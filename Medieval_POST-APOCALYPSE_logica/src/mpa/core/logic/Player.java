@@ -17,5 +17,9 @@ public class Player extends AbstractCharacter
 		subalterns = new ArrayList<DependentPlayer>();
 	}
 
-	// public pickUp
+	public boolean pickUpTool(AbstractTool tool)
+	{
+		return this.addToolToBag(tool);
+	}
+
 }

@@ -17,9 +17,9 @@ public abstract class AbstractCharacter extends AbstractObject
 		this.bag = new Inventory(bagDimension);
 	}
 
-	public void addToolToBag(AbstractTool tool)
+	public boolean addToolToBag(AbstractTool tool)
 	{
-		this.bag.addTool(tool);
+		return this.bag.addTool(tool);
 	}
 
 }
