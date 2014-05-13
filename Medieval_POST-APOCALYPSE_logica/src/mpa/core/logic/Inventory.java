@@ -28,6 +28,17 @@ public class Inventory
 
 	}
 
+	public boolean removeTool (AbstractTool tool)
+	{
+		if (inventory.contains(tool))
+		{
+			inventory.remove(tool);
+			return true;
+		}
+		else
+			return false;
+		
+	}
 	private int freeCapacity()
 	{
 		int currentCapacity = 0;
@@ -36,5 +47,19 @@ public class Inventory
 			currentCapacity = currentCapacity + tool.getVolume();
 		}
 		return capacity - currentCapacity;
+	}
+	public int getCapacity()
+	{
+		return capacity;
+	}
+	
+	public Collection<AbstractTool> getInventory()
+	{
+		return inventory;
+	}
+	
+	public boolean isToolPresent (AbstractTool tool)
+	{
+		return inventory.contains(tool);
 	}
 }
