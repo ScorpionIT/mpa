@@ -1,22 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" size="2664,1010" id="mpa.core.logic" metadata="uml2-1.0" initialized="true" zoom="0.5" scrolledX="60" scrolledY="100" tag="1000" key="32303037303533312D31303030204D6564696576616C5F504F53542D41504F43414C595053452F456C6961">
-  <children xsi:type="editmodel:ClassEditModel" name="GameManager" location="409,693" size="150,67" id="mpa.core.logic/GameManager">
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" size="2664,1010" id="mpa.core.logic" metadata="uml2-1.0" initialized="true" zoom="0.5" scrolledY="73" tag="1000" key="32303037303533312D31303030204D6564696576616C5F504F53542D41504F43414C595053455F6C6F676963612F456C6961">
+  <children xsi:type="editmodel:ClassEditModel" name="GameManager" location="409,693" size="150,67" id="mpa.core.logic/GameManager" runTimeClassModel="GameManager(Ljava.lang.String;I[Ljava.lang.String;[I)">
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <children xsi:type="editmodel:CompartmentEditModel" size="114,18">
-      <children xsi:type="editmodel:MethodEditModel" name="GameManager" id="mpa.core.logic/GameManager#GameManager(Ljava.lang.String;I[I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="GameManager" id="mpa.core.logic/GameManager#GameManager(Ljava.lang.String;I[Ljava.lang.String;[I)"/>
     </children>
     <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/GameManager-Soyatec::Import->mpa.core.logic/World" source="//@children.0" target="//@children.3" targetEnd="//@children.0/@sourceConnections.0/@children.2" label="//@children.0/@sourceConnections.0/@children.0" sourceEnd="//@children.0/@sourceConnections.0/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import»" size="51,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="150,33" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,33"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/GameManager-Soyatec::Access->mpa.core.logic/Level" source="//@children.0" target="//@children.2" targetEnd="//@children.0/@sourceConnections.1/@children.2" label="//@children.0/@sourceConnections.1/@children.0" sourceEnd="//@children.0/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Access»" size="54,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,33" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="109,33"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/GameManager-Standard::Call->mpa.core.logic/WorldManager*mpa.core.logic/GameManager-Standard::Instantiate->mpa.core.logic/WorldManager*mpa.core.logic/GameManager-Soyatec::Import->mpa.core.logic/WorldManager" source="//@children.0" target="//@children.4" targetEnd="//@children.0/@sourceConnections.2/@children.2" label="//@children.0/@sourceConnections.2/@children.0" sourceEnd="//@children.0/@sourceConnections.2/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Call, Import, Instantiate»" size="148,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,33" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="150,33"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/GameManager-Soyatec::Import->mpa.core.logic/Headquarter*mpa.core.logic/GameManager-Standard::Call->mpa.core.logic/Headquarter" source="//@children.0" target="//@children.6" targetEnd="//@children.0/@sourceConnections.3/@children.2" label="//@children.0/@sourceConnections.3/@children.0" sourceEnd="//@children.0/@sourceConnections.3/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Call, Import»" size="80,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="6,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="136,65"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/GameManager-Standard::Instantiate->mpa.core.logic/Player" source="//@children.0" target="//@children.10" targetEnd="//@children.0/@sourceConnections.4/@children.2" label="//@children.0/@sourceConnections.4/@children.0" sourceEnd="//@children.0/@sourceConnections.4/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Instantiate»" size="74,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="73,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="44,67"/>
+    </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" name="Inventory" location="770,693" size="110,67" id="mpa.core.logic/Inventory">
-    <children xsi:type="editmodel:CompartmentEditModel"/>
-    <children xsi:type="editmodel:CompartmentEditModel" size="83,18">
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.21/@sourceConnections.2" name="Inventory" location="770,693" size="276,121" id="mpa.core.logic/Inventory" runTimeClassModel="Inventory(I),inventory,addTool(Lmpa.core.logic.AbstractTool;),capacity">
+    <children xsi:type="editmodel:CompartmentEditModel" size="253,36">
+      <children xsi:type="editmodel:AttributeEditModel" name="inventory" id="mpa.core.logic/Inventory#inventory"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="capacity" id="mpa.core.logic/Inventory#capacity"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="83,36">
       <children xsi:type="editmodel:MethodEditModel" name="Inventory" id="mpa.core.logic/Inventory#Inventory(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addTool" id="mpa.core.logic/Inventory#addTool(Lmpa.core.logic.AbstractTool;)"/>
     </children>
     <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/Inventory-Standard::Call->mpa.core.logic/AbstractTool*mpa.core.logic/Inventory-Soyatec::Import->mpa.core.logic/AbstractTool" source="//@children.1" target="//@children.26" targetEnd="//@children.1/@sourceConnections.0/@children.2" label="//@children.1/@sourceConnections.0/@children.0" sourceEnd="//@children.1/@sourceConnections.0/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Call, Import»" size="80,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="276,23" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,132"/>
+    </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:EnumerationEditModel" name="Level" location="50,693" size="109,142" id="mpa.core.logic/Level">
+  <children xsi:type="editmodel:EnumerationEditModel" targetConnections="//@children.0/@sourceConnections.1 //@children.10/@sourceConnections.1" name="Level" location="50,693" size="109,142" id="mpa.core.logic/Level" runTimeClassModel="NEWBIE%,SER%,WAR_LORD%,LORD%,KING%">
     <children xsi:type="editmodel:CompartmentEditModel" size="77,90">
       <children xsi:type="editmodel:EnumerationLiteralEditModel" name="NEWBIE" id="mpa.core.logic/Level#NEWBIE%"/>
       <children xsi:type="editmodel:EnumerationLiteralEditModel" name="KING" id="mpa.core.logic/Level#KING%"/>
@@ -24,26 +58,42 @@
       <children xsi:type="editmodel:EnumerationLiteralEditModel" name="WAR_LORD" id="mpa.core.logic/Level#WAR_LORD%"/>
       <children xsi:type="editmodel:EnumerationLiteralEditModel" name="SER" id="mpa.core.logic/Level#SER%"/>
     </children>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" name="World" location="609,693" size="111,85" id="mpa.core.logic/World">
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.0/@sourceConnections.0 //@children.4/@sourceConnections.1" name="World" location="609,693" size="111,85" id="mpa.core.logic/World" runTimeClassModel="World(II),addObject(Lmpa.core.logic.AbstractObject;)">
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <children xsi:type="editmodel:CompartmentEditModel" size="88,36">
       <children xsi:type="editmodel:MethodEditModel" name="World" id="mpa.core.logic/World#World(II)"/>
       <children xsi:type="editmodel:MethodEditModel" name="addObject" id="mpa.core.logic/World#addObject(Lmpa.core.logic.AbstractObject;)"/>
     </children>
     <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/World-Standard::Call->mpa.core.logic/AbstractObject*mpa.core.logic/World-Soyatec::Import->mpa.core.logic/AbstractObject" source="//@children.3" target="//@children.7" targetEnd="//@children.3/@sourceConnections.0/@children.2" label="//@children.3/@sourceConnections.0/@children.0" sourceEnd="//@children.3/@sourceConnections.0/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Call, Import»" size="80,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="74,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="36,175"/>
+    </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" name="WorldManager" location="209,693" size="150,85" id="mpa.core.logic/WorldManager">
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.0/@sourceConnections.2" name="WorldManager" location="209,693" size="150,85" id="mpa.core.logic/WorldManager" runTimeClassModel="WorldManager(Ljava.lang.String;),addHeadquarter(I)">
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <children xsi:type="editmodel:CompartmentEditModel" size="123,36">
       <children xsi:type="editmodel:MethodEditModel" name="WorldManager" id="mpa.core.logic/WorldManager#WorldManager(Ljava.lang.String;)"/>
       <children xsi:type="editmodel:MethodEditModel" name="addHeadquarter" id="mpa.core.logic/WorldManager#addHeadquarter(I)"/>
     </children>
     <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/WorldManager-Standard::Instantiate->mpa.core.logic/Headquarter*mpa.core.logic/WorldManager-Soyatec::Import->mpa.core.logic/Headquarter" source="//@children.4" target="//@children.6" targetEnd="//@children.4/@sourceConnections.0/@children.2" label="//@children.4/@sourceConnections.0/@children.0" sourceEnd="//@children.4/@sourceConnections.0/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import, Instantiate»" size="119,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="48,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="87,67"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/WorldManager-Standard::Call->mpa.core.logic/World*mpa.core.logic/WorldManager-Standard::Instantiate->mpa.core.logic/World*mpa.core.logic/WorldManager-Soyatec::Import->mpa.core.logic/World" source="//@children.4" target="//@children.3" targetEnd="//@children.4/@sourceConnections.1/@children.2" label="//@children.4/@sourceConnections.1/@children.0" sourceEnd="//@children.4/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Call, Import, Instantiate»" size="148,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="150,42" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,42"/>
+    </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:InterfaceEditModel" targetConnections="//@children.7/@sourceConnections.0" name="InterfaceAbstractObject" location="742,50" size="219,134" id="mpa.core.logic/InterfaceAbstractObject">
+  <children xsi:type="editmodel:InterfaceEditModel" targetConnections="//@children.7/@sourceConnections.0 //@children.7/@sourceConnections.1" name="InterfaceAbstractObject" location="742,50" size="219,134" id="mpa.core.logic/InterfaceAbstractObject" runTimeClassModel="getX(),setX(I),getY(),setY(I)">
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <children xsi:type="editmodel:CompartmentEditModel" size="56,72">
       <children xsi:type="editmodel:MethodEditModel" name="getX" id="mpa.core.logic/InterfaceAbstractObject#getX()"/>
@@ -54,7 +104,7 @@
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" name="Headquarter" location="170,576" size="136,67" id="mpa.core.logic/Headquarter">
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.0/@sourceConnections.3 //@children.4/@sourceConnections.0 //@children.10/@sourceConnections.3" name="Headquarter" location="170,576" size="136,67" id="mpa.core.logic/Headquarter" runTimeClassModel="Headquarter(IIIII)">
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <children xsi:type="editmodel:CompartmentEditModel" size="102,18">
       <children xsi:type="editmodel:MethodEditModel" name="Headquarter" id="mpa.core.logic/Headquarter#Headquarter(IIIII)"/>
@@ -64,9 +114,14 @@
       <children xsi:type="editmodel:AssociationEndEditModel" location="68,0" anchorKind="FixedAtEdge" attachSource="true"/>
       <children xsi:type="editmodel:AssociationEndEditModel"/>
     </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/Headquarter-Standard::Derive->mpa.core.logic/AbstractBuilding" source="//@children.6" target="//@children.19" targetEnd="//@children.6/@sourceConnections.1/@children.2" label="//@children.6/@sourceConnections.1/@children.0" sourceEnd="//@children.6/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Derive»" size="50,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="121,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="13,67"/>
+    </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.19/@sourceConnections.0" name="AbstractObject" location="775,234" size="153,175" id="mpa.core.logic/AbstractObject">
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.19/@sourceConnections.0 //@children.3/@sourceConnections.0 //@children.9/@sourceConnections.1 //@children.19/@sourceConnections.1 //@children.21/@sourceConnections.1 //@children.26/@sourceConnections.1" name="AbstractObject" location="775,234" size="153,175" id="mpa.core.logic/AbstractObject" runTimeClassModel="AbstractObject(II),getX(),setX(I),getY(),setY(I),y,x">
     <children xsi:type="editmodel:CompartmentEditModel" size="48,36">
       <children xsi:type="editmodel:AttributeEditModel" name="x" id="mpa.core.logic/AbstractObject#x"/>
       <children xsi:type="editmodel:AttributeEditModel" name="y" id="mpa.core.logic/AbstractObject#y"/>
@@ -83,9 +138,14 @@
       <children xsi:type="editmodel:AssociationEndEditModel" location="76,0" attachSource="true"/>
       <children xsi:type="editmodel:AssociationEndEditModel" location="109,134"/>
     </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/AbstractObject-Soyatec::Implement->mpa.core.logic/InterfaceAbstractObject" source="//@children.7" target="//@children.5" targetEnd="//@children.7/@sourceConnections.1/@children.2" label="//@children.7/@sourceConnections.1/@children.0" sourceEnd="//@children.7/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Implement»" size="74,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="56,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="89,134"/>
+    </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" name="Stone" location="865,576" size="87,67" id="mpa.core.logic/Stone">
+  <children xsi:type="editmodel:ClassEditModel" name="Stone" location="865,576" size="87,67" id="mpa.core.logic/Stone" runTimeClassModel="Stone(III)">
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <children xsi:type="editmodel:CompartmentEditModel" size="64,18">
       <children xsi:type="editmodel:MethodEditModel" name="Stone" id="mpa.core.logic/Stone#Stone(III)"/>
@@ -95,9 +155,14 @@
       <children xsi:type="editmodel:AssociationEndEditModel" location="43,0" anchorKind="FixedAtEdge" attachSource="true"/>
       <children xsi:type="editmodel:AssociationEndEditModel"/>
     </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/Stone-Standard::Derive->mpa.core.logic/AbstractResource" source="//@children.8" target="//@children.9" targetEnd="//@children.8/@sourceConnections.1/@children.2" label="//@children.8/@sourceConnections.1/@children.0" sourceEnd="//@children.8/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Derive»" size="50,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="43,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="86,67"/>
+    </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.25/@sourceConnections.0" name="AbstractResource" location="822,459" size="173,67" id="mpa.core.logic/AbstractResource">
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.25/@sourceConnections.0 //@children.8/@sourceConnections.1 //@children.16/@sourceConnections.1 //@children.25/@sourceConnections.1" name="AbstractResource" location="822,459" size="173,67" id="mpa.core.logic/AbstractResource" runTimeClassModel="AbstractResource(III)">
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <children xsi:type="editmodel:CompartmentEditModel" size="131,18">
       <children xsi:type="editmodel:MethodEditModel" name="AbstractResource" id="mpa.core.logic/AbstractResource#AbstractResource(III)"/>
@@ -107,81 +172,131 @@
       <children xsi:type="editmodel:AssociationEndEditModel" location="86,0" anchorKind="FixedAtEdge" attachSource="true"/>
       <children xsi:type="editmodel:AssociationEndEditModel"/>
     </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/AbstractResource-Standard::Derive->mpa.core.logic/AbstractObject" source="//@children.9" target="//@children.7" targetEnd="//@children.9/@sourceConnections.1/@children.2" label="//@children.9/@sourceConnections.1/@children.0" sourceEnd="//@children.9/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Derive»" size="50,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="52,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="99,175"/>
+    </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" name="Player" location="438,576" size="89,67" id="mpa.core.logic/Player">
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.0/@sourceConnections.4" name="Player" location="438,576" size="89,67" id="mpa.core.logic/Player" runTimeClassModel="Player(Ljava.lang.String;IIILmpa.core.logic.Level;Lmpa.core.logic.Headquarter;I)">
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <children xsi:type="editmodel:CompartmentEditModel" size="66,18">
-      <children xsi:type="editmodel:MethodEditModel" name="Player" id="mpa.core.logic/Player#Player(Ljava.lang.String;IIILmpa.core.logic.Level;Lmpa.core.logic.Headquarter;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Player" id="mpa.core.logic/Player#Player(Ljava.lang.String;IIILmpa.core.logic.Level;Lmpa.core.logic.Headquarter;I)"/>
     </children>
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <sourceConnections xsi:type="editmodel:GeneralizationEditModel" targetConnections="//@children.22/@sourceConnections.0" autoLocated="true" id="mpa.core.logic/AbstractCharacter&lt;-mpa.core.logic/Player" source="//@children.10" target="//@children.21" targetEnd="//@children.10/@sourceConnections.0/@children.1" sourceEnd="//@children.10/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
       <children xsi:type="editmodel:AssociationEndEditModel" location="44,0" anchorKind="FixedAtEdge" attachSource="true"/>
-      <children xsi:type="editmodel:AssociationEndEditModel" location="88,67" anchorKind="FixedAtEdge"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="88,85" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/Player-Soyatec::Import->mpa.core.logic/Level" source="//@children.10" target="//@children.2" targetEnd="//@children.10/@sourceConnections.1/@children.2" label="//@children.10/@sourceConnections.1/@children.0" sourceEnd="//@children.10/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import»" size="51,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,51" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="109,48"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/Player-Standard::Derive->mpa.core.logic/AbstractCharacter" source="//@children.10" target="//@children.21" targetEnd="//@children.10/@sourceConnections.2/@children.2" label="//@children.10/@sourceConnections.2/@children.0" sourceEnd="//@children.10/@sourceConnections.2/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Derive»" size="50,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="61,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="26,85"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/Player-Soyatec::Import->mpa.core.logic/Headquarter" source="//@children.10" target="//@children.6" targetEnd="//@children.10/@sourceConnections.3/@children.2" label="//@children.10/@sourceConnections.3/@children.0" sourceEnd="//@children.10/@sourceConnections.3/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import»" size="51,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,33" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="136,33"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/Player-Soyatec::Import->mpa.core.logic/AbstractTool" source="//@children.10" target="//@children.26" targetEnd="//@children.10/@sourceConnections.4/@children.2" label="//@children.10/@sourceConnections.4/@children.0" sourceEnd="//@children.10/@sourceConnections.4/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import»" size="51,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="89,33" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,150"/>
     </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" name="Hammer" location="1341,576" size="105,67" id="mpa.core.logic/Hammer">
+  <children xsi:type="editmodel:ClassEditModel" name="Hammer" location="1341,576" size="105,67" id="mpa.core.logic/Hammer" runTimeClassModel="Hammer(II)">
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <children xsi:type="editmodel:CompartmentEditModel" size="80,18">
-      <children xsi:type="editmodel:MethodEditModel" name="Hammer" id="mpa.core.logic/Hammer#Hammer(IIII)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Hammer" id="mpa.core.logic/Hammer#Hammer(II)"/>
     </children>
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="mpa.core.logic/AbstractTool&lt;-mpa.core.logic/Hammer" source="//@children.11" target="//@children.14/@sourceConnections.0" targetEnd="//@children.11/@sourceConnections.0/@children.1" sourceEnd="//@children.11/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
       <children xsi:type="editmodel:AssociationEndEditModel" location="52,0" anchorKind="FixedAtEdge" attachSource="true"/>
       <children xsi:type="editmodel:AssociationEndEditModel"/>
     </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/Hammer-Standard::Derive->mpa.core.logic/AbstractTool" source="//@children.11" target="//@children.26" targetEnd="//@children.11/@sourceConnections.1/@children.2" label="//@children.11/@sourceConnections.1/@children.0" sourceEnd="//@children.11/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Derive»" size="50,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="105,33" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,150"/>
+    </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" name="Pitchfork" location="1202,576" size="109,67" id="mpa.core.logic/Pitchfork">
+  <children xsi:type="editmodel:ClassEditModel" name="Pitchfork" location="1202,576" size="109,67" id="mpa.core.logic/Pitchfork" runTimeClassModel="Pitchfork(II)">
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <children xsi:type="editmodel:CompartmentEditModel" size="80,18">
-      <children xsi:type="editmodel:MethodEditModel" name="Pitchfork" id="mpa.core.logic/Pitchfork#Pitchfork(IIII)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Pitchfork" id="mpa.core.logic/Pitchfork#Pitchfork(II)"/>
     </children>
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="mpa.core.logic/AbstractTool&lt;-mpa.core.logic/Pitchfork" source="//@children.12" target="//@children.14/@sourceConnections.0" targetEnd="//@children.12/@sourceConnections.0/@children.1" sourceEnd="//@children.12/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
       <children xsi:type="editmodel:AssociationEndEditModel" location="54,0" anchorKind="FixedAtEdge" attachSource="true"/>
       <children xsi:type="editmodel:AssociationEndEditModel"/>
     </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/Pitchfork-Standard::Derive->mpa.core.logic/AbstractTool" source="//@children.12" target="//@children.26" targetEnd="//@children.12/@sourceConnections.1/@children.2" label="//@children.12/@sourceConnections.1/@children.0" sourceEnd="//@children.12/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Derive»" size="50,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="109,33" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,150"/>
+    </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" name="Hatchet" location="1588,576" size="100,67" id="mpa.core.logic/Hatchet">
+  <children xsi:type="editmodel:ClassEditModel" name="Hatchet" location="1588,576" size="100,67" id="mpa.core.logic/Hatchet" runTimeClassModel="Hatchet(II)">
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <children xsi:type="editmodel:CompartmentEditModel" size="74,18">
-      <children xsi:type="editmodel:MethodEditModel" name="Hatchet" id="mpa.core.logic/Hatchet#Hatchet(IIII)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Hatchet" id="mpa.core.logic/Hatchet#Hatchet(II)"/>
     </children>
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="mpa.core.logic/AbstractTool&lt;-mpa.core.logic/Hatchet" source="//@children.13" target="//@children.14/@sourceConnections.0" targetEnd="//@children.13/@sourceConnections.0/@children.1" sourceEnd="//@children.13/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
       <children xsi:type="editmodel:AssociationEndEditModel" location="50,0" anchorKind="FixedAtEdge" attachSource="true"/>
       <children xsi:type="editmodel:AssociationEndEditModel"/>
     </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/Hatchet-Standard::Derive->mpa.core.logic/AbstractTool" source="//@children.13" target="//@children.26" targetEnd="//@children.13/@sourceConnections.1/@children.2" label="//@children.13/@sourceConnections.1/@children.0" sourceEnd="//@children.13/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Derive»" size="50,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="22,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" name="Rake" location="1091,576" size="81,67" id="mpa.core.logic/Rake">
+  <children xsi:type="editmodel:ClassEditModel" name="Rake" location="1091,576" size="81,67" id="mpa.core.logic/Rake" runTimeClassModel="Rake(II)">
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <children xsi:type="editmodel:CompartmentEditModel" size="58,18">
-      <children xsi:type="editmodel:MethodEditModel" name="Rake" id="mpa.core.logic/Rake#Rake(IIII)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Rake" id="mpa.core.logic/Rake#Rake(II)"/>
     </children>
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <sourceConnections xsi:type="editmodel:GeneralizationEditModel" targetConnections="//@children.12/@sourceConnections.0 //@children.11/@sourceConnections.0 //@children.24/@sourceConnections.0 //@children.13/@sourceConnections.0 //@children.20/@sourceConnections.0 //@children.23/@sourceConnections.0 //@children.15/@sourceConnections.0" autoLocated="true" id="mpa.core.logic/AbstractTool&lt;-mpa.core.logic/Rake" source="//@children.14" target="//@children.26" targetEnd="//@children.14/@sourceConnections.0/@children.1" sourceEnd="//@children.14/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
       <children xsi:type="editmodel:AssociationEndEditModel" location="40,0" anchorKind="FixedAtEdge" attachSource="true"/>
-      <children xsi:type="editmodel:AssociationEndEditModel" location="66,67" anchorKind="FixedAtEdge"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="67,228" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/Rake-Standard::Derive->mpa.core.logic/AbstractTool" source="//@children.14" target="//@children.26" targetEnd="//@children.14/@sourceConnections.1/@children.2" label="//@children.14/@sourceConnections.1/@children.0" sourceEnd="//@children.14/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Derive»" size="50,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="81,33" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,150"/>
     </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" name="Shovel" location="1972,576" size="92,67" id="mpa.core.logic/Shovel">
+  <children xsi:type="editmodel:ClassEditModel" name="Shovel" location="1972,576" size="92,67" id="mpa.core.logic/Shovel" runTimeClassModel="Shovel(II)">
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <children xsi:type="editmodel:CompartmentEditModel" size="69,18">
-      <children xsi:type="editmodel:MethodEditModel" name="Shovel" id="mpa.core.logic/Shovel#Shovel(IIII)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Shovel" id="mpa.core.logic/Shovel#Shovel(II)"/>
     </children>
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="mpa.core.logic/AbstractTool&lt;-mpa.core.logic/Shovel" source="//@children.15" target="//@children.14/@sourceConnections.0" targetEnd="//@children.15/@sourceConnections.0/@children.1" sourceEnd="//@children.15/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
       <children xsi:type="editmodel:AssociationEndEditModel" location="46,0" anchorKind="FixedAtEdge" attachSource="true"/>
       <children xsi:type="editmodel:AssociationEndEditModel"/>
     </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/Shovel-Standard::Derive->mpa.core.logic/AbstractTool" source="//@children.15" target="//@children.26" targetEnd="//@children.15/@sourceConnections.1/@children.2" label="//@children.15/@sourceConnections.1/@children.0" sourceEnd="//@children.15/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Derive»" size="50,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,33" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="137,150"/>
+    </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" name="Field" location="982,576" size="79,67" id="mpa.core.logic/Field">
+  <children xsi:type="editmodel:ClassEditModel" name="Field" location="982,576" size="79,67" id="mpa.core.logic/Field" runTimeClassModel="Field(III)">
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <children xsi:type="editmodel:CompartmentEditModel" size="56,18">
       <children xsi:type="editmodel:MethodEditModel" name="Field" id="mpa.core.logic/Field#Field(III)"/>
@@ -191,9 +306,14 @@
       <children xsi:type="editmodel:AssociationEndEditModel" location="39,0" anchorKind="FixedAtEdge" attachSource="true"/>
       <children xsi:type="editmodel:AssociationEndEditModel"/>
     </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/Field-Standard::Derive->mpa.core.logic/AbstractResource" source="//@children.16" target="//@children.9" targetEnd="//@children.16/@sourceConnections.1/@children.2" label="//@children.16/@sourceConnections.1/@children.0" sourceEnd="//@children.16/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Derive»" size="50,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="6,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="166,67"/>
+    </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" name="House" location="50,576" size="90,67" id="mpa.core.logic/House">
+  <children xsi:type="editmodel:ClassEditModel" name="House" location="50,576" size="90,67" id="mpa.core.logic/House" runTimeClassModel="House(IIIII)">
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <children xsi:type="editmodel:CompartmentEditModel" size="67,18">
       <children xsi:type="editmodel:MethodEditModel" name="House" id="mpa.core.logic/House#House(IIIII)"/>
@@ -203,9 +323,14 @@
       <children xsi:type="editmodel:AssociationEndEditModel" location="45,0" anchorKind="FixedAtEdge" attachSource="true"/>
       <children xsi:type="editmodel:AssociationEndEditModel" location="82,67" anchorKind="FixedAtEdge"/>
     </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/House-Standard::Derive->mpa.core.logic/AbstractBuilding" source="//@children.17" target="//@children.19" targetEnd="//@children.17/@sourceConnections.1/@children.2" label="//@children.17/@sourceConnections.1/@children.0" sourceEnd="//@children.17/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Derive»" size="50,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="90,13" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="5,67"/>
+    </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" name="Mill" location="336,576" size="72,67" id="mpa.core.logic/Mill">
+  <children xsi:type="editmodel:ClassEditModel" name="Mill" location="336,576" size="72,67" id="mpa.core.logic/Mill" runTimeClassModel="Mill(IIIII)">
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <children xsi:type="editmodel:CompartmentEditModel" size="49,18">
       <children xsi:type="editmodel:MethodEditModel" name="Mill" id="mpa.core.logic/Mill#Mill(IIIII)"/>
@@ -215,9 +340,14 @@
       <children xsi:type="editmodel:AssociationEndEditModel" location="36,0" anchorKind="FixedAtEdge" attachSource="true"/>
       <children xsi:type="editmodel:AssociationEndEditModel"/>
     </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/Mill-Standard::Derive->mpa.core.logic/AbstractBuilding" source="//@children.18" target="//@children.19" targetEnd="//@children.18/@sourceConnections.1/@children.2" label="//@children.18/@sourceConnections.1/@children.0" sourceEnd="//@children.18/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Derive»" size="50,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="35,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="93,67"/>
+    </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.17/@sourceConnections.0" name="AbstractBuilding" location="278,459" size="165,67" id="mpa.core.logic/AbstractBuilding">
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.17/@sourceConnections.0 //@children.6/@sourceConnections.1 //@children.17/@sourceConnections.1 //@children.18/@sourceConnections.1" name="AbstractBuilding" location="278,459" size="165,67" id="mpa.core.logic/AbstractBuilding" runTimeClassModel="AbstractBuilding(IIIII)">
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <children xsi:type="editmodel:CompartmentEditModel" size="123,18">
       <children xsi:type="editmodel:MethodEditModel" name="AbstractBuilding" id="mpa.core.logic/AbstractBuilding#AbstractBuilding(IIIII)"/>
@@ -227,69 +357,110 @@
       <children xsi:type="editmodel:AssociationEndEditModel" location="82,0" anchorKind="FixedAtEdge" attachSource="true"/>
       <children xsi:type="editmodel:AssociationEndEditModel" location="76,175" anchorKind="FixedAtEdge"/>
     </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/AbstractBuilding-Standard::Derive->mpa.core.logic/AbstractObject" source="//@children.19" target="//@children.7" targetEnd="//@children.19/@sourceConnections.1/@children.2" label="//@children.19/@sourceConnections.1/@children.0" sourceEnd="//@children.19/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Derive»" size="50,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="165,4" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,113"/>
+    </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" name="Scythe" location="1718,576" size="92,67" id="mpa.core.logic/Scythe">
+  <children xsi:type="editmodel:ClassEditModel" name="Scythe" location="1718,576" size="92,67" id="mpa.core.logic/Scythe" runTimeClassModel="Scythe(II)">
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <children xsi:type="editmodel:CompartmentEditModel" size="69,18">
-      <children xsi:type="editmodel:MethodEditModel" name="Scythe" id="mpa.core.logic/Scythe#Scythe(IIII)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Scythe" id="mpa.core.logic/Scythe#Scythe(II)"/>
     </children>
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="mpa.core.logic/AbstractTool&lt;-mpa.core.logic/Scythe" source="//@children.20" target="//@children.14/@sourceConnections.0" targetEnd="//@children.20/@sourceConnections.0/@children.1" sourceEnd="//@children.20/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
       <children xsi:type="editmodel:AssociationEndEditModel" location="46,0" anchorKind="FixedAtEdge" attachSource="true"/>
       <children xsi:type="editmodel:AssociationEndEditModel"/>
     </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/Scythe-Standard::Derive->mpa.core.logic/AbstractTool" source="//@children.20" target="//@children.26" targetEnd="//@children.20/@sourceConnections.1/@children.2" label="//@children.20/@sourceConnections.1/@children.0" sourceEnd="//@children.20/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Derive»" size="50,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,33" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="137,150"/>
+    </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.10/@sourceConnections.0" name="AbstractCharacter" location="473,459" size="177,67" id="mpa.core.logic/AbstractCharacter">
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.10/@sourceConnections.0 //@children.10/@sourceConnections.2 //@children.22/@sourceConnections.1" name="AbstractCharacter" location="473,459" size="177,85" id="mpa.core.logic/AbstractCharacter" runTimeClassModel="addToolToBag(Lmpa.core.logic.AbstractTool;),AbstractCharacter(Ljava.lang.String;IIII)">
     <children xsi:type="editmodel:CompartmentEditModel"/>
-    <children xsi:type="editmodel:CompartmentEditModel" size="134,18">
-      <children xsi:type="editmodel:MethodEditModel" name="AbstractCharacter" id="mpa.core.logic/AbstractCharacter#AbstractCharacter(Ljava.lang.String;III)"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="134,36">
+      <children xsi:type="editmodel:MethodEditModel" name="AbstractCharacter" id="mpa.core.logic/AbstractCharacter#AbstractCharacter(Ljava.lang.String;IIII)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addToolToBag" id="mpa.core.logic/AbstractCharacter#addToolToBag(Lmpa.core.logic.AbstractTool;)"/>
     </children>
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="mpa.core.logic/AbstractObject&lt;-mpa.core.logic/AbstractCharacter" source="//@children.21" target="//@children.19/@sourceConnections.0" targetEnd="//@children.21/@sourceConnections.0/@children.1" sourceEnd="//@children.21/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
       <children xsi:type="editmodel:AssociationEndEditModel" location="88,0" anchorKind="FixedAtEdge" attachSource="true"/>
       <children xsi:type="editmodel:AssociationEndEditModel"/>
     </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/AbstractCharacter-Standard::Derive->mpa.core.logic/AbstractObject" source="//@children.21" target="//@children.7" targetEnd="//@children.21/@sourceConnections.1/@children.2" label="//@children.21/@sourceConnections.1/@children.0" sourceEnd="//@children.21/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Derive»" size="50,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="156,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,134"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/AbstractCharacter-Soyatec::Import->mpa.core.logic/Inventory*mpa.core.logic/AbstractCharacter-Standard::Call->mpa.core.logic/Inventory*mpa.core.logic/AbstractCharacter-Standard::Instantiate->mpa.core.logic/Inventory" source="//@children.21" target="//@children.1" targetEnd="//@children.21/@sourceConnections.2/@children.2" label="//@children.21/@sourceConnections.2/@children.0" sourceEnd="//@children.21/@sourceConnections.2/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Call, Import, Instantiate»" size="148,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="147,85" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="55,0"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/AbstractCharacter-Soyatec::Import->mpa.core.logic/AbstractTool" source="//@children.21" target="//@children.26" targetEnd="//@children.21/@sourceConnections.3/@children.2" label="//@children.21/@sourceConnections.3/@children.0" sourceEnd="//@children.21/@sourceConnections.3/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import»" size="51,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="177,42" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,42"/>
+    </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" name="DependentPlayer" location="557,576" size="170,67" id="mpa.core.logic/DependentPlayer">
+  <children xsi:type="editmodel:ClassEditModel" name="DependentPlayer" location="557,576" size="170,67" id="mpa.core.logic/DependentPlayer" runTimeClassModel="DependentPlayer(Ljava.lang.String;IIII)">
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <children xsi:type="editmodel:CompartmentEditModel" size="127,18">
-      <children xsi:type="editmodel:MethodEditModel" name="DependentPlayer" id="mpa.core.logic/DependentPlayer#DependentPlayer(Ljava.lang.String;III)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="DependentPlayer" id="mpa.core.logic/DependentPlayer#DependentPlayer(Ljava.lang.String;IIII)"/>
     </children>
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="mpa.core.logic/AbstractCharacter&lt;-mpa.core.logic/DependentPlayer" source="//@children.22" target="//@children.10/@sourceConnections.0" targetEnd="//@children.22/@sourceConnections.0/@children.1" sourceEnd="//@children.22/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
       <children xsi:type="editmodel:AssociationEndEditModel" location="85,0" anchorKind="FixedAtEdge" attachSource="true"/>
       <children xsi:type="editmodel:AssociationEndEditModel"/>
     </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/DependentPlayer-Standard::Derive->mpa.core.logic/AbstractCharacter" source="//@children.22" target="//@children.21" targetEnd="//@children.22/@sourceConnections.1/@children.2" label="//@children.22/@sourceConnections.1/@children.0" sourceEnd="//@children.22/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Derive»" size="50,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="46,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="130,85"/>
+    </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" name="Mattock" location="1840,576" size="102,67" id="mpa.core.logic/Mattock">
+  <children xsi:type="editmodel:ClassEditModel" name="Mattock" location="1840,576" size="102,67" id="mpa.core.logic/Mattock" runTimeClassModel="Mattock(II)">
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <children xsi:type="editmodel:CompartmentEditModel" size="74,18">
-      <children xsi:type="editmodel:MethodEditModel" name="Mattock" id="mpa.core.logic/Mattock#Mattock(IIII)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Mattock" id="mpa.core.logic/Mattock#Mattock(II)"/>
     </children>
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="mpa.core.logic/AbstractTool&lt;-mpa.core.logic/Mattock" source="//@children.23" target="//@children.14/@sourceConnections.0" targetEnd="//@children.23/@sourceConnections.0/@children.1" sourceEnd="//@children.23/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
       <children xsi:type="editmodel:AssociationEndEditModel" location="51,0" anchorKind="FixedAtEdge" attachSource="true"/>
       <children xsi:type="editmodel:AssociationEndEditModel"/>
     </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/Mattock-Standard::Derive->mpa.core.logic/AbstractTool" source="//@children.23" target="//@children.26" targetEnd="//@children.23/@sourceConnections.1/@children.2" label="//@children.23/@sourceConnections.1/@children.0" sourceEnd="//@children.23/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Derive»" size="50,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,33" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="137,150"/>
+    </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" name="Knife" location="1476,576" size="82,67" id="mpa.core.logic/Knife">
+  <children xsi:type="editmodel:ClassEditModel" name="Knife" location="1476,576" size="82,67" id="mpa.core.logic/Knife" runTimeClassModel="Knife(II)">
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <children xsi:type="editmodel:CompartmentEditModel" size="59,18">
-      <children xsi:type="editmodel:MethodEditModel" name="Knife" id="mpa.core.logic/Knife#Knife(IIII)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Knife" id="mpa.core.logic/Knife#Knife(II)"/>
     </children>
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="mpa.core.logic/AbstractTool&lt;-mpa.core.logic/Knife" source="//@children.24" target="//@children.14/@sourceConnections.0" targetEnd="//@children.24/@sourceConnections.0/@children.1" sourceEnd="//@children.24/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
       <children xsi:type="editmodel:AssociationEndEditModel" location="41,0" anchorKind="FixedAtEdge" attachSource="true"/>
       <children xsi:type="editmodel:AssociationEndEditModel"/>
     </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/Knife-Standard::Derive->mpa.core.logic/AbstractTool" source="//@children.24" target="//@children.26" targetEnd="//@children.24/@sourceConnections.1/@children.2" label="//@children.24/@sourceConnections.1/@children.0" sourceEnd="//@children.24/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Derive»" size="50,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="39,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" name="Tree" location="757,576" size="78,67" id="mpa.core.logic/Tree">
+  <children xsi:type="editmodel:ClassEditModel" name="Tree" location="757,576" size="78,67" id="mpa.core.logic/Tree" runTimeClassModel="Tree(III)">
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <children xsi:type="editmodel:CompartmentEditModel" size="55,18">
       <children xsi:type="editmodel:MethodEditModel" name="Tree" id="mpa.core.logic/Tree#Tree(III)"/>
@@ -299,17 +470,37 @@
       <children xsi:type="editmodel:AssociationEndEditModel" location="39,0" anchorKind="FixedAtEdge" attachSource="true"/>
       <children xsi:type="editmodel:AssociationEndEditModel" location="86,67" anchorKind="FixedAtEdge"/>
     </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/Tree-Standard::Derive->mpa.core.logic/AbstractResource" source="//@children.25" target="//@children.9" targetEnd="//@children.25/@sourceConnections.1/@children.2" label="//@children.25/@sourceConnections.1/@children.0" sourceEnd="//@children.25/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Derive»" size="50,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="71,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="6,67"/>
+    </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.14/@sourceConnections.0" name="AbstractTool" location="1509,459" size="133,67" id="mpa.core.logic/AbstractTool">
-    <children xsi:type="editmodel:CompartmentEditModel"/>
-    <children xsi:type="editmodel:CompartmentEditModel" size="100,18">
-      <children xsi:type="editmodel:MethodEditModel" name="AbstractTool" id="mpa.core.logic/AbstractTool#AbstractTool(IIII)"/>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.14/@sourceConnections.0 //@children.1/@sourceConnections.0 //@children.10/@sourceConnections.4 //@children.11/@sourceConnections.1 //@children.12/@sourceConnections.1 //@children.13/@sourceConnections.1 //@children.14/@sourceConnections.1 //@children.15/@sourceConnections.1 //@children.20/@sourceConnections.1 //@children.21/@sourceConnections.3 //@children.23/@sourceConnections.1 //@children.24/@sourceConnections.1" name="AbstractTool" location="1509,459" size="137,229" id="mpa.core.logic/AbstractTool" runTimeClassModel="setDamage(I),getProductivity(),setVolume(I),setProductivity(I),AbstractTool(IIIII),volume,damage,getVolume(),getDamage(),productivity">
+    <children xsi:type="editmodel:CompartmentEditModel" size="105,54">
+      <children xsi:type="editmodel:AttributeEditModel" name="damage" id="mpa.core.logic/AbstractTool#damage"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="volume" id="mpa.core.logic/AbstractTool#volume"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="productivity" id="mpa.core.logic/AbstractTool#productivity"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="114,126">
+      <children xsi:type="editmodel:MethodEditModel" name="getVolume" id="mpa.core.logic/AbstractTool#getVolume()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="AbstractTool" id="mpa.core.logic/AbstractTool#AbstractTool(IIIII)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setProductivity" id="mpa.core.logic/AbstractTool#setProductivity(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getProductivity" id="mpa.core.logic/AbstractTool#getProductivity()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setDamage" id="mpa.core.logic/AbstractTool#setDamage(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getDamage" id="mpa.core.logic/AbstractTool#getDamage()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setVolume" id="mpa.core.logic/AbstractTool#setVolume(I)"/>
     </children>
     <children xsi:type="editmodel:CompartmentEditModel"/>
     <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="mpa.core.logic/AbstractObject&lt;-mpa.core.logic/AbstractTool" source="//@children.26" target="//@children.19/@sourceConnections.0" targetEnd="//@children.26/@sourceConnections.0/@children.1" sourceEnd="//@children.26/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
-      <children xsi:type="editmodel:AssociationEndEditModel" location="66,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="67,0" anchorKind="FixedAtEdge" attachSource="true"/>
       <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="mpa.core.logic/AbstractTool-Standard::Derive->mpa.core.logic/AbstractObject" source="//@children.26" target="//@children.7" targetEnd="//@children.26/@sourceConnections.1/@children.2" label="//@children.26/@sourceConnections.1/@children.0" sourceEnd="//@children.26/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Derive»" size="50,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,90" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="153,114"/>
     </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
