@@ -17,5 +17,5 @@ public class Player extends AbstractCharacter
 		subalterns = new ArrayList<DependentPlayer>();
 	}
 
-	public pickUp
+	// public pickUp
 }
