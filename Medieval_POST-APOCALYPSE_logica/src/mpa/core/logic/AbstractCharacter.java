@@ -4,9 +4,9 @@ package mpa.core.logic;
 public abstract class AbstractCharacter extends AbstractObject
 {
 
-	private String name;
-	private int health; // 0 - 100
-	private Inventory bag;
+	protected String name;
+	protected int health; // 0 - 100
+	protected Inventory bag;
 
 	public AbstractCharacter(String name, int x, int y, int health,
 			int bagDimension)
@@ -15,11 +15,6 @@ public abstract class AbstractCharacter extends AbstractObject
 		this.name = name;
 		this.health = health;
 		this.bag = new Inventory(bagDimension);
-	}
-
-	public boolean addToolToBag(AbstractTool tool)
-	{
-		return this.bag.addTool(tool);
 	}
 
 }

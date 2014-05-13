@@ -19,7 +19,12 @@ public class Player extends AbstractCharacter
 
 	public boolean pickUpTool(AbstractTool tool)
 	{
-		return this.addToolToBag(tool);
+		return this.bag.addTool(tool);
+	}
+
+	public boolean throwTool(AbstractTool tool)
+	{
+		return this.bag.removeTool(tool);
 	}
 
 }
