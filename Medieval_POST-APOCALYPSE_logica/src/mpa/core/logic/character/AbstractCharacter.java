@@ -1,6 +1,8 @@
-package mpa.core.logic;
+package mpa.core.logic.character;
 
-@SuppressWarnings("unused")
+import mpa.core.logic.AbstractObject;
+import mpa.core.logic.Inventory;
+
 public abstract class AbstractCharacter extends AbstractObject
 {
 
@@ -8,8 +10,7 @@ public abstract class AbstractCharacter extends AbstractObject
 	protected int health; // 0 - 100
 	protected Inventory bag;
 
-	public AbstractCharacter(String name, int x, int y, int health,
-			int bagDimension)
+	public AbstractCharacter(String name, int x, int y, int health, int bagDimension)
 	{
 		super(x, y);
 		this.name = name;

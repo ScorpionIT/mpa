@@ -1,4 +1,6 @@
-package mpa.core.logic;
+package mpa.core.logic.building;
+
+import mpa.core.logic.AbstractObject;
 
 @SuppressWarnings("unused")
 public abstract class AbstractBuilding extends AbstractObject

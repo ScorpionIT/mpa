@@ -1,7 +1,11 @@
-package mpa.core.logic;
+package mpa.core.logic.character;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import mpa.core.logic.Level;
+import mpa.core.logic.building.Headquarter;
+import mpa.core.logic.tool.AbstractTool;
 
 @SuppressWarnings("unused")
 public class Player extends AbstractCharacter

@@ -1,4 +1,5 @@
-package mpa.core.logic;
+package mpa.core.logic.tool;
+
 
 public class Rake extends AbstractTool
 {

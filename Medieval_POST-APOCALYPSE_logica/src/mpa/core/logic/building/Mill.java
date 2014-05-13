@@ -1,4 +1,5 @@
-package mpa.core.logic;
+package mpa.core.logic.building;
+
 
 public class Mill extends AbstractBuilding
 {

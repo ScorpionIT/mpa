@@ -1,4 +1,5 @@
-package mpa.core.logic;
+package mpa.core.logic.tool;
+
 
 
 public class Scythe extends AbstractTool

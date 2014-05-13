@@ -1,4 +1,5 @@
-package mpa.core.logic;
+package mpa.core.logic.resource;
+
 
 
 public class Tree extends AbstractResource

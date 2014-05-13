@@ -1,4 +1,5 @@
-package mpa.core.logic;
+package mpa.core.logic.character;
+
 
 public class DependentPlayer extends AbstractCharacter
 {

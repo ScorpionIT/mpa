@@ -3,6 +3,8 @@ package mpa.core.logic;
 import java.util.HashMap;
 import java.util.Map;
 
+import mpa.core.logic.building.Headquarter;
+
 public class WorldManager
 {
 	private World world;

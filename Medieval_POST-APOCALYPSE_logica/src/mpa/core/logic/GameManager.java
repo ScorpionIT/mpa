@@ -2,6 +2,9 @@ package mpa.core.logic;
 
 import java.util.List;
 
+import mpa.core.logic.building.Headquarter;
+import mpa.core.logic.character.Player;
+
 @SuppressWarnings("unused")
 public class GameManager
 {

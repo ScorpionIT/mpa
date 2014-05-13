@@ -1,6 +1,7 @@
-package mpa.core.logic;
+package mpa.core.logic.tool;
 
-@SuppressWarnings("unused")
+import mpa.core.logic.AbstractObject;
+
 public abstract class AbstractTool extends AbstractObject
 {
 

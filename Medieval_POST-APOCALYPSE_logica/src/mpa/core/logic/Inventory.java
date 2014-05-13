@@ -3,6 +3,8 @@ package mpa.core.logic;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import mpa.core.logic.tool.AbstractTool;
+
 public class Inventory
 {
 
@@ -16,7 +18,7 @@ public class Inventory
 		this.inventory = new ArrayList<AbstractTool>();
 	}
 
-	boolean addTool(AbstractTool abstractTool)
+	public boolean addTool(AbstractTool abstractTool)
 	{
 		if (freeCapacity() >= abstractTool.getVolume())
 		{
@@ -28,7 +30,7 @@ public class Inventory
 
 	}
 
-	public boolean removeTool (AbstractTool tool)
+	public boolean removeTool(AbstractTool tool)
 	{
 		if (inventory.contains(tool))
 		{
@@ -37,8 +39,9 @@ public class Inventory
 		}
 		else
 			return false;
-		
+
 	}
+
 	public int freeCapacity()
 	{
 		int currentCapacity = 0;
@@ -48,12 +51,12 @@ public class Inventory
 		}
 		return capacity - currentCapacity;
 	}
+
 	public int getCapacity()
 	{
 		return capacity;
 	}
-	
-	
+
 	public void setCapacity(int capacity)
 	{
 		this.capacity = capacity;
@@ -63,8 +66,8 @@ public class Inventory
 	{
 		return inventory;
 	}
-	
-	public boolean isToolPresent (AbstractTool tool)
+
+	public boolean isToolPresent(AbstractTool tool)
 	{
 		return inventory.contains(tool);
 	}
