@@ -6,8 +6,8 @@ import java.util.Collection;
 public class Inventory
 {
 
-	private int capacity;
-	private Collection<AbstractTool> inventory;
+	int capacity;
+	Collection<AbstractTool> inventory;
 
 	public Inventory(int capacity)
 	{
@@ -39,7 +39,7 @@ public class Inventory
 			return false;
 		
 	}
-	private int freeCapacity()
+	public int freeCapacity()
 	{
 		int currentCapacity = 0;
 		for (AbstractTool tool : inventory)

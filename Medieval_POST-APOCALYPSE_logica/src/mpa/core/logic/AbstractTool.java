@@ -4,9 +4,9 @@ package mpa.core.logic;
 public abstract class AbstractTool extends AbstractObject
 {
 
-	private int volume;
-	private int damage; // 0-10
-	private int productivity; // 0-10
+	int volume;
+	int damage; // 0-10
+	int productivity; // 0-10
 
 	public AbstractTool(int x, int y, int volume, int damage, int productivity)
 	{
