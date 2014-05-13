@@ -21,4 +21,29 @@ public abstract class AbstractTool extends AbstractObject
 		return this.volume;
 	}
 
+	public int getDamage()
+	{
+		return damage;
+	}
+
+	public void setDamage(int damage)
+	{
+		this.damage = damage;
+	}
+
+	public int getProductivity()
+	{
+		return productivity;
+	}
+
+	public void setProductivity(int productivity)
+	{
+		this.productivity = productivity;
+	}
+
+	public void setVolume(int volume)
+	{
+		this.volume = volume;
+	}
+
 }
