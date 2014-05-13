@@ -6,7 +6,7 @@ public abstract class AbstractTool extends AbstractObject
 
 	private int volume;
 	private int damage; // 0-10
-	private int productivity; //0-10
+	private int productivity; // 0-10
 
 	public AbstractTool(int x, int y, int volume, int damage, int productivity)
 	{
@@ -14,6 +14,11 @@ public abstract class AbstractTool extends AbstractObject
 		this.volume = volume;
 		this.damage = damage;
 		this.productivity = productivity;
+	}
+
+	public int getVolume()
+	{
+		return this.volume;
 	}
 
 }
