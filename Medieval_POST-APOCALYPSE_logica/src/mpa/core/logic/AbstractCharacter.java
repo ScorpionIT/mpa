@@ -8,11 +8,18 @@ public abstract class AbstractCharacter extends AbstractObject
 	private int health; // 0 - 100
 	private Inventory bag;
 
-	public AbstractCharacter(String name, int x, int y, int health)
+	public AbstractCharacter(String name, int x, int y, int health,
+			int bagDimension)
 	{
 		super(x, y);
 		this.name = name;
 		this.health = health;
+		this.bag = new Inventory(bagDimension);
+	}
+
+	public void addToolToBag(AbstractTool tool)
+	{
+		this.bag.addTool(tool);
 	}
 
 }
