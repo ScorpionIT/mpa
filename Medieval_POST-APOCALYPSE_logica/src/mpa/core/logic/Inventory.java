@@ -3,7 +3,6 @@ package mpa.core.logic;
 import java.util.ArrayList;
 import java.util.Collection;
 
-@SuppressWarnings("unused")
 public class Inventory
 {
 
@@ -16,7 +15,8 @@ public class Inventory
 		this.capacity = capacity;
 		this.inventory = new ArrayList<AbstractTool>();
 	}
-	boolean addTool (AbstractTool abstractTool)
+
+	boolean addTool(AbstractTool abstractTool)
 	{
 		if (freeCapacity() >= abstractTool.getVolume())
 		{
@@ -25,12 +25,13 @@ public class Inventory
 		}
 		else
 			return false;
-			
+
 	}
-	private int freeCapacity ()
+
+	private int freeCapacity()
 	{
 		int currentCapacity = 0;
-		for (AbstractTool tool: inventory)
+		for (AbstractTool tool : inventory)
 		{
 			currentCapacity = currentCapacity + tool.getVolume();
 		}
