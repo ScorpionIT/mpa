@@ -16,5 +16,24 @@ public class Inventory
 		this.capacity = capacity;
 		this.inventory = new ArrayList<AbstractTool>();
 	}
-
+	boolean addTool (AbstractTool abstractTool)
+	{
+		if (freeCapacity() >= abstractTool.getVolume())
+		{
+			inventory.add(abstractTool);
+			return true;
+		}
+		else
+			return false;
+			
+	}
+	private int freeCapacity ()
+	{
+		int currentCapacity = 0;
+		for (AbstractTool tool: inventory)
+		{
+			currentCapacity = currentCapacity + tool.getVolume();
+		}
+		return capacity - currentCapacity;
+	}
 }
