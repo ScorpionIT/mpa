@@ -16,7 +16,7 @@ public class GameManager
 		for (int pos : position)
 		{
 			Headquarter playerHeadquarter = WorldManager.addHeadquarter(pos);
-			players.add(new Player("Pippo", 0, 0, 100, Level.NEWBIE, playerHeadquarter));
+			players.add(new Player("Pippo", 0, 0, 100, Level.NEWBIE, playerHeadquarter, 0)); // TODO
 		}
 
 	}
