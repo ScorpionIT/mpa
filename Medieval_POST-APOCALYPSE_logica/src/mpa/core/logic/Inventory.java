@@ -53,6 +53,12 @@ public class Inventory
 		return capacity;
 	}
 	
+	
+	public void setCapacity(int capacity)
+	{
+		this.capacity = capacity;
+	}
+
 	public Collection<AbstractTool> getInventory()
 	{
 		return inventory;
