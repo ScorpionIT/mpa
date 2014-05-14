@@ -14,4 +14,17 @@ public abstract class AbstractResource extends AbstractObject
 		this.providing = providing;
 	}
 
+	public int getProviding()
+	{
+		return providing;
+	}
+
+	public void setProviding(int providing)
+	{
+		this.providing = providing;
+	}
+	
+	
+
 }
+
