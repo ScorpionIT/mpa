@@ -2,7 +2,6 @@ package mpa.core.logic.resource;
 
 import mpa.core.logic.AbstractObject;
 
-@SuppressWarnings("unused")
 public abstract class AbstractResource extends AbstractObject
 {
 
