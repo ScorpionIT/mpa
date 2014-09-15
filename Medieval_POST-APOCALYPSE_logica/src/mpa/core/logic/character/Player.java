@@ -11,14 +11,14 @@ import mpa.core.logic.tool.AbstractTool;
 public class Player extends AbstractCharacter
 {
 	private Headquarter headquarter;
-	private ArrayList<DependentPlayer> subalterns;
+	private ArrayList<AbstractCharacter> subalterns;
 
 	public Player(String name, int x, int y, int health, Level level,
 				  Headquarter headquarter, int bagDimension)
 	{
 		super(name, x, y, health, bagDimension);
 		this.headquarter = headquarter;
-		subalterns = new ArrayList<DependentPlayer>();
+		subalterns = new ArrayList<AbstractCharacter>();
 	}
 
 	public boolean pickUpTool(AbstractTool tool)
@@ -29,6 +29,11 @@ public class Player extends AbstractCharacter
 	public boolean throwTool(AbstractTool tool)
 	{
 		return this.bag.removeTool(tool);
+	}
+	
+	public boolean addSubaltern(AbstractCharacter subaltern)
+	{
+		return this.subalterns.add(subaltern);
 	}
 
 }

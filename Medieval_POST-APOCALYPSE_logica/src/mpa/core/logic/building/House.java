@@ -1,6 +1,5 @@
 package mpa.core.logic.building;
 
-
 public class House extends AbstractBuilding
 {
 
