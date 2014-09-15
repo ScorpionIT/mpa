@@ -11,10 +11,10 @@ import mpa.core.logic.tool.AbstractTool;
 public class Player extends AbstractCharacter
 {
 	private Headquarter headquarter;
-	private Collection<DependentPlayer> subalterns;
+	private ArrayList<DependentPlayer> subalterns;
 
 	public Player(String name, int x, int y, int health, Level level,
-			Headquarter headquarter, int bagDimension)
+				  Headquarter headquarter, int bagDimension)
 	{
 		super(name, x, y, health, bagDimension);
 		this.headquarter = headquarter;
