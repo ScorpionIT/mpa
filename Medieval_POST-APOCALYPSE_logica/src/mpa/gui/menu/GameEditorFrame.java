@@ -3,6 +3,8 @@ package mpa.gui.menu;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.nio.file.Files;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -26,6 +28,10 @@ public class GameEditorFrame extends JFrame
 		this.setLocation(600, 300);
 		this.setSize(500, 500);
 		this.setTitle("Aru Q");
+		File mapDir = new File(maps);
+		if (!mapDir.exists())
+			new File(maps).mkdirs();
+			
 		panel.setLayout(new BorderLayout());
 		
 		JComboBox <String> comboBox = new GameEditorComboBox(maps);
