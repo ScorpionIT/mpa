@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import javax.swing.JComboBox;
 
 
+@SuppressWarnings("serial")
 public class GameEditorComboBox extends JComboBox<String>
 {
 

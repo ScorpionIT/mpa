@@ -9,6 +9,7 @@ public class GameEditor
 	{
 	}
 
+	@SuppressWarnings("unused")
 	public static void main(String[] args)
 	{
 		JFrame menu = new GameEditorFrame();

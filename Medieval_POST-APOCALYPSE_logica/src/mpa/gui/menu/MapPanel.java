@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 
 import mpa.core.logic.MapManager;
 
+@SuppressWarnings("serial")
 public class MapPanel extends JPanel
 {
 

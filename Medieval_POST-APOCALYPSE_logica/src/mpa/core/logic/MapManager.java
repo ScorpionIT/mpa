@@ -4,21 +4,17 @@ import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Map;
 
 public class MapManager
 {
-	private String path;
 	private Map<Integer, Point> headquartedPosition;
 	private int width;
 	private int height;
 	private char map [][];
 
 	public MapManager(String path)
-	{
-		this.path = path;
-		
+	{		
 		String s;
 		BufferedReader reader;
 		try

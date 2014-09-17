@@ -1,11 +1,8 @@
 package mpa.gui.menu;
 
 import java.awt.BorderLayout;
-import java.awt.Button;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Vector;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -14,11 +11,12 @@ import javax.swing.JPanel;
 import mpa.core.logic.MapManager;
 
 
+@SuppressWarnings("serial")
 public class GameEditorFrame extends JFrame
 {
-	private static final String maps = new String ("/home/parcuri/Dropbox/Workspace_Java/MappeGioco/");
-	private static MapManager map;
-	private static JPanel panel;
+	private final String maps = new String (System.getProperty("user.home")+"/Medieval Post APOCALYPSE/MappeGioco/");
+	private MapManager map;
+	private JPanel panel;
 
 	public GameEditorFrame()
 	{
@@ -32,14 +30,12 @@ public class GameEditorFrame extends JFrame
 		
 		JComboBox <String> comboBox = new GameEditorComboBox(maps);
 		panel.add(comboBox, BorderLayout.NORTH);
-		
-		String mapPath = new String (maps);		
-		
-		
+
 		 comboBox.addActionListener(new ActionListener() {
 	            public void actionPerformed(ActionEvent event) {
 	              
-	                JComboBox comboBox = (JComboBox) event.getSource();
+	                @SuppressWarnings("rawtypes")
+					JComboBox comboBox = (JComboBox) event.getSource();
 
 	                loadMap(comboBox.getSelectedItem().toString());
 
