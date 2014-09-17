@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import mpa.core.logic.building.Headquarter;
+import mpa.core.logic.building.Mill;
 
 public class WorldManager
 {
@@ -24,7 +25,7 @@ public class WorldManager
 		try
 		{
 			headquarter = new Headquarter(headquartedPosition.get(i).x,
-					headquartedPosition.get(i).y, 100, 100, 0);
+					headquartedPosition.get(i).y, 100, 100, 0, new Mill (0,0,0));
 			world.addObject(headquarter);
 		} catch (Exception e)
 		{
