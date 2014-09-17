@@ -1,12 +1,13 @@
 package mpa.core.logic.building;
 
-public class Headquarter extends AbstractBuilding
+import mpa.core.logic.character.Player;
+
+public class Headquarter extends House
 {
-
-	public Headquarter(int x, int y, int width, int height, int damages) throws Exception
+	
+	public Headquarter(int x, int y, int width, int height, int damages, Player player, Mill mill) throws Exception
 	{
-		super(x, y, width, height, damages);
-		// TODO Auto-generated constructor stub
+		super(x, y, width, height, damages, player, mill);
 	}
-
+	
 }
