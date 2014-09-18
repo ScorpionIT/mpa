@@ -30,7 +30,7 @@ public class Field extends AbstractResource
 	{
 		if( this.currentFieldState.ordinal() < FieldState.values().length )
 		{
-			this.currentFieldState= this.currentFieldState.values()[currentFieldState.ordinal() + 1];
+			this.currentFieldState= FieldState.values()[currentFieldState.ordinal() + 1];
 		}
 		else 
 		{
