@@ -7,15 +7,17 @@ public class Field extends AbstractResource
 	private FieldState currentFieldState;
 	private boolean free;
 	private int foodCollected;
-	private int maximumFoodCollected;
+	private int maximumFoodCapacity;
+	private int food;
 	
-	public Field( int x, int y, int providing, FieldState fieldState, int maximumFoodCollected )
+	public Field( int x, int y, int providing, FieldState fieldState, int maximumFoodCapacity )
 	{
 		super(x, y, providing);
 		this.currentFieldState = fieldState;
 		this.free = true;
 		this.foodCollected = 0;
-		this.maximumFoodCollected = maximumFoodCollected;
+		this.maximumFoodCapacity = maximumFoodCapacity;
+		this.food = 10;
 		
 	}
 
@@ -27,10 +29,15 @@ public class Field extends AbstractResource
 	public void advanceStatus()
 	{
 		if( this.currentFieldState.ordinal() < FieldState.values().length )
+		{
 			this.currentFieldState= this.currentFieldState.values()[currentFieldState.ordinal() + 1];
+		}
 		else 
 		{
 			this.currentFieldState = FieldState.values()[0];
+			
+			if( this.foodCollected + this.food <= this.maximumFoodCapacity )
+				this.foodCollected += this.food;
 			
 		}
 	}
@@ -49,5 +56,12 @@ public class Field extends AbstractResource
 	{
 		this.free = free;
 	}
+
+	public void setFood(int food)
+	{
+		this.food = food;
+	}
+	
+	
 
 }
