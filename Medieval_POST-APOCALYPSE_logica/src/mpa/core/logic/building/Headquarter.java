@@ -1,7 +1,5 @@
 package mpa.core.logic.building;
 
-import mpa.core.logic.character.Player;
-
 public class Headquarter extends House
 {
 	
