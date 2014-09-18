@@ -14,7 +14,6 @@ public class FieldManager extends Thread
 	{
 		this.fields = fields;
 		this.time = time;
-		this.time+= this.time;
 	}
 
 	@Override
