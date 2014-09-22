@@ -9,7 +9,6 @@ public class FictiveSpace extends AbstractObject
 	public FictiveSpace(int x, int y) throws Exception
 	{
 		super( x, y );
-		this.building = building;
 	}
 	
 	public void setBuilding(AbstractBuilding building)
