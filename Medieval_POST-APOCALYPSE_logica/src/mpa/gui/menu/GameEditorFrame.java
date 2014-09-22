@@ -58,7 +58,7 @@ public class GameEditorFrame extends JFrame
 	private void loadMap (String path) 
 	{
 		map = new MapManager(maps.concat(path));
-		map.printMap();
+		map.printCodedMap();
 		JPanel pane = new MapPanel (map);
 		panel.add(pane, BorderLayout.CENTER);
 		

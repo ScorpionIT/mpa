@@ -10,13 +10,13 @@ public class Field extends AbstractResource
 	private int maximumFoodCapacity;
 	private int food;
 	
-	public Field( int x, int y, int providing, FieldState fieldState, int maximumFoodCapacity )
+	public Field( int x, int y)
 	{
-		super(x, y, providing);
-		this.currentFieldState = fieldState;
+		super(x, y, 0); //TODO
+		this.currentFieldState = FieldState.PLOWING;
 		this.free = true;
 		this.foodCollected = 0;
-		this.maximumFoodCapacity = maximumFoodCapacity;
+		this.maximumFoodCapacity = 10; //TODO
 		this.food = 10;
 		
 	}

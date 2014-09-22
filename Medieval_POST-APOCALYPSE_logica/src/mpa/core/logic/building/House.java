@@ -6,10 +6,10 @@ public class House extends AbstractBuilding
 	private Mill mill;
 
 
-	public House(int x, int y, int width, int height, int damages, Mill mill) throws Exception
+	public House(int x, int y) throws Exception
 	{
-		super(x, y, width, height, damages);
-		this.mill = mill;
+		super(x, y, 10); //TODO
+		//this.mill = mill;
 	}
 	
 

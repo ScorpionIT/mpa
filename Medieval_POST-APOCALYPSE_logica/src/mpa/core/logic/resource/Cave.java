@@ -2,10 +2,10 @@ package mpa.core.logic.resource;
 
 
 
-public class Tree extends AbstractResource
+public class Cave extends AbstractResource
 {
 
-	public Tree(int x, int y)
+	public Cave(int x, int y)
 	{
 		super(x, y, 0); //TODO
 		// TODO Auto-generated constructor stub

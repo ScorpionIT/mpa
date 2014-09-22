@@ -6,6 +6,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Map;
 
+import mpa.core.logic.building.FictiveSpace;
+import mpa.core.logic.resource.*;
+
 public class MapManager
 {
 	private Map<Integer, Point> headquartedPosition;
@@ -33,7 +36,6 @@ public class MapManager
 						mapInformation += s.charAt(j);
 					
 					this.height = Integer.parseInt(mapInformation);
-				
 				}
 				else if (s.charAt(0) == 'w')
 				{
@@ -45,18 +47,12 @@ public class MapManager
 					this.width = Integer.parseInt(mapInformation);
 					
 					this.map = new char [this.height][this.width];
-					
-					
 				}
 				else
 				{
 					
 					for (int j = 0; j < s.length(); j++)
-					{
 						map [i][j] = s.charAt(j);
-						if (map[i][j] == '6')
-							headquartedPosition.put (headquartedPosition.size(),new Point (i,j));
-					}
 					i++;
 				}
 			}
@@ -66,15 +62,57 @@ public class MapManager
 		{
 			e.printStackTrace();
 		}
-		
-		
 	}
 
-	public Map<Integer, Point> getHeadquartedPosition()
+	/*public Map<Integer, Point> getHeadquartedPosition()
 	{
 		return headquartedPosition;
+	}*/
+	
+	public World decode() throws Exception
+	{
+		World world = new World (this.width, this.height);
+		
+		for (int i = 0; i < this.height; i++)
+		{
+			for (int j = 0; j < this.width; j++)
+			{
+				switch (map[i][j])
+				{
+					case 'H':
+						headquartedPosition.put(headquartedPosition.size(), new Point(i, j));
+						break;
+						
+					case 'F':
+						world.addObject(new Field(i, j));
+						break;
+						
+					case 'T':
+						world.addObject(new Tree (i,j));
+						break;
+					
+					case 'C':
+						world.addObject(new Cave (i,j));
+						break;
+						
+					case '0':
+						world.addObject(new FictiveSpace(i, j));
+						break;
+						
+					case 'M':
+						//world.addObject(new Market (i,j)); //TODO
+						break;
+						
+					case 'S':
+						//world.addObject(new Space (i,j)); //TODO
+						break;
+				}
+			}
+		}
+		world.setHeadquartedPosition(headquartedPosition);
+		return world;
 	}
-
+	
 	public int getWidth()
 	{
 		return width;
@@ -85,14 +123,12 @@ public class MapManager
 		return height;
 	}
 
-	
-
 	public char[][] getMap()
 	{
 		return map;
 	}
 
-	public void printMap ()
+	public void printCodedMap ()
 	{
 		for (int i = 0; i < this.height; i++)
 		{
@@ -100,9 +136,5 @@ public class MapManager
 				System.out.print(map[i][j] + " ");
 			System.out.println();
 		}
-	
 	}
-	
-
-
 }
