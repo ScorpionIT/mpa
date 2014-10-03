@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Map;
 
-import mpa.core.logic.building.FictiveSpace;
+import mpa.core.logic.building.*;
 import mpa.core.logic.resource.*;
 
 public class MapManager
@@ -96,15 +96,15 @@ public class MapManager
 						break;
 						
 					case '0':
-						world.addObject(new FictiveSpace(i, j));
+						world.addObject(new EmptyObject (i, j));
 						break;
 						
 					case 'M':
-						//world.addObject(new Market (i,j)); //TODO
+						world.addObject(new Market (i,j)); 
 						break;
 						
 					case 'S':
-						//world.addObject(new Space (i,j)); //TODO
+						world.addObject(new FictiveSpace (i,j)); 
 						break;
 				}
 			}
