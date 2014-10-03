@@ -8,7 +8,7 @@ public class House extends AbstractBuilding
 
 	public House(int x, int y) throws Exception
 	{
-		super(x, y, 10); //TODO
+		super(x, y); //TODO
 		//this.mill = mill;
 	}
 	
