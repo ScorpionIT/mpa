@@ -42,7 +42,6 @@ public class GameEditorFrame extends JFrame
 					JComboBox comboBox = (JComboBox) event.getSource();
 
 	                loadMap(comboBox.getSelectedItem().toString());
-
 	            
 	           
 	            }
