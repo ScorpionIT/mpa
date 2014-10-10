@@ -7,57 +7,20 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.event.MouseInputAdapter;
 
+import mpa.gui.eventHandler.MouseEventManager;
 import mpa.gui.menu.GameEditorFrame;
 
 public class GameFrame extends JFrame
 {
 	private JPanel panel;
+	private MouseEventManager mouseEventManager;
 
 	public GameFrame() throws HeadlessException
 	{
 		super();
 		panel = new GamePanel();
-		
-		panel.addMouseListener( new MouseListener()
-		{
-			
-			@Override
-			public void mousePressed(MouseEvent arg0)
-			{
-					
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e)
-			{
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e)
-			{
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e)
-			{
-				// TODO Auto-generated method stub
-				
-			}
-			
-			
-		});
 		
 		this.setContentPane(panel);
 		this.setLocation(600, 300);
@@ -67,12 +30,18 @@ public class GameFrame extends JFrame
 		this.setVisible(true);
 	
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
+		this.mouseEventManager = new MouseEventManager( (GamePanel) this.panel );
+		
+		this.panel.addMouseListener( this.mouseEventManager );
+		
 	}
 	
-	public static void main(String argv[])
+	
+	
+	public void refresh()
 	{
-		JFrame frame = new GameFrame();
-		
+			this.panel.repaint();
 	}
 
 }
