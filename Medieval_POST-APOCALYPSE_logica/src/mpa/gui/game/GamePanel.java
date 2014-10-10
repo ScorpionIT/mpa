@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JPanel;
 
@@ -14,12 +15,19 @@ public class GamePanel extends JPanel
 	private int playerX;
 	private int playerY;
 	private ArrayList<Point> path;
+	private static enum Move { LEFT, RIGHT, UP, DOWN };
+	
+	private ArrayList<Point> Obstacles; 
 	
 	public GamePanel()
 	{
-		this.playerX = 0;
-		this.playerY = 0;
+		this.playerX = 2;
+		this.playerY = 2;
 		this.path = new ArrayList<Point>();
+		this.Obstacles = new ArrayList<Point>();
+		this.Obstacles.add (new Point (4, 3));
+		this.Obstacles.add (new Point (6, 6));
+		this.Obstacles.add (new Point (5, 5));
 	}
 
 	@Override
@@ -48,16 +56,28 @@ public class GamePanel extends JPanel
             g.drawLine(0, y, width, y);
             y += lineGap;
         }
-
+        
+        g.setColor( Color.gray );
         g.drawRect(playerX * this.lineGap + 1, playerY * this.lineGap + 1, lineGap - 2, lineGap - 2);
         g.setColor( Color.cyan );
         g.fillRect(playerX * this.lineGap + 1, playerY * this.lineGap + 1, lineGap - 2, lineGap - 2);
-
+        
+        g.setColor( Color.gray );
+        
+        
+        for( final Point point : this.Obstacles )
+        {
+        	 g.setColor( Color.gray );
+	    	 g.drawRect( point.x * this.lineGap +1, point.y * this.lineGap +1, lineGap -2, lineGap -2 );
+	    	 g.setColor( Color.red );
+	    	 g.fillRect(point.x * this.lineGap +1, point.y * this.lineGap +1, lineGap -2, lineGap -2 );
+        }
         for( final Point point : this.path )
         {
-        	 g.drawRect( point.x * this.lineGap +1, point.y * this.lineGap +1, lineGap -2, lineGap -2 );
-        	 g.setColor( Color.red );
-        	 g.fillRect(point.x * this.lineGap +1, point.y * this.lineGap +1, lineGap -2, lineGap -2 );
+        	 g.setColor( Color.gray );
+	    	 g.drawRect( point.x * this.lineGap +1, point.y * this.lineGap +1, lineGap -2, lineGap -2 );
+	    	 g.setColor( Color.green );
+	    	 g.fillRect(point.x * this.lineGap +1, point.y * this.lineGap +1, lineGap -2, lineGap -2 );
         }
 	}
 	
@@ -91,6 +111,12 @@ public class GamePanel extends JPanel
 		if( initX < 0 || initY < 0 )
 			return false;
 
+		for( final Point obstacle : this.Obstacles )
+        {
+			if( initX  == obstacle.x && initY == obstacle.y  )
+				return false;
+        }
+		
 		int currentX;
 		int currentY;
 		
@@ -104,18 +130,34 @@ public class GamePanel extends JPanel
 			currentX = initX;
 			currentY = initY;
 		}
-		ArrayList<Point> borders = new ArrayList<Point>();
+		ArrayList<Move> borders = new ArrayList<Move>();
 		
+		int randomNum = 0 + (int)(Math.random()*2); 
 		
-		if( currentX < destX )
-			borders.add( new Point( currentX + 1, currentY ) );
-		else if ( currentX > destX )
-			borders.add( new Point( currentX - 1, currentY  ) );
-		
-		else if( currentY < destY )
-			borders.add( new Point( currentX , currentY + 1 ) );
+		if (randomNum == 0)
+		{
+			if( currentX < destX )
+				borders.add( Move.RIGHT );
+			else if ( currentX > destX )
+				borders.add( Move.LEFT );
+			
+			if( currentY < destY )
+				borders.add( Move.DOWN );
+			else if ( currentY > destY )
+				borders.add( Move.UP );
+		}
 		else
-			borders.add( new Point( currentX , currentY - 1 ) );
+		{
+			if( currentY < destY )
+				borders.add( Move.DOWN );
+			else if ( currentY > destY )
+				borders.add( Move.UP );
+			
+			if( currentX < destX )
+				borders.add( Move.RIGHT );
+			else if ( currentX > destX )
+				borders.add( Move.LEFT );
+		}
 		
 		//borders.add( new Point( currentX + 1, currentY ) );
 		//borders.add( new Point( currentX + 1, currentY + 1 ) );
@@ -127,34 +169,51 @@ public class GamePanel extends JPanel
 		//borders.add( new Point( currentX + 1, currentY - 1 ) );
 				
 		
-		for( final Point point : borders )
+		for( final Move direction : borders )
 		{
-			if( path.size() <= 1 || !( point.x == path.get( path.size() - 2).x && point.y == path.get( path.size() - 2).y ) )
+			Point point = new Point();
+			if (direction == Move.RIGHT)
 			{
-				path.add( point );
-				for( final Point point2 : this.path )
-				{
-					System.out.print( " x : " + point2.x + " " );
-					System.out.println( " y : " + point2.y );
-					
-				}
-				if( this.computePath( point.x, point.y, destX, destY, path ) )
-					return true;
-				
-				else
-					path.remove( path.size() - 1 );
-				
-				for( final Point point3 : this.path )
-				{
-					System.out.print( " x : " + point3.x + " " );
-					System.out.println( " y : " + point3.y );
-					
-				}
+				System.out.println("RIGHT");
+				point = new Point (currentX+1, currentY);
+			}
+			else if (direction == Move.LEFT)
+			{
+				System.out.println("LEFT");
+				point = new Point (currentX-1, currentY);
+			}
+			else if (direction == Move.UP)
+			{
+				System.out.println("UP");
+				point = new Point (currentX, currentY-1);
+			}
+			else if (direction == Move.DOWN)
+			{
+				System.out.println("DOWN");
+				point = new Point (currentX, currentY+1);
 			}
 			
+			path.add( point );
+//			for( final Point point2 : this.path )
+//			{
+//				System.out.print( " x : " + point2.x + " " );
+//				System.out.println( " y : " + point2.y );
+//				
+//			}
+			if( this.computePath( point.x, point.y, destX, destY, path ) )
+				return true;
+			
+			else
+				path.remove( path.size() - 1 );
+			
+//			for( final Point point3 : this.path )
+//			{
+//				System.out.print( " x : " + point3.x + " " );
+//				System.out.println( " y : " + point3.y );
+//				
+//			}			
 		}
 		
 		return false;
 	}
-
 }
