@@ -1,7 +1,5 @@
 package mpa.gui.game;
 
-import javax.swing.JFrame;
-
 public class GraphicManager extends Thread
 {
 

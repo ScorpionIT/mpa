@@ -1,17 +1,13 @@
 package mpa.gui.game;
 
-import java.awt.GraphicsConfiguration;
 import java.awt.HeadlessException;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.event.MouseInputAdapter;
 
 import mpa.gui.eventHandler.MouseEventManager;
-import mpa.gui.menu.GameEditorFrame;
 
+@SuppressWarnings("serial")
 public class GameFrame extends JFrame
 {
 	private JPanel panel;

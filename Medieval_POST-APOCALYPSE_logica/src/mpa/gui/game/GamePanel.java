@@ -4,10 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Random;
-
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class GamePanel extends JPanel
 {
 	private int lineGap;
@@ -88,16 +87,20 @@ public class GamePanel extends JPanel
 		
 		this.path.clear();
 		
-		computePath( this.playerX, this.playerY, clickX / this.lineGap, clickY / this.lineGap, this.path);
-		
-		System.out.println( "il path è ");
-		
-		for( final Point point : this.path )
+		if (computePath( this.playerX, this.playerY, clickX / this.lineGap, clickY / this.lineGap, this.path))
 		{
-			System.out.print( " x : " + point.x + " " );
-			System.out.println( " y : " + point.y );
+			System.out.println( "il path è ");
 			
+			for( final Point point : this.path )
+			{
+				System.out.print( " x : " + point.x + " " );
+				System.out.println( " y : " + point.y );
+				
+			}			
 		}
+		else
+			System.out.println("Destinazione non raggiungibile");
+		
 	}
 
 	public boolean computePath( int initX, int initY, int destX, int destY, ArrayList<Point> path)
@@ -113,6 +116,8 @@ public class GamePanel extends JPanel
 
 		for( final Point obstacle : this.Obstacles )
         {
+			if( destX  == obstacle.x && destY == obstacle.y  )
+				return false;
 			if( initX  == obstacle.x && initY == obstacle.y  )
 				return false;
         }
@@ -132,86 +137,58 @@ public class GamePanel extends JPanel
 		}
 		ArrayList<Move> borders = new ArrayList<Move>();
 		
-		int randomNum = 0 + (int)(Math.random()*2); 
+		if( currentX < destX )
+			borders.add( Move.RIGHT );
+		else if ( currentX > destX )
+			borders.add( Move.LEFT );
 		
-		if (randomNum == 0)
+		if( currentY < destY )
+			borders.add( Move.DOWN );
+		else if ( currentY > destY )
+			borders.add( Move.UP );
+		
+		int randomNum = 0 + (int)(Math.random()*2);
+		int start = 0;
+		int end = borders.size();
+		int op = 1;
+		
+		if (randomNum == 1)
 		{
-			if( currentX < destX )
-				borders.add( Move.RIGHT );
-			else if ( currentX > destX )
-				borders.add( Move.LEFT );
-			
-			if( currentY < destY )
-				borders.add( Move.DOWN );
-			else if ( currentY > destY )
-				borders.add( Move.UP );
-		}
-		else
-		{
-			if( currentY < destY )
-				borders.add( Move.DOWN );
-			else if ( currentY > destY )
-				borders.add( Move.UP );
-			
-			if( currentX < destX )
-				borders.add( Move.RIGHT );
-			else if ( currentX > destX )
-				borders.add( Move.LEFT );
+			start = borders.size()-1;
+			end = -1;
+			op = -1;
 		}
 		
-		//borders.add( new Point( currentX + 1, currentY ) );
-		//borders.add( new Point( currentX + 1, currentY + 1 ) );
-		//borders.add( new Point( currentX , currentY + 1 ) );
-		//borders.add( new Point( currentX - 1, currentY + 1 ) );
-		//borders.add( new Point( currentX - 1, currentY ) );
-		//borders.add( new Point( currentX - 1, currentY - 1 ) );
-		//borders.add( new Point( currentX, currentY -1 ) );
-		//borders.add( new Point( currentX + 1, currentY - 1 ) );
-				
-		
-		for( final Move direction : borders )
+		for(int i = start; i != end; i= i+op )
 		{
 			Point point = new Point();
-			if (direction == Move.RIGHT)
+			if (borders.get(i) == Move.RIGHT)
 			{
 				System.out.println("RIGHT");
 				point = new Point (currentX+1, currentY);
 			}
-			else if (direction == Move.LEFT)
+			else if (borders.get(i) == Move.LEFT)
 			{
 				System.out.println("LEFT");
 				point = new Point (currentX-1, currentY);
 			}
-			else if (direction == Move.UP)
+			else if (borders.get(i) == Move.UP)
 			{
 				System.out.println("UP");
 				point = new Point (currentX, currentY-1);
 			}
-			else if (direction == Move.DOWN)
+			else if (borders.get(i) == Move.DOWN)
 			{
 				System.out.println("DOWN");
 				point = new Point (currentX, currentY+1);
 			}
 			
 			path.add( point );
-//			for( final Point point2 : this.path )
-//			{
-//				System.out.print( " x : " + point2.x + " " );
-//				System.out.println( " y : " + point2.y );
-//				
-//			}
 			if( this.computePath( point.x, point.y, destX, destY, path ) )
 				return true;
 			
 			else
-				path.remove( path.size() - 1 );
-			
-//			for( final Point point3 : this.path )
-//			{
-//				System.out.print( " x : " + point3.x + " " );
-//				System.out.println( " y : " + point3.y );
-//				
-//			}			
+				path.remove( path.size() - 1 );	
 		}
 		
 		return false;
