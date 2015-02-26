@@ -2,13 +2,14 @@ package mpa.gui.eventHandler;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import mpa.gui.game.GamePanel;
 
 public class MouseEventManager extends MouseAdapter
 {
 	GamePanel panel;
 
-	public MouseEventManager( GamePanel panel )
+	public MouseEventManager(GamePanel panel)
 	{
 		this.panel = panel;
 	}
@@ -16,9 +17,7 @@ public class MouseEventManager extends MouseAdapter
 	@Override
 	public void mousePressed(MouseEvent e)
 	{
-		this.panel.setPlayerPosition( e.getX(), e.getY() );
+		// this.panel.setPlayerPosition( e.getX(), e.getY() );
 	}
-	
-   
 
 }

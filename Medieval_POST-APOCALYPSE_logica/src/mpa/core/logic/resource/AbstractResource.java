@@ -1,15 +1,16 @@
 package mpa.core.logic.resource;
 
-import mpa.core.logic.AbstractObject;
+import mpa.core.logic.building.AbstractPrivateProperty;
+import mpa.core.logic.character.Player;
 
-public abstract class AbstractResource extends AbstractObject
+public abstract class AbstractResource extends AbstractPrivateProperty
 {
 
 	private int providing;
 
-	public AbstractResource(int x, int y, int providing)
+	public AbstractResource(int x, int y, int providing, Player player)
 	{
-		super(x, y);
+		super(x, y, 0, 0, player);
 		this.providing = providing;
 	}
 
@@ -22,8 +23,5 @@ public abstract class AbstractResource extends AbstractObject
 	{
 		this.providing = providing;
 	}
-	
-	
 
 }
-

@@ -11,7 +11,7 @@ public abstract class AbstractTool extends AbstractObject
 
 	public AbstractTool(int x, int y, int volume, int damage, int productivity)
 	{
-		super(x, y);
+		super(x, y, 0, 0);
 		this.volume = volume;
 		this.damage = damage;
 		this.productivity = productivity;

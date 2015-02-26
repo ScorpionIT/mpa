@@ -1,25 +1,13 @@
 package mpa.core.logic.building;
 
+import mpa.core.logic.character.Player;
 
-public class House extends AbstractBuilding
+public class House extends AbstractPrivateProperty
 {
-	private Mill mill;
 
-
-	public House(int x, int y) throws Exception
+	public House(float x, float y, Player player)
 	{
-		super(x, y); //TODO
-		//this.mill = mill;
+		super(x, y, 0, 0, player); // TODO
 	}
-	
-
-	public Mill getMill()
-	{
-		return mill;
-	}
-	
-	
-	
-	
 
 }

@@ -32,4 +32,23 @@ public enum Level
 		return current;
 	}
 
+	public int getNumberOfSubalterns(Level level)
+	{
+		switch (level)
+		{
+			case NEWBIE:
+				return 4;
+			case SER:
+				return 8;
+			case LORD:
+				return 12;
+			case WAR_LORD:
+				return 16;
+			case KING:
+				return 20;
+
+		}
+		return 0;
+	}
+
 }

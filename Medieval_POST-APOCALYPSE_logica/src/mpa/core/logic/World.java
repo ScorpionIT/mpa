@@ -1,47 +1,79 @@
 package mpa.core.logic;
 
-import java.awt.Point;
-import java.util.Map;
-
-import mpa.core.logic.building.Headquarter;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class World
 {
-	private int width;
-	private int height;
-	private AbstractObject map[][];
-	private Map<Integer, Point> headquartedPosition;
-	
-	public World(int width, int height)
+	private float width;
+	private float height;
+	private HashMap<Pair, ArrayList<AbstractObject>> objectX = new HashMap<>();
+	private HashMap<Pair, ArrayList<AbstractObject>> objectY = new HashMap<>();
+
+	// private Map<Integer, Point> headquartedPosition;
+
+	public World(float width, float height)
 	{
 		super();
 		this.width = width;
 		this.height = height;
-		map = new AbstractObject[this.width][this.height];
+
 	}
-	
+
 	public boolean addObject(AbstractObject obj)
 	{
-		if (map[obj.getX()][obj.getY()] != null) //TODO
-			return false;
+		float x = obj.getX();
+		float y = obj.getY();
+		float width = obj.getWidth();
+		float height = obj.getHeight();
+		float xMin = x - width / 2;
+		float xMax = x + width / 2;
+		float yMin = y - height / 2;
+		float yMax = y + height / 2;
 
-		if (obj.getX() >= this.width || obj.getY() >= this.height)
-			return false;
-		
-		map[obj.getX()][obj.getY()] = obj;
+		Pair xPair = new Pair(xMin, xMax);
+		Pair yPair = new Pair(yMin, yMax);
+		if (!objectX.containsKey(xPair))
+			objectX.put(xPair, new ArrayList<AbstractObject>());
+
+		objectX.get(xPair).add(obj);
+
+		if (!objectY.containsKey(yPair))
+			objectY.put(yPair, new ArrayList<AbstractObject>());
+
+		objectY.get(yPair).add(obj);
+
+		// TODO vedere se ci sono oggetti sovrapposti
 		return true;
 	}
-	
-	public Headquarter addHeadquarter(int i) throws Exception
+
+	// per aggiungere giocatori a partita iniziata
+	// public Headquarter addHeadquarter(int i) throws Exception
+	// {
+	// Headquarter headquarter;
+	// headquarter = new Headquarter(headquartedPosition.get(i).x, headquartedPosition.get(i).y);
+	// this.addObject(headquarter);
+	// return headquarter;
+	// }
+
+	// public void setHeadquartedPosition(Map<Integer, Point> headquartedPosition)
+	// {
+	// this.headquartedPosition = headquartedPosition;
+	// }
+
+	public float getWidth()
 	{
-		Headquarter headquarter;
-		headquarter = new Headquarter(headquartedPosition.get(i).x, headquartedPosition.get(i).y);
-		this.addObject(headquarter);
-		return headquarter;
+		return width;
 	}
-	
-	public void setHeadquartedPosition(Map<Integer, Point> headquartedPosition)
+
+	public float getHeight()
 	{
-		this.headquartedPosition = headquartedPosition;
+		return height;
 	}
+
+	// public boolean isPositionEmpty(int x, int y)
+	// {
+	// return (map[x][y] instanceof EmptyObject);
+	// }
+
 }

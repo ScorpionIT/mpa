@@ -2,51 +2,51 @@ package mpa.core.logic.building;
 
 public class Mill extends Thread
 {
-    private int food;
-    private int capacity;
-    private int time;
-    private int quantityToAdd;
-    
-	public Mill( int capacity, int time , int quantityToAdd ) throws Exception
+
+	// TODO TUTTO
+	private int food;
+	private int capacity;
+	private int time;
+	private int quantityToAdd;
+
+	public Mill(int capacity, int time, int quantityToAdd) throws Exception
 	{
 		this.food = 0;
 		this.capacity = capacity;
 		this.time = time;
 		this.quantityToAdd = quantityToAdd;
 	}
-	
-	public boolean addFood( int quantity )
+
+	public boolean addFood(int quantity)
 	{
-		if( ( this.food + quantity ) <= this.capacity )
+		if ((this.food + quantity) <= this.capacity)
 		{
 			this.food = this.food + quantity;
 			return true;
 		}
-		
-		else return false;
+
+		else
+			return false;
 	}
-	
+
 	@Override
 	public void run()
 	{
 		try
-        {
-            while (true)
-            {
-                try
-                {
-                    sleep( this.time );
-                }
-                catch (final InterruptedException e)
-                {
+		{
+			while (true)
+			{
+				try
+				{
+					sleep(this.time);
+				} catch (final InterruptedException e)
+				{
 
-                }
-               this.food += this.quantityToAdd;
-            }
-        }
-        catch (final Exception e)
-        {
-        }
+				}
+				this.food += this.quantityToAdd;
+			}
+		} catch (final Exception e)
+		{}
 		super.run();
 	}
 
@@ -64,9 +64,5 @@ public class Mill extends Thread
 	{
 		this.quantityToAdd = quantityToAdd;
 	}
-	
-	
 
-
-	
 }

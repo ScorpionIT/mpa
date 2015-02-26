@@ -1,12 +1,12 @@
 package mpa.core.logic.building;
 
-public class Market extends AbstractBuilding
+public class Market extends AbstractProperty
 {
 
-	public Market(int x, int y)
+	public Market(float x, float y)
 	{
-		super(x, y);
-		
+		super(x, y, 0, 0);
+
 	}
 
 }
