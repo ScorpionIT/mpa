@@ -1,18 +1,22 @@
 package mpa.core.logic;
 
+import java.awt.Point;
+import java.util.ArrayList;
+
 public class MapInfo
 {
 	private float width;
 	private float height;
-	private String title;
-	private int numberOfPlayer;
+	private String name;
+	private int numberOfPlayers;
+	private ArrayList<Point> headQuarters = new ArrayList<Point>();
 
 	public float getWidth()
 	{
 		return width;
 	}
 
-	public void setWidth(float width)
+	public void setWidth( float width )
 	{
 		this.width = width;
 	}
@@ -22,29 +26,42 @@ public class MapInfo
 		return height;
 	}
 
-	public void setHeight(float height)
+	public void setHeight( float height )
 	{
 		this.height = height;
 	}
 
-	public String getTitle()
+	public String getName()
 	{
-		return title;
+		return name;
 	}
 
-	public void setTitle(String title)
+	public void setName( String name )
 	{
-		this.title = title;
+		this.name = name;
 	}
 
-	public int getNumberOfPlayer()
+	public int getNumberOfPlayers()
 	{
-		return numberOfPlayer;
+		return numberOfPlayers;
 	}
 
-	public void setNumberOfPlayer(int numberOfPlayer)
+	public void setNumberOfPlayers( int numberOfPlayers )
 	{
-		this.numberOfPlayer = numberOfPlayer;
+		this.numberOfPlayers = numberOfPlayers;
 	}
 
+	public boolean addHeadQuarter( Point position )
+	{
+		if( headQuarters.size() == numberOfPlayers )
+			return false;
+
+		headQuarters.add( position );
+		return true;
+	}
+
+	public ArrayList<Point> getHeadQuarters()
+	{
+		return headQuarters;
+	}
 }

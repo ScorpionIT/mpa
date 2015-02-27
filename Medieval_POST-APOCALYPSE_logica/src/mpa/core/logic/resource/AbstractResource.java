@@ -8,9 +8,9 @@ public abstract class AbstractResource extends AbstractPrivateProperty
 
 	private int providing;
 
-	public AbstractResource(int x, int y, int providing, Player player)
+	public AbstractResource( int x, int y, int providing, Player player )
 	{
-		super(x, y, 0, 0, player);
+		super( x, y, 0, 0, player );
 		this.providing = providing;
 	}
 
@@ -19,7 +19,7 @@ public abstract class AbstractResource extends AbstractPrivateProperty
 		return providing;
 	}
 
-	public void setProviding(int providing)
+	public void setProviding( int providing )
 	{
 		this.providing = providing;
 	}
