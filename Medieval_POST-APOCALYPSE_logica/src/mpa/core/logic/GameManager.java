@@ -3,7 +3,6 @@ package mpa.core.logic;
 import java.util.List;
 
 import mpa.core.logic.building.AbstractPrivateProperty;
-import mpa.core.logic.character.DependentCharacter;
 import mpa.core.logic.character.Player;
 
 public class GameManager
@@ -34,14 +33,16 @@ public class GameManager
 
 	public void computePath(Player player, float xGoal, float yGoal)
 	{
+		PathCalculator pathCalculator = new LongRangePathCalculator();
+		pathCalculator.computePath(world, player, xGoal, yGoal);
+
 		// TODO
 	}
 
 	public boolean conquer(AbstractPrivateProperty abstractPrivateProperty, Player player)
 	{
-		DependentCharacter employSubaltern = player.employSubaltern(abstractPrivateProperty);
+		return player.employSubaltern(abstractPrivateProperty) != null;
 
-		return true;
 	}
 
 }
