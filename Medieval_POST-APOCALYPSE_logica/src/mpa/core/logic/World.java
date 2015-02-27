@@ -12,12 +12,26 @@ public class World
 
 	// private Map<Integer, Point> headquartedPosition;
 
+	public World()
+	{
+	}
+
 	public World(float width, float height)
 	{
 		super();
 		this.width = width;
 		this.height = height;
 
+	}
+
+	public void setHeight(float height)
+	{
+		this.height = height;
+	}
+
+	public void setWidth(float width)
+	{
+		this.width = width;
 	}
 
 	public boolean addObject(AbstractObject obj)

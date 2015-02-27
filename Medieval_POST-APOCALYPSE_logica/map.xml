@@ -1,0 +1,37 @@
+<Map>
+	<Name></Name>
+	<Width></Width>
+	<Height></Height>
+	<Number></Number>
+	<Object>
+		<HeadQuarters>
+			<HeadQuarter></HeadQuarter>
+			<HeadQuarter></HeadQuarter>
+			<HeadQuarter></HeadQuarter>
+			<HeadQuarter></HeadQuarter>
+			<HeadQuarter></HeadQuarter>
+			<HeadQuarter></HeadQuarter>
+		</HeadQuarters>
+		<Woods>
+			<Wood></Wood>
+		</Woods>
+
+		<Caves>
+			<Cave></Cave>
+		</Caves>
+
+		<Fields>
+			<Field></Field>
+		</Fields>
+
+		<Market>
+
+		</Market>
+
+		<Mills>
+			<Mill></Mill>
+		</Mills>
+	</Object>
+
+
+</Map>
