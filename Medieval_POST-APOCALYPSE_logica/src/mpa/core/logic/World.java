@@ -7,14 +7,10 @@ public class World
 {
 	private float width;
 	private float height;
-	private HashMap<Pair, ArrayList<AbstractObject>> objectX = new HashMap<>();
-	private HashMap<Pair, ArrayList<AbstractObject>> objectY = new HashMap<>();
+	private HashMap<Pair<Float, Float>, ArrayList<AbstractObject>> objectX = new HashMap<>();
+	private HashMap<Pair<Float, Float>, ArrayList<AbstractObject>> objectY = new HashMap<>();
 
 	// private Map<Integer, Point> headquartedPosition;
-
-	public World()
-	{
-	}
 
 	public World(float width, float height)
 	{
@@ -22,16 +18,6 @@ public class World
 		this.width = width;
 		this.height = height;
 
-	}
-
-	public void setHeight(float height)
-	{
-		this.height = height;
-	}
-
-	public void setWidth(float width)
-	{
-		this.width = width;
 	}
 
 	public boolean addObject(AbstractObject obj)
@@ -45,8 +31,8 @@ public class World
 		float yMin = y - height / 2;
 		float yMax = y + height / 2;
 
-		Pair xPair = new Pair(xMin, xMax);
-		Pair yPair = new Pair(yMin, yMax);
+		Pair<Float, Float> xPair = new Pair(xMin, xMax);
+		Pair<Float, Float> yPair = new Pair(yMin, yMax);
 		if (!objectX.containsKey(xPair))
 			objectX.put(xPair, new ArrayList<AbstractObject>());
 

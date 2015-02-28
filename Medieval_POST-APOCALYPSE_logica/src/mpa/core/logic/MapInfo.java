@@ -8,11 +8,12 @@ public class MapInfo
 	private float height;
 	private String name;
 	private int numberOfPlayers;
-	private ArrayList<mpa.core.logic.Point> headQuarters = new ArrayList<mpa.core.logic.Point>();
-	private ArrayList<mpa.core.logic.Point> caves = new ArrayList<mpa.core.logic.Point>();
-	private ArrayList<mpa.core.logic.Point> woods = new ArrayList<mpa.core.logic.Point>();
-	private ArrayList<mpa.core.logic.Point> fields = new ArrayList<mpa.core.logic.Point>();
-	private ArrayList<mpa.core.logic.Point> mills = new ArrayList<mpa.core.logic.Point>();
+	private ArrayList<Pair<Float, Float>> headQuarters = new ArrayList<Pair<Float, Float>>();
+	private ArrayList<Pair<Float, Float>> caves = new ArrayList<Pair<Float, Float>>();
+	private ArrayList<Pair<Float, Float>> woods = new ArrayList<Pair<Float, Float>>();
+	private ArrayList<Pair<Float, Float>> fields = new ArrayList<Pair<Float, Float>>();
+	private ArrayList<Pair<Float, Float>> mills = new ArrayList<Pair<Float, Float>>();
+	private Pair<Float, Float> market;
 
 	public float getWidth()
 	{
@@ -54,7 +55,7 @@ public class MapInfo
 		this.numberOfPlayers = numberOfPlayers;
 	}
 
-	public boolean addHeadQuarter(mpa.core.logic.Point position)
+	public boolean addHeadQuarter(Pair<Float, Float> position)
 	{
 		if (headQuarters.size() == numberOfPlayers)
 			return false;
@@ -63,28 +64,90 @@ public class MapInfo
 		return true;
 	}
 
-	public void addCave(mpa.core.logic.Point position)
+	public void setMarket(Pair<Float, Float> market)
+	{
+		this.market = market;
+	}
+
+	public void addCave(Pair<Float, Float> position)
 	{
 		caves.add(position);
 	}
 
-	public void addField(mpa.core.logic.Point position)
+	public void addField(Pair<Float, Float> position)
 	{
 		fields.add(position);
 	}
 
-	public void addWood(mpa.core.logic.Point position)
+	public void addWood(Pair<Float, Float> position)
 	{
 		woods.add(position);
 	}
 
-	public void addMill(mpa.core.logic.Point position)
+	public void addMill(Pair<Float, Float> position)
 	{
 		mills.add(position);
 	}
 
-	public ArrayList<mpa.core.logic.Point> getHeadQuarters()
+	public ArrayList<Pair<Float, Float>> getHeadQuarters()
 	{
 		return headQuarters;
+	}
+
+	public ArrayList<Pair<Float, Float>> getCaves()
+	{
+		return caves;
+	}
+
+	public ArrayList<Pair<Float, Float>> getMills()
+	{
+		return mills;
+	}
+
+	public ArrayList<Pair<Float, Float>> getWoods()
+	{
+		return woods;
+	}
+
+	public ArrayList<Pair<Float, Float>> getFields()
+	{
+		return fields;
+	}
+
+	public Pair<Float, Float> getMarket()
+	{
+		return market;
+	}
+
+	@Override
+	public String toString()
+	{
+		String s = "Name: " + name;
+		s += "\nWidth : " + width + " ; Height: " + height;
+		s += "\nHeadQuarters: ";
+		for (Pair<Float, Float> position : headQuarters)
+		{
+			s += "\nHeadQuarter: " + position.getFirst() + " - " + position.getSecond();
+		}
+
+		s += "\nFields: ";
+		for (Pair<Float, Float> position : fields)
+		{
+			s += "\nField: " + position.getFirst() + " - " + position.getSecond();
+		}
+
+		s += "\nCaves: ";
+		for (Pair<Float, Float> position : caves)
+		{
+			s += "\nCave: " + position.getFirst() + " - " + position.getSecond();
+		}
+		s += "\nWoods: ";
+		for (Pair<Float, Float> position : woods)
+		{
+			s += "\nWoods: " + position.getFirst() + " - " + position.getSecond();
+		}
+
+		s += "\nMarket: " + market.getFirst() + " - " + market.getSecond();
+		return s;
 	}
 }

@@ -16,6 +16,9 @@ public class MapFromXMLCreator implements MapInfoCreator
 	@Override
 	public MapInfo createMapInfo(String path)
 	{
+
+		// TODO controllare che la struttura del file sia corretta prima di caricare.
+
 		MapInfo mapInfo = null;
 		SAXBuilder builder = new SAXBuilder();
 		Document document;
@@ -37,37 +40,61 @@ public class MapFromXMLCreator implements MapInfoCreator
 				{
 					mapInfo.setHeight(Float.parseFloat(element.getValue()));
 				}
+				else if (element.getName().equals("Number"))
+				{
+					mapInfo.setNumberOfPlayers(Integer.parseInt(element.getValue()));
+				}
+
 				else if (element.getName().equals("Objects"))
 				{
 					for (Element element2 : element.getChildren())
 					{
-						if (element2.getName() == "HeadQuartes")
+						if (element2.getName() == "HeadQuarters")
 						{
-							for (mpa.core.logic.Point position : getBuildingCoordinates(element2))
+							for (Pair<Float, Float> position : getBuildingCoordinates(element2))
 							{
 								mapInfo.addHeadQuarter(position);
 							}
 						}
 						else if (element2.getName() == "Caves")
 						{
-							for (mpa.core.logic.Point position : getBuildingCoordinates(element2))
+							for (Pair<Float, Float> position : getBuildingCoordinates(element2))
 							{
 								mapInfo.addCave(position);
 							}
 						}
 						else if (element2.getName() == "Fields")
 						{
-							for (mpa.core.logic.Point position : getBuildingCoordinates(element2))
+							for (Pair<Float, Float> position : getBuildingCoordinates(element2))
 							{
 								mapInfo.addField(position);
 							}
 						}
 						else if (element2.getName() == "Mills")
 						{
-							for (mpa.core.logic.Point position : getBuildingCoordinates(element2))
+							for (Pair<Float, Float> position : getBuildingCoordinates(element2))
 							{
 								mapInfo.addMill(position);
 							}
+						}
+
+						else if (element2.getName() == "Woods")
+						{
+							for (Pair<Float, Float> position : getBuildingCoordinates(element2))
+							{
+								mapInfo.addWood(position);
+							}
+						}
+
+						else if (element2.getName() == "Market")
+						{
+							String value = element2.getValue();
+							String[] coordinates = value.split(",");
+							if (coordinates.length == 2)
+							{
+								mapInfo.setMarket(new Pair<Float, Float>(Float.parseFloat(coordinates[0]), Float.parseFloat(coordinates[1])));
+							}
+
 						}
 					}
 
@@ -82,17 +109,17 @@ public class MapFromXMLCreator implements MapInfoCreator
 
 	}
 
-	private ArrayList<mpa.core.logic.Point> getBuildingCoordinates(Element element)
+	private ArrayList<Pair<Float, Float>> getBuildingCoordinates(Element element)
 	{
 		List<Element> children = element.getChildren();
-		ArrayList<mpa.core.logic.Point> points = new ArrayList<>();
+		ArrayList<Pair<Float, Float>> points = new ArrayList<>();
 		for (Element element2 : children)
 		{
 			String value = element2.getValue();
 			String[] coordinates = value.split(",");
 			if (coordinates.length == 2)
 			{
-				points.add(new mpa.core.logic.Point(Float.parseFloat(coordinates[0]), Float.parseFloat(coordinates[1])));
+				points.add(new Pair<Float, Float>(Float.parseFloat(coordinates[0]), Float.parseFloat(coordinates[1])));
 			}
 
 		}

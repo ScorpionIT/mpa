@@ -6,20 +6,20 @@ import mpa.core.logic.character.Player;
 public abstract class AbstractResource extends AbstractPrivateProperty
 {
 
-	private int providing;
+	private float providing;
 
-	public AbstractResource( int x, int y, int providing, Player player )
+	public AbstractResource(float x, float y, float providing, Player player)
 	{
-		super( x, y, 0, 0, player );
+		super(x, y, 0, 0, player);
 		this.providing = providing;
 	}
 
-	public int getProviding()
+	public float getProviding()
 	{
 		return providing;
 	}
 
-	public void setProviding( int providing )
+	public void setProviding(float providing)
 	{
 		this.providing = providing;
 	}

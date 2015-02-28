@@ -1,37 +1,32 @@
 <Map>
-	<Name></Name>
-	<Width></Width>
-	<Height></Height>
-	<Number></Number>
-	<Object>
+	<Name>Mappa1</Name>
+	<Width>1005</Width>
+	<Height>100</Height>
+	<Number>3</Number>
+	<Objects>
 		<HeadQuarters>
-			<HeadQuarter></HeadQuarter>
-			<HeadQuarter></HeadQuarter>
-			<HeadQuarter></HeadQuarter>
-			<HeadQuarter></HeadQuarter>
-			<HeadQuarter></HeadQuarter>
-			<HeadQuarter></HeadQuarter>
+			<HeadQuarter>3,2</HeadQuarter>
+			<HeadQuarter>4,5</HeadQuarter>
+			<HeadQuarter>6,5</HeadQuarter>
 		</HeadQuarters>
 		<Woods>
-			<Wood></Wood>
+			<Wood>1,2</Wood>
 		</Woods>
 
 		<Caves>
-			<Cave></Cave>
+			<Cave>3,5</Cave>
 		</Caves>
 
 		<Fields>
-			<Field></Field>
+			<Field>6,7</Field>
 		</Fields>
 
-		<Market>
-
-		</Market>
+		<Market>10,4</Market>
 
 		<Mills>
-			<Mill></Mill>
+			<Mill>4,44</Mill>
 		</Mills>
-	</Object>
+	</Objects>
 
 
 </Map>

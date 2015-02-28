@@ -15,7 +15,7 @@ public class Field extends AbstractResource
 	private int maximumFoodCapacity;
 	private int food;
 
-	public Field(int x, int y, Player player)
+	public Field(float x, float y, Player player)
 	{
 		super(x, y, 0, player); // TODO
 		this.currentFieldState = FieldState.PLOWING;

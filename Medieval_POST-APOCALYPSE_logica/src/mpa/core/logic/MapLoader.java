@@ -4,7 +4,7 @@ public class MapLoader
 {
 	MapInfo mapInfo;
 
-	void loadMapInfo(MapInfoCreator mapInfoCreator, String path)
+	public void loadMapInfo(MapInfoCreator mapInfoCreator, String path)
 	{
 		mapInfo = mapInfoCreator.createMapInfo(path);
 	}
@@ -14,9 +14,10 @@ public class MapLoader
 		return mapInfo;
 	}
 
-	public void loadWorld(WorldCreator worldCreator, String path)
+	public World loadWorld(WorldCreator worldCreator)
 	{
-		World world = worldCreator.createWorld(path);
+		World world = worldCreator.createWorld(mapInfo);
+		return world;
 
 	}
 

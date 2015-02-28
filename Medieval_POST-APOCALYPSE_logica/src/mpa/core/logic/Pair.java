@@ -1,24 +1,23 @@
 package mpa.core.logic;
 
-public class Pair
+public class Pair<T, S>
 {
-	private float min;
-	private float max;
+	private T first;
+	private S second;
 
-	public Pair(float min, float max)
+	public Pair(T first, S second)
 	{
-		this.min = min;
-		this.max = max;
+		this.first = first;
+		this.second = second;
 	}
 
-	public float getMin()
+	public T getFirst()
 	{
-		return min;
+		return first;
 	}
 
-	public float getMax()
+	public S getSecond()
 	{
-		return max;
+		return second;
 	}
-
 }
