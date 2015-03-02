@@ -1,0 +1,33 @@
+<Map>
+	<Name>Mappa1</Name>
+	<Width>1005</Width>
+	<Height>100</Height>
+	<Number>3</Number>
+	<Objects>
+		<HeadQuarters>
+			<HeadQuarter>3,2</HeadQuarter>
+			<HeadQuarter>4,5</HeadQuarter>
+			<HeadQuarter>6,5</HeadQuarter>
+		</HeadQuarters>
+		<Woods>
+			<Wood>1,2</Wood>
+			<Wood>10,15</Wood>
+		</Woods>
+
+		<Caves>
+			<Cave>3,5</Cave>
+		</Caves>
+
+		<Fields>
+			<Field>6,7</Field>
+		</Fields>
+
+		<Market>10,4</Market>
+
+		<Mills>
+			<Mill>4,44</Mill>
+		</Mills>
+	</Objects>
+
+
+</Map>

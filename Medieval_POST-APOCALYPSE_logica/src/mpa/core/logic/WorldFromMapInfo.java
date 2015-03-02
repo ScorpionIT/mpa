@@ -5,7 +5,7 @@ import mpa.core.logic.resource.Cave;
 import mpa.core.logic.resource.Field;
 import mpa.core.logic.resource.Wood;
 
-public class WorldFromXMLCreator implements WorldCreator
+public class WorldFromMapInfo implements WorldCreator
 {
 
 	@Override

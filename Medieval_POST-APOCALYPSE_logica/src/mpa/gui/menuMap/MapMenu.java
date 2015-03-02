@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 import mpa.core.logic.MapFromXMLCreator;
 import mpa.core.logic.MapLoader;
 import mpa.core.logic.World;
-import mpa.core.logic.WorldFromXMLCreator;
+import mpa.core.logic.WorldFromMapInfo;
 import mpa.gui.menu.GameEditorComboBox;
 import mpa.gui.menu.GameEditorPanel;
 
@@ -24,6 +24,7 @@ public class MapMenu extends JFrame
 
 	public MapMenu()
 	{
+
 		super();
 		this.panel = new GameEditorPanel();
 		this.setContentPane(panel);
@@ -58,14 +59,13 @@ public class MapMenu extends JFrame
 
 	}
 
-	private void loadMap(String path)
+	private void loadMap(String mapName)
 	{
-		mapLoader.loadMapInfo(new MapFromXMLCreator(),
-				"/home/parcuri/Dropbox/Workspace_Java/Ho Perso Al Gioco/mpa/Medieval_POST-APOCALYPSE_logica/map.xml");
+		mapLoader.loadMapInfo(new MapFromXMLCreator(), maps + mapName);
 		System.out.println("ho caricato la mappa info");
 		System.out.println(mapLoader.getMapInfo().toString());
 
-		World world = mapLoader.loadWorld(new WorldFromXMLCreator());
+		World world = mapLoader.loadWorld(new WorldFromMapInfo());
 		System.out.println("ho caricato il mondo");
 
 	}
