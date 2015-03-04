@@ -3,7 +3,6 @@ package mpa.gui.menuMap;
 import java.io.File;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -20,9 +19,12 @@ public class MapListPanel extends JPanel
 
 	private JList<String> mapList;
 	private String[] data;
+	JScrollPane scrollPane;
 
 	public MapListPanel(MainMenuPanel mainPanel)
 	{
+
+		this.setOpaque(false);
 
 		this.mainPanel = mainPanel;
 		File folder = new File(maps);
@@ -57,28 +59,30 @@ public class MapListPanel extends JPanel
 				}
 			}
 		});
+
 		this.mainPanel = mainPanel;
 		this.setLayout(null);
-		this.setSize(500, 500);
-		JScrollPane scrollPane = new JScrollPane(mapList);
+
+		mapList.setOpaque(false); // TODO
+		mapList.setBounds(0, 0, mapList.getPreferredSize().width, mapList.getPreferredSize().width);
+		scrollPane = new JScrollPane();
+		scrollPane.setLayout(null);
+		scrollPane.add(mapList);
+		scrollPane.setOpaque(false);
+
 		scrollPane.setBounds(0, 0, this.getWidth() - 15, this.getHeight());
 		this.add(scrollPane);
-
-		System.out.println(this.getWidth());
 
 		this.setVisible(true);
 
 	}
 
-	public static void main(String[] args)
+	@Override
+	public void setBounds(int x, int y, int width, int height)
 	{
-		JFrame frame = new JFrame();
-		frame.setLocation(600, 300);
-		frame.setSize(500, 500);
-		JPanel pane = new MapListPanel(null);
-
-		frame.setContentPane(pane);
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		super.setBounds(x, y, width, height);
+		scrollPane.setBounds(0, 0, this.getWidth() - 15, this.getHeight());
+		mapList.setBounds(0, 0, this.getWidth() - 15, this.getHeight());
 	}
+
 }

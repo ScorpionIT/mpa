@@ -70,8 +70,4 @@ public class MapMenu extends JFrame
 
 	}
 
-	public static void main(String[] args)
-	{
-		JFrame jFrame = new MapMenu();
-	}
 }

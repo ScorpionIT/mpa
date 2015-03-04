@@ -3,35 +3,36 @@ package mpa.gui.menuMap;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
-import mpa.core.logic.MapFromXMLCreator;
 import mpa.core.logic.MapInfo;
-import mpa.core.logic.MapLoader;
 import mpa.core.logic.Pair;
 
 public class MapPreview extends MpaPanel
 {
 
-	MapInfo mapInfo;
-	HashMap<String, Image> images = new HashMap<>();
+	private MapInfo mapInfo;
+	private HashMap<String, Image> images = new HashMap<>();
+	private HashMap<JLabel, Pair<Float, Float>> headQuartersLabel = new HashMap<>();
 	private MainMenuPanel mainMenuPanel;
 
-	public MapPreview(MapInfo mapInfo, MainMenuPanel mainMenuPanel)
+	public MapPreview(MainMenuPanel mainMenuPanel)
 	{
-		this.mapInfo = mapInfo;
 		this.mainMenuPanel = mainMenuPanel;
 		this.setLayout(null);
 
 		loadImages();
-		// this.setSize(new Dimension(500, 500));
 		this.setBackground(Color.GREEN);
-
 		this.setVisible(true);
 
 	}
@@ -47,7 +48,6 @@ public class MapPreview extends MpaPanel
 			{
 				if (listOfFiles[i].isFile() && listOfFiles[i].getName().endsWith(".png"))
 				{
-					System.out.println("sono " + listOfFiles[i].getName());
 					Image img = ImageIO.read(new File("./imagesPreview/" + listOfFiles[i].getName()));
 					img = img.getScaledInstance(W(img.getWidth(null)), H(img.getHeight(null)), 0);
 					images.put(listOfFiles[i].getName().substring(0, listOfFiles[i].getName().length() - 4), img);
@@ -61,32 +61,78 @@ public class MapPreview extends MpaPanel
 
 	}
 
+	public void loadMap(MapInfo mapInfo)
+	{
+		this.mapInfo = mapInfo;
+		ImageIcon imageIcon = new ImageIcon(images.get("headQuarter"));
+		this.headQuartersLabel.clear();
+
+		for (Pair<Float, Float> headQuarterPosition : mapInfo.getHeadQuarters())
+		{
+			JLabel jLabel = new JLabel(imageIcon);
+			jLabel.addMouseListener(new MouseAdapter()
+			{
+				@Override
+				public void mouseReleased(MouseEvent e)
+				{
+					Set<JLabel> keys = MapPreview.this.headQuartersLabel.keySet();
+					for (JLabel l : keys)
+						if (MapPreview.this.headQuartersLabel.get(l).equals(MapPreview.this.mainMenuPanel.getSelectedHQ()))
+						{
+							l.setBorder(BorderFactory.createEmptyBorder());
+						}
+					((JLabel) e.getSource()).setBorder(BorderFactory.createLineBorder(Color.red));
+					MapPreview.this.mainMenuPanel.setSelectedHeadQuarter(MapPreview.this.headQuartersLabel.get(e.getSource()));
+
+				}
+
+			});
+			jLabel.setBounds(X(headQuarterPosition.getFirst()), Y(headQuarterPosition.getSecond()), images.get("headQuarter").getWidth(null), images
+					.get("headQuarter").getHeight(null));
+			this.add(jLabel);
+
+			headQuartersLabel.put(jLabel, headQuarterPosition);
+		}
+	}
+
 	@Override
 	protected void paintComponent(Graphics g)
 	{
+
 		super.paintComponent(g);
+		if (mapInfo == null)
+		{
+			return;
+		}
+
 		for (Pair<Float, Float> woodPosition : mapInfo.getWoods())
 		{
 
+			System.out.println(woodPosition.getFirst() + " " + woodPosition.getSecond());
 			g.drawImage(images.get("wood"), X(woodPosition.getFirst()), Y(woodPosition.getSecond()), images.get("wood").getWidth(null),
 					images.get("wood").getHeight(null), this);
 		}
+		for (Pair<Float, Float> fieldPosition : mapInfo.getFields())
+		{
+
+			// System.out.println(fieldPosition.getFirst() + " " + fieldPosition.getSecond());
+
+			g.drawRect(X(fieldPosition.getFirst()), Y(fieldPosition.getSecond()), images.get("headQuarter").getWidth(null), images.get("headQuarter")
+					.getHeight(null));
+		}
+
+		for (Pair<Float, Float> cavesPosition : mapInfo.getCaves())
+		{
+
+			// System.out.println(cavesPosition.getFirst() + " " + cavesPosition.getSecond());
+
+			g.drawOval(X(cavesPosition.getFirst()), Y(cavesPosition.getSecond()), images.get("headQuarter").getWidth(null), images.get("headQuarter")
+					.getHeight(null));
+
+		}
+		g.drawImage(images.get("market"), X(mapInfo.getMarket().getFirst()), Y(mapInfo.getMarket().getSecond()),
+				images.get("headQuarter").getWidth(null), images.get("market").getHeight(null), this);
 
 	}
 
-	public static void main(String[] args)
-	{
-		JFrame frame = new JFrame();
-
-		MapLoader mapLoader = new MapLoader();
-
-		mapLoader.loadMapInfo(new MapFromXMLCreator(), "./maps/map.xml");
-		MapInfo mapInfo = mapLoader.getMapInfo();
-		System.out.println(mapInfo.toString());
-		frame.add(new MapPreview(mapInfo, null));
-		frame.setLocation(0, 0);
-		frame.setSize(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width, java.awt.Toolkit.getDefaultToolkit().getScreenSize().height);
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
 }
