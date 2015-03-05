@@ -5,7 +5,7 @@ import mpa.core.logic.character.Player;
 public class Headquarter extends House
 {
 
-	public Headquarter(float x, float y, Player player) throws Exception
+	public Headquarter(float x, float y, Player player)
 	{
 		super(x, y, player); // TODO
 	}

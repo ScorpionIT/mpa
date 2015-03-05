@@ -24,6 +24,7 @@ public class WorldFromMapInfo implements WorldCreator
 		{
 			world.addObject(new Field(position.getFirst(), position.getSecond(), null));
 		}
+
 		world.addObject(new Market(mapInfo.getMarket().getFirst(), mapInfo.getMarket().getSecond()));
 		return world;
 	}

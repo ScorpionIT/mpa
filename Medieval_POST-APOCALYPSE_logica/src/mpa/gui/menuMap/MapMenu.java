@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import mpa.core.logic.MapFromXMLCreator;
-import mpa.core.logic.MapLoader;
+import mpa.core.logic.WorldLoader;
 import mpa.core.logic.World;
 import mpa.core.logic.WorldFromMapInfo;
 import mpa.gui.menu.GameEditorComboBox;
@@ -19,7 +19,7 @@ import mpa.gui.menu.GameEditorPanel;
 public class MapMenu extends JFrame
 {
 	private final String maps = new String(System.getProperty("user.home") + "/Medieval Post APOCALYPSE/MappeGioco/");
-	private MapLoader mapLoader = new MapLoader();
+	private WorldLoader worldLoader = new WorldLoader();
 	private JPanel panel;
 
 	public MapMenu()
@@ -61,11 +61,11 @@ public class MapMenu extends JFrame
 
 	private void loadMap(String mapName)
 	{
-		mapLoader.loadMapInfo(new MapFromXMLCreator(), maps + mapName);
+		worldLoader.loadMapInfo(new MapFromXMLCreator(), maps + mapName);
 		System.out.println("ho caricato la mappa info");
-		System.out.println(mapLoader.getMapInfo().toString());
+		System.out.println(worldLoader.getMapInfo().toString());
 
-		World world = mapLoader.loadWorld(new WorldFromMapInfo());
+		World world = worldLoader.loadWorld(new WorldFromMapInfo());
 		System.out.println("ho caricato il mondo");
 
 	}

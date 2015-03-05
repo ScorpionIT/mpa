@@ -14,7 +14,7 @@ public class Player extends AbstractCharacter
 	private ArrayList<DependentCharacter> subalterns;
 	private Level level;
 
-	public Player(String name, int x, int y, int health, Level level, Headquarter headquarter, int bagDimension)
+	public Player(String name, float x, float y, int health, Level level, Headquarter headquarter, int bagDimension)
 	{
 		super(name, x, y, health, bagDimension);
 		this.headquarter = headquarter;
@@ -104,6 +104,11 @@ public class Player extends AbstractCharacter
 	public Level getPlayerLevel()
 	{
 		return this.level;
+	}
+
+	public void setHeadquarter(Headquarter headquarter)
+	{
+		this.headquarter = headquarter;
 	}
 
 	public ArrayList<DependentCharacter> getSubalterns()
