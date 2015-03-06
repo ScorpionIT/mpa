@@ -61,6 +61,16 @@ public class World
 	// this.headquartedPosition = headquartedPosition;
 	// }
 
+	public HashMap<Pair<Float, Float>, ArrayList<AbstractObject>> getObjectX()
+	{
+		return objectX;
+	}
+
+	public HashMap<Pair<Float, Float>, ArrayList<AbstractObject>> getObjectY()
+	{
+		return objectY;
+	}
+
 	public float getWidth()
 	{
 		return width;

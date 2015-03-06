@@ -26,7 +26,7 @@ public class WorldLoader
 
 	}
 
-	public ArrayList<Player> createSinglePlayer(String playerName, World world, Pair<Float, Float> selectedHQ)
+	public ArrayList<Player> makePlayers(String playerName, World world, Pair<Float, Float> selectedHQ)
 	{
 		ArrayList<Player> players = new ArrayList<>();
 		ArrayList<Pair<Float, Float>> headQuarters = mapInfo.getHeadQuarters();
@@ -34,18 +34,21 @@ public class WorldLoader
 		{
 			if (selectedHQ.equals(headQuarters.get(i)))
 			{
-				Player player = new Player(playerName, selectedHQ.getFirst(), selectedHQ.getSecond() + 10, 100, Level.NEWBIE, null, 100);
-				Headquarter headquarter = new Headquarter(headQuarters.get(i).getFirst(), headQuarters.get(i).getSecond(), player);
+				Headquarter headquarter = new Headquarter(headQuarters.get(i).getFirst(), headQuarters.get(i).getSecond(), null);
+				Player player = new Player(playerName, headquarter.getX() + headquarter.getWidth() / 2, headquarter.getY() + headquarter.getHeight()
+						/ 2, 100, Level.NEWBIE, headquarter, 100);
+				headquarter.setOwner(player);
 				world.addObject(headquarter);
-				player.setHeadquarter(headquarter);
+				players.add(player);
 			}
 			else
 			{
-				Player player = new Player("Giocatore " + (i + 1), headQuarters.get(i).getFirst(), headQuarters.get(i).getSecond() + 10, 100,
-						Level.NEWBIE, null, 100);
-				Headquarter headquarter = new Headquarter(headQuarters.get(i).getFirst(), headQuarters.get(i).getSecond(), player);
+				Headquarter headquarter = new Headquarter(headQuarters.get(i).getFirst(), headQuarters.get(i).getSecond(), null);
+				Player player = new Player("Giocatore " + (i + 1), headquarter.getX() + headquarter.getWidth() / 2, headquarter.getY()
+						+ headquarter.getHeight() / 2, 100, Level.NEWBIE, headquarter, 100);
+				headquarter.setOwner(player);
 				world.addObject(headquarter);
-				player.setHeadquarter(headquarter);
+				players.add(player);
 
 			}
 		}

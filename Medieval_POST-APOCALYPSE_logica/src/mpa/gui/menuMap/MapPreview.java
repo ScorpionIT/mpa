@@ -30,8 +30,6 @@ public class MapPreview extends MpaPanel
 	{
 		this.mainMenuPanel = mainMenuPanel;
 		this.setLayout(null);
-
-		loadImages();
 		this.setBackground(Color.GREEN);
 		this.setVisible(true);
 
@@ -133,6 +131,14 @@ public class MapPreview extends MpaPanel
 		g.drawImage(images.get("market"), X(mapInfo.getMarket().getFirst()), Y(mapInfo.getMarket().getSecond()),
 				images.get("headQuarter").getWidth(null), images.get("market").getHeight(null), this);
 
+	}
+
+	@Override
+	public void setMapDimension(float width, float height)
+	{
+		// TODO Stub di metodo generato automaticamente
+		super.setMapDimension(width, height);
+		loadImages();
 	}
 
 }

@@ -7,7 +7,7 @@ public class House extends AbstractPrivateProperty
 
 	public House(float x, float y, Player player)
 	{
-		super(x, y, 0, 0, player); // TODO
+		super(x, y, 60, 60, player); // TODO
 	}
 
 }

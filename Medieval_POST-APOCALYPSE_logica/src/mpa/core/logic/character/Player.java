@@ -25,6 +25,7 @@ public class Player extends AbstractCharacter
 			subalterns.add(new DependentCharacter("ERia", headquarter.getX(), headquarter.getY(), 100, 100, null, level, this));
 
 		}
+
 	}
 
 	public boolean pickUpTool(AbstractTool tool)
@@ -104,11 +105,6 @@ public class Player extends AbstractCharacter
 	public Level getPlayerLevel()
 	{
 		return this.level;
-	}
-
-	public void setHeadquarter(Headquarter headquarter)
-	{
-		this.headquarter = headquarter;
 	}
 
 	public ArrayList<DependentCharacter> getSubalterns()

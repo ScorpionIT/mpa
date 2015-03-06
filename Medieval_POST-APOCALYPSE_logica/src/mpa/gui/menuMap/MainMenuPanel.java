@@ -13,10 +13,11 @@ import javax.swing.JPanel;
 import mpa.core.logic.GameManager;
 import mpa.core.logic.MapFromXMLCreator;
 import mpa.core.logic.MapInfo;
-import mpa.core.logic.WorldLoader;
 import mpa.core.logic.Pair;
 import mpa.core.logic.World;
 import mpa.core.logic.WorldFromMapInfo;
+import mpa.core.logic.WorldLoader;
+import mpa.gui.prova.GameGui;
 
 public class MainMenuPanel extends JPanel
 {
@@ -30,6 +31,8 @@ public class MainMenuPanel extends JPanel
 	private Pair<Float, Float> selectedHQ = null;
 	private String playerName = null;
 	private Button button;
+	int screenWidth = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
+	int screenHeight = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
 
 	public MainMenuPanel()
 	{
@@ -39,9 +42,6 @@ public class MainMenuPanel extends JPanel
 
 		this.setSize(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width, java.awt.Toolkit.getDefaultToolkit().getScreenSize().height);
 		this.setLayout(null);
-
-		int screenWidth = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
-		int screenHeight = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
 
 		mapPreview.setBounds(screenWidth * 55 / 100, 30, screenWidth * 45 / 100 - 30, screenHeight * 55 / 100);
 		this.add(mapPreview);
@@ -71,7 +71,13 @@ public class MainMenuPanel extends JPanel
 				{
 					World world = MainMenuPanel.this.worldLoader.loadWorld(new WorldFromMapInfo());
 					GameManager.init(world,
-							MainMenuPanel.this.worldLoader.createSinglePlayer(MainMenuPanel.this.playerName, world, MainMenuPanel.this.selectedHQ));
+							MainMenuPanel.this.worldLoader.makePlayers(MainMenuPanel.this.playerName, world, MainMenuPanel.this.selectedHQ));
+					// System.out.println(GameManager.getInstance().toString());
+					MainMenuPanel.this.removeAll();
+					GameGui gameGui = new GameGui();
+					gameGui.setBounds(0, 0, MainMenuPanel.this.screenWidth, MainMenuPanel.this.screenHeight);
+					MainMenuPanel.this.add(gameGui);
+					MainMenuPanel.this.updateUI();
 				}
 
 			}

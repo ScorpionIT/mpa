@@ -32,16 +32,14 @@ public class MpaPanel extends JPanel
 
 	public int W(float w)
 	{
-
-		this.getWidth();
-		return (int) w;
+		int x = (int) (w * this.width / width);
+		return (int) x;
 	}
 
 	public int H(float h)
 	{
-
-		this.getHeight();
-		return (int) h;
+		int x = (int) (h * this.getHeight() / height);
+		return (int) x;
 	}
 
 	public void setMapDimension(float width, float height)

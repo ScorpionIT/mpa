@@ -39,10 +39,29 @@ public class GameManager
 		// TODO
 	}
 
+	public World getWorld()
+	{
+		return world;
+	}
+
 	public boolean conquer(AbstractPrivateProperty abstractPrivateProperty, Player player)
 	{
 		return player.employSubaltern(abstractPrivateProperty) != null;
 
 	}
 
+	public List<Player> getPlayers()
+	{
+		return players;
+	}
+
+	@Override
+	public String toString()
+	{
+		String s = new String();
+		s += world.toString();
+
+		s += "\n" + players.size();
+		return s;
+	}
 }

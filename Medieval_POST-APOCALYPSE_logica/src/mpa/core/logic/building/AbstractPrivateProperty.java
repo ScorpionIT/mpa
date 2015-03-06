@@ -12,8 +12,6 @@ public abstract class AbstractPrivateProperty extends AbstractProperty
 	{
 		super(x, y, width, height);
 		this.owner = owner;// TODO
-		// TODO TUTTI I BUILDING
-
 	}
 
 	public boolean setOwner(Player player)
