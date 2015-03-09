@@ -1,9 +1,10 @@
 package mpa.core.logic;
 
-import mpa.core.logic.character.Player;
+import java.util.ArrayList;
+
 
 public interface PathCalculator
 {
 
-	public void computePath(World world, Player player, float xGoal, float yGoal);
+	public ArrayList<Pair<Float, Float>> computePath(World world, float xGoal, float yGoal, float xPlayer, float yPlayer);
 }

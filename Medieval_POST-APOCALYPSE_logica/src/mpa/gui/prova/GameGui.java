@@ -3,6 +3,8 @@ package mpa.gui.prova;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,6 +33,8 @@ public class GameGui extends MpaPanel
 	private MapInfo mapInfo;
 	private HashMap<String, Image> images = new HashMap<>();
 	private HashMap<JLabel, Pair<Float, Float>> headQuartersLabel = new HashMap<>();
+	private ArrayList<Pair<Float, Float>> path = null;
+	private Pair<Float, Float> point = null;
 
 	public GameGui()
 	{
@@ -39,6 +43,37 @@ public class GameGui extends MpaPanel
 		this.setBackground(Color.GREEN);
 		this.setMapDimension(GameManager.getInstance().getWorld().getWidth(), GameManager.getInstance().getWorld().getHeight());
 
+		this.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mouseReleased(MouseEvent e)
+			{
+				if (point == null)
+				{
+					point = new Pair<Float, Float>(new Float(e.getXOnScreen()), new Float(e.getYOnScreen()));
+					System.out.println("Ho clickato nella posizione " + e.getXOnScreen() + " " + e.getYOnScreen());
+					return;
+				}
+				else
+				{
+
+					System.out.println("Ho clickato nella posizione " + e.getXOnScreen() + " " + e.getYOnScreen());
+					path = GameManager.getInstance().computePath(point.getFirst(), point.getSecond(), new Float(e.getXOnScreen()),
+							new Float(e.getYOnScreen()));
+					System.out.println("Ho calcolato il path");
+					point = null;
+					GameGui.this.repaint();
+				}
+				// System.out.println("sono player " +
+				// GameManager.getInstance().getPlayers().get(0).getX() + " "
+				// + GameManager.getInstance().getPlayers().get(0).getY());
+				//
+				// path =
+				// GameManager.getInstance().computePath(GameManager.getInstance().getPlayers().get(0),
+				// e.getX(), e.getY());
+
+			}
+		});
 		this.setVisible(true);
 	}
 
@@ -103,8 +138,20 @@ public class GameGui extends MpaPanel
 		List<Player> players = GameManager.getInstance().getPlayers();
 		for (Player player : players)
 		{
-			// System.out.println(player.getX() + " - " + player.getY());
 			g.drawRoundRect(X(player.getX()), Y(player.getY()), 10, 10, 10, 20);
+		}
+
+		if (path != null)
+		{
+			System.out.println("sono la size di path " + path.size());
+			// g.drawLine((int) GameManager.getInstance().getPlayers().get(0).getX(), (int)
+			// GameManager.getInstance().getPlayers().get(0).getY(), path
+			// .get(0).getFirst().intValue(), path.get(0).getSecond().intValue());
+			for (int i = 0; i < path.size() - 1; i++)
+			{
+				g.drawLine(path.get(i).getFirst().intValue(), path.get(i).getSecond().intValue(), path.get(i + 1).getFirst().intValue(),
+						path.get(i + 1).getSecond().intValue());
+			}
 		}
 
 	}

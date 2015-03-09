@@ -1,13 +1,14 @@
 package mpa.core.logic;
 
-import mpa.core.logic.character.Player;
+import java.util.ArrayList;
 
 public class ShortRangePathCalculator implements PathCalculator
 {
 
 	@Override
-	public void computePath(World world, Player player, float xGoal, float yGoal)
+	public ArrayList<Pair<Float, Float>> computePath(World world, float xGoal, float yGoal, float xPlayer, float yPlayer)
 	{
+		return null;
 		// TODO Stub di metodo generato automaticamente
 
 	}

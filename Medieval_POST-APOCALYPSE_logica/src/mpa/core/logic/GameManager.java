@@ -1,5 +1,6 @@
 package mpa.core.logic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import mpa.core.logic.building.AbstractPrivateProperty;
@@ -31,10 +32,10 @@ public class GameManager
 		this.players = players;
 	}
 
-	public void computePath(Player player, float xGoal, float yGoal)
+	public ArrayList<Pair<Float, Float>> computePath(Player player, float xGoal, float yGoal)
 	{
 		PathCalculator pathCalculator = new LongRangePathCalculator();
-		pathCalculator.computePath(world, player, xGoal, yGoal);
+		return pathCalculator.computePath(world, xGoal, yGoal, player.getX(), player.getY());
 
 		// TODO
 	}
@@ -63,5 +64,11 @@ public class GameManager
 
 		s += "\n" + players.size();
 		return s;
+	}
+
+	public ArrayList<Pair<Float, Float>> computePath(Float first, Float second, Float float1, Float float2)
+	{
+		PathCalculator pathCalculator = new LongRangePathCalculator();
+		return pathCalculator.computePath(world, float1, float2, first, second);
 	}
 }
