@@ -21,8 +21,8 @@ public class LongRangePathCalculator implements PathCalculator
 		Pair<Float, Float> currentPosition = new Pair<Float, Float>(xPlayer, yPlayer);
 		Pair<Float, Float> currentVector = new Pair<Float, Float>(xGoal - xPlayer, yGoal - yPlayer);
 
-		// int sign = 1;
-		while (true)
+		int sign = 0;
+		while (sign < 5)
 		{
 			path.add(currentPosition);
 			ArrayList<Pair<Float, Float>> points = new ArrayList<>();
@@ -32,19 +32,20 @@ public class LongRangePathCalculator implements PathCalculator
 				break;
 			}
 			Rectangle2D.Float rect = new Rectangle2D.Float();
-			rect.setRect(xGoal, yGoal, 5, 5);
+			rect.setRect(xGoal, yGoal, 40, 40);
 			Point2D.Float pointFloat = new Point2D.Float(currentPosition.getFirst().floatValue(), currentPosition.getSecond().floatValue());
+			System.out.println("sono current position " + currentPosition.getFirst() + " " + currentPosition.getSecond());
 			if (rect.contains(pointFloat))
 			{
 				System.out.println("Non sono uguali uguali");
 				break;
 			}
 
-			points.add(new Pair<Float, Float>(currentPosition.getFirst() + increment * currentPosition.getFirst(), currentPosition.getSecond()
-					+ increment * currentPosition.getSecond()));
+			points.add(new Pair<Float, Float>(currentPosition.getFirst() + increment * currentVector.getFirst(), currentPosition.getSecond()
+					+ increment * currentVector.getSecond()));
 
-			points.add(new Pair<Float, Float>(currentPosition.getFirst() - increment * currentPosition.getFirst(), currentPosition.getSecond()
-					- increment * currentPosition.getSecond()));
+			points.add(new Pair<Float, Float>(currentPosition.getFirst() - increment * currentVector.getFirst(), currentPosition.getSecond()
+					- increment * currentVector.getSecond()));
 
 			Pair<Float, Float> normalVector = new Pair<Float, Float>(-currentVector.getSecond(), currentVector.getFirst());
 
@@ -54,18 +55,20 @@ public class LongRangePathCalculator implements PathCalculator
 			points.add(new Pair<Float, Float>(currentPosition.getFirst() + increment * normalVector.getFirst(), currentPosition.getSecond()
 					+ increment * normalVector.getSecond()));
 
-			double shorthestDist = distance(points.get(0).getFirst(), points.get(0).getSecond(), xGoal, yGoal);
+			double shortestDist = distance(points.get(0).getFirst(), points.get(0).getSecond(), xGoal, yGoal);
 
+			System.out.println("sono shortest dist " + shortestDist);
 			Pair<Float, Float> shortestPoint = points.get(0);
 			int i = 0;
 			int indexShortest = 0;
 			for (Pair<Float, Float> pair : points)
 			{
+				System.out.println(pair.toString());
 				double dist = distance(pair.getFirst(), pair.getSecond(), xGoal, yGoal);
-				if (dist < shorthestDist && pair != path.get(path.size() - 1))
+				if (dist < shortestDist && pair != path.get(path.size() - 2))
 				{
 					shortestPoint = pair;
-					shorthestDist = dist;
+					shortestDist = dist;
 					indexShortest = i;
 				}
 				i++;
@@ -77,6 +80,7 @@ public class LongRangePathCalculator implements PathCalculator
 			}
 			currentPosition = shortestPoint;
 
+			sign++;
 		}
 
 		return path;
