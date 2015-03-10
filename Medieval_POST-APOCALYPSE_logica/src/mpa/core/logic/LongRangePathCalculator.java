@@ -19,10 +19,10 @@ public class LongRangePathCalculator implements PathCalculator
 	{
 		ArrayList<Pair<Float, Float>> path = new ArrayList<Pair<Float, Float>>();
 		Pair<Float, Float> currentPosition = new Pair<Float, Float>(xPlayer, yPlayer);
-		Pair<Float, Float> currentVector = new Pair<Float, Float>(xGoal - xPlayer, yGoal - yPlayer);
+		Pair<Float, Float> currentVector = new Pair<Float, Float>((xGoal - xPlayer) / 1000, (yGoal - yPlayer) / 1000);
 
 		int sign = 0;
-		while (sign < 5)
+		while (true)
 		{
 			path.add(currentPosition);
 			ArrayList<Pair<Float, Float>> points = new ArrayList<>();
@@ -32,7 +32,7 @@ public class LongRangePathCalculator implements PathCalculator
 				break;
 			}
 			Rectangle2D.Float rect = new Rectangle2D.Float();
-			rect.setRect(xGoal, yGoal, 40, 40);
+			rect.setRect(xGoal - 20, yGoal - 20, 40, 40);
 			Point2D.Float pointFloat = new Point2D.Float(currentPosition.getFirst().floatValue(), currentPosition.getSecond().floatValue());
 			System.out.println("sono current position " + currentPosition.getFirst() + " " + currentPosition.getSecond());
 			if (rect.contains(pointFloat))
@@ -57,7 +57,6 @@ public class LongRangePathCalculator implements PathCalculator
 
 			double shortestDist = distance(points.get(0).getFirst(), points.get(0).getSecond(), xGoal, yGoal);
 
-			System.out.println("sono shortest dist " + shortestDist);
 			Pair<Float, Float> shortestPoint = points.get(0);
 			int i = 0;
 			int indexShortest = 0;
@@ -74,6 +73,8 @@ public class LongRangePathCalculator implements PathCalculator
 				i++;
 			}
 
+			System.out.println("sono shortest dist " + shortestDist);
+
 			if (indexShortest == 3 || indexShortest == 2)
 			{
 				currentVector = normalVector;
@@ -89,9 +90,11 @@ public class LongRangePathCalculator implements PathCalculator
 
 	private static double distance(float x1, float y1, float x2, float y2)
 	{
+		System.out.println("sono potenza X " + Math.pow((x2 - x1), 2));
+		System.out.println("sono potenza Y " + Math.pow((y2 - y1), 2));
+		System.out.println();
 		return Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2));
 	}
-
 	// @Override
 	// protected void paintComponent(Graphics g)
 	// {
