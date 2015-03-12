@@ -85,7 +85,7 @@ public class MapPreview extends MpaPanel
 				}
 
 			});
-			jLabel.setBounds(X(headQuarterPosition.getFirst()), Y(headQuarterPosition.getSecond()), images.get("headQuarter").getWidth(null), images
+			jLabel.setBounds(graphicX(headQuarterPosition.getFirst()), graphicY(headQuarterPosition.getSecond()), images.get("headQuarter").getWidth(null), images
 					.get("headQuarter").getHeight(null));
 			this.add(jLabel);
 
@@ -107,7 +107,7 @@ public class MapPreview extends MpaPanel
 		{
 
 			System.out.println(woodPosition.getFirst() + " " + woodPosition.getSecond());
-			g.drawImage(images.get("wood"), X(woodPosition.getFirst()), Y(woodPosition.getSecond()), images.get("wood").getWidth(null),
+			g.drawImage(images.get("wood"), graphicX(woodPosition.getFirst()), graphicY(woodPosition.getSecond()), images.get("wood").getWidth(null),
 					images.get("wood").getHeight(null), this);
 		}
 		for (Pair<Float, Float> fieldPosition : mapInfo.getFields())
@@ -115,7 +115,7 @@ public class MapPreview extends MpaPanel
 
 			// System.out.println(fieldPosition.getFirst() + " " + fieldPosition.getSecond());
 
-			g.drawRect(X(fieldPosition.getFirst()), Y(fieldPosition.getSecond()), images.get("headQuarter").getWidth(null), images.get("headQuarter")
+			g.drawRect(graphicX(fieldPosition.getFirst()), graphicY(fieldPosition.getSecond()), images.get("headQuarter").getWidth(null), images.get("headQuarter")
 					.getHeight(null));
 		}
 
@@ -124,11 +124,11 @@ public class MapPreview extends MpaPanel
 
 			// System.out.println(cavesPosition.getFirst() + " " + cavesPosition.getSecond());
 
-			g.drawOval(X(cavesPosition.getFirst()), Y(cavesPosition.getSecond()), images.get("headQuarter").getWidth(null), images.get("headQuarter")
+			g.drawOval(graphicX(cavesPosition.getFirst()), graphicY(cavesPosition.getSecond()), images.get("headQuarter").getWidth(null), images.get("headQuarter")
 					.getHeight(null));
 
 		}
-		g.drawImage(images.get("market"), X(mapInfo.getMarket().getFirst()), Y(mapInfo.getMarket().getSecond()),
+		g.drawImage(images.get("market"), graphicX(mapInfo.getMarket().getFirst()), graphicY(mapInfo.getMarket().getSecond()),
 				images.get("headQuarter").getWidth(null), images.get("market").getHeight(null), this);
 
 	}

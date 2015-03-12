@@ -50,16 +50,16 @@ public class GameGui extends MpaPanel
 			{
 				if (point == null)
 				{
-					point = new Pair<Float, Float>(new Float(e.getXOnScreen()), new Float(e.getYOnScreen()));
+					point = new Pair<Float, Float>(new Float(worldX(e.getXOnScreen())), new Float(worldY(e.getYOnScreen())));
 					System.out.println("Ho clickato nella posizione " + e.getXOnScreen() + " " + e.getYOnScreen());
 					return;
 				}
 				else
 				{
 
-					System.out.println("Ho clickato nella posizione " + e.getXOnScreen() + " " + e.getYOnScreen());
-					path = GameManager.getInstance().computePath(point.getFirst(), point.getSecond(), new Float(e.getXOnScreen()),
-							new Float(e.getYOnScreen()));
+					System.out.println("Ho clickato nella posizione " + worldX(e.getXOnScreen()) + " " + worldY(e.getYOnScreen()));
+					path = GameManager.getInstance().computePath(point.getFirst(), point.getSecond(), new Float(worldX(e.getXOnScreen())),
+							new Float(worldY(e.getYOnScreen())));
 					System.out.println("Ho calcolato il path");
 					point = null;
 					GameGui.this.repaint();
@@ -117,20 +117,32 @@ public class GameGui extends MpaPanel
 			for (AbstractObject obj : objectX.get(pair))
 			{
 				if (obj instanceof Wood)
-					g.drawImage(images.get("wood"), X(obj.getX()), Y(obj.getY()), images.get("wood").getWidth(null),
-							images.get("wood").getHeight(null), this);
+					// g.drawImage(images.get("wood"), graphicX(obj.getX()), graphicY(obj.getY()),
+					// images.get("wood").getWidth(null), images.get("wood")
+					// .getHeight(null), this);
 
+					g.drawRect(graphicX(obj.getX()), graphicY(obj.getY()), (int) obj.getWidth(), (int) obj.getHeight());
 				else if (obj instanceof Headquarter)
-					g.drawImage(images.get("headQuarter"), X(obj.getX()), Y(obj.getY()), images.get("wood").getWidth(null), images.get("wood")
-							.getHeight(null), this);
+					// g.drawImage(images.get("headQuarter"), graphicX(obj.getX()),
+					// graphicY(obj.getY()), images.get("wood").getWidth(null),
+					// images.get("wood").getHeight(null), this);
+					g.drawRect(graphicX(obj.getX()), graphicY(obj.getY()), (int) obj.getWidth(), (int) obj.getHeight());
 
 				else if (obj instanceof Cave)
-					g.drawOval(X(obj.getX()), Y(obj.getY()), images.get("headQuarter").getWidth(null), images.get("headQuarter").getHeight(null));
+					// g.drawOval(graphicX(obj.getX()), graphicY(obj.getY()),
+					// images.get("headQuarter").getWidth(null), images.get("headQuarter")
+					// .getHeight(null));
+					g.drawRect(graphicX(obj.getX()), graphicY(obj.getY()), (int) obj.getWidth(), (int) obj.getHeight());
 				else if (obj instanceof Market)
-					g.drawImage(images.get("market"), X(obj.getX()), Y(obj.getY()), images.get("headQuarter").getWidth(null), images.get("market")
-							.getHeight(null), this);
+					// g.drawImage(images.get("market"), graphicX(obj.getX()), graphicY(obj.getY()),
+					// images.get("headQuarter").getWidth(null), images
+					// .get("market").getHeight(null), this);
+					g.drawRect(graphicX(obj.getX()), graphicY(obj.getY()), (int) obj.getWidth(), (int) obj.getHeight());
 				else if (obj instanceof Field)
-					g.drawRect(X(obj.getX()), Y(obj.getY()), images.get("headQuarter").getWidth(null), images.get("headQuarter").getHeight(null));
+					// g.drawRect(graphicX(obj.getX()), graphicY(obj.getY()),
+					// images.get("headQuarter").getWidth(null), images.get("headQuarter")
+					// .getHeight(null));
+					g.drawRect(graphicX(obj.getX()), graphicY(obj.getY()), (int) obj.getWidth(), (int) obj.getHeight());
 
 			}
 		}
@@ -138,7 +150,7 @@ public class GameGui extends MpaPanel
 		List<Player> players = GameManager.getInstance().getPlayers();
 		for (Player player : players)
 		{
-			g.drawRoundRect(X(player.getX()), Y(player.getY()), 10, 10, 10, 20);
+			g.drawRoundRect(graphicX(player.getX()), graphicY(player.getY()), 10, 10, 10, 20);
 		}
 
 		if (path != null)
@@ -149,9 +161,11 @@ public class GameGui extends MpaPanel
 			// .get(0).getFirst().intValue(), path.get(0).getSecond().intValue());
 			for (int i = 0; i < path.size() - 1; i++)
 			{
-				g.drawLine(path.get(i).getFirst().intValue(), path.get(i).getSecond().intValue(), path.get(i + 1).getFirst().intValue(),
-						path.get(i + 1).getSecond().intValue());
+				g.drawLine(graphicX(path.get(i).getFirst().intValue()), graphicY(path.get(i).getSecond()), graphicX(path.get(i + 1).getFirst()),
+						graphicY(path.get(i + 1).getSecond()));
 			}
+
+			// System.out.println(GameManager.getInstance().getWorld().toString());
 		}
 
 	}
