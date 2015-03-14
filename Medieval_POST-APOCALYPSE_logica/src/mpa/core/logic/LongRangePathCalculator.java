@@ -6,15 +6,17 @@ import java.util.Iterator;
 public class LongRangePathCalculator implements PathCalculator
 {
 
-	private static float increment = 60;
+	private static float increment = 30;
 
 	// @Override
-	// public ArrayList<Pair<Float, Float>> computePath(World world, float xGoal, float yGoal, float
-	// xPlayer, float yPlayer)
+	// public ArrayList<Pair<Float, Float>> computePath(World world, Float xGoal, Float
+	// yGoal, Float
+	// xPlayer, Float yPlayer)
 	// {
 	// ArrayList<Pair<Float, Float>> path = new ArrayList<Pair<Float, Float>>();
 	// Pair<Float, Float> currentPosition = new Pair<Float, Float>(xPlayer, yPlayer);
-	// Pair<Float, Float> currentVector = new Pair<Float, Float>((xGoal - xPlayer) / 1000, (yGoal -
+	// Pair<Float, Float> currentVector = new Pair<Float, Float>((xGoal - xPlayer) / 1000,
+	// (yGoal -
 	// yPlayer) / 1000);
 	// path.add(currentPosition);
 	//
@@ -30,8 +32,8 @@ public class LongRangePathCalculator implements PathCalculator
 	// break;
 	//
 	// Rectangle2D.Float rect = new Rectangle2D.Float(xGoal - 10, yGoal - 10, 20, 20);
-	// Point2D.Float pointFloat = new Point2D.Float(currentPosition.getFirst().floatValue(),
-	// currentPosition.getSecond().floatValue());
+	// Point2D.Float pointFloat = new Point2D.Float(currentPosition.getFirst().FloatValue(),
+	// currentPosition.getSecond().FloatValue());
 	// if (rect.contains(pointFloat))
 	// {
 	// break;
@@ -102,14 +104,16 @@ public class LongRangePathCalculator implements PathCalculator
 	// }
 
 	// @Override
-	// public ArrayList<Pair<Float, Float>> computePath(World world, float xGoal, float yGoal, float
-	// xPlayer, float yPlayer)
+	// public ArrayList<Pair<Float, Float>> computePath(World world, Float xGoal, Float
+	// yGoal, Float
+	// xPlayer, Float yPlayer)
 	// {
 	// ArrayList<Pair<Float, Float>> openList = new ArrayList<Pair<Float, Float>>();
 	//
 	// ArrayList<Pair<Float, Float>> closedList = new ArrayList<Pair<Float, Float>>();
 	// Pair<Float, Float> currentPosition = new Pair<Float, Float>(xPlayer, yPlayer);
-	// Pair<Float, Float> currentVector = new Pair<Float, Float>((xGoal - xPlayer) / 1000, (yGoal -
+	// Pair<Float, Float> currentVector = new Pair<Float, Float>((xGoal - xPlayer) / 1000,
+	// (yGoal -
 	// yPlayer) / 1000);
 	// openList.add(currentPosition);
 	// while (openList.size() != 0)
@@ -125,8 +129,8 @@ public class LongRangePathCalculator implements PathCalculator
 	// }
 	// // Rectangle2D.Float rect = new Rectangle2D.Float(xGoal - 10, yGoal - 10, 20, 20);
 	// // Point2D.Float pointFloat = new
-	// // Point2D.Float(currentPosition.getFirst().floatValue(),
-	// // currentPosition.getSecond().floatValue());
+	// // Point2D.Float(currentPosition.getFirst().FloatValue(),
+	// // currentPosition.getSecond().FloatValue());
 	// // if (rect.contains(pointFloat))
 	// // {
 	// // break;
@@ -158,7 +162,7 @@ public class LongRangePathCalculator implements PathCalculator
 	//
 	// for (Pair<Float, Float> pair : points)
 	// {
-	// if (!contains(closedList, pair.getFirst(), pair.getSecond()) && !contains(closedList,
+	// if (!contains(openList, pair.getFirst(), pair.getSecond()) && !contains(closedList,
 	// pair.getFirst(), pair.getSecond())
 	// && !isThereAnyCollision(pair.getFirst(), pair.getSecond(), world))
 	// {
@@ -172,91 +176,63 @@ public class LongRangePathCalculator implements PathCalculator
 	// return closedList;
 	// }
 
-	@Override
-	public ArrayList<Pair<Float, Float>> computePath(World world, float xGoal, float yGoal, float xPlayer, float yPlayer)
+	ArrayList<Pair<Float, Float>> getPath(ArrayList<Pair<Pair<Float, Float>, Pair<Float, Float>>> closedList)
 	{
-		ArrayList<Pair<Pair<Float, Float>, Pair<Float, Float>>> openList = new ArrayList<Pair<Pair<Float, Float>, Pair<Float, Float>>>();
+		ArrayList<Pair<Float, Float>> path = new ArrayList<>();
+		Pair<Pair<Float, Float>, Pair<Float, Float>> element = closedList.get(closedList.size() - 1);
 
-		ArrayList<Pair<Float, Float>> closedList = new ArrayList<Pair<Float, Float>>();
-		Pair<Float, Float> currentPosition = new Pair<Float, Float>(xPlayer, yPlayer);
-		Pair<Float, Float> currentVector = new Pair<Float, Float>((xGoal - xPlayer) / 1000, (yGoal - yPlayer) / 1000);
-		// openList.add(currentPosition); //TODO
-		while (openList.size() != 0)
+		while (element.getFirst() != null)
 		{
-			// currentPosition = pointWithLowestCost(openList, xGoal, yGoal, world); //TODO
-			if (currentPosition == null)
-				System.out.println("sono null");
-
-			if (distance(currentPosition.getFirst(), currentPosition.getSecond(), xGoal, yGoal) < increment)
-			{
-				break;
-			}
-			// Rectangle2D.Float rect = new Rectangle2D.Float(xGoal - 10, yGoal - 10, 20, 20);
-			// Point2D.Float pointFloat = new
-			// Point2D.Float(currentPosition.getFirst().floatValue(),
-			// currentPosition.getSecond().floatValue());
-			// if (rect.contains(pointFloat))
-			// {
-			// break;
-			// }
-
-			System.out.println();
-			closedList.add(currentPosition);
-			openList.remove(currentPosition);
-
-			ArrayList<Pair<Float, Float>> points = new ArrayList<>();
-			points.add(new Pair<Float, Float>(currentPosition.getFirst() + increment * currentVector.getFirst(), currentPosition.getSecond()
-					+ increment * currentVector.getSecond()));
-
-			points.add(new Pair<Float, Float>(currentPosition.getFirst() - increment * currentVector.getFirst(), currentPosition.getSecond()
-					- increment * currentVector.getSecond()));
-
-			Pair<Float, Float> normalVector = new Pair<Float, Float>(-currentVector.getSecond(), currentVector.getFirst());
-
-			points.add(new Pair<Float, Float>(currentPosition.getFirst() - increment * normalVector.getFirst(), currentPosition.getSecond()
-					- increment * normalVector.getSecond()));
-
-			points.add(new Pair<Float, Float>(currentPosition.getFirst() + increment * normalVector.getFirst(), currentPosition.getSecond()
-					+ increment * normalVector.getSecond()));
-
-			for (Pair<Float, Float> pair : points)
-			{
-				if (!contains(closedList, pair.getFirst(), pair.getSecond()) && !contains(closedList, pair.getFirst(), pair.getSecond())
-						&& !isThereAnyCollision(pair.getFirst(), pair.getSecond(), world))
-				{
-					// openList.add(pair); //TODO
-					System.out.println("sto aggiungendo alla open list il punto " + pair.getFirst() + " " + pair.getSecond());
-				}
-			}
-
+			System.out.println("sono nel while finale");
+			System.out.println(element.getSecond());
+			path.add(0, element.getSecond());
+			element = getElement(closedList, element.getFirst());
+			if (element == null)
+				System.out.println("sono null e sono element");
 		}
-		return closedList;
+		path.add(0, element.getSecond());
+		return path;
 	}
 
-	boolean contains(ArrayList<Pair<Float, Float>> list, Float x, Float y)
+	Pair<Pair<Float, Float>, Pair<Float, Float>> getElement(ArrayList<Pair<Pair<Float, Float>, Pair<Float, Float>>> closedList,
+			Pair<Float, Float> parent)
 	{
-		for (Pair<Float, Float> pair : list)
+		for (Pair<Pair<Float, Float>, Pair<Float, Float>> pair : closedList)
 		{
-			if (pair.getFirst().equals(x) && pair.getSecond().equals(y))
+			if (pair.getSecond().equal(parent))
 			{
-				System.out.println("pair " + pair.getFirst() + " | " + pair.getSecond() + " è uguale a " + x + " | " + y);
-
-				return true;
+				return pair;
 			}
+		}
+		return null;
+	}
+
+	boolean contains(ArrayList<Pair<Pair<Float, Float>, Pair<Float, Float>>> openList, Pair<Float, Float> first, Pair<Float, Float> second)
+	{
+		for (Pair<Pair<Float, Float>, Pair<Float, Float>> pair : openList)
+		{
+			if (pair.getFirst() != null)
+				if (/* pair.getFirst().equal(first) && */pair.getSecond().equal(second))
+				{
+					System.out.println("pair " + pair.getFirst() + " | " + pair.getSecond() + " è uguale a " + first + " | " + second);
+
+					return true;
+				}
 
 		}
 		return false;
 	}
 
-	Pair<Float, Float> pointWithLowestCost(ArrayList<Pair<Float, Float>> list, float xGoal, float yGoal, World world)
+	Pair<Pair<Float, Float>, Pair<Float, Float>> pointWithLowestCost(ArrayList<Pair<Pair<Float, Float>, Pair<Float, Float>>> list, Float xGoal,
+			Float yGoal, World world)
 	{
 		double shortestDist = Double.MAX_VALUE;
 
-		Pair<Float, Float> shortestPoint = null;
+		Pair<Pair<Float, Float>, Pair<Float, Float>> shortestPoint = null;
 		for (int i = 0; i < list.size(); i++)
 		{
 
-			double dist = distance(list.get(i).getFirst(), list.get(i).getSecond(), xGoal, yGoal);
+			double dist = distance(list.get(i).getSecond().getFirst(), list.get(i).getSecond().getSecond(), xGoal, yGoal);
 			if (dist < shortestDist)
 			{
 				shortestPoint = list.get(i);
@@ -268,12 +244,12 @@ public class LongRangePathCalculator implements PathCalculator
 
 	}
 
-	private static double distance(float x1, float y1, float x2, float y2)
+	private static double distance(Float x1, Float y1, Float x2, Float y2)
 	{
 		return Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2));
 	}
 
-	private static boolean isThereAnyCollision(float nextX, float nextY, World world)
+	private static boolean isThereAnyCollision(Float nextX, Float nextY, World world)
 	{
 		ArrayList<AbstractObject> objectsX = world.getObjectsXInTheRange(nextX);
 		ArrayList<AbstractObject> objectsY = world.getObjectsYInTheRange(nextY);
@@ -304,4 +280,97 @@ public class LongRangePathCalculator implements PathCalculator
 		return false;
 
 	}
+
+	@Override
+	public ArrayList<Pair<Float, Float>> computePath(World world, float xGoal, float yGoal, float xPlayer, float yPlayer)
+	{
+		System.out.println("sono io ciao");
+		ArrayList<Pair<Pair<Float, Float>, Pair<Float, Float>>> openList = new ArrayList<Pair<Pair<Float, Float>, Pair<Float, Float>>>();
+
+		ArrayList<Pair<Pair<Float, Float>, Pair<Float, Float>>> closedList = new ArrayList<Pair<Pair<Float, Float>, Pair<Float, Float>>>();
+		Pair<Pair<Float, Float>, Pair<Float, Float>> currentPosition = new Pair<Pair<Float, Float>, Pair<Float, Float>>(null, new Pair<Float, Float>(
+				xPlayer, yPlayer));
+		Pair<Float, Float> currentVector = new Pair<Float, Float>((xGoal - xPlayer) / 500, (yGoal - yPlayer) / 500);
+		Pair<Float, Float> normalVector = new Pair<Float, Float>(-currentVector.getSecond(), currentVector.getFirst());
+
+		openList.add(currentPosition);
+		while (openList.size() != 0)
+		{
+			currentPosition = pointWithLowestCost(openList, xGoal, yGoal, world);
+			// currentVector = new Pair<Float, Float>((xGoal -
+			// currentPosition.getSecond().getFirst()) / 1000, (yGoal - currentPosition.getSecond()
+			// .getSecond()) / 1000);
+
+			if (currentPosition == null)
+				System.out.println("sono null");
+
+			System.out.println();
+			closedList.add(currentPosition);
+			openList.remove(currentPosition);
+			if (distance(currentPosition.getSecond().getFirst(), currentPosition.getSecond().getSecond(), xGoal, yGoal) < increment)
+			{
+				closedList.add(new Pair<Pair<Float, Float>, Pair<Float, Float>>(currentPosition.getSecond(), new Pair<Float, Float>(xGoal, yGoal)));
+				break;
+			}
+
+			ArrayList<Pair<Float, Float>> points = new ArrayList<>();
+
+			// nord
+			points.add(new Pair<Float, Float>(currentPosition.getSecond().getFirst() + increment * currentVector.getFirst(), currentPosition
+					.getSecond().getSecond() + increment * currentVector.getSecond()));
+
+			// sud
+			points.add(new Pair<Float, Float>(currentPosition.getSecond().getFirst() - increment * currentVector.getFirst(), currentPosition
+					.getSecond().getSecond() - increment * currentVector.getSecond()));
+
+			normalVector = new Pair<Float, Float>(-currentVector.getSecond(), currentVector.getFirst());
+			// est
+			points.add(new Pair<Float, Float>(currentPosition.getSecond().getFirst() - increment * normalVector.getFirst(), currentPosition
+					.getSecond().getSecond() - increment * normalVector.getSecond()));
+
+			// ovest
+			points.add(new Pair<Float, Float>(currentPosition.getSecond().getFirst() + increment * normalVector.getFirst(), currentPosition
+					.getSecond().getSecond() + increment * normalVector.getSecond()));
+
+			// // nord est
+			// points.add(new Pair<Float, Float>(currentPosition.getSecond().getFirst() -
+			// increment
+			// * normalVector.getFirst(), currentPosition
+			// .getSecond().getSecond() + increment * currentVector.getSecond()));
+			// // nord ovest
+			// points.add(new Pair<Float, Float>(currentPosition.getSecond().getFirst() +
+			// increment
+			// * normalVector.getFirst(), currentPosition
+			// .getSecond().getSecond() + increment * currentVector.getSecond()));
+			//
+			// // sud est
+			// points.add(new Pair<Float, Float>(currentPosition.getSecond().getFirst() -
+			// increment
+			// * normalVector.getFirst(), currentPosition
+			// .getSecond().getSecond() - increment * currentVector.getSecond()));
+			// // sud ovest
+			// points.add(new Pair<Float, Float>(currentPosition.getSecond().getFirst() +
+			// increment
+			// * normalVector.getFirst(), currentPosition
+			// .getSecond().getSecond() - increment * currentVector.getSecond()));
+
+			int i = 0;
+			int index = 0;
+			for (Pair<Float, Float> pair : points)
+			{
+				if (!contains(openList, currentPosition.getSecond(), pair) && !contains(closedList, currentPosition.getSecond(), pair)
+						&& !isThereAnyCollision(pair.getFirst(), pair.getSecond(), world))
+				{
+					openList.add(new Pair<Pair<Float, Float>, Pair<Float, Float>>(currentPosition.getSecond(), pair));
+					System.out.println("sto aggiungendo alla open list il punto " + pair.getFirst() + " " + pair.getSecond());
+					index = i;
+				}
+				i++;
+			}
+
+		}
+
+		return getPath(closedList);
+	}
+
 }

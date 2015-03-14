@@ -33,7 +33,7 @@ public class GameGui extends MpaPanel
 	private MapInfo mapInfo;
 	private HashMap<String, Image> images = new HashMap<>();
 	private HashMap<JLabel, Pair<Float, Float>> headQuartersLabel = new HashMap<>();
-	private ArrayList<Pair<Float, Float>> path = null;
+	private ArrayList<Pair<Integer, Integer>> path = null;
 	private Pair<Float, Float> point = null;
 
 	public GameGui()
@@ -121,12 +121,20 @@ public class GameGui extends MpaPanel
 					// images.get("wood").getWidth(null), images.get("wood")
 					// .getHeight(null), this);
 
-					g.drawRect(graphicX(obj.getX()), graphicY(obj.getY()), (int) obj.getWidth(), (int) obj.getHeight());
+					g.drawRect(graphicX(obj.getX() - obj.getWidth() / 2), graphicY(obj.getY() - obj.getHeight() / 2), (int) obj.getWidth(),
+							(int) obj.getHeight());
+
 				else if (obj instanceof Headquarter)
+				{
 					// g.drawImage(images.get("headQuarter"), graphicX(obj.getX()),
 					// graphicY(obj.getY()), images.get("wood").getWidth(null),
 					// images.get("wood").getHeight(null), this);
-					g.drawRect(graphicX(obj.getX()), graphicY(obj.getY()), (int) obj.getWidth(), (int) obj.getHeight());
+					g.drawRect(graphicX(obj.getX() - obj.getWidth() / 2), graphicY(obj.getY() - obj.getHeight() / 2), (int) obj.getWidth(),
+							(int) obj.getHeight());
+					g.drawOval(graphicX(obj.getX() - obj.getWidth() / 2), graphicY(obj.getY() - obj.getHeight() / 2),
+							(int) obj.getCollisionRay() * 2, (int) obj.getCollisionRay() * 2);
+
+				}
 
 				else if (obj instanceof Cave)
 					// g.drawOval(graphicX(obj.getX()), graphicY(obj.getY()),
@@ -159,10 +167,15 @@ public class GameGui extends MpaPanel
 			// g.drawLine((int) GameManager.getInstance().getPlayers().get(0).getX(), (int)
 			// GameManager.getInstance().getPlayers().get(0).getY(), path
 			// .get(0).getFirst().intValue(), path.get(0).getSecond().intValue());
-			for (int i = 0; i < path.size() - 1; i++)
+			for (int i = 0; i < path.size() - 2; i += 2)
 			{
-				g.drawLine(graphicX(path.get(i).getFirst().intValue()), graphicY(path.get(i).getSecond()), graphicX(path.get(i + 1).getFirst()),
-						graphicY(path.get(i + 1).getSecond()));
+				if (i % 3 == 0)
+					g.setColor(Color.MAGENTA);
+
+				else
+					g.setColor(Color.BLUE);
+				g.drawLine(graphicX(path.get(i).getFirst().intValue()), graphicY(path.get(i).getSecond()), graphicX(path.get(i + 2).getFirst()),
+						graphicY(path.get(i + 2).getSecond()));
 			}
 
 			// System.out.println(GameManager.getInstance().getWorld().toString());

@@ -26,4 +26,9 @@ public class Pair<T, S>
 	{
 		return new String("First= " + first + " second= " + second);
 	}
+
+	public boolean equal(Pair<T, S> obj)
+	{
+		return this.first.equals(obj.getFirst()) && this.second.equals(obj.getSecond());
+	}
 }

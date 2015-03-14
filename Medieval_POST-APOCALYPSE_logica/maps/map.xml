@@ -1,13 +1,19 @@
 <Map>
 	<Name>Mappa1</Name>
-	<Width>380</Width>
+	<Width>500</Width>
 	<Height>500</Height>
-	<Number>3</Number>
+	<Number>9</Number>
 	<Objects>
 		<HeadQuarters>
 			<HeadQuarter>300,2</HeadQuarter>
 			<HeadQuarter>200,170</HeadQuarter>
 			<HeadQuarter>120,300</HeadQuarter>
+			<HeadQuarter>120,200</HeadQuarter>
+			<HeadQuarter>400,100</HeadQuarter>
+			<HeadQuarter>300,300</HeadQuarter>
+			<HeadQuarter>250,400</HeadQuarter>
+			<HeadQuarter>120,330</HeadQuarter>
+			<HeadQuarter>320,11</HeadQuarter>
 		</HeadQuarters>
 		<Woods>
 			<Wood>1,2</Wood>

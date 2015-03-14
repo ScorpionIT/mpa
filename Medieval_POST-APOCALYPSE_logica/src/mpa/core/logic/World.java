@@ -123,17 +123,30 @@ public class World
 		ArrayList<AbstractObject> abstractObjectsX = new ArrayList<>();
 		for (Pair<Float, Float> pair : keySet)
 		{
-			if (xMin >= pair.getFirst() && xMin <= pair.getSecond())
-			{
-				abstractObjectsX.addAll(objectX.get(pair));
-			}
-			else if (xMax >= pair.getFirst() && xMax <= pair.getSecond())
+			if ((xMin >= pair.getFirst() && xMin <= pair.getSecond()) || (xMax >= pair.getFirst() && xMax <= pair.getSecond()))
 			{
 				abstractObjectsX.addAll(objectX.get(pair));
 			}
 
 		}
 		return abstractObjectsX;
+
+	}
+
+	public ArrayList<AbstractObject> getObjectsYInTheRange(int yMin, int yMax)
+	{
+		Set<Pair<Float, Float>> keySet = objectY.keySet();
+
+		ArrayList<AbstractObject> abstractObjectsY = new ArrayList<>();
+		for (Pair<Float, Float> pair : keySet)
+		{
+			if ((yMin >= pair.getFirst() && yMin <= pair.getSecond()) || (yMax >= pair.getFirst() && yMax <= pair.getSecond()))
+			{
+				abstractObjectsY.addAll(objectY.get(pair));
+			}
+
+		}
+		return abstractObjectsY;
 
 	}
 
