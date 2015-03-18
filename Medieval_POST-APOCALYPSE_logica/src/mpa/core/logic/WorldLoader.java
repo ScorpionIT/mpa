@@ -35,8 +35,8 @@ public class WorldLoader
 			if (selectedHQ.equals(headQuarters.get(i)))
 			{
 				Headquarter headquarter = new Headquarter(headQuarters.get(i).getFirst(), headQuarters.get(i).getSecond(), null);
-				Player player = new Player(playerName, headquarter.getX() + headquarter.getWidth() / 2, headquarter.getY() + headquarter.getHeight()
-						/ 2, 100, Level.NEWBIE, headquarter, 100);
+				Player player = new Player(playerName, headquarter.getX() + headquarter.getWidth() / 2 + 120, headquarter.getY()
+						+ headquarter.getHeight() / 2 + 120, 100, Level.NEWBIE, headquarter, 100);
 				headquarter.setOwner(player);
 				world.addObject(headquarter);
 				players.add(player);
@@ -44,8 +44,8 @@ public class WorldLoader
 			else
 			{
 				Headquarter headquarter = new Headquarter(headQuarters.get(i).getFirst(), headQuarters.get(i).getSecond(), null);
-				Player player = new Player("Giocatore " + (i + 1), headquarter.getX() + headquarter.getWidth() / 2, headquarter.getY()
-						+ headquarter.getHeight() / 2, 100, Level.NEWBIE, headquarter, 100);
+				Player player = new Player("Giocatore " + (i + 1), headquarter.getX() + headquarter.getWidth() / 2 + 120, headquarter.getY()
+						+ headquarter.getHeight() / 2 + 120, 100, Level.NEWBIE, headquarter, 100);
 				headquarter.setOwner(player);
 				world.addObject(headquarter);
 				players.add(player);

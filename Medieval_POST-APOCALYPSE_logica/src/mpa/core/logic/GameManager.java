@@ -32,9 +32,9 @@ public class GameManager
 		this.players = players;
 	}
 
-	public ArrayList<Pair<Float, Float>> computePath(Player player, float xGoal, float yGoal)
+	public ArrayList<Pair<Integer, Integer>> computePath(Player player, float xGoal, float yGoal)
 	{
-		PathCalculator pathCalculator = new LongRangePathCalculator();
+		ProvaIntegerPathCalculator pathCalculator = new ProvaIntegerPathCalculator();
 		return pathCalculator.computePath(world, xGoal, yGoal, player.getX(), player.getY());
 
 		// una volta era Float
@@ -68,14 +68,4 @@ public class GameManager
 		return s;
 	}
 
-	public ArrayList<Pair<Integer, Integer>> computePath(Float first, Float second, Float float1, Float float2) // una
-																												// volta
-																												// restituiva
-																												// float
-																												// float
-	{
-		ProvaIntegerPathCalculator pathCalculator = new ProvaIntegerPathCalculator();
-		return pathCalculator.computePath(world, float1, float2.intValue(), first, second);
-
-	}
 }
