@@ -2,7 +2,7 @@ package mpa.core.logic.resource;
 
 import mpa.core.logic.character.Player;
 
-public class Cave extends AbstractResource
+public class Cave extends AbstractResourceProducer
 {
 
 	public Cave(float x, float y, Player player)

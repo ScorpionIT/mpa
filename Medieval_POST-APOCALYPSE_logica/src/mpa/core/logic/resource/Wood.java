@@ -2,7 +2,7 @@ package mpa.core.logic.resource;
 
 import mpa.core.logic.character.Player;
 
-public class Wood extends AbstractResource
+public class Wood extends AbstractResourceProducer
 {
 
 	public Wood(float x, float y, Player player)

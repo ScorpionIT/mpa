@@ -7,9 +7,9 @@ public interface InterfaceAbstractObject
 
 	public abstract float getY();
 
-	public abstract void setX(int x);
+	public abstract void setX(float x);
 
-	public abstract void setY(int y);
+	public abstract void setY(float y);
 
 	public abstract float getWidth();
 

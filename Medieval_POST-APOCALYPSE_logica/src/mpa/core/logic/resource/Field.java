@@ -7,7 +7,7 @@ enum FieldState
 	PLOWING, SEEDING, GROWTH, HARVEST
 }; // RACCOLTO, CRESCITA, ARATURA, SEMINA
 
-public class Field extends AbstractResource
+public class Field extends AbstractResourceProducer
 {
 	private FieldState currentFieldState;
 	private boolean free;

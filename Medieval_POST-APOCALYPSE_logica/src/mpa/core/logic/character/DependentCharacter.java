@@ -9,10 +9,10 @@ public class DependentCharacter extends AbstractCharacter
 	private Level level;
 	private Player boss;
 
-	public DependentCharacter(String name, float f, float g, int health, int bagDimension, AbstractPrivateProperty abstractPrivateProperty,
-			Level level, Player boss)
+	public DependentCharacter( String name, float f, float g, int health, int bagDimension,
+			AbstractPrivateProperty abstractPrivateProperty, Level level, Player boss )
 	{
-		super(name, f, g, health, bagDimension);
+		super( name, f, g, health, bagDimension );
 		this.level = level;
 		this.abstractPrivateProperty = abstractPrivateProperty;
 		this.boss = boss;
@@ -23,7 +23,7 @@ public class DependentCharacter extends AbstractCharacter
 		return abstractPrivateProperty;
 	}
 
-	public void setAbstractPrivateProperty(AbstractPrivateProperty abstractPrivateProperty)
+	public void setAbstractPrivateProperty( AbstractPrivateProperty abstractPrivateProperty )
 	{
 		this.abstractPrivateProperty = abstractPrivateProperty;
 	}
@@ -33,14 +33,37 @@ public class DependentCharacter extends AbstractCharacter
 		return level;
 	}
 
-	public boolean setLevel(Object object, Level level)
+	public boolean setLevel( Object object, Level level )
 	{
-		if (object == boss)
+		if( object == boss )
 		{
 			this.level = level;
 			return true;
 		}
 		else
 			return false;
+	}
+
+	public boolean leaveProperty()
+	{
+		try
+		{
+			writeLock.lock();
+
+			if( abstractPrivateProperty == null )
+				return false;
+
+			abstractPrivateProperty.setOwner( null );
+			abstractPrivateProperty = null;
+			return true;
+		} finally
+		{
+			writeLock.unlock();
+		}
+	}
+
+	public Player getBoss()
+	{
+		return boss;
 	}
 }

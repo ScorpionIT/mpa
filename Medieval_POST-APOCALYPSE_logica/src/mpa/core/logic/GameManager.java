@@ -18,28 +18,40 @@ public class GameManager
 		return gameManager;
 	}
 
-	public static void init(World world, List<Player> players)
+	public static void init( World world, List<Player> players )
 	{
-		if (gameManager == null)
+		if( gameManager == null )
 		{
-			gameManager = new GameManager(world, players);
+			gameManager = new GameManager( world, players );
 		}
 	}
 
-	private GameManager(World world, List<Player> players)
+	private GameManager( World world, List<Player> players )
 	{
 		this.world = world;
 		this.players = players;
 	}
 
-	public ArrayList<Pair<Integer, Integer>> computePath(Player player, float xGoal, float yGoal)
+	// public ArrayList<Pair<Integer, Integer>> computePath(Player player, float xGoal, float yGoal)
+	// {
+	// ProvaIntegerPathCalculator pathCalculator = new ProvaIntegerPathCalculator();
+	// return pathCalculator.computePath(world, xGoal, yGoal, player.getX(), player.getY());
+	//
+	// // una volta era Float
+	//
+	// // TODO
+	// }
+	public ArrayList<Pair<Integer, Integer>> computePath( Player player, float xGoal, float yGoal )
 	{
-		ProvaIntegerPathCalculator pathCalculator = new ProvaIntegerPathCalculator();
-		return pathCalculator.computePath(world, xGoal, yGoal, player.getX(), player.getY());
+		PathCalculatorThread pathCalculatorThread = new PathCalculatorThread( player, xGoal, yGoal );
+		pathCalculatorThread.start();
+		return pathCalculatorThread.getPath();
+	}
 
-		// una volta era Float
-
-		// TODO
+	public void updateCharacterPositions()
+	{
+		for( Player player : players )
+			player.movePlayer();
 	}
 
 	public World getWorld()
@@ -47,9 +59,9 @@ public class GameManager
 		return world;
 	}
 
-	public boolean conquer(AbstractPrivateProperty abstractPrivateProperty, Player player)
+	public boolean conquer( AbstractPrivateProperty abstractPrivateProperty, Player player )
 	{
-		return player.employSubaltern(abstractPrivateProperty) != null;
+		return player.employSubaltern( abstractPrivateProperty ) != null;
 
 	}
 

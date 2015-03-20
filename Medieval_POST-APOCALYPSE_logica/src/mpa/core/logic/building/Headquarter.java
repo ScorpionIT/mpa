@@ -4,10 +4,8 @@ import mpa.core.logic.character.Player;
 
 public class Headquarter extends House
 {
-
-	public Headquarter(float x, float y, Player player)
+	public Headquarter( float x, float y, Player player )
 	{
-		super(x, y, player); // TODO
+		super( x, y, player );
 	}
-
 }

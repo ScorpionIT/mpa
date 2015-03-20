@@ -3,13 +3,13 @@ package mpa.core.logic;
 public abstract class AbstractObject implements InterfaceAbstractObject
 {
 
-	private float x;
-	private float y;
+	protected float x;
+	protected float y;
 
-	private float width;
-	private float height;
+	protected float width;
+	protected float height;
 
-	public AbstractObject(float x, float y, float width, float height)
+	public AbstractObject( float x, float y, float width, float height )
 	{
 		this.x = x;
 		this.y = y;
@@ -31,14 +31,14 @@ public abstract class AbstractObject implements InterfaceAbstractObject
 	}
 
 	@Override
-	public void setX(int X)
+	public void setX( float X )
 	{
 		this.x = X;
 
 	}
 
 	@Override
-	public void setY(int Y)
+	public void setY( float Y )
 	{
 		this.y = Y;
 
@@ -57,13 +57,13 @@ public abstract class AbstractObject implements InterfaceAbstractObject
 	}
 
 	@Override
-	public void setHeight(int height)
+	public void setHeight( int height )
 	{
 		this.height = height;
 	}
 
 	@Override
-	public void setWidth(int width)
+	public void setWidth( int width )
 	{
 		this.width = width;
 	}
@@ -72,6 +72,6 @@ public abstract class AbstractObject implements InterfaceAbstractObject
 	{
 		float xMin = x - width / 2;
 		float yMin = y - height / 2;
-		return Math.sqrt(Math.pow((xMin - x), 2) + Math.pow((yMin - y), 2));
+		return Math.sqrt( Math.pow( ( xMin - x ), 2 ) + Math.pow( ( yMin - y ), 2 ) );
 	}
 }

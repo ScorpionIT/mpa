@@ -5,7 +5,7 @@ public class Pair<T, S>
 	private T first;
 	private S second;
 
-	public Pair(T first, S second)
+	public Pair( T first, S second )
 	{
 		this.first = first;
 		this.second = second;
@@ -24,11 +24,21 @@ public class Pair<T, S>
 	@Override
 	public String toString()
 	{
-		return new String("First= " + first + " second= " + second);
+		return new String( "First= " + first + " second= " + second );
 	}
 
-	public boolean equal(Pair<T, S> obj)
+	public boolean equal( Pair<T, S> obj )
 	{
-		return this.first.equals(obj.getFirst()) && this.second.equals(obj.getSecond());
+		return this.first.equals( obj.getFirst() ) && this.second.equals( obj.getSecond() );
+	}
+
+	public void setFirst( T first )
+	{
+		this.first = first;
+	}
+
+	public void setSecond( S second )
+	{
+		this.second = second;
 	}
 }
