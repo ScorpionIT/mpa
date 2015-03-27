@@ -14,12 +14,10 @@ import mpa.core.logic.GameManager;
 import mpa.core.logic.MapFromXMLCreator;
 import mpa.core.logic.MapInfo;
 import mpa.core.logic.Pair;
-import mpa.core.logic.PositionUpdater;
 import mpa.core.logic.World;
 import mpa.core.logic.WorldFromMapInfo;
 import mpa.core.logic.WorldLoader;
 import mpa.gui.prova.GameGui;
-import mpa.gui.prova.GraphicThread;
 
 public class MainMenuPanel extends JPanel
 {
@@ -85,9 +83,29 @@ public class MainMenuPanel extends JPanel
 					gameGui.setBounds( 0, 0, MainMenuPanel.this.screenWidth,
 							MainMenuPanel.this.screenHeight );
 					MainMenuPanel.this.add( gameGui );
-					new GraphicThread( gameGui ).start();
-					new PositionUpdater().start();
-					MainMenuPanel.this.updateUI();
+					// new GraphicThread( gameGui ).start();
+					// new PositionUpdater().start();
+					// MainMenuPanel.this.updateUI();
+
+					// mpa.gui.gameGui.GameGui app = new mpa.gui.gameGui.GameGui();
+					// app.start();
+
+					Thread t = new Thread( new Runnable()
+					{
+
+						@Override
+						public void run()
+						{
+
+							mpa.gui.gameGui.GameGui app = new mpa.gui.gameGui.GameGui();
+							app.start();
+
+						}
+
+					} );
+
+					t.start();
+
 				}
 
 			}

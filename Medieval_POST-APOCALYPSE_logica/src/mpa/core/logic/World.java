@@ -10,6 +10,7 @@ public class World
 	private float height;
 	private HashMap<Pair<Float, Float>, ArrayList<AbstractObject>> objectX = new HashMap<>();
 	private HashMap<Pair<Float, Float>, ArrayList<AbstractObject>> objectY = new HashMap<>();
+	private ArrayList<AbstractObject> allObjects = new ArrayList<>();
 
 	// private Map<Integer, Point> headquartedPosition;
 	public World( float width, float height )
@@ -37,6 +38,8 @@ public class World
 		if( !objectY.containsKey( yPair ) )
 			objectY.put( yPair, new ArrayList<AbstractObject>() );
 		objectY.get( yPair ).add( obj );
+
+		allObjects.add( obj );
 		return true;
 	}
 
@@ -70,6 +73,11 @@ public class World
 	public float getHeight()
 	{
 		return height;
+	}
+
+	public ArrayList<AbstractObject> getAllObjects()
+	{
+		return allObjects;
 	}
 
 	public ArrayList<AbstractObject> getObjectsXInTheRange( float x )
