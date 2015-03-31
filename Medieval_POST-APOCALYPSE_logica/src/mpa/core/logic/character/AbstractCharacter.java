@@ -102,6 +102,12 @@ public abstract class AbstractCharacter extends AbstractObject
 			setX( ( ( float ) ( x + paceX ) ) );
 			setY( ( float ) ( y + paceY ) );
 
+			System.out.println();
+			System.out.println();
+			System.out.println( "sto muovendo" );
+			System.out.println();
+			System.out.println();
+
 			return true;
 
 		} finally

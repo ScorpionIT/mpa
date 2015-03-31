@@ -254,8 +254,8 @@ public class ProvaIntegerPathCalculator
 		else
 			objectsY = world.getObjectsYInTheRange( yGoal, currentY );
 
-		System.err.println( "size X " + objectsX.size() );
-		System.err.println( "size Y " + objectsY.size() );
+		// System.err.println( "size X " + objectsX.size() );
+		// System.err.println( "size Y " + objectsY.size() );
 
 		ArrayList<AbstractObject> intersection = new ArrayList<>();
 
@@ -273,18 +273,18 @@ public class ProvaIntegerPathCalculator
 			}
 		}
 
-		System.out.println( "size intersersection " + intersection.size() );
+		// System.out.println( "size intersersection " + intersection.size() );
 		for( AbstractObject abstractObject : intersection )
 		{
-			System.out.println( "distance "
-					+ pointToLineDistance( currentX, currentY, xGoal, yGoal, new Integer(
-							( int ) abstractObject.getX() ),
-							new Integer( ( int ) abstractObject.getY() ) ) );
+			// System.out.println( "distance "
+			// + pointToLineDistance( currentX, currentY, xGoal, yGoal, new Integer(
+			// ( int ) abstractObject.getX() ),
+			// new Integer( ( int ) abstractObject.getY() ) ) );
 			if( ( pointToLineDistance( currentX, currentY, xGoal, yGoal, new Integer(
 					( int ) abstractObject.getX() ), new Integer( ( int ) abstractObject.getY() ) ) - abstractObject
 					.getCollisionRay() ) <= 0 )
 			{
-				System.err.println( "c'è l'intersezione" );
+				// System.err.println( "c'è l'intersezione" );
 				return true;
 			}
 		}

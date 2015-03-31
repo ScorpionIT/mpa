@@ -23,6 +23,7 @@ public class GameManager
 		if( gameManager == null )
 		{
 			gameManager = new GameManager( world, players );
+			new PositionUpdater().start();
 		}
 	}
 

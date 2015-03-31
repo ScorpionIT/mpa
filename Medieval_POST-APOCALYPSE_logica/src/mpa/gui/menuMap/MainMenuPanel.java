@@ -19,6 +19,8 @@ import mpa.core.logic.WorldFromMapInfo;
 import mpa.core.logic.WorldLoader;
 import mpa.gui.prova.GameGui;
 
+import com.jme3.system.AppSettings;
+
 public class MainMenuPanel extends JPanel
 {
 
@@ -98,6 +100,28 @@ public class MainMenuPanel extends JPanel
 						{
 
 							mpa.gui.gameGui.GameGui app = new mpa.gui.gameGui.GameGui();
+							AppSettings gameSettings = new AppSettings( false );
+
+							gameSettings.setResolution( screenWidth, screenHeight );
+
+							gameSettings.setFullscreen( true );
+
+							gameSettings.setVSync( false );
+
+							gameSettings.setTitle( "Stellar Conquest" );
+
+							gameSettings.setUseInput( true );
+
+							gameSettings.setFrameRate( 500 );
+
+							gameSettings.setSamples( 0 );
+
+							gameSettings.setRenderer( "LWJGL-OpenGL2" );
+
+							app.setSettings( gameSettings );
+
+							app.setShowSettings( false );
+
 							app.start();
 
 						}

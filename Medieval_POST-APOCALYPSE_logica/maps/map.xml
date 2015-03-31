@@ -2,7 +2,7 @@
 	<Name>Mappa1</Name>
 	<Width>500</Width>
 	<Height>500</Height>
-	<Number>9</Number>
+	<Number>21</Number>
 	<Objects>
 		<HeadQuarters>
 		    <HeadQuarter>300, 35</HeadQuarter>
@@ -14,6 +14,18 @@
 			<HeadQuarter>250,400</HeadQuarter>
 			<HeadQuarter>120,330</HeadQuarter>
 			<HeadQuarter>320,110</HeadQuarter>
+			<HeadQuarter>120,400</HeadQuarter> 
+			<HeadQuarter>400,100</HeadQuarter> 
+			<HeadQuarter>300,40</HeadQuarter> 
+			<HeadQuarter>50,170</HeadQuarter>
+			<HeadQuarter>70,30</HeadQuarter>
+			<HeadQuarter>320,190</HeadQuarter>
+			<HeadQuarter>10,200</HeadQuarter> 
+			<HeadQuarter>280,80</HeadQuarter> 
+			<HeadQuarter>330,40</HeadQuarter> 
+			<HeadQuarter>240,480</HeadQuarter>
+			<HeadQuarter>130,30</HeadQuarter>
+			<HeadQuarter>50,10</HeadQuarter>
 		</HeadQuarters>
 		<Woods>
 			<Wood>1,2</Wood>
