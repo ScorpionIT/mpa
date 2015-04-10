@@ -1,19 +1,25 @@
 package mpa.core.logic.character;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import mpa.core.logic.Level;
 import mpa.core.logic.building.AbstractPrivateProperty;
+import mpa.core.logic.building.AbstractProperty;
 import mpa.core.logic.building.Headquarter;
 import mpa.core.logic.tool.AbstractTool;
 
-@SuppressWarnings("unused")
 public class Player extends AbstractCharacter
 {
 	private Headquarter headquarter;
 	private ArrayList<DependentCharacter> subalterns;
 
 	private Level level;
+
+	private ArrayList<Player> knownPlayers = new ArrayList<>();
+	private ArrayList<AbstractProperty> knownBuildings = new ArrayList<>();
+
+	private HashMap<String, Integer> resources = new HashMap<>();
 
 	public Player( String name, float x, float y, int health, Level level, Headquarter headquarter,
 			int bagDimension )
@@ -28,6 +34,12 @@ public class Player extends AbstractCharacter
 					100, 100, null, level, this ) );
 
 		}
+
+		resources.put( "Wheat", 0 );
+		resources.put( "Iron", 0 );
+		resources.put( "Wood", 0 );
+		resources.put( "Stone", 0 );
+		resources.put( "Herbs", 0 );
 
 	}
 
@@ -129,4 +141,34 @@ public class Player extends AbstractCharacter
 
 	}
 
+	public ArrayList<Player> getKnownPlayers()
+	{
+		return knownPlayers;
+	}
+
+	public ArrayList<AbstractProperty> getKnownBuildings()
+	{
+		return knownBuildings;
+	}
+
+	public void putResources( String type, int providing )
+	{
+		switch( type )
+		{
+			case "Iron":
+				resources.put( "Iron", resources.get( "Iron" ) + providing );
+				break;
+			case "Wheat":
+				resources.put( "Wheat", resources.get( "Wheat" ) + providing );
+				break;
+			case "Wood":
+				resources.put( "Wood", resources.get( "Wood" ) + providing );
+				break;
+			case "Herbs":
+				resources.put( "Herbs", resources.get( "Herbs" ) + providing );
+				break;
+			default:
+				return;
+		}
+	}
 }

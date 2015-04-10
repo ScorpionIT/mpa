@@ -24,6 +24,7 @@ public class GameManager
 		{
 			gameManager = new GameManager( world, players );
 			new PositionUpdater().start();
+			new ResourceUpdater().start();
 		}
 	}
 
@@ -69,6 +70,11 @@ public class GameManager
 	public List<Player> getPlayers()
 	{
 		return players;
+	}
+
+	public boolean attack( Player attacker, Player target )
+	{
+		return true;
 	}
 
 	@Override

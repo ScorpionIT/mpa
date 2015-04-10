@@ -6,6 +6,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import mpa.core.logic.AbstractObject;
 import mpa.core.logic.GameManager;
+import mpa.core.logic.Pair;
 import mpa.core.logic.building.House;
 import mpa.core.logic.character.Player;
 
@@ -42,7 +43,7 @@ public class GameGui extends SimpleApplication
 	boolean cursorOnTheLeftEdge = false;
 	boolean cursorOnTheTopEdge = false;
 	boolean cursorOnTheBottomEdge = false;
-	private float cameraHeight = 200;
+	private float cameraHeight = 120;
 	private float lx = ( float ) Math.sqrt( Math.pow( cameraHeight / Math.sin( 10 ), 2 )
 			- Math.pow( cameraHeight, 2 ) );
 	private float lz = ( float ) Math.sqrt( Math.pow( cameraHeight / Math.sin( 40 ), 2 )
@@ -50,7 +51,10 @@ public class GameGui extends SimpleApplication
 
 	private Node groundNode;
 	private Node mobileObjects = new Node( "Mobile Objects" );
+	private Node pathNodes = new Node();
 	private List<Player> players = GameManager.getInstance().getPlayers();
+
+	private ArrayList<Pair<Integer, Integer>> path;
 	BitmapText text;
 
 	@Override
@@ -67,6 +71,7 @@ public class GameGui extends SimpleApplication
 
 		loadCharacters();
 		rootNode.attachChild( mobileObjects );
+		rootNode.attachChild( pathNodes );
 
 		loadStaticObjects();
 		setEventTriggers();
@@ -97,7 +102,7 @@ public class GameGui extends SimpleApplication
 
 		assetManager.registerLocator( "Textures/", FileLocator.class );
 		Material mat1 = new Material( assetManager, "Common/MatDefs/Misc/Unshaded.j3md" );
-		Texture text1 = assetManager.loadTexture( "grass-pattern.jpg" );
+		Texture text1 = assetManager.loadTexture( "grass-bella.jpeg" );
 
 		mat1.setTexture( "ColorMap", text1 );
 		floor.setMaterial( mat1 );
@@ -160,16 +165,23 @@ public class GameGui extends SimpleApplication
 	{
 		DirectionalLight dl = new DirectionalLight();
 		dl.setDirection( new Vector3f( -0.8f, -0.6f, -0.08f ).normalizeLocal() );
-		dl.setColor( new ColorRGBA( 0.9f, 0.9f, 0.9f, 1.0f ) );
+		// dl.setColor( new ColorRGBA( 0.9f, 0.9f, 0.9f, 1.0f ) );
 		rootNode.addLight( dl );
 
 		AmbientLight al = new AmbientLight();
-		al.setColor( new ColorRGBA( 0.7f, 0.9f, 1.5f, 1.0f ) );
+		// al.setColor( new ColorRGBA( 0.7f, 0.9f, 1.5f, 1.0f ) );
 		rootNode.addLight( al );
 	}
 
 	public void setCamera( Vector3f newPosition )
 	{
+		// if( newPosition.z + lz < 0 )
+		// return;
+		// if( newPosition.x < -1
+		// || newPosition.x > GameManager.getInstance().getWorld().getWidth() + 10
+		// || newPosition.z > GameManager.getInstance().getWorld().getHeight() )
+		// return;
+
 		cam.setLocation( newPosition );
 		cam.lookAt( new Vector3f( newPosition.x, 0, newPosition.z + lz ), new Vector3f( 0, 1, 0 ) );
 
@@ -190,60 +202,23 @@ public class GameGui extends SimpleApplication
 	private void loadCharacters()
 	{
 		int i = 0;
+		assetManager.registerLocator( "./assets/Models/male_civilian_1.zip", ZipLocator.class );
 		for( Player player : players )
 		{
-			Sphere sphereMesh;
-			Geometry sphereGeo;
-
+			Spatial model = assetManager.loadModel( "main.mesh.xml" );
 			if( i == 0 )
 			{
-				System.out
-						.println( "sto player si trova in " + player.getX() + " " + player.getY() );
-				sphereMesh = new Sphere( 32, 32, 2f );
-				sphereGeo = new Geometry( "" + i, sphereMesh );
-
-				sphereMesh.setTextureMode( Sphere.TextureMode.Projected ); // better quality on
-				// spheres
-				TangentBinormalGenerator.generate( sphereMesh ); // for lighting effect
-				Material sphereMat = new Material( assetManager,
-						"Common/MatDefs/Light/Lighting.j3md" );
-				sphereMat.setTexture( "DiffuseMap",
-						assetManager.loadTexture( "Textures/Terrain/Pond/Pond.jpg" ) );
-				sphereMat.setTexture( "NormalMap",
-						assetManager.loadTexture( "Textures/Terrain/Pond/Pond_normal.png" ) );
-				sphereMat.setBoolean( "UseMaterialColors", true );
-				sphereMat.setColor( "Diffuse", ColorRGBA.White );
-				sphereMat.setColor( "Specular", ColorRGBA.White );
-				sphereMat.setFloat( "Shininess", 64f ); // [0,128]
-				sphereGeo.setMaterial( sphereMat );
-
-				sphereGeo.rotate( 1.6f, 0, 0 ); // Rotate it a bit
-				// }
-				// else
-				// {
-				// sphereMesh = new Sphere( 32, 32, 2f );
-				// sphereGeo = new Geometry( "" + i, sphereMesh );
-				//
-				// sphereMesh.setTextureMode( Sphere.TextureMode.Projected ); // better quality on
-				// // spheres
-				// TangentBinormalGenerator.generate( sphereMesh ); // for lighting effect
-				// Material sphereMat = new Material( assetManager,
-				// "Common/MatDefs/Light/Lighting.j3md" );
-				// sphereMat.setTexture( "DiffuseMap",
-				// assetManager.loadTexture( "Textures/Terrain/Pond/Pond.jpg" ) );
-				// sphereMat.setTexture( "NormalMap",
-				// assetManager.loadTexture( "Textures/Terrain/Pond/Pond_normal.png" ) );
-				// sphereMat.setBoolean( "UseMaterialColors", true );
-				// sphereMat.setColor( "Diffuse", ColorRGBA.White );
-				// sphereMat.setColor( "Specular", ColorRGBA.White );
-				// sphereMat.setFloat( "Shininess", 64f ); // [0,128]
-				// sphereGeo.setMaterial( sphereMat );
-				// }
-				sphereGeo.setLocalTranslation( player.getX(), 5, player.getY() );
-				mobileObjects.attachChild( sphereGeo );
-
-				i++;
+				model.scale( 25.2f, 25.2f, 25.2f );
+				model.setLocalTranslation( new Vector3f( player.getX(), 95, player.getY() ) );
 			}
+			else
+			{
+				model.scale( 10.2f, 10.2f, 10.2f );
+				model.setLocalTranslation( new Vector3f( player.getX(), 30, player.getY() ) );
+			}
+			i++;
+			mobileObjects.attachChild( model );
+
 		}
 	}
 
@@ -274,12 +249,56 @@ public class GameGui extends SimpleApplication
 
 			if( crs.getClosestCollision() != null )
 			{
-				GameManager.getInstance().computePath( players.get( 0 ),
-						crs.getClosestCollision().getContactPoint().x,
-						crs.getClosestCollision().getContactPoint().z );
+				Vector2f contactPoint = new Vector2f(
+						crs.getClosestCollision().getContactPoint().x, crs.getClosestCollision()
+								.getContactPoint().z );
+
+				if( GameManager.getInstance().getWorld()
+						.pickedObject( contactPoint.x, contactPoint.y ) == null )
+				{
+					GameManager.getInstance().computePath( players.get( 0 ), contactPoint.x,
+							contactPoint.y );
+
+					path = players.get( 0 ).getPath();
+					drawPath();
+				}
 			}
 		}
 	};
+
+	private void drawPath()
+	{
+		pathNodes.detachAllChildren();
+		int i = 0;
+		for( Pair<Integer, Integer> pair : path )
+		{
+			Sphere sphereMesh;
+			Geometry sphereGeo;
+
+			sphereMesh = new Sphere( 32, 32, 2f );
+			sphereGeo = new Geometry( "" + i, sphereMesh );
+
+			sphereMesh.setTextureMode( Sphere.TextureMode.Projected ); // better quality on
+			// spheres
+			TangentBinormalGenerator.generate( sphereMesh ); // for lighting effect
+			Material sphereMat = new Material( assetManager, "Common/MatDefs/Light/Lighting.j3md" );
+			sphereMat.setTexture( "DiffuseMap",
+					assetManager.loadTexture( "Textures/Terrain/Pond/Pond.jpg" ) );
+			sphereMat.setTexture( "NormalMap",
+					assetManager.loadTexture( "Textures/Terrain/Pond/Pond_normal.png" ) );
+			sphereMat.setBoolean( "UseMaterialColors", true );
+			sphereMat.setColor( "Diffuse", ColorRGBA.White );
+			sphereMat.setColor( "Specular", ColorRGBA.White );
+			sphereMat.setFloat( "Shininess", 64f ); // [0,128]
+			sphereGeo.setMaterial( sphereMat );
+
+			sphereGeo.rotate( 1.6f, 0, 0 ); // Rotate it a bit
+
+			sphereGeo
+					.setLocalTranslation( ( float ) pair.getFirst(), 5, ( float ) pair.getSecond() );
+			pathNodes.attachChild( sphereGeo );
+		}
+	}
 
 	private AnalogListener mouseActionListener = new AnalogListener()
 	{
@@ -355,7 +374,7 @@ public class GameGui extends SimpleApplication
 		for( Player p : players )
 		{
 			if( i == 0 )
-				mobileObjects.getChild( i ).setLocalTranslation( p.getX(), 0, p.getY() );
+				mobileObjects.getChild( i ).setLocalTranslation( p.getX(), 25, p.getY() );
 
 			i++;
 		}

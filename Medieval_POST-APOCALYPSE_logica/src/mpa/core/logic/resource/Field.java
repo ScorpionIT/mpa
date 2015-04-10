@@ -10,20 +10,13 @@ enum FieldState
 public class Field extends AbstractResourceProducer
 {
 	private FieldState currentFieldState;
-	private boolean free;
-	private int foodCollected;
-	private int maximumFoodCapacity;
-	private int food;
+	private static final int PROVIDING = 50;
+	private static final int EXTRA_PROVIDING = 10;
 
-	public Field(float x, float y, Player player)
+	public Field( float x, float y, Player player )
 	{
-		super(x, y, 0, player); // TODO
+		super( x, y, player );
 		this.currentFieldState = FieldState.PLOWING;
-		this.free = true;
-		this.foodCollected = 0;
-		this.maximumFoodCapacity = 10; // TODO
-		this.food = 10;
-
 	}
 
 	public FieldState getCurrentFieldState()
@@ -31,40 +24,38 @@ public class Field extends AbstractResourceProducer
 		return currentFieldState;
 	}
 
-	public void advanceStatus()
-	{
-		if (this.currentFieldState.ordinal() < FieldState.values().length)
-		{
-			this.currentFieldState = FieldState.values()[currentFieldState.ordinal() + 1];
-		}
-		else
-		{
-			this.currentFieldState = FieldState.values()[0];
-
-			if (this.foodCollected + this.food <= this.maximumFoodCapacity)
-				this.foodCollected += this.food;
-
-		}
-	}
-
-	public void setCurrentFieldState(FieldState currentFieldState)
-	{
-		this.currentFieldState = currentFieldState;
-	}
-
 	public boolean isFree()
 	{
-		return free;
+		try
+		{
+			readLock.lock();
+			return owner == null;
+		} finally
+		{
+			readLock.unlock();
+		}
 	}
 
-	public void setFree(boolean free)
+	@Override
+	public void providePlayer()
 	{
-		this.free = free;
-	}
+		readLock.lock();
+		if( owner == null )
+			return;
+		else
+		{
+			if( this.currentFieldState.ordinal() < FieldState.values().length )
+			{
+				this.currentFieldState = FieldState.values()[currentFieldState.ordinal() + 1];
+			}
+			else
+			{
+				owner.putResources( "Wheat", PROVIDING + EXTRA_PROVIDING
+						* owner.getPlayerLevel().ordinal() );
+				this.currentFieldState = FieldState.values()[0];
+			}
 
-	public void setFood(int food)
-	{
-		this.food = food;
+		}
+		readLock.unlock();
 	}
-
 }

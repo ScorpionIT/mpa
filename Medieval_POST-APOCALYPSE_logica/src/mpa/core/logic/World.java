@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
+import mpa.core.logic.resource.AbstractResourceProducer;
+import mpa.core.maths.MyMath;
+
 public class World
 {
 	private float width;
@@ -11,6 +14,7 @@ public class World
 	private HashMap<Pair<Float, Float>, ArrayList<AbstractObject>> objectX = new HashMap<>();
 	private HashMap<Pair<Float, Float>, ArrayList<AbstractObject>> objectY = new HashMap<>();
 	private ArrayList<AbstractObject> allObjects = new ArrayList<>();
+	private ArrayList<AbstractResourceProducer> resourceProducers = new ArrayList<AbstractResourceProducer>();
 
 	// private Map<Integer, Point> headquartedPosition;
 	public World( float width, float height )
@@ -40,21 +44,12 @@ public class World
 		objectY.get( yPair ).add( obj );
 
 		allObjects.add( obj );
+
+		if( obj instanceof AbstractResourceProducer )
+			resourceProducers.add( ( AbstractResourceProducer ) obj );
 		return true;
 	}
 
-	// per aggiungere giocatori a partita iniziata
-	// public Headquarter addHeadquarter(int i) throws Exception
-	// {
-	// Headquarter headquarter;
-	// headquarter = new Headquarter(headquartedPosition.get(i).x, headquartedPosition.get(i).y);
-	// this.addObject(headquarter);
-	// return headquarter;
-	// }
-	// public void setHeadquartedPosition(Map<Integer, Point> headquartedPosition)
-	// {
-	// this.headquartedPosition = headquartedPosition;
-	// }
 	public HashMap<Pair<Float, Float>, ArrayList<AbstractObject>> getObjectX()
 	{
 		return objectX;
@@ -171,8 +166,47 @@ public class World
 		}
 		return s;
 	}
-	// public boolean isPositionEmpty(int x, int y)
+
+	// public ArrayList<AbstractObject> getObjectsInTheRange( int xMin, int xMax, int yMin, int yMax
+	// )
 	// {
-	// return (map[x][y] instanceof EmptyObject);
+	// ArrayList<AbstractObject> intersection = new ArrayList<>();
+	//
+	// for( AbstractObject objectX : objectsX )
+	// {
+	// Iterator<AbstractObject> it = objectsY.iterator();
+	// while( it.hasNext() )
+	// {
+	// AbstractObject objectY = it.next();
+	// if( objectX == objectY )
+	// {
+	// intersection.add( objectX );
+	// it.remove();
 	// }
+	// }
+	// }
+	// }
+
+	public AbstractObject pickedObject( float xGoal, float yGoal )
+	{
+		ArrayList<AbstractObject> objectsXInTheRange = getObjectsXInTheRange( xGoal );
+		ArrayList<AbstractObject> objectsYInTheRange = getObjectsYInTheRange( yGoal );
+
+		objectsXInTheRange.addAll( objectsYInTheRange );
+		for( AbstractObject abstractObject : objectsXInTheRange )
+		{
+			if( MyMath.distanceFloat( ( int ) abstractObject.getX(), ( int ) abstractObject.getY(),
+					( int ) xGoal, ( int ) yGoal ) - abstractObject.getCollisionRay() <= 0 )
+			{
+				return abstractObject;
+			}
+
+		}
+		return null;
+	}
+
+	public ArrayList<AbstractResourceProducer> getResourceProducers()
+	{
+		return resourceProducers;
+	}
 }

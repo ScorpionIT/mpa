@@ -2,7 +2,7 @@ package mpa.core.logic;
 
 public class PositionUpdater extends Thread
 {
-	private static final long INTERVAL = 500;
+	private static final long INTERVAL = 100;
 
 	public PositionUpdater()
 	{
@@ -17,7 +17,6 @@ public class PositionUpdater extends Thread
 			{
 				sleep( INTERVAL );
 				GameManager.getInstance().updateCharacterPositions();
-				// System.err.println( "ho updato le posizioni" );
 			} catch( InterruptedException e )
 			{
 				// TODO Auto-generated catch block

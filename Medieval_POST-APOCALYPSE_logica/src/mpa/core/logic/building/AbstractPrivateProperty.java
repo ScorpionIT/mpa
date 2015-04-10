@@ -9,11 +9,12 @@ import mpa.core.logic.character.Player;
 public abstract class AbstractPrivateProperty extends AbstractProperty
 {
 
-	private Player owner;
+	protected Player owner;
 	private DependentCharacter controller;
+
 	private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
-	private Lock rLock = lock.readLock();
-	private Lock wLock = lock.writeLock();
+	protected Lock readLock = lock.readLock();
+	protected Lock writeLock = lock.writeLock();
 
 	public AbstractPrivateProperty( float x, float y, float width, float height, Player owner )
 	{
@@ -25,7 +26,7 @@ public abstract class AbstractPrivateProperty extends AbstractProperty
 	{
 		try
 		{
-			wLock.lock();
+			writeLock.lock();
 
 			if( owner == null )
 				return false;
@@ -35,7 +36,7 @@ public abstract class AbstractPrivateProperty extends AbstractProperty
 
 		} finally
 		{
-			wLock.unlock();
+			writeLock.unlock();
 		}
 	}
 
@@ -43,18 +44,18 @@ public abstract class AbstractPrivateProperty extends AbstractProperty
 	{
 		try
 		{
-			rLock.lock();
+			readLock.lock();
 			return owner;
 		} finally
 		{
-			rLock.unlock();
+			readLock.unlock();
 		}
 	}
 
 	public void setController( DependentCharacter controller )
 			throws ControllerAlreadyPresentException, DifferentOwnerException
 	{
-		wLock.lock();
+		writeLock.lock();
 		if( this.controller != null )
 			throw new ControllerAlreadyPresentException();
 		else if( owner != controller.getBoss() )
@@ -62,6 +63,6 @@ public abstract class AbstractPrivateProperty extends AbstractProperty
 
 		this.controller = controller;
 
-		wLock.unlock();
+		writeLock.unlock();
 	}
 }

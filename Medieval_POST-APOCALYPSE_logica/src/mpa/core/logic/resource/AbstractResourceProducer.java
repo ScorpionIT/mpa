@@ -6,22 +6,11 @@ import mpa.core.logic.character.Player;
 public abstract class AbstractResourceProducer extends AbstractPrivateProperty
 {
 
-	private float providing;
-
-	public AbstractResourceProducer(float x, float y, float providing, Player player)
+	public AbstractResourceProducer( float x, float y, Player player )
 	{
-		super(x, y, 0, 0, player);
-		this.providing = providing;
+		super( x, y, 0, 0, player );
 	}
 
-	public float getProviding()
-	{
-		return providing;
-	}
-
-	public void setProviding(float providing)
-	{
-		this.providing = providing;
-	}
+	public abstract void providePlayer();
 
 }

@@ -7,10 +7,11 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import mpa.core.logic.AbstractObject;
 import mpa.core.logic.Inventory;
 import mpa.core.logic.Pair;
+import mpa.core.maths.MyMath;
 
 public abstract class AbstractCharacter extends AbstractObject
 {
-	private static final float PACE = 10;
+	private static final float PACE = 5;
 
 	private ArrayList<Pair<Integer, Integer>> path;
 	private Pair<Float, Float> currentVector = new Pair<Float, Float>( new Float( 0.0 ), new Float(
@@ -35,19 +36,14 @@ public abstract class AbstractCharacter extends AbstractObject
 		this.bag = new Inventory( bagDimension );
 	}
 
-	private double distance( Integer x1, Integer y1, Integer x2, Integer y2 )
-	{
-		return Math.sqrt( Math.pow( ( x2 - x1 ), 2 ) + Math.pow( ( y2 - y1 ), 2 ) );
-	}
-
 	private void computeCurrentVector()
 	{
 		currentVector = new Pair<Float, Float>( ( float ) ( -path.get( 0 ).getFirst() + path
 				.get( 1 ).getFirst() ), ( float ) ( -path.get( 0 ).getSecond() + path.get( 1 )
 				.getSecond() ) );
 
-		numberOfIterationsPerVector = ( int ) ( distance( path.get( 0 ).getFirst(), path.get( 0 )
-				.getSecond(), path.get( 1 ).getFirst(), path.get( 1 ).getSecond() ) / PACE );
+		numberOfIterationsPerVector = ( int ) ( MyMath.distanceInteger( path.get( 0 ).getFirst(), path
+				.get( 0 ).getSecond(), path.get( 1 ).getFirst(), path.get( 1 ).getSecond() ) / PACE );
 		paceX = currentVector.getFirst() / numberOfIterationsPerVector;
 		paceY = currentVector.getSecond() / numberOfIterationsPerVector;
 
@@ -64,9 +60,31 @@ public abstract class AbstractCharacter extends AbstractObject
 		System.out.println( "path assegnato per la " + counter++ + " volta" );
 		System.out.println( "size del path " + path.size() );
 		this.path = path;
-		computeCurrentVector();
-		// computeNumberOfSteps();
 
+		System.out.println();
+		System.out.println();
+		System.out.println( "Path : " );
+		for( Pair<Integer, Integer> pair : path )
+		{
+			System.out.println( pair );
+
+		}
+		System.out.println();
+		System.out.println();
+		if( path.size() > 1 )
+		{
+			computeCurrentVector();
+		}
+		else
+		{
+			Pair<Integer, Integer> point = new Pair<Integer, Integer>( path.get( 0 ).getFirst(),
+					path.get( 0 ).getSecond() );
+			currentVector = new Pair<Float, Float>( new Float( point.getFirst() - x ), new Float(
+					point.getSecond() - y ) );
+
+			numberOfIterationsPerVector = ( int ) ( MyMath.distanceInteger( ( int ) x, point.getFirst(),
+					( int ) y, point.getSecond() ) / PACE );
+		}
 		writeLock.unlock();
 	}
 
@@ -87,7 +105,6 @@ public abstract class AbstractCharacter extends AbstractObject
 			if( numberOfIterationsPerVector <= 0 )
 			{
 				path.remove( 0 );
-				System.err.println( " sono nell'if" );
 				if( path.size() > 1 )
 				{
 					computeCurrentVector();
@@ -101,12 +118,6 @@ public abstract class AbstractCharacter extends AbstractObject
 			}
 			setX( ( ( float ) ( x + paceX ) ) );
 			setY( ( float ) ( y + paceY ) );
-
-			System.out.println();
-			System.out.println();
-			System.out.println( "sto muovendo" );
-			System.out.println();
-			System.out.println();
 
 			return true;
 
@@ -137,6 +148,18 @@ public abstract class AbstractCharacter extends AbstractObject
 		{
 			readLock.lock();
 			return super.getY();
+		} finally
+		{
+			readLock.unlock();
+		}
+	}
+
+	public ArrayList<Pair<Integer, Integer>> getPath()
+	{
+		try
+		{
+			readLock.lock();
+			return path;
 		} finally
 		{
 			readLock.unlock();

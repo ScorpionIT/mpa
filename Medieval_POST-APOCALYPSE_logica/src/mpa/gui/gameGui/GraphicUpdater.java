@@ -3,8 +3,8 @@ package mpa.gui.gameGui;
 public class GraphicUpdater extends Thread
 {
 	private GameGui gameGui;
-	private final long INTERVAL = 50;
-	private final float MOVEMENT_LENGTH = 5;
+	private final long INTERVAL = 10;
+	private final float MOVEMENT_LENGTH = 1;
 
 	public GraphicUpdater( GameGui gameGui )
 	{

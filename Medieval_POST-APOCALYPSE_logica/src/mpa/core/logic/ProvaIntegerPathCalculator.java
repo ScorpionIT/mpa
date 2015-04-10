@@ -1,7 +1,8 @@
 package mpa.core.logic;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+
+import mpa.core.maths.MyMath;
 
 public class ProvaIntegerPathCalculator
 {
@@ -29,9 +30,9 @@ public class ProvaIntegerPathCalculator
 
 			closedList.add( currentPosition );
 			openList.remove( currentPosition );
-			if( !isThereAnyCollision( currentPosition.getCurrentNode().getFirst(), currentPosition
-					.getCurrentNode().getSecond(), new Integer( ( int ) xGoal ), new Integer(
-					( int ) yGoal ), world ) )
+			if( !MyMath.isThereAnyCollision( currentPosition.getCurrentNode().getFirst(),
+					currentPosition.getCurrentNode().getSecond(), new Integer( ( int ) xGoal ),
+					new Integer( ( int ) yGoal ), world ) )
 			{
 				Pair<Integer, Integer> goal = new Pair<Integer, Integer>( ( int ) xGoal,
 						( int ) yGoal );
@@ -41,7 +42,7 @@ public class ProvaIntegerPathCalculator
 			}
 
 			/* TODO use geometry to make the shit up here work */
-			if( distance( currentPosition.getCurrentNode().getFirst(), currentPosition
+			if( MyMath.distanceInteger( currentPosition.getCurrentNode().getFirst(), currentPosition
 					.getCurrentNode().getSecond(), ( int ) xGoal, ( int ) yGoal ) < increment )
 			{
 				Pair<Integer, Integer> goal = new Pair<Integer, Integer>( ( int ) xGoal,
@@ -76,11 +77,23 @@ public class ProvaIntegerPathCalculator
 
 			for( Pair<Float, Float> pair : points )
 			{
+				if( pair.getFirst() > world.getWidth() || pair.getFirst() < 0
+						|| pair.getSecond() < 0 || pair.getSecond() > world.getHeight() )
+				{
+					System.out.println();
+					System.out.println();
+					System.out.println();
+					System.out.println( "conitnue lalalalalalalalal" );
+					System.out.println();
+					System.out.println();
+					System.out.println();
+					continue;
+				}
 				Pair<Integer, Integer> point = new Pair<Integer, Integer>( new Integer( pair
 						.getFirst().intValue() ), new Integer( pair.getSecond().intValue() ) );
 				double computeCost = computeCost( currentPosition, point );
 
-				if( !isThereAnyCollision( currentPosition.getCurrentNode().getFirst(),
+				if( !MyMath.isThereAnyCollision( currentPosition.getCurrentNode().getFirst(),
 						currentPosition.getCurrentNode().getSecond(), point.getFirst(),
 						point.getSecond(), world ) )
 				{
@@ -123,7 +136,7 @@ public class ProvaIntegerPathCalculator
 				break;
 			}
 			Pair<Integer, Integer> pointToConsider = path.get( currentFurthestPoint + 1 );
-			if( !isThereAnyCollision( currentPair.getFirst(), currentPair.getSecond(),
+			if( !MyMath.isThereAnyCollision( currentPair.getFirst(), currentPair.getSecond(),
 					pointToConsider.getFirst(), pointToConsider.getSecond(), GameManager
 							.getInstance().getWorld() ) )
 			{
@@ -154,7 +167,7 @@ public class ProvaIntegerPathCalculator
 
 	private double computeCost( PathNode currentNode, Pair<Integer, Integer> newNode )
 	{
-		return( currentNode.getCost() + distance( currentNode.getCurrentNode().getFirst(),
+		return( currentNode.getCost() + MyMath.distanceInteger( currentNode.getCurrentNode().getFirst(),
 				currentNode.getCurrentNode().getSecond(), newNode.getFirst(), newNode.getSecond() ) );
 	}
 
@@ -220,7 +233,7 @@ public class ProvaIntegerPathCalculator
 		{
 
 			double dist = list.get( i ).getCost()
-					+ distance( list.get( i ).getCurrentNode().getFirst(), list.get( i )
+					+ MyMath.distanceInteger( list.get( i ).getCurrentNode().getFirst(), list.get( i )
 							.getCurrentNode().getSecond(), ( int ) xGoal, ( int ) yGoal );
 			if( dist < shortestDist )
 			{
@@ -231,89 +244,6 @@ public class ProvaIntegerPathCalculator
 		}
 		return shortestPoint;
 
-	}
-
-	private static double distance( Integer x1, Integer y1, Integer x2, Integer y2 )
-	{
-		return Math.sqrt( Math.pow( ( x2 - x1 ), 2 ) + Math.pow( ( y2 - y1 ), 2 ) );
-	}
-
-	private static boolean isThereAnyCollision( Integer currentX, Integer currentY, Integer xGoal,
-			Integer yGoal, World world )
-	{
-		ArrayList<AbstractObject> objectsX;
-		ArrayList<AbstractObject> objectsY;
-
-		if( currentX < xGoal )
-			objectsX = world.getObjectsXInTheRange( currentX, xGoal );
-		else
-			objectsX = world.getObjectsXInTheRange( xGoal, currentX );
-
-		if( currentY < yGoal )
-			objectsY = world.getObjectsYInTheRange( currentY, yGoal );
-		else
-			objectsY = world.getObjectsYInTheRange( yGoal, currentY );
-
-		// System.err.println( "size X " + objectsX.size() );
-		// System.err.println( "size Y " + objectsY.size() );
-
-		ArrayList<AbstractObject> intersection = new ArrayList<>();
-
-		for( AbstractObject objectX : objectsX )
-		{
-			Iterator<AbstractObject> it = objectsY.iterator();
-			while( it.hasNext() )
-			{
-				AbstractObject objectY = it.next();
-				if( objectX == objectY )
-				{
-					intersection.add( objectX );
-					it.remove();
-				}
-			}
-		}
-
-		// System.out.println( "size intersersection " + intersection.size() );
-		for( AbstractObject abstractObject : intersection )
-		{
-			// System.out.println( "distance "
-			// + pointToLineDistance( currentX, currentY, xGoal, yGoal, new Integer(
-			// ( int ) abstractObject.getX() ),
-			// new Integer( ( int ) abstractObject.getY() ) ) );
-			if( ( pointToLineDistance( currentX, currentY, xGoal, yGoal, new Integer(
-					( int ) abstractObject.getX() ), new Integer( ( int ) abstractObject.getY() ) ) - abstractObject
-					.getCollisionRay() ) <= 0 )
-			{
-				// System.err.println( "c'è l'intersezione" );
-				return true;
-			}
-		}
-
-		return false;
-
-	}
-
-	public static double pointToLineDistance( Integer currentX, Integer currentY, Integer xGoal,
-			Integer yGoal, Integer xObj, Integer yObj )
-	{
-		// double normalLength = Math.sqrt((xGoal - currentX) * (xGoal - currentX) + (yGoal -
-		// currentY) * (yGoal - currentY));
-		// return Math.abs((xObj - currentX) * (yGoal - currentY) - (yObj - currentY) * (xGoal -
-		// currentX)) / normalLength;
-		Pair<Integer, Integer> vector = new Pair<Integer, Integer>( -currentX + xGoal, -currentY
-				+ yGoal );
-		Pair<Integer, Integer> vectorToPoint = new Pair<Integer, Integer>( -currentX + xObj,
-				-currentY + yObj );
-
-		double scalarProduct = ( double ) ( ( double ) ( vector.getFirst()
-				* vectorToPoint.getFirst() + vector.getSecond() * vectorToPoint.getSecond() ) / ( double ) ( vector
-				.getFirst() * vector.getFirst() + vector.getSecond() * vector.getSecond() ) );
-
-		Pair<Double, Double> proj = new Pair<Double, Double>( vectorToPoint.getFirst()
-				- ( scalarProduct * vector.getFirst() ), vectorToPoint.getSecond() - scalarProduct
-				* vector.getSecond() );
-
-		return Math.sqrt( proj.getFirst() * proj.getFirst() + proj.getSecond() * proj.getSecond() );
 	}
 
 }
