@@ -19,7 +19,7 @@ public class Mine extends AbstractResourceProducer
 		readLock.lock();
 
 		if( owner != null )
-			owner.putResources( "Iron", PROVIDING + EXTRA_PROVIDING
+			owner.putResources( Resources.IRON, PROVIDING + EXTRA_PROVIDING
 					* owner.getPlayerLevel().ordinal() );
 
 		readLock.unlock();

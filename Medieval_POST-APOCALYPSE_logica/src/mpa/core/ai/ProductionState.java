@@ -1,52 +1,61 @@
 package mpa.core.ai;
 
 import mpa.core.logic.character.Player;
-import mpa.core.maths.MyMath;
+import mpa.core.logic.tool.Potions;
 
 class ProductionState extends AIState
 {
 
-	ProductionState( Player player )
+	ProductionState()
 	{
-		super( player );
+		super();
 	}
 
 	@Override
-	protected void action()
+	void action( OpponentAI opponentAI )
 	{
-		/*
-		 * if( enough resources to raise the level and current level is not the maximum level )
-		 * player.raiseLevel(); else { while( enough resources to make potions ) if(
-		 * player.getNumberOfDamagePotions > player.getNumberOfHPPotions +
-		 * player.getNumberOfMPPotions ) player.makeDamagePotions(); else if(
-		 * player.getNumberOfHPPotions > player.getNumberOfMPPotions ) player.makeHPPotions(); else
-		 * player.makeMPPotions(); }
-		 */
-	}
+		Player p = opponentAI.player;
 
-	@Override
-	protected AIState changeState()
-	{
-		float distance = Float.MAX_VALUE;
-		Player playerToAttack = null;
-
-		for( Player opponent : player.getKnownPlayers() )
+		if( p.canUpgrade() )
+			p.upgradeLevel();
+		else
 		{
-			float distance2 = MyMath.distanceFloat( player.getX(), player.getY(), opponent.getX(),
-					opponent.getY() );
-			if( ( player.getPlayerLevel().ordinal() > opponent.getPlayerLevel().ordinal() && ( playerToAttack == null || playerToAttack
-					.getPlayerLevel().ordinal() < opponent.getPlayerLevel().ordinal() ) )
-					&& distance2 < distance )
+			Potions potionNotToBuy = null;
+			int max = Integer.MIN_VALUE;
+			for( Potions potion : Potions.values() )
 			{
-				distance = distance2;
-				playerToAttack = opponent;
+				int amount = p.getPotionAmount( potion );
+
+				if( amount > max )
+				{
+					potionNotToBuy = potion;
+					max = amount;
+				}
 			}
+
+			for( Potions value : Potions.values() )
+				while( p.canBuyPotion( value ) )
+				{
+					if( value != potionNotToBuy )
+					{
+						p.buyPotion( value );
+
+						if( p.getPotionAmount( value ) == p.getPotionAmount( potionNotToBuy )
+								&& p.canBuyPotion( value ) )
+						{
+							potionNotToBuy = value;
+						}
+					}
+				}
 		}
 
-		if( playerToAttack != null )
-			return new CombatState( player, playerToAttack );
-		else
-			return new ExplorationState( player );
+	}
 
+	@Override
+	AIState changeState( OpponentAI opponentAI )
+	{
+		AIState nextState = null;
+
+		return nextState;
 	}
 }

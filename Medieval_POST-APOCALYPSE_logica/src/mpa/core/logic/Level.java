@@ -1,40 +1,80 @@
 package mpa.core.logic;
 
+import mpa.core.logic.character.Player;
+import mpa.core.logic.resource.Resources;
+
 public enum Level
 {
 	NEWBIE, SER, LORD, WAR_LORD, KING;
 
+	private int goldRequired = 100;
+	private int ironRequired = 150;
+	private int stoneRequired = 150;
+
 	public boolean hasNext()
 	{
-		if (this.ordinal() < Level.values().length)
+		if( this.ordinal() < Level.values().length )
 			return true;
 		return false;
 	}
 
 	public boolean hasPrevious()
 	{
-		if (this.ordinal() > 0)
+		if( this.ordinal() > 0 )
 			return true;
 		return false;
 	}
 
-	public Level getNext(Level current)
+	private boolean areResourcesEnough( Player player )
 	{
-		if (current.hasNext())
-			return Level.values()[current.ordinal() + 1];
-		return current;
+		if( player.getResourceAmount( "Iron" ) < ( player.getPlayerLevel().ordinal() + 1 )
+				* ironRequired )
+			return false;
+		else if( player.getResourceAmount( "Stone" ) < ( player.getPlayerLevel().ordinal() + 1 )
+				* stoneRequired )
+			return false;
+		else if( player.getResourceAmount( "Gold" ) < ( player.getPlayerLevel().ordinal() + 1 )
+				* stoneRequired )
+			return false;
+		else
+			return true;
 	}
 
-	public Level getPrevious(Level current)
+	public boolean canUpgrade( Player player )
 	{
-		if (current.hasPrevious())
+		if( player.getPlayerLevel().hasNext() && areResourcesEnough( player ) )
+			return true;
+
+		return false;
+	}
+
+	public boolean upgradeLevel( Player player )
+	{
+		if( canUpgrade( player ) )
+		{
+			player.putResources( Resources.IRON,
+					-( player.getPlayerLevel().ordinal() + 1 * ironRequired ) );
+			player.putResources( Resources.STONE,
+					-( player.getPlayerLevel().ordinal() + 1 * stoneRequired ) );
+			// player.putResources( Resources.GO, -( player.getPlayerLevel().ordinal() + 1 *
+			// goldRequired ) );
+			player.setLevel( Level.values()[player.getPlayerLevel().ordinal() + 1] );
+
+			return true;
+		}
+		return false;
+	}
+
+	public Level getPrevious( Level current )
+	{
+		if( current.hasPrevious() )
 			return Level.values()[current.ordinal() - 1];
 		return current;
 	}
 
-	public int getNumberOfSubalterns(Level level)
+	public int getNumberOfSubalterns( Level level )
 	{
-		switch (level)
+		switch( level )
 		{
 			case NEWBIE:
 				return 4;
