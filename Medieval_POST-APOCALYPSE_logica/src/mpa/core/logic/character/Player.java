@@ -24,51 +24,49 @@ public class Player extends AbstractCharacter
 
 	private HashMap<Potions, Integer> potions = new HashMap<>();
 
-	public Player( String name, float x, float y, int health, Level level, Headquarter headquarter,
-			int bagDimension )
+	public Player(String name, float x, float y, int health, Level level, Headquarter headquarter, int bagDimension)
 	{
-		super( name, x, y, health, bagDimension );
+		super(name, x, y, health, bagDimension);
 		this.headquarter = headquarter;
 		subalterns = new ArrayList<DependentCharacter>();
 		this.level = level;
-		for( int i = 0; i < level.getNumberOfSubalterns( level ); i++ )
+		for (int i = 0; i < level.getNumberOfSubalterns(level); i++)
 		{
-			subalterns.add( new DependentCharacter( "ERia", headquarter.getX(), headquarter.getY(),
-					100, 100, null, level, this ) );
+			subalterns.add(new DependentCharacter("ERia", headquarter.getX(), headquarter.getY(), 100, 100, null, level, this));
 
 		}
 
-		resources.put( Resources.WHEAT, 0 );
-		resources.put( Resources.IRON, 0 );
-		resources.put( Resources.WOOD, 0 );
-		resources.put( Resources.STONE, 0 );
-		resources.put( Resources.HERBS, 0 );
+		resources.put(Resources.WHEAT, 0);
+		resources.put(Resources.IRON, 0);
+		resources.put(Resources.WOOD, 0);
+		resources.put(Resources.STONE, 0);
+		resources.put(Resources.HERBS, 0);
 
-		potions.put( Potions.HP, 0 );
-		potions.put( Potions.MP, 0 );
-		potions.put( Potions.GRANADE, 0 );
-		potions.put( Potions.FLASH_BANG, 0 );
+		potions.put(Potions.HP, 0);
+		potions.put(Potions.MP, 0);
+		potions.put(Potions.GRANADE, 0);
+		potions.put(Potions.FLASH_BANG, 0);
 
 	}
 
-	public boolean pickUpTool( AbstractTool tool )
+	public boolean pickUpTool(AbstractTool tool)
 	{
-		return this.bag.addTool( tool );
+		return this.bag.addTool(tool);
 	}
 
-	public boolean throwTool( AbstractTool tool )
+	public boolean throwTool(AbstractTool tool)
 	{
-		return this.bag.removeTool( tool );
+		return this.bag.removeTool(tool);
 	}
 
-	public DependentCharacter employSubaltern( AbstractPrivateProperty abstractPrivateProperty )
+	public DependentCharacter employSubaltern(AbstractPrivateProperty abstractPrivateProperty)
 	{
-		for( DependentCharacter subaltern : subalterns )
+		for (DependentCharacter subaltern : subalterns)
 		{
-			if( subaltern.getAbstractPrivateProperty() == null )
+			if (subaltern.getAbstractPrivateProperty() == null)
 			{
-				subaltern.setAbstractPrivateProperty( abstractPrivateProperty );
-				subaltern.setAbstractPrivateProperty( abstractPrivateProperty );
+				subaltern.setAbstractPrivateProperty(abstractPrivateProperty);
+				subaltern.setAbstractPrivateProperty(abstractPrivateProperty);
 				employedSubalterns++;
 				return subaltern;
 			}
@@ -77,12 +75,11 @@ public class Player extends AbstractCharacter
 		return null;
 	}
 
-	public boolean employSubaltern( DependentCharacter dependentCharacter,
-			AbstractPrivateProperty abstractPrivateProperty )
+	public boolean employSubaltern(DependentCharacter dependentCharacter, AbstractPrivateProperty abstractPrivateProperty)
 	{
-		if( subalterns.contains( dependentCharacter ) )
+		if (subalterns.contains(dependentCharacter))
 		{
-			dependentCharacter.setAbstractPrivateProperty( abstractPrivateProperty );
+			dependentCharacter.setAbstractPrivateProperty(abstractPrivateProperty);
 			return true;
 		}
 		else
@@ -93,22 +90,22 @@ public class Player extends AbstractCharacter
 	public ArrayList<DependentCharacter> getFreeSubalterns()
 	{
 		ArrayList<DependentCharacter> freeSubalterns = new ArrayList<>();
-		for( DependentCharacter subaltern : subalterns )
+		for (DependentCharacter subaltern : subalterns)
 		{
-			if( subaltern.getAbstractPrivateProperty() == null )
+			if (subaltern.getAbstractPrivateProperty() == null)
 			{
-				freeSubalterns.add( subaltern );
+				freeSubalterns.add(subaltern);
 			}
 
 		}
 		return freeSubalterns;
 	}
 
-	public DependentCharacter getSubaltern( AbstractPrivateProperty abstractPrivateProperty )
+	public DependentCharacter getSubaltern(AbstractPrivateProperty abstractPrivateProperty)
 	{
-		for( DependentCharacter subaltern : subalterns )
+		for (DependentCharacter subaltern : subalterns)
 		{
-			if( abstractPrivateProperty == subaltern.getAbstractPrivateProperty() )
+			if (abstractPrivateProperty == subaltern.getAbstractPrivateProperty())
 				return subaltern;
 
 		}
@@ -116,11 +113,11 @@ public class Player extends AbstractCharacter
 
 	}
 
-	public boolean freeSubaltern( DependentCharacter dependentCharacter )
+	public boolean freeSubaltern(DependentCharacter dependentCharacter)
 	{
-		if( subalterns.contains( dependentCharacter ) )
+		if (subalterns.contains(dependentCharacter))
 		{
-			dependentCharacter.setAbstractPrivateProperty( null );
+			dependentCharacter.setAbstractPrivateProperty(null);
 			employedSubalterns--;
 			return true;
 
@@ -133,7 +130,7 @@ public class Player extends AbstractCharacter
 		return this.level;
 	}
 
-	public void setLevel( Level level )
+	public void setLevel(Level level)
 	{
 		this.level = level;
 	}
@@ -147,9 +144,9 @@ public class Player extends AbstractCharacter
 	{
 		writeLock.lock();
 
-		headquarter.setOwner( null );
+		headquarter.setOwner(null);
 
-		for( DependentCharacter subaltern : subalterns )
+		for (DependentCharacter subaltern : subalterns)
 		{
 			subaltern.leaveProperty();
 		}
@@ -157,22 +154,22 @@ public class Player extends AbstractCharacter
 		writeLock.unlock();
 	}
 
-	public void putResources( Resources type, int providing )
+	public void putResources(Resources type, int providing)
 	{
 		writeLock.lock();
-		switch( type )
+		switch (type)
 		{
 			case IRON:
-				resources.put( Resources.IRON, resources.get( Resources.IRON ) + providing );
+				resources.put(Resources.IRON, resources.get(Resources.IRON) + providing);
 				break;
 			case WHEAT:
-				resources.put( Resources.WHEAT, resources.get( Resources.WHEAT ) + providing );
+				resources.put(Resources.WHEAT, resources.get(Resources.WHEAT) + providing);
 				break;
 			case WOOD:
-				resources.put( Resources.WOOD, resources.get( Resources.WOOD ) + providing );
+				resources.put(Resources.WOOD, resources.get(Resources.WOOD) + providing);
 				break;
 			case HERBS:
-				resources.put( Resources.HERBS, resources.get( Resources.HERBS ) + providing );
+				resources.put(Resources.HERBS, resources.get(Resources.HERBS) + providing);
 				break;
 			default:
 		}
@@ -180,12 +177,12 @@ public class Player extends AbstractCharacter
 		writeLock.unlock();
 	}
 
-	public int getResourceAmount( String type )
+	public int getResourceAmount(String type)
 	{
 		try
 		{
 			readLock.lock();
-			return resources.get( type );
+			return resources.get(type);
 		} finally
 		{
 			readLock.unlock();
@@ -198,9 +195,9 @@ public class Player extends AbstractCharacter
 		{
 			writeLock.lock();
 
-			if( level.canUpgrade( this ) )
+			if (level.canUpgrade(this))
 			{
-				level.upgradeLevel( this );
+				level.upgradeLevel(this);
 				return true;
 			}
 			else
@@ -218,7 +215,7 @@ public class Player extends AbstractCharacter
 		try
 		{
 			readLock.lock();
-			return level.canUpgrade( this );
+			return level.canUpgrade(this);
 		} finally
 		{
 			readLock.unlock();
@@ -243,13 +240,13 @@ public class Player extends AbstractCharacter
 		{
 			readLock.lock();
 
-			for( Potions p : Potions.values() )
+			for (Potions p : Potions.values())
 			{
-				HashMap<Resources, Integer> price = PotionManager.getInstance().getPrice( p );
+				HashMap<Resources, Integer> price = PotionManager.getInstance().getPrice(p);
 
-				for( Resources r : price.keySet() )
+				for (Resources r : price.keySet())
 				{
-					if( resources.get( r ) < price.get( r ) )
+					if (resources.get(r) < price.get(r))
 						return false;
 				}
 			}
@@ -262,17 +259,17 @@ public class Player extends AbstractCharacter
 		}
 	}
 
-	public boolean canBuyPotion( Potions potion )
+	public boolean canBuyPotion(Potions potion)
 	{
 		try
 		{
 			readLock.lock();
 
-			HashMap<Resources, Integer> price = PotionManager.getInstance().getPrice( potion );
+			HashMap<Resources, Integer> price = PotionManager.getInstance().getPrice(potion);
 
-			for( Resources r : price.keySet() )
+			for (Resources r : price.keySet())
 			{
-				if( resources.get( r ) < price.get( r ) )
+				if (resources.get(r) < price.get(r))
 					return false;
 			}
 
@@ -284,37 +281,37 @@ public class Player extends AbstractCharacter
 		}
 	}
 
-	public int getPotionAmount( Potions p )
+	public int getPotionAmount(Potions p)
 	{
 		try
 		{
 			readLock.lock();
 
-			return potions.get( p );
+			return potions.get(p);
 		} finally
 		{
 			readLock.unlock();
 		}
 	}
 
-	public boolean buyPotion( Potions potion )
+	public boolean buyPotion(Potions potion)
 	{
 		try
 		{
 			writeLock.lock();
-			if( x != headquarter.getCollectionPoint().x && y != headquarter.getCollectionPoint().y )
+			if (x != headquarter.getCollectionPoint().x && y != headquarter.getCollectionPoint().y)
 				return false;
 
-			HashMap<Resources, Integer> price = PotionManager.getInstance().getPrice( potion );
+			HashMap<Resources, Integer> price = PotionManager.getInstance().getPrice(potion);
 
-			for( Resources r : price.keySet() )
+			for (Resources r : price.keySet())
 			{
-				if( price.get( r ) > resources.get( r ) )
+				if (price.get(r) > resources.get(r))
 					return false;
 			}
-			for( Resources r : price.keySet() )
+			for (Resources r : price.keySet())
 			{
-				resources.put( r, resources.get( r ) - price.get( r ) );
+				resources.put(r, resources.get(r) - price.get(r));
 			}
 
 			return true;
@@ -325,4 +322,10 @@ public class Player extends AbstractCharacter
 		}
 
 	}
+
+	public HashMap<Resources, Integer> getResources()
+	{
+		return resources;
+	}
+
 }

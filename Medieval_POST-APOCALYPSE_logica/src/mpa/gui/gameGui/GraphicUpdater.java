@@ -6,7 +6,7 @@ public class GraphicUpdater extends Thread
 	private final long INTERVAL = 10;
 	private final float MOVEMENT_LENGTH = 1;
 
-	public GraphicUpdater( GameGui gameGui )
+	public GraphicUpdater(GameGui gameGui)
 	{
 		super();
 		this.gameGui = gameGui;
@@ -15,12 +15,12 @@ public class GraphicUpdater extends Thread
 	@Override
 	public void run()
 	{
-		while( true )
+		while (true)
 		{
 			try
 			{
-				sleep( INTERVAL );
-			} catch( InterruptedException e )
+				sleep(INTERVAL);
+			} catch (InterruptedException e)
 			{
 				e.printStackTrace();
 			}
@@ -28,25 +28,28 @@ public class GraphicUpdater extends Thread
 
 			com.jme3.math.Vector3f camLocation = gameGui.getCamPosition();
 
-			if( gameGui.cursorOnTheBottomEdge )
+			if (gameGui.cursorOnTheBottomEdge)
 			{
-				camLocation.setZ( camLocation.z - MOVEMENT_LENGTH );
+				camLocation.setZ(camLocation.z - MOVEMENT_LENGTH);
+				gameGui.setCamera(camLocation);
 			}
-			else if( gameGui.cursorOnTheTopEdge )
+			else if (gameGui.cursorOnTheTopEdge)
 			{
-				camLocation.setZ( camLocation.z + MOVEMENT_LENGTH );
-			}
-
-			if( gameGui.cursorOnTheLeftEdge )
-			{
-				camLocation.setX( camLocation.x + MOVEMENT_LENGTH );
-			}
-			else if( gameGui.cursorOnTheRightEdge )
-			{
-				camLocation.setX( camLocation.x - MOVEMENT_LENGTH );
+				camLocation.setZ(camLocation.z + MOVEMENT_LENGTH);
+				gameGui.setCamera(camLocation);
 			}
 
-			gameGui.setCamera( camLocation );
+			if (gameGui.cursorOnTheLeftEdge)
+			{
+				camLocation.setX(camLocation.x + MOVEMENT_LENGTH);
+				gameGui.setCamera(camLocation);
+			}
+			else if (gameGui.cursorOnTheRightEdge)
+			{
+				camLocation.setX(camLocation.x - MOVEMENT_LENGTH);
+				gameGui.setCamera(camLocation);
+			}
+
 			gameGui.leaveLock();
 		}
 	}
