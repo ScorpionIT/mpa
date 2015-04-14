@@ -17,7 +17,7 @@ public class Cave extends AbstractResourceProducer
 	{
 		readLock.lock();
 		if( owner != null )
-			owner.putResources( Resources.STONE, PROVIDING + EXTRA_PROVIDING
+			owner.putResources( "Stone", PROVIDING + EXTRA_PROVIDING
 					* owner.getPlayerLevel().ordinal() );
 		readLock.unlock();
 	}

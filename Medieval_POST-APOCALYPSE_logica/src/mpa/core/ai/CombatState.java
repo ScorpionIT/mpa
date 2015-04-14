@@ -1,41 +1,26 @@
 package mpa.core.ai;
 
 import mpa.core.logic.character.Player;
-import mpa.core.maths.MyMath;
 
 class CombatState extends AIState
 {
 	private Player playerToAttack;
 
-	CombatState()
+	CombatState( Player player, Player playerToAttack )
 	{
-		super();
+		super( player );
+		this.playerToAttack = playerToAttack;
 	}
 
-	@Override void action( OpponentAI opponentAI )
+	@Override
+	protected void action()
 	{
-		if( playerToAttack == null )
-		{
-			float distance = Float.MAX_VALUE;
-			Player playerToAttack = null;
+		// TODO Auto-generated method stub
 
-			for( Player opponent : opponentAI.knownPlayers )
-			{
-				float distance2 = MyMath.distanceFloat( opponentAI.player.getX(),
-						opponentAI.player.getY(), opponent.getX(), opponent.getY() );
-				if( ( opponentAI.player.getPlayerLevel().ordinal() > opponent.getPlayerLevel()
-						.ordinal() && ( playerToAttack == null || playerToAttack.getPlayerLevel()
-						.ordinal() < opponent.getPlayerLevel().ordinal() ) )
-						&& distance2 < distance )
-				{
-					distance = distance2;
-					playerToAttack = opponent;
-				}
-			}
-		}
 	}
 
-	@Override AIState changeState( OpponentAI opponentAI )
+	@Override
+	protected AIState changeState()
 	{
 		// TODO Auto-generated method stub
 		return null;
