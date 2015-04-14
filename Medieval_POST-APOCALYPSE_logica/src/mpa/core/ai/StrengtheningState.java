@@ -1,24 +1,21 @@
 package mpa.core.ai;
 
-import mpa.core.logic.character.Player;
 
 class StrengtheningState extends AIState
 {
 
-	public StrengtheningState( Player player )
+	public StrengtheningState()
 	{
-		super( player );
+		super();
 	}
 
-	@Override
-	protected void action()
+	@Override void action( OpponentAI opponentAI )
 	{
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
-	protected AIState changeState()
+	@Override AIState changeState( OpponentAI opponentAI )
 	{
 		// TODO Auto-generated method stub
 		return null;

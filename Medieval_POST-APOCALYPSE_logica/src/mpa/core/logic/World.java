@@ -2,6 +2,7 @@ package mpa.core.logic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Set;
 
 import mpa.core.logic.resource.AbstractResourceProducer;
@@ -88,6 +89,30 @@ public class World
 		}
 		// System.out.println("getObjectsXInTheRange " + abstractObjectsX.size());
 		return abstractObjectsX;
+	}
+
+	public ArrayList<AbstractObject> getObjectsInTheRange( float xMin, float xMax, float yMin,
+			float yMax )
+	{
+		ArrayList<AbstractObject> objects = new ArrayList<>();
+		ArrayList<AbstractObject> objectsX = getObjectsXInTheRange( ( int ) xMin, ( int ) xMax );
+		ArrayList<AbstractObject> objectsY = getObjectsXInTheRange( ( int ) yMin, ( int ) yMax );
+
+		for( AbstractObject objX : objectsX )
+		{
+			Iterator<AbstractObject> it = objectsY.iterator();
+			while( it.hasNext() )
+			{
+				AbstractObject objectY = it.next();
+				if( objX == objectY )
+				{
+					objects.add( objX );
+					it.remove();
+				}
+			}
+		}
+
+		return objects;
 	}
 
 	public ArrayList<AbstractObject> getObjectsYInTheRange( float y )

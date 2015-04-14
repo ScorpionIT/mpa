@@ -1,18 +1,13 @@
 package mpa.core.ai;
 
-import mpa.core.logic.character.Player;
-
 abstract class AIState
 {
-	protected Player player;
-
-	protected AIState( Player player )
+	protected AIState()
 	{
-		this.player = player;
 	}
 
-	abstract protected void action();
+	abstract void action( OpponentAI opponentAI );
 
-	abstract protected AIState changeState();
+	abstract AIState changeState(OpponentAI opponentAI );
 
 }
