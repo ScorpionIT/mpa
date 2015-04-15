@@ -15,7 +15,7 @@ public class Field extends AbstractResourceProducer
 
 	public Field(float x, float y, Player player)
 	{
-		super(x, y, player);
+		super(x, y, 30, 30, player);
 		this.currentFieldState = FieldState.PLOWING;
 	}
 

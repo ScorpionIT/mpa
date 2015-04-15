@@ -9,7 +9,7 @@ public class Cave extends AbstractResourceProducer
 
 	public Cave(float x, float y, Player player)
 	{
-		super(x, y, player); // TODO
+		super(x, y, 30, 30, player); // TODO
 	}
 
 	@Override

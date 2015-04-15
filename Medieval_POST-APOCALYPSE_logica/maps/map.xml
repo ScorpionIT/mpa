@@ -1,7 +1,7 @@
 <Map>
 	<Name>Mappa1</Name>
-	<Width>500</Width>
-	<Height>500</Height>
+	<Width>600</Width>
+	<Height>600</Height>
 	<Number>21</Number>
 	<Objects>
 		<HeadQuarters>
@@ -37,7 +37,7 @@
 		</Caves>
 
 		<Fields>
-			<Field>300,200</Field>
+			<Field>550,200</Field>
 		</Fields>
 
 		<Market>333,88</Market>

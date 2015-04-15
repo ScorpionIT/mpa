@@ -10,8 +10,12 @@ import mpa.core.logic.AbstractObject;
 import mpa.core.logic.GameManager;
 import mpa.core.logic.Pair;
 import mpa.core.logic.building.House;
+import mpa.core.logic.building.Market;
 import mpa.core.logic.character.Player;
+import mpa.core.logic.resource.Cave;
+import mpa.core.logic.resource.Field;
 import mpa.core.logic.resource.Resources;
+import mpa.core.logic.resource.Wood;
 import mpa.gui.gameGui.panel.NiftyHandler;
 
 import com.jme3.app.SimpleApplication;
@@ -121,11 +125,11 @@ public class GameGui extends SimpleApplication
 		Material mat2 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
 		mat2.setColor("Color", ColorRGBA.Red);
 
-		assetManager.registerLocator("assets/Models/house.zip", ZipLocator.class);
 		for (AbstractObject object : allObjects)
 		{
 			if (object instanceof House)
 			{
+				assetManager.registerLocator("assets/Models/house.zip", ZipLocator.class);
 				Spatial loadModel = assetManager.loadModel("house.scene");
 				loadModel.setLocalTranslation(new Vector3f(object.getX(), 0, object.getY()));
 				float cos = FastMath.cos(130 + 180);
@@ -133,6 +137,58 @@ public class GameGui extends SimpleApplication
 				loadModel.setLocalRotation(new Matrix3f(cos, 0, sin, 0, 1, 0, -sin, 0, cos));
 				loadModel.scale(2f);
 				rootNode.attachChild(loadModel);
+			}
+			else if (object instanceof Field)
+			{
+
+				assetManager.registerLocator("assets/Models/CornField.zip", ZipLocator.class);
+
+				Spatial loadModel = assetManager.loadModel("CornField.mesh.xml");
+				loadModel.setLocalTranslation(new Vector3f(object.getX(), 0, object.getY()));
+				float cos = FastMath.cos(90);
+				float sin = FastMath.sin(90);
+				loadModel.setLocalRotation(new Matrix3f(1, 0, 0, 0, cos, -sin, 0, sin, cos));
+				loadModel.scale(6f);
+				rootNode.attachChild(loadModel);
+			}
+
+			else if (object instanceof Cave)
+			{
+
+				// assetManager.registerLocator("assets/Models/wagen.zip", ZipLocator.class);
+				//
+				// Spatial loadModel = assetManager.loadModel("wagen.mesh.xml");
+				// loadModel.setLocalTranslation(new Vector3f(object.getX(), 0, object.getY()));
+				// float cos = FastMath.cos(90);
+				// float sin = FastMath.sin(90);
+				// loadModel.setLocalRotation(new Matrix3f(1, 0, 0, 0, cos, -sin, 0, sin, cos));
+				// loadModel.scale(1f);
+				// rootNode.attachChild(loadModel);
+			}
+			else if (object instanceof Market)
+			{
+				assetManager.registerLocator("assets/Models/wagen.zip", ZipLocator.class);
+
+				Spatial loadModel = assetManager.loadModel("wagen.mesh.xml");
+				loadModel.setLocalTranslation(new Vector3f(object.getX(), 0, object.getY()));
+
+				loadModel.scale(0.1f);
+				rootNode.attachChild(loadModel);
+
+			}
+
+			else if (object instanceof Wood)
+			{
+				assetManager.registerLocator("assets/Models/Tree1.zip", ZipLocator.class);
+
+				Spatial loadModel = assetManager.loadModel("Tree1.mesh.xml");
+				loadModel.setLocalTranslation(new Vector3f(object.getX(), 0, object.getY()));
+				float cos = FastMath.cos(90);
+				float sin = FastMath.sin(90);
+				loadModel.setLocalRotation(new Matrix3f(1, 0, 0, 0, cos, -sin, 0, sin, cos));
+				loadModel.scale(2f);
+				rootNode.attachChild(loadModel);
+
 			}
 
 		}

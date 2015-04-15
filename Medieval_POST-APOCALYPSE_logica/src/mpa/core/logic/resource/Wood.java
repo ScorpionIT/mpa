@@ -9,7 +9,7 @@ public class Wood extends AbstractResourceProducer
 
 	public Wood(float x, float y, Player player)
 	{
-		super(x, y, player);
+		super(x, y, 30, 30, player);
 		// TODO Auto-generated constructor stub
 	}
 
