@@ -24,13 +24,20 @@ public class MapPreview extends MpaPanel
 	private MapInfo mapInfo;
 	private HashMap<String, Image> images = new HashMap<>();
 	private HashMap<JLabel, Pair<Float, Float>> headQuartersLabel = new HashMap<>();
-	private MainMenuPanel mainMenuPanel;
+	private MainMenuGamePanel mainMenuGamePanel;
+	private Image backgroundImage;
 
-	public MapPreview(MainMenuPanel mainMenuPanel)
+	public MapPreview(MainMenuGamePanel mainMenuGamePanel)
 	{
-		this.mainMenuPanel = mainMenuPanel;
+		this.mainMenuGamePanel = mainMenuGamePanel;
 		this.setLayout(null);
-		this.setBackground(Color.GREEN);
+		try
+		{
+			backgroundImage = ImageIO.read(new File("Assets/Textures/grass-pattern.png"));
+		} catch (IOException e1)
+		{
+			e1.printStackTrace();
+		}
 		this.setVisible(true);
 
 	}
@@ -40,14 +47,15 @@ public class MapPreview extends MpaPanel
 
 		try
 		{
-			File folder = new File("./imagesPreview");
+			File folder = new File("./Assets/imagesPreview");
 			File[] listOfFiles = folder.listFiles();
 			for (int i = 0; i < listOfFiles.length; i++)
 			{
 				if (listOfFiles[i].isFile() && listOfFiles[i].getName().endsWith(".png"))
 				{
-					Image img = ImageIO.read(new File("./imagesPreview/" + listOfFiles[i].getName()));
-					img = img.getScaledInstance(W(img.getWidth(null)), H(img.getHeight(null)), 0);
+					Image img = ImageIO.read(new File("./Assets/imagesPreview/" + listOfFiles[i].getName()));
+					// img = img.getScaledInstance(W(img.getWidth(null)), H(img.getHeight(null)),
+					// 0);
 					images.put(listOfFiles[i].getName().substring(0, listOfFiles[i].getName().length() - 4), img);
 				}
 			}
@@ -75,18 +83,18 @@ public class MapPreview extends MpaPanel
 				{
 					Set<JLabel> keys = MapPreview.this.headQuartersLabel.keySet();
 					for (JLabel l : keys)
-						if (MapPreview.this.headQuartersLabel.get(l).equals(MapPreview.this.mainMenuPanel.getSelectedHQ()))
+						if (MapPreview.this.headQuartersLabel.get(l).equals(MapPreview.this.mainMenuGamePanel.getSelectedHQ()))
 						{
 							l.setBorder(BorderFactory.createEmptyBorder());
 						}
 					((JLabel) e.getSource()).setBorder(BorderFactory.createLineBorder(Color.red));
-					MapPreview.this.mainMenuPanel.setSelectedHeadQuarter(MapPreview.this.headQuartersLabel.get(e.getSource()));
+					MapPreview.this.mainMenuGamePanel.setSelectedHeadQuarter(MapPreview.this.headQuartersLabel.get(e.getSource()));
 
 				}
 
 			});
-			jLabel.setBounds(graphicX(headQuarterPosition.getFirst()), graphicY(headQuarterPosition.getSecond()), images.get("headQuarter").getWidth(null), images
-					.get("headQuarter").getHeight(null));
+			jLabel.setBounds(graphicX(headQuarterPosition.getFirst()), graphicY(headQuarterPosition.getSecond()),
+					images.get("headQuarter").getWidth(null), images.get("headQuarter").getHeight(null));
 			this.add(jLabel);
 
 			headQuartersLabel.put(jLabel, headQuarterPosition);
@@ -98,6 +106,8 @@ public class MapPreview extends MpaPanel
 	{
 
 		super.paintComponent(g);
+		setBackgroundPatternImage(g);
+
 		if (mapInfo == null)
 		{
 			return;
@@ -107,29 +117,53 @@ public class MapPreview extends MpaPanel
 		{
 
 			System.out.println(woodPosition.getFirst() + " " + woodPosition.getSecond());
-			g.drawImage(images.get("wood"), graphicX(woodPosition.getFirst()), graphicY(woodPosition.getSecond()), images.get("wood").getWidth(null),
-					images.get("wood").getHeight(null), this);
+			g.drawImage(images.get("wood"), graphicX(woodPosition.getFirst()), graphicY(woodPosition.getSecond()), W(images.get("wood")
+					.getWidth(null)), H(images.get("wood").getHeight(null)), this);
+			// g.drawImage(images.get("wood"), graphicX(woodPosition.getFirst()),
+			// graphicY(woodPosition.getSecond()), images.get("wood").getWidth(null),
+			// images.get("wood").getHeight(null), this);
 		}
 		for (Pair<Float, Float> fieldPosition : mapInfo.getFields())
 		{
 
-			// System.out.println(fieldPosition.getFirst() + " " + fieldPosition.getSecond());
-
-			g.drawRect(graphicX(fieldPosition.getFirst()), graphicY(fieldPosition.getSecond()), images.get("headQuarter").getWidth(null), images.get("headQuarter")
-					.getHeight(null));
+			g.drawImage(images.get("field"), graphicX(fieldPosition.getFirst()), graphicY(fieldPosition.getSecond()),
+					W(images.get("field").getWidth(null)), H(images.get("field").getHeight(null)), this);
+			// g.drawImage(images.get("field"), graphicX(fieldPosition.getFirst()),
+			// graphicY(fieldPosition.getSecond()),
+			// images.get("field").getWidth(null), images.get("field").getHeight(null), this);
 		}
 
 		for (Pair<Float, Float> cavesPosition : mapInfo.getCaves())
 		{
-
-			// System.out.println(cavesPosition.getFirst() + " " + cavesPosition.getSecond());
-
-			g.drawOval(graphicX(cavesPosition.getFirst()), graphicY(cavesPosition.getSecond()), images.get("headQuarter").getWidth(null), images.get("headQuarter")
-					.getHeight(null));
+			g.drawImage(images.get("cave"), graphicX(cavesPosition.getFirst()), graphicY(cavesPosition.getSecond()),
+					W(images.get("cave").getWidth(null)), H(images.get("cave").getHeight(null)), this);
+			// g.drawImage(images.get("cave"), graphicX(cavesPosition.getFirst()),
+			// graphicY(cavesPosition.getSecond()), images.get("cave")
+			// .getWidth(null), images.get("cave").getHeight(null), this);
 
 		}
-		g.drawImage(images.get("market"), graphicX(mapInfo.getMarket().getFirst()), graphicY(mapInfo.getMarket().getSecond()),
-				images.get("headQuarter").getWidth(null), images.get("market").getHeight(null), this);
+		// g.drawImage(images.get("market"), graphicX(mapInfo.getMarket().getFirst()),
+		// graphicY(mapInfo.getMarket().getSecond()),
+		// images.get("headQuarter").getWidth(null), images.get("market").getHeight(null), this);
+		g.drawImage(images.get("market"), graphicX(mapInfo.getMarket().getFirst()), graphicY(mapInfo.getMarket().getSecond()), W(images.get("market")
+				.getWidth(null)), H(images.get("market").getHeight(null)), this);
+
+	}
+
+	private void setBackgroundPatternImage(Graphics g)
+	{
+		int backgroundWidth = backgroundImage.getWidth(this);
+		int backgroundHeight = backgroundImage.getWidth(this);
+		int maxI = this.getWidth() / backgroundWidth;
+		int maxJ = this.getHeight() / backgroundHeight;
+
+		for (int i = 0; i <= maxI; i++)
+		{
+			for (int j = 0; j <= maxJ; j++)
+			{
+				g.drawImage(backgroundImage, i * backgroundWidth, j * backgroundHeight, backgroundWidth, backgroundHeight, this);
+			}
+		}
 
 	}
 

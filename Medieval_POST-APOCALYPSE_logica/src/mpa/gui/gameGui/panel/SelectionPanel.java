@@ -66,17 +66,17 @@ public class SelectionPanel
 			{
 				childLayoutAbsoluteInside();
 
-				x("37%");
-				y("87%");
+				x("33%");
+				y("83%");
 				width("20%");
 				height("20%");
 
 				image(new ImageBuilder()
 				{
 					{
-						filename("sfondomenu.png");
-						width("100%");
-						height("100%");
+						filename("selectedPanel.png");
+						width("85%");
+						height("85%");
 
 					}
 				});

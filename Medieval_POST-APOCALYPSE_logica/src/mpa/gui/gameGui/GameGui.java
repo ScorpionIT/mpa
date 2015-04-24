@@ -42,6 +42,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.texture.Texture;
+import com.jme3.texture.Texture.WrapMode;
 import com.jme3.util.TangentBinormalGenerator;
 
 public class GameGui extends SimpleApplication
@@ -73,6 +74,7 @@ public class GameGui extends SimpleApplication
 
 		niftyHandler = new NiftyHandler(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this);
 		setCamera(new Vector3f(250, cameraHeight, 250));
+		updateResourcePanel();
 
 		groundNode = new Node("Ground");
 		groundNode.attachChild(makeFloor());
@@ -106,9 +108,11 @@ public class GameGui extends SimpleApplication
 		Geometry floor = new Geometry("the Floor", box);
 		floor.setLocalTranslation(GameManager.getInstance().getWorld().getWidth() / 2, 0, GameManager.getInstance().getWorld().getHeight() / 2);
 
-		assetManager.registerLocator("Textures/", FileLocator.class);
+		assetManager.registerLocator("Assets/Textures/", FileLocator.class);
 		Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-		Texture text1 = assetManager.loadTexture("grass-bella.jpeg");
+		Texture text1 = assetManager.loadTexture("grass-pattern.png");
+		floor.getMesh().scaleTextureCoordinates(new Vector2f(20, 20));
+		text1.setWrap(WrapMode.Repeat);
 
 		mat1.setTexture("ColorMap", text1);
 		floor.setMaterial(mat1);
@@ -129,7 +133,7 @@ public class GameGui extends SimpleApplication
 		{
 			if (object instanceof House)
 			{
-				assetManager.registerLocator("assets/Models/house.zip", ZipLocator.class);
+				assetManager.registerLocator("Assets/Models/house.zip", ZipLocator.class);
 				Spatial loadModel = assetManager.loadModel("house.scene");
 				loadModel.setLocalTranslation(new Vector3f(object.getX(), 0, object.getY()));
 				float cos = FastMath.cos(130 + 180);
@@ -141,7 +145,7 @@ public class GameGui extends SimpleApplication
 			else if (object instanceof Field)
 			{
 
-				assetManager.registerLocator("assets/Models/CornField.zip", ZipLocator.class);
+				assetManager.registerLocator("Assets/Models/CornField.zip", ZipLocator.class);
 
 				Spatial loadModel = assetManager.loadModel("CornField.mesh.xml");
 				loadModel.setLocalTranslation(new Vector3f(object.getX(), 0, object.getY()));
@@ -155,19 +159,19 @@ public class GameGui extends SimpleApplication
 			else if (object instanceof Cave)
 			{
 
-				// assetManager.registerLocator("assets/Models/wagen.zip", ZipLocator.class);
-				//
-				// Spatial loadModel = assetManager.loadModel("wagen.mesh.xml");
-				// loadModel.setLocalTranslation(new Vector3f(object.getX(), 0, object.getY()));
-				// float cos = FastMath.cos(90);
-				// float sin = FastMath.sin(90);
-				// loadModel.setLocalRotation(new Matrix3f(1, 0, 0, 0, cos, -sin, 0, sin, cos));
-				// loadModel.scale(1f);
-				// rootNode.attachChild(loadModel);
+				assetManager.registerLocator("Assets/Models/stones.zip", ZipLocator.class);
+
+				Spatial loadModel = assetManager.loadModel("stones.mesh.xml");
+				loadModel.setLocalTranslation(new Vector3f(object.getX(), 0, object.getY()));
+				float cos = FastMath.cos(90);
+				float sin = FastMath.sin(90);
+				loadModel.setLocalRotation(new Matrix3f(1, 0, 0, 0, cos, -sin, 0, sin, cos));
+				loadModel.scale(3f);
+				rootNode.attachChild(loadModel);
 			}
 			else if (object instanceof Market)
 			{
-				assetManager.registerLocator("assets/Models/wagen.zip", ZipLocator.class);
+				assetManager.registerLocator("Assets/Models/wagen.zip", ZipLocator.class);
 
 				Spatial loadModel = assetManager.loadModel("wagen.mesh.xml");
 				loadModel.setLocalTranslation(new Vector3f(object.getX(), 0, object.getY()));
@@ -179,15 +183,15 @@ public class GameGui extends SimpleApplication
 
 			else if (object instanceof Wood)
 			{
-				assetManager.registerLocator("assets/Models/Tree1.zip", ZipLocator.class);
-
-				Spatial loadModel = assetManager.loadModel("Tree1.mesh.xml");
-				loadModel.setLocalTranslation(new Vector3f(object.getX(), 0, object.getY()));
-				float cos = FastMath.cos(90);
-				float sin = FastMath.sin(90);
-				loadModel.setLocalRotation(new Matrix3f(1, 0, 0, 0, cos, -sin, 0, sin, cos));
-				loadModel.scale(2f);
-				rootNode.attachChild(loadModel);
+				// assetManager.registerLocator("Assets/Models/wood.zip", ZipLocator.class);
+				//
+				// Spatial loadModel = assetManager.loadModel("wood.mesh.xml");
+				// loadModel.setLocalTranslation(new Vector3f(object.getX(), 0, object.getY()));
+				// float cos = FastMath.cos(90);
+				// float sin = FastMath.sin(90);
+				// loadModel.setLocalRotation(new Matrix3f(1, 0, 0, 0, cos, -sin, 0, sin, cos));
+				// loadModel.scale(2f);
+				// rootNode.attachChild(loadModel);
 
 			}
 
@@ -256,7 +260,7 @@ public class GameGui extends SimpleApplication
 	private void loadCharacters()
 	{
 		int i = 0;
-		assetManager.registerLocator("./assets/Models/male_civilian_1.zip", ZipLocator.class);
+		assetManager.registerLocator("./Assets/Models/male_civilian_1.zip", ZipLocator.class);
 		for (Player player : players)
 		{
 			Spatial model = assetManager.loadModel("main.mesh.xml");
@@ -456,6 +460,14 @@ public class GameGui extends SimpleApplication
 		Set<Resources> keySet = resources.keySet();
 		for (Resources key : keySet)
 		{
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println(niftyHandler);
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println();
 			niftyHandler.setResourceValue(key, resources.get(key));
 		}
 

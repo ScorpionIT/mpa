@@ -1,8 +1,13 @@
 package mpa.gui.menuMap;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -21,7 +26,7 @@ public class MapListPanel extends JPanel
 	private String[] data;
 	JScrollPane scrollPane;
 
-	public MapListPanel(MainMenuPanel mainPanel)
+	public MapListPanel(MainMenuGamePanel mainPanel)
 	{
 
 		this.setOpaque(false);
@@ -46,6 +51,8 @@ public class MapListPanel extends JPanel
 
 		mapList = new JList<>(data);
 		mapList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		mapList.setBackground(new Color(255, 255, 204));
+		// mapList.setOpaque(false);
 		mapList.addListSelectionListener(new ListSelectionListener()
 		{
 
@@ -54,7 +61,7 @@ public class MapListPanel extends JPanel
 			{
 				if (!e.getValueIsAdjusting())
 				{
-					((MainMenuPanel) MapListPanel.this.mainPanel).setMap(MapListPanel.this.maps + "/" + mapList.getSelectedValue() + ".xml");
+					((MainMenuGamePanel) MapListPanel.this.mainPanel).setMap(MapListPanel.this.maps + "/" + mapList.getSelectedValue() + ".xml");
 
 				}
 			}
@@ -65,12 +72,32 @@ public class MapListPanel extends JPanel
 
 		mapList.setOpaque(false); // TODO
 		mapList.setBounds(0, 0, mapList.getPreferredSize().width, mapList.getPreferredSize().width);
-		scrollPane = new JScrollPane();
+		scrollPane = new JScrollPane()
+		{
+			@Override
+			protected void paintComponent(Graphics g)
+			{
+				// TODO Stub di metodo generato automaticamente
+				super.paintComponent(g);
+				try
+				{
+					Image backgroundImage = ImageIO.read(new File("Assets/BackgroundImages/mapList.gif"));
+					g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
+				} catch (IOException e)
+				{
+					// TODO Blocco catch generato automaticamente
+					e.printStackTrace();
+				}
+
+			}
+		};
 		scrollPane.setLayout(null);
 		scrollPane.add(mapList);
 		scrollPane.setOpaque(false);
 
 		scrollPane.setBounds(0, 0, this.getWidth() - 15, this.getHeight());
+		scrollPane.repaint();
+
 		this.add(scrollPane);
 
 		this.setVisible(true);

@@ -1,6 +1,9 @@
 package mpa.gui.menuMap;
 
 import java.awt.Button;
+import java.awt.Color;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -9,16 +12,33 @@ import javax.swing.JTextField;
 
 public class InputNamePanel extends JPanel
 {
-	private MainMenuPanel mainMenuPanel;
+	private MainMenuGamePanel mainMenuGamePanel;
 	private JTextField textField;
 	Button button;
 
-	public InputNamePanel(MainMenuPanel mainMenuPanel)
+	public InputNamePanel(MainMenuGamePanel mainMenuGamePanel)
 	{
-		this.mainMenuPanel = mainMenuPanel;
+		this.mainMenuGamePanel = mainMenuGamePanel;
 		this.setLayout(null);
 
+		FocusListener highlighter = new FocusListener()
+		{
+
+			@Override
+			public void focusGained(FocusEvent e)
+			{
+				e.getComponent().setBackground(new Color(255, 255, 153));
+			}
+
+			@Override
+			public void focusLost(FocusEvent e)
+			{
+				e.getComponent().setBackground(Color.WHITE);
+			}
+		};
 		textField = new JTextField();
+		textField.addFocusListener(highlighter);
+
 		this.add(textField);
 		button = new Button("Set Name");
 		button.addMouseListener(new MouseAdapter()
@@ -26,9 +46,11 @@ public class InputNamePanel extends JPanel
 			@Override
 			public void mouseReleased(MouseEvent e)
 			{
-				InputNamePanel.this.mainMenuPanel.setPlayerName(InputNamePanel.this.textField.getText());
+				InputNamePanel.this.mainMenuGamePanel.setPlayerName(InputNamePanel.this.textField.getText());
 			}
 		});
+
+		button.setBackground(new Color(224, 224, 224));
 		this.add(button);
 
 		this.setVisible(true);

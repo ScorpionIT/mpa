@@ -62,7 +62,7 @@ public class ResourcesPanel
 		for (Resources resourceName : resourcesName)
 		{
 
-			resourcesPanel.panel(getPanelBuilder(resourceName.toString(), "wood.png"));
+			resourcesPanel.panel(getPanelBuilder(resourceName.toString(), resourceName.toString() + ".png"));
 			xPanel += widthPanel;
 		}
 	}
@@ -74,9 +74,9 @@ public class ResourcesPanel
 			{
 				filename(fileName);
 
-				y("30%");
-				width("50%");
-				height("50%");
+				y("35%");
+				width("40%");
+				height("40%");
 
 			}
 		};

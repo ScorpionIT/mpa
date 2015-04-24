@@ -13,8 +13,6 @@ public class MpaPanel extends JPanel
 		super();
 	}
 
-	// TODO tutta la classe
-
 	public int graphicX(float x)
 	{
 
@@ -43,7 +41,7 @@ public class MpaPanel extends JPanel
 
 	public int W(float w)
 	{
-		int x = (int) (w * this.worldWidth / worldWidth);
+		int x = (int) (w * this.getWidth() / worldWidth);
 		return (int) x;
 	}
 

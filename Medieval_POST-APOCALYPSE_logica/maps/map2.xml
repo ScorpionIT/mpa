@@ -1,18 +1,18 @@
 <Map>
 	<Name>Mappa2</Name>
-	<Width>1000</Width>
-	<Height>1000</Height>
+	<Width>600</Width>
+	<Height>600</Height>
 	<Number>8</Number>
 	<Objects>
 		<HeadQuarters>
-		    <HeadQuarter>300, 35</HeadQuarter>
+		    <HeadQuarter>300, 905</HeadQuarter>
 			<HeadQuarter>800,170</HeadQuarter>
 			<HeadQuarter>120,300</HeadQuarter>
 			<HeadQuarter>370,200</HeadQuarter> 
 			<HeadQuarter>400,100</HeadQuarter> 
 			<HeadQuarter>300,300</HeadQuarter> 
 			<HeadQuarter>250,400</HeadQuarter>
-			<HeadQuarter>80,97</HeadQuarter>
+			<HeadQuarter>80,100</HeadQuarter>
 		</HeadQuarters>
 		<Woods>
 			<Wood>1,2</Wood>
@@ -20,7 +20,7 @@
 		</Woods>
 
 		<Caves>
-			<Cave>300,350</Cave>
+			<Cave>300,500</Cave>
 		</Caves>
 
 		<Fields>

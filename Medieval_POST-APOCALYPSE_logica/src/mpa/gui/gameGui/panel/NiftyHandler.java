@@ -1,8 +1,5 @@
 package mpa.gui.gameGui.panel;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import mpa.core.logic.AbstractObject;
 import mpa.core.logic.building.AbstractPrivateProperty;
 import mpa.core.logic.resource.AbstractResourceProducer;
@@ -39,17 +36,19 @@ public class NiftyHandler
 
 		initNifty(controller, assetManager);
 
-		TimerTask timerTask = new TimerTask()
-		{
-			public void run()
-			{
-				gameGui.updateResourcePanel();
+		// TimerTask timerTask = new TimerTask()
+		// {
+		// public void run()
+		// {
+		// gameGui.updateResourcePanel();
+		//
+		// }
+		// };
+		//
+		// Timer timer = new Timer(true);
+		// timer.scheduleAtFixedRate(timerTask, 0, 1000);
 
-			}
-		};
-
-		Timer timer = new Timer(true);
-		timer.scheduleAtFixedRate(timerTask, 0, 1000);
+		// gameGui.updateResourcePanel();
 
 		guiViewPort.addProcessor(niftyDisplay);
 	}
@@ -82,10 +81,10 @@ public class NiftyHandler
 
 		nifty.gotoScreen("main");
 
-		assetManager.registerLocator("./Textures", FileLocator.class);
+		assetManager.registerLocator("./Assets/BackgroundImages", FileLocator.class);
 		selectionPanel = new SelectionPanel();
 
-		assetManager.registerLocator("./imagesPreview", FileLocator.class);
+		assetManager.registerLocator("./Assets/iconResources", FileLocator.class);
 		resourcesPanel = new ResourcesPanel();
 		Element findElementByName = nifty.getCurrentScreen().findElementByName("resourcesLayer");
 		findElementByName.add(resourcesPanel.build(nifty, nifty.getCurrentScreen(), findElementByName));
