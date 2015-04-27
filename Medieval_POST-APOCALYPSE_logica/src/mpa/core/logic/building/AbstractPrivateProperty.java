@@ -19,7 +19,7 @@ public abstract class AbstractPrivateProperty extends AbstractProperty
 	public AbstractPrivateProperty( float x, float y, float width, float height, Player owner )
 	{
 		super( x, y, width, height );
-		this.owner = owner;// TODO
+		this.owner = owner;
 	}
 
 	public boolean isFree()
