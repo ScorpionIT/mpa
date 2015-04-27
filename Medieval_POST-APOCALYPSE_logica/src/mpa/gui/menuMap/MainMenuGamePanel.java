@@ -18,12 +18,12 @@ import javax.swing.JPanel;
 
 import mpa.core.ai.DifficultyLevel;
 import mpa.core.logic.GameManager;
-import mpa.core.logic.MapFromXMLCreator;
 import mpa.core.logic.MapInfo;
 import mpa.core.logic.Pair;
 import mpa.core.logic.World;
 import mpa.core.logic.WorldFromMapInfo;
 import mpa.core.logic.WorldLoader;
+import mpa.core.util.MapFromXMLCreator;
 
 import com.jme3.system.AppSettings;
 

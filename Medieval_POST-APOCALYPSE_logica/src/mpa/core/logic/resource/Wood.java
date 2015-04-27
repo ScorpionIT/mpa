@@ -1,6 +1,7 @@
 package mpa.core.logic.resource;
 
 import mpa.core.logic.character.Player;
+import mpa.core.util.GameProperties;
 
 public class Wood extends AbstractResourceProducer
 {
@@ -9,7 +10,7 @@ public class Wood extends AbstractResourceProducer
 
 	public Wood(float x, float y, Player player)
 	{
-		super(x, y, 30, 30, player);
+		super(x, y, GameProperties.getInstance().getObjectWdth("Wood"), GameProperties.getInstance().getObjectHeight("Wood"), player);
 		// TODO Auto-generated constructor stub
 	}
 

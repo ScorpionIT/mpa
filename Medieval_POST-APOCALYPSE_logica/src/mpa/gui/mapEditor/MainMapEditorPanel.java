@@ -2,6 +2,7 @@ package mpa.gui.mapEditor;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Frame;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import mpa.core.logic.Pair;
@@ -23,12 +25,17 @@ public class MainMapEditorPanel extends JPanel
 	private int mapWidth = 0;
 	private int mapHeight = 0;
 	private int numberOfPlayers;
+	private String mapName = null;
 	private MapPreviewEditorPanel mapPreviewEditorPanel;
 	private IconMapEditorPanel iconMapEditorPanel;
 	private ButtonsEditorPanel buttonsEditorPanel;
 	private boolean inizialized = false;
 	private HashMap<String, Image> imageLabels = new HashMap<String, Image>();
 	private final String imageFolder = "./Assets/imagesPreview";
+	private final String mapFolder = "./maps";
+
+	// TODO creare un file proporties per le cartelle
+	private SubmitButtonEditorPanel submitButtonEditorPanel;
 
 	public MainMapEditorPanel()
 	{
@@ -37,6 +44,7 @@ public class MainMapEditorPanel extends JPanel
 		settingsMapEditorPanel = new SettingsMapEditorPanel(this);
 		buttonsEditorPanel = new ButtonsEditorPanel(this);
 		mapPreviewEditorPanel = new MapPreviewEditorPanel(this, imageLabels);
+		submitButtonEditorPanel = new SubmitButtonEditorPanel(this);
 
 		loadImages();
 		iconMapEditorPanel = new IconMapEditorPanel(this, imageLabels);
@@ -45,6 +53,7 @@ public class MainMapEditorPanel extends JPanel
 		this.add(mapPreviewEditorPanel);
 		this.add(settingsMapEditorPanel);
 		this.add(buttonsEditorPanel);
+		this.add(submitButtonEditorPanel);
 
 	}
 
@@ -60,7 +69,6 @@ public class MainMapEditorPanel extends JPanel
 
 	public void addSelectedIcon()
 	{
-		// TODO controllare che ci sia un solo market
 		mapPreviewEditorPanel.addLabel();
 	}
 
@@ -72,12 +80,23 @@ public class MainMapEditorPanel extends JPanel
 		mapPreviewEditorPanel.repaint();
 	}
 
+	public boolean isThereAMarket()
+	{
+		if (mapPreviewEditorPanel.isThereAMarket())
+		{
+			JOptionPane.showMessageDialog(new Frame(), "Ci può essere un solo market", "", JOptionPane.PLAIN_MESSAGE);
+			return true;
+		}
+		else
+			return false;
+	}
+
 	public ArrayList<Pair<String, Rectangle>> getIcons()
 	{
 		return iconMapEditorPanel.getImageLabelsPosition();
 	}
 
-	public boolean thereIsAnIntersection(Rectangle rectangle, String objectName)
+	public boolean thereIsAnIntersection(Point rectangle, String objectName)
 	{
 		return mapPreviewEditorPanel.thereIsIntersection(rectangle, objectName);
 	}
@@ -94,17 +113,20 @@ public class MainMapEditorPanel extends JPanel
 
 		buttonsEditorPanel.setBounds(0, 0, this.getWidth() * 15 / 100, this.getHeight() * 5 / 100);
 		settingsMapEditorPanel.setBounds(0, this.getHeight() * 5 / 100, this.getWidth() * 15 / 100, this.getHeight() * 25 / 100);
-		mapPreviewEditorPanel.setBounds(this.getWidth() * 15 / 100, 0, this.getWidth() - this.getWidth() * 15 / 100, this.getHeight());
+		mapPreviewEditorPanel.setBounds(this.getWidth() * 15 / 100, 0, this.getWidth() - settingsMapEditorPanel.getWidth(), this.getHeight());
 		if (!inizialized)
 		{
 			addIconMapEditorPanel();
 			inizialized = true;
 		}
+		submitButtonEditorPanel.setBounds(0, iconMapEditorPanel.getY() + iconMapEditorPanel.getHeight(), this.getWidth() * 15 / 100,
+				this.getHeight() * 5 / 100);
 	}
 
 	private void addIconMapEditorPanel()
 	{
-		iconMapEditorPanel.setBounds(0, this.getHeight() * 31 / 100, this.getWidth() * 15 / 100, this.getHeight() - this.getHeight() * 31 / 100);
+		iconMapEditorPanel.setBounds(0, this.buttonsEditorPanel.getHeight() + this.settingsMapEditorPanel.getHeight(), this.getWidth() * 15 / 100,
+				this.getHeight() - this.buttonsEditorPanel.getHeight() - this.settingsMapEditorPanel.getHeight() - this.getHeight() * 5 / 100);
 		IconMotion iconMotion = new IconMotion(this);
 
 		iconMapEditorPanel.getIconPanel().addMouseListener(iconMotion);
@@ -125,9 +147,9 @@ public class MainMapEditorPanel extends JPanel
 
 	}
 
-	public void paintImageInMapPreviewEditorPanel(Point elementPosition, Color color, String nameElement)
+	public void paintImageInMapPreviewEditorPanel(Color color)
 	{
-		mapPreviewEditorPanel.setSelectedObject(elementPosition, color, nameElement);
+		mapPreviewEditorPanel.paintSelectedObject(color);
 	}
 
 	public boolean isMapDimensionValid()
@@ -178,6 +200,43 @@ public class MainMapEditorPanel extends JPanel
 			e.printStackTrace();
 		}
 
+	}
+
+	public void convertMapToXml()
+	{
+		boolean isNameValid = true;
+		if (!isMapDimensionValid())
+			JOptionPane.showMessageDialog(new Frame(), "Inserire oggetti nella mappa", "", JOptionPane.PLAIN_MESSAGE);
+		else if (mapName == null || mapName.equals(""))
+			JOptionPane.showMessageDialog(new Frame(), "Inserire un nome valido per la mappa", "", JOptionPane.PLAIN_MESSAGE);
+		else
+		{
+			File folder = new File(mapFolder);
+			File[] listOfFiles = folder.listFiles();
+			for (int i = 0; i < listOfFiles.length; i++)
+			{
+				if (listOfFiles[i].isFile() && listOfFiles[i].getName().endsWith(".xml"))
+				{
+					if (listOfFiles[i].getName().subSequence(0, listOfFiles[i].getName().length() - 4).equals(mapName))
+					{
+						JOptionPane.showMessageDialog(new Frame(), "Mappa già esistente", "", JOptionPane.PLAIN_MESSAGE);
+						isNameValid = false;
+						break;
+					}
+				}
+
+			}
+		}
+
+		if (isNameValid)
+		{
+			// TODO converti in xml
+		}
+	}
+
+	public void setSelectedObject(String selectedObjectName, Point selectedObjectPosition)
+	{
+		mapPreviewEditorPanel.setSelectedObject(selectedObjectPosition, selectedObjectName);
 	}
 
 	public static void main(String[] args)

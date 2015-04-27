@@ -9,10 +9,10 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import mpa.core.logic.MapFromXMLCreator;
 import mpa.core.logic.World;
 import mpa.core.logic.WorldFromMapInfo;
 import mpa.core.logic.WorldLoader;
+import mpa.core.util.MapFromXMLCreator;
 import mpa.gui.menu.GameEditorComboBox;
 import mpa.gui.menu.GameEditorPanel;
 

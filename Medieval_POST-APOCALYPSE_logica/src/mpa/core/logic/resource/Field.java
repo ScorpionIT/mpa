@@ -1,6 +1,7 @@
 package mpa.core.logic.resource;
 
 import mpa.core.logic.character.Player;
+import mpa.core.util.GameProperties;
 
 enum FieldState
 {
@@ -15,7 +16,7 @@ public class Field extends AbstractResourceProducer
 
 	public Field(float x, float y, Player player)
 	{
-		super(x, y, 30, 30, player);
+		super(x, y, GameProperties.getInstance().getObjectWdth("Field"), GameProperties.getInstance().getObjectHeight("Field"), player);
 		this.currentFieldState = FieldState.PLOWING;
 	}
 

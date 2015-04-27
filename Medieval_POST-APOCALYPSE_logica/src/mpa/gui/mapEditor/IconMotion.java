@@ -12,7 +12,7 @@ import mpa.core.logic.Pair;
 
 class IconMotion extends MouseInputAdapter
 {
-	Rectangle selectedObjectBounds;
+	Point selectedObjectPosition;
 	boolean dragging;
 	private MainMapEditorPanel mainMapEditorPanel;
 	private ArrayList<Pair<String, Rectangle>> components;
@@ -37,12 +37,16 @@ class IconMotion extends MouseInputAdapter
 			Point point = e.getPoint();
 			if (components.get(i).getSecond().contains(point))
 			{
+				if (components.get(i).getFirst().toLowerCase().equals("market") && mainMapEditorPanel.isThereAMarket())
+					break;
 
 				Rectangle rect = components.get(i).getSecond();
-				selectedObjectBounds = new Rectangle(rect.x, rect.y, rect.width, rect.height);
+				selectedObjectPosition = new Point(rect.x, rect.y);
 				selectedObjectName = components.get(i).getFirst();
+				mainMapEditorPanel.setSelectedObject(selectedObjectName, selectedObjectPosition);
 				dragging = true;
 				break;
+
 			}
 		}
 	}
@@ -50,10 +54,10 @@ class IconMotion extends MouseInputAdapter
 	public void mouseReleased(MouseEvent e)
 	{
 
-		if (!mainMapEditorPanel.thereIsAnIntersection(selectedObjectBounds, selectedObjectName) && dragging)
+		if (!mainMapEditorPanel.thereIsAnIntersection(selectedObjectPosition, selectedObjectName) && dragging)
 			mainMapEditorPanel.addSelectedIcon();
 		else
-			mainMapEditorPanel.paintImageInMapPreviewEditorPanel(null, null, null);
+			mainMapEditorPanel.setSelectedObject(null, null);
 
 		dragging = false;
 
@@ -64,18 +68,16 @@ class IconMotion extends MouseInputAdapter
 
 		if (dragging)
 		{
-			selectedObjectBounds.x = e.getX() - mainMapEditorPanel.getIconMapEditorWidth();
-			selectedObjectBounds.y = e.getY() + mainMapEditorPanel.getSettingsMapEditorHeight();
+			selectedObjectPosition.x = e.getX() - mainMapEditorPanel.getIconMapEditorWidth();
+			selectedObjectPosition.y = e.getY() + mainMapEditorPanel.getSettingsMapEditorHeight();
 
-			if (selectedObjectBounds.x > 0 && selectedObjectBounds.y > 0)
+			if (selectedObjectPosition.x > 0 && selectedObjectPosition.y > 0)
 			{
 
-				if (mainMapEditorPanel.thereIsAnIntersection(selectedObjectBounds, selectedObjectName))
-					mainMapEditorPanel.paintImageInMapPreviewEditorPanel(new Point(selectedObjectBounds.x, selectedObjectBounds.y), Color.red,
-							selectedObjectName);
+				if (mainMapEditorPanel.thereIsAnIntersection(selectedObjectPosition, selectedObjectName))
+					mainMapEditorPanel.paintImageInMapPreviewEditorPanel(Color.red);
 				else
-					mainMapEditorPanel.paintImageInMapPreviewEditorPanel(new Point(selectedObjectBounds.x, selectedObjectBounds.y), Color.green,
-							selectedObjectName);
+					mainMapEditorPanel.paintImageInMapPreviewEditorPanel(Color.green);
 			}
 
 			mainMapEditorPanel.repaintMapPreviewEditorPanel();

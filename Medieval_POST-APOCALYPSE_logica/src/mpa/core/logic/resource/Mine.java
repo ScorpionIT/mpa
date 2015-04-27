@@ -1,6 +1,7 @@
 package mpa.core.logic.resource;
 
 import mpa.core.logic.character.Player;
+import mpa.core.util.GameProperties;
 
 public class Mine extends AbstractResourceProducer
 {
@@ -10,7 +11,7 @@ public class Mine extends AbstractResourceProducer
 
 	public Mine(float x, float y, Player player)
 	{
-		super(x, y, 30, 30, player);
+		super(x, y, GameProperties.getInstance().getObjectWdth("Mine"), GameProperties.getInstance().getObjectHeight("Mine"), player);
 	}
 
 	@Override

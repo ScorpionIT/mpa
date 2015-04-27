@@ -13,19 +13,21 @@ import java.util.Stack;
 import javax.imageio.ImageIO;
 
 import mpa.core.logic.Pair;
+import mpa.core.util.GameProperties;
 import mpa.gui.menuMap.MpaPanel;
 
 public class MapPreviewEditorPanel extends MpaPanel
 {
 	private Image backgroundImage;
-	private Stack<Pair<String, Rectangle>> addedObjects = new Stack<>();
-	private Stack<Pair<String, Rectangle>> removedObjects = new Stack<>();
+	private Stack<Pair<String, Point>> addedObjects = new Stack<>();
+	private Stack<Pair<String, Point>> removedObjects = new Stack<>();
 	private HashMap<String, Image> images;
 
 	private Point selectedObjectPosition = null;
 	private Color selectedObjectColor;
 	private String selectedObjectName;
 	private MainMapEditorPanel mainMapEditorPanel;
+	private boolean market = false;
 
 	public MapPreviewEditorPanel(MainMapEditorPanel mainMapEditorPanel, HashMap<String, Image> imageLabels)
 	{
@@ -65,12 +67,13 @@ public class MapPreviewEditorPanel extends MpaPanel
 	{
 		if (selectedObjectPosition != null)
 		{
-			if (selectedObjectName.equals("Headquarter"))
+			if (selectedObjectName.toLowerCase().equals("headquarter"))
 				mainMapEditorPanel.addPlayer();
+			else if (selectedObjectName.toLowerCase().equals("market"))
+				market = true;
 			removedObjects.removeAllElements();
-			Rectangle rect = new Rectangle((int) (selectedObjectPosition.getX()), (int) selectedObjectPosition.getY(), (int) W((float) images.get(
-					selectedObjectName).getWidth(null)), (int) H((float) images.get(selectedObjectName).getHeight(null)));
-			addedObjects.push(new Pair<String, Rectangle>(selectedObjectName, rect));
+
+			addedObjects.push(new Pair<String, Point>(selectedObjectName, selectedObjectPosition));
 			selectedObjectColor = null;
 			selectedObjectName = null;
 			selectedObjectPosition = null;
@@ -79,15 +82,19 @@ public class MapPreviewEditorPanel extends MpaPanel
 
 	}
 
-	public boolean thereIsIntersection(Rectangle selectedLabelBounds, String selectedObjectName)
+	public boolean thereIsIntersection(Point selectedLabelBounds, String selectedObjectName)
 	{
 		for (int i = 0; i < addedObjects.size(); i++)
 		{
-			Rectangle rect = addedObjects.get(i).getSecond();
-			selectedLabelBounds.setBounds((int) selectedLabelBounds.getX(), (int) selectedLabelBounds.getY(),
-					(int) W((float) images.get(selectedObjectName).getWidth(null)), (int) H((float) images.get(selectedObjectName).getHeight(null)));
+			Rectangle rect = new Rectangle((int) (addedObjects.get(i).getSecond().getX()), (int) addedObjects.get(i).getSecond().getY(),
+					(int) W((float) GameProperties.getInstance().getObjectWdth(addedObjects.get(i).getFirst())), (int) H((float) GameProperties
+							.getInstance().getObjectWdth(addedObjects.get(i).getFirst())));
 
-			if (rect.intersects(selectedLabelBounds))
+			Rectangle rect1 = new Rectangle((int) selectedLabelBounds.getX(), (int) selectedLabelBounds.getY(), (int) W((float) GameProperties
+					.getInstance().getObjectWdth(selectedObjectName)), (int) H((float) GameProperties.getInstance().getObjectHeight(
+					selectedObjectName)));
+
+			if (rect.intersects(rect1))
 			{
 				return true;
 			}
@@ -105,41 +112,38 @@ public class MapPreviewEditorPanel extends MpaPanel
 		{
 			g.setColor(selectedObjectColor);
 
-			g.drawRect((int) selectedObjectPosition.getX(), (int) selectedObjectPosition.getY(), (int) W((float) images.get(selectedObjectName)
-					.getWidth(null)), (int) H((float) images.get(selectedObjectName).getHeight(null)));
+			g.drawRect((int) (this.selectedObjectPosition.getX()), (int) this.selectedObjectPosition.getY(), (int) W((float) GameProperties
+					.getInstance().getObjectWdth(this.selectedObjectName)),
+					(int) H((float) GameProperties.getInstance().getObjectHeight(this.selectedObjectName)));
 
-			g.drawImage(images.get(selectedObjectName), (int) selectedObjectPosition.getX(), (int) selectedObjectPosition.getY(),
-					(int) W((float) images.get(selectedObjectName).getWidth(null)), (int) H((float) images.get(selectedObjectName).getHeight(null)),
-					this);
+			g.drawImage(images.get(this.selectedObjectName), (int) (this.selectedObjectPosition.getX()), (int) this.selectedObjectPosition.getY(),
+					(int) W((float) GameProperties.getInstance().getObjectWdth(this.selectedObjectName)), (int) H((float) GameProperties
+							.getInstance().getObjectHeight(this.selectedObjectName)), this);
 		}
 
-		for (Pair<String, Rectangle> element : addedObjects)
+		for (Pair<String, Point> element : addedObjects)
 		{
 
 			Image image = images.get(element.getFirst());
 			g.setColor(Color.green);
-			g.drawRect((int) element.getSecond().getX(), (int) element.getSecond().getY(), (int) W((float) image.getWidth(null)),
-					(int) H((float) image.getHeight(null)));
-			g.drawImage(image, (int) element.getSecond().getX(), (int) element.getSecond().getY(), (int) W((float) image.getWidth(null)),
-					(int) H((float) image.getHeight(null)), this);
+			g.drawRect((int) element.getSecond().getX(), (int) element.getSecond().getY(), (int) W((float) GameProperties.getInstance()
+					.getObjectWdth(element.getFirst())), (int) H((float) GameProperties.getInstance().getObjectHeight(element.getFirst())));
+			g.drawImage(image, (int) element.getSecond().getX(), (int) element.getSecond().getY(), (int) W((float) GameProperties.getInstance()
+					.getObjectWdth(element.getFirst())), (int) H((float) GameProperties.getInstance().getObjectHeight(element.getFirst())), this);
 
 		}
 
-	}
-
-	public void removeLabel(Rectangle elementBounds)
-	{
-		this.addedObjects.pop();
-		this.repaint();
 	}
 
 	public void undo()
 	{
 		if (addedObjects.size() > 0)
 		{
-			Pair<String, Rectangle> removedObject = addedObjects.pop();
-			if (removedObject.getFirst().equals("Headquarter"))
+			Pair<String, Point> removedObject = addedObjects.pop();
+			if (removedObject.getFirst().toLowerCase().equals("headquarter"))
 				mainMapEditorPanel.removePlayer();
+			else if (removedObject.getFirst().toLowerCase().equals("market"))
+				market = false;
 			removedObjects.push(removedObject);
 			this.repaint();
 		}
@@ -149,9 +153,11 @@ public class MapPreviewEditorPanel extends MpaPanel
 	{
 		if (removedObjects.size() > 0)
 		{
-			Pair<String, Rectangle> readdedObject = removedObjects.pop();
-			if (readdedObject.getFirst().equals("Headquarter"))
+			Pair<String, Point> readdedObject = removedObjects.pop();
+			if (readdedObject.getFirst().toLowerCase().equals("headquarter"))
 				mainMapEditorPanel.addPlayer();
+			else if (readdedObject.getFirst().toLowerCase().equals("market"))
+				market = true;
 			addedObjects.push(readdedObject);
 			this.repaint();
 		}
@@ -163,17 +169,18 @@ public class MapPreviewEditorPanel extends MpaPanel
 	{
 		super.setMapDimension(width, height);
 
+		Rectangle map = new Rectangle(0, 0, (int) width, (int) height);
 		// resize Object
 		for (int i = 0; i < addedObjects.size(); i++)
 		{
-			Pair<String, Rectangle> element = addedObjects.get(i);
-			Image image = images.get(element.getFirst());
+			Pair<String, Point> element = addedObjects.get(i);
+			element.getSecond().setLocation((int) graphicX((float) element.getSecond().getX()), (int) graphicX((float) element.getSecond().getY()));
 
-			element.getSecond().setBounds((int) graphicX((float) element.getSecond().getX()), (int) graphicX((float) element.getSecond().getY()),
-					(int) W((float) image.getWidth(null)), (int) H((float) image.getHeight(null)));
+			Rectangle objectBounds = new Rectangle((int) element.getSecond().getX(), (int) element.getSecond().getY(), (int) W((float) GameProperties
+					.getInstance().getObjectWdth(element.getFirst())), (int) H((float) GameProperties.getInstance().getObjectHeight(
+					element.getFirst())));
 
-			Rectangle map = new Rectangle(0, 0, (int) width, (int) height);
-			if (!map.contains(element.getSecond()))
+			if (!map.contains(objectBounds))
 			{
 				addedObjects.remove(element);
 				i--;
@@ -182,12 +189,22 @@ public class MapPreviewEditorPanel extends MpaPanel
 		}
 	}
 
-	public void setSelectedObject(Point elementPosition, Color selectedObjectColor, String selectedObjectName)
+	public boolean isThereAMarket()
+	{
+		return market;
+	}
+
+	public void setSelectedObject(Point elementPosition, String selectedObjectName)
 	{
 
-		this.selectedObjectColor = selectedObjectColor;
 		this.selectedObjectName = selectedObjectName;
 		this.selectedObjectPosition = elementPosition;
+
+	}
+
+	public void paintSelectedObject(Color color)
+	{
+		this.selectedObjectColor = color;
 		this.repaint();
 
 	}
