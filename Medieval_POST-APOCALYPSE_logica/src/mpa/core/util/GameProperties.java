@@ -140,7 +140,7 @@ public class GameProperties
 	{
 		for (Entry<Object, Object> entry : paths)
 		{
-			if (entry.getKey().equals(key.toLowerCase()))
+			if (entry.getKey().equals(key))
 			{
 				return (String) entry.getValue();
 			}

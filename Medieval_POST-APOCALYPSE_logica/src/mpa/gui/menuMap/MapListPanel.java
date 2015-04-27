@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JList;
@@ -15,10 +14,13 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import mpa.core.util.GameProperties;
+
 public class MapListPanel extends JPanel
 {
 
-	private final String maps = new String("./maps");
+	private final String defaultMaps = GameProperties.getInstance().getPath("DefaultMapsPath");
+	private final String customMaps = GameProperties.getInstance().getPath("CustomMapsPath");
 
 	private JPanel mainPanel;
 
@@ -29,25 +31,37 @@ public class MapListPanel extends JPanel
 	public MapListPanel(MainMenuGamePanel mainPanel)
 	{
 
+		// TODO sistemare la visualizzazione dell'elenco delle mappe
+		// TODO sistemare l'anteprima delle icone nel menu principale di gioco
+
 		this.setOpaque(false);
 
 		this.mainPanel = mainPanel;
-		File folder = new File(maps);
-		File[] listOfFiles = folder.listFiles();
-		data = new String[listOfFiles.length];
-		ArrayList<String> maps = new ArrayList<String>();
-		for (int i = 0; i < listOfFiles.length; i++)
+		File folderDefaultMaps = new File(defaultMaps);
+		File[] listOfFilesDefaultFolder = folderDefaultMaps.listFiles();
+
+		File folderCustomMaps = new File(customMaps);
+		File[] listOfFilesCustomFolder = folderCustomMaps.listFiles();
+
+		data = new String[listOfFilesDefaultFolder.length + listOfFilesCustomFolder.length];
+
+		for (int i = 0; i < listOfFilesDefaultFolder.length; i++)
 		{
-			if (listOfFiles[i].isFile())
+			if (listOfFilesDefaultFolder[i].isFile())
 			{
-				data[i] = listOfFiles[i].getName().substring(0, listOfFiles[i].getName().length() - 4);
+				data[i] = listOfFilesDefaultFolder[i].getName().substring(0, listOfFilesDefaultFolder[i].getName().length() - 4);
 			}
 		}
-		for (int i = 0; i < data.length; i++)
-		{
-			System.out.println(data[i]);
-
-		}
+		// for (int i = listOfFilesDefaultFolder.length; i < listOfFilesDefaultFolder.length +
+		// listOfFilesCustomFolder.length; i++)
+		// {
+		// if (listOfFilesCustomFolder[i - listOfFilesDefaultFolder.length].isFile())
+		// {
+		// data[i - listOfFilesDefaultFolder.length] = listOfFilesDefaultFolder[i -
+		// listOfFilesDefaultFolder.length].getName().substring(0,
+		// listOfFilesDefaultFolder[i - listOfFilesDefaultFolder.length].getName().length() - 4);
+		// }
+		// }
 
 		mapList = new JList<>(data);
 		mapList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -61,7 +75,8 @@ public class MapListPanel extends JPanel
 			{
 				if (!e.getValueIsAdjusting())
 				{
-					((MainMenuGamePanel) MapListPanel.this.mainPanel).setMap(MapListPanel.this.maps + "/" + mapList.getSelectedValue() + ".xml");
+					((MainMenuGamePanel) MapListPanel.this.mainPanel).setMap(MapListPanel.this.defaultMaps + "/" + mapList.getSelectedValue()
+							+ ".xml");
 
 				}
 			}
@@ -81,7 +96,7 @@ public class MapListPanel extends JPanel
 				super.paintComponent(g);
 				try
 				{
-					Image backgroundImage = ImageIO.read(new File("Assets/BackgroundImages/mapList.gif"));
+					Image backgroundImage = ImageIO.read(new File(GameProperties.getInstance().getPath("BackgroundImagesPath") + "/mapList.gif"));
 					g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
 				} catch (IOException e)
 				{

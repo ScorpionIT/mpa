@@ -31,6 +31,8 @@ public class MapPreviewEditorPanel extends MpaPanel
 
 	public MapPreviewEditorPanel(MainMapEditorPanel mainMapEditorPanel, HashMap<String, Image> imageLabels)
 	{
+
+		// TODO sistemare le x proporzionarle al mondo
 		this.mainMapEditorPanel = mainMapEditorPanel;
 		this.images = imageLabels;
 		this.setLayout(null);
@@ -207,5 +209,15 @@ public class MapPreviewEditorPanel extends MpaPanel
 		this.selectedObjectColor = color;
 		this.repaint();
 
+	}
+
+	public Stack<Pair<String, Point>> getAddedObjects()
+	{
+
+		for (Pair<String, Point> addedObject : addedObjects)
+		{
+			addedObject.getSecond().setLocation(worldX((float) addedObject.getSecond().getX()), worldY((float) addedObject.getSecond().getY()));
+		}
+		return addedObjects;
 	}
 }

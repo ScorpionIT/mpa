@@ -61,6 +61,11 @@ public class SettingsMapEditorPanel extends JPanel
 		this.setVisible(true);
 	}
 
+	public String getMapName()
+	{
+		return fields.get("Map Name").getFirst().getText();
+	}
+
 	private void setComponentsBounds()
 	{
 
@@ -88,12 +93,12 @@ public class SettingsMapEditorPanel extends JPanel
 
 	private boolean checkInputValue(String width, String height)
 	{
-		if (width.equals("") || Integer.parseInt(width) < 1000)
+		if (width.equals("") || Integer.parseInt(width) < 500)
 		{
 			JOptionPane.showMessageDialog(new Frame(), "Inserisci la larghezza", "", JOptionPane.PLAIN_MESSAGE);
 			return false;
 		}
-		else if (height.equals("") || Integer.parseInt(height) < 1000)
+		else if (height.equals("") || Integer.parseInt(height) < 500)
 		{
 			JOptionPane.showMessageDialog(new Frame(), "Inserisci l'altezza", "", JOptionPane.PLAIN_MESSAGE);
 			return false;

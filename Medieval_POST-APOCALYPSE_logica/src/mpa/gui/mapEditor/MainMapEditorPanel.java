@@ -17,6 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import mpa.core.logic.Pair;
+import mpa.core.util.GameProperties;
+import mpa.core.util.MapToXmlCreator;
 
 public class MainMapEditorPanel extends JPanel
 {
@@ -31,8 +33,8 @@ public class MainMapEditorPanel extends JPanel
 	private ButtonsEditorPanel buttonsEditorPanel;
 	private boolean inizialized = false;
 	private HashMap<String, Image> imageLabels = new HashMap<String, Image>();
-	private final String imageFolder = "./Assets/imagesPreview";
-	private final String mapFolder = "./maps";
+	private final String imageFolder = GameProperties.getInstance().getPath("ImagesPreviewPath");
+	private final String mapFolder = GameProperties.getInstance().getPath("CustomMapsPath");
 
 	// TODO creare un file proporties per le cartelle
 	private SubmitButtonEditorPanel submitButtonEditorPanel;
@@ -189,7 +191,7 @@ public class MainMapEditorPanel extends JPanel
 			{
 				if (listOfFiles[i].isFile() && listOfFiles[i].getName().endsWith(".png"))
 				{
-					Image img = ImageIO.read(new File("./Assets/imagesPreview/" + listOfFiles[i].getName()));
+					Image img = ImageIO.read(new File(imageFolder + "/" + listOfFiles[i].getName()));
 					imageLabels.put(listOfFiles[i].getName().substring(0, listOfFiles[i].getName().length() - 4), img);
 
 				}
@@ -204,6 +206,7 @@ public class MainMapEditorPanel extends JPanel
 
 	public void convertMapToXml()
 	{
+		mapName = settingsMapEditorPanel.getMapName();
 		boolean isNameValid = true;
 		if (!isMapDimensionValid())
 			JOptionPane.showMessageDialog(new Frame(), "Inserire oggetti nella mappa", "", JOptionPane.PLAIN_MESSAGE);
@@ -226,12 +229,13 @@ public class MainMapEditorPanel extends JPanel
 				}
 
 			}
+			if (isNameValid)
+			{
+				MapToXmlCreator.createXmlMap(mapPreviewEditorPanel.getAddedObjects(), mapName, mapWidth, mapHeight, numberOfPlayers);
+				// TODO converti in xml
+			}
 		}
 
-		if (isNameValid)
-		{
-			// TODO converti in xml
-		}
 	}
 
 	public void setSelectedObject(String selectedObjectName, Point selectedObjectPosition)
