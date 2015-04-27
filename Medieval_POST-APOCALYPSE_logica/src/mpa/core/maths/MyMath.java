@@ -93,4 +93,19 @@ public class MyMath
 		return Math.sqrt( proj.getFirst() * proj.getFirst() + proj.getSecond() * proj.getSecond() );
 	}
 
+	public static int greatestCommonDivisor( int p, int q )
+	{
+		if( q < 0 )
+			q *= -1;
+
+		if( p < 0 )
+			p *= -1;
+
+		if( q == 0 )
+		{
+			return p;
+		}
+		return greatestCommonDivisor( q, p % q );
+	}
+
 }

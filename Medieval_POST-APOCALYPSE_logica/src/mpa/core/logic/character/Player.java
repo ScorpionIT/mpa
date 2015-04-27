@@ -22,6 +22,7 @@ public class Player extends AbstractCharacter
 
 	private int MP;
 	private float rangeOfPhysicallAttack = 5;
+	private int physicallAttackDamage = 0;
 	private float rangeOfDistanceAttack = 12;
 	private float distanceAttackRayOfCollision = 4;
 
@@ -120,6 +121,21 @@ public class Player extends AbstractCharacter
 
 		}
 		return null;
+
+	}
+
+	public void inflictDamage( int damage )
+	{
+		writeLock.lock();
+
+		if( damage >= health )
+		{
+
+		}
+		else
+			health -= damage;
+
+		writeLock.unlock();
 
 	}
 
@@ -345,6 +361,11 @@ public class Player extends AbstractCharacter
 		}
 	}
 
+	public void setMP( int mp )
+	{
+		MP = mp;
+	}
+
 	public float getRangeOfPhysicallAttack()
 	{
 		try
@@ -402,6 +423,25 @@ public class Player extends AbstractCharacter
 	{
 		writeLock.lock();
 		this.distanceAttackRayOfCollision = distanceAttackRayOfCollision;
+		writeLock.unlock();
+	}
+
+	public int getPhysicallAttackDamage()
+	{
+		try
+		{
+			readLock.lock();
+			return physicallAttackDamage;
+		} finally
+		{
+			readLock.unlock();
+		}
+	}
+
+	public void setPhysicallAttackDamage( int physicallAttackDamage )
+	{
+		writeLock.lock();
+		this.physicallAttackDamage = physicallAttackDamage;
 		writeLock.unlock();
 	}
 

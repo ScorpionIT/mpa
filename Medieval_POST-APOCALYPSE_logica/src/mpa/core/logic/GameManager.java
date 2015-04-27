@@ -72,10 +72,47 @@ public class GameManager
 		return players;
 	}
 
-	public boolean attack( Player attacker, Player target )
+	public ArrayList<Player> attackPhysically( Player attacker )
 	{
-		return true;
+		return CombatManager.getInstance().attackPhysically( attacker );
 	}
+
+	// public ArrayList<Player> getPlayersIntTheRange( float xMin, float xMax, float yMin, float
+	// yMax )
+	// {
+	// try
+	// {
+	// for( Player p : players )
+	// p.getReadLock();
+	//
+	// ArrayList<Player> _players = new ArrayList<>();
+	//
+	// if( xMin > xMax )
+	// {
+	// float tmp = xMin;
+	// xMin = xMax;
+	// xMax = tmp;
+	// }
+	//
+	// if( yMin > yMax )
+	// {
+	// float tmp = yMin;
+	// xMin = yMax;
+	// xMax = tmp;
+	// }
+	//
+	// for( Player p : players )
+	// {
+	//
+	// }
+	//
+	// return _players;
+	// } finally
+	// {
+	// for( Player p : players )
+	// p.leaveReadLock();
+	// }
+	// }
 
 	@Override
 	public String toString()

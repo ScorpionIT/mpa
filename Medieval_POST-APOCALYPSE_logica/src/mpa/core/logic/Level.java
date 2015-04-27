@@ -12,6 +12,7 @@ public enum Level
 	private int stoneRequired = 150;
 	private final int RANGE_PHYSICALL_ATTACK_INCREMENT = 2;
 	private final int COLLISION_RAY_INCREMENT = 2;
+	private final int PHYSICALL_ATTACK_DAMAGE_INCREMENT = 10;
 
 	public boolean hasNext()
 	{
@@ -64,6 +65,8 @@ public enum Level
 					+ RANGE_PHYSICALL_ATTACK_INCREMENT );
 			player.setDistanceAttackRayOfCollision( player.getDistanceAttackRayOfCollision()
 					+ COLLISION_RAY_INCREMENT );
+			player.setPhysicallAttackDamage( player.getPhysicallAttackDamage()
+					+ PHYSICALL_ATTACK_DAMAGE_INCREMENT );
 			player.setLevel( Level.values()[player.getPlayerLevel().ordinal() + 1] );
 
 			return true;
