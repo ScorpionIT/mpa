@@ -22,6 +22,19 @@ public abstract class AbstractPrivateProperty extends AbstractProperty
 		this.owner = owner;// TODO
 	}
 
+	public boolean isFree()
+	{
+		try
+		{
+			readLock.lock();
+
+			return owner == null;
+		} finally
+		{
+			readLock.unlock();
+		}
+	}
+
 	public boolean setOwner( Player player )
 	{
 		try

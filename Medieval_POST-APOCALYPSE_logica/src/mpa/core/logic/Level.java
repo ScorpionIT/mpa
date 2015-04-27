@@ -10,6 +10,8 @@ public enum Level
 	private int goldRequired = 100;
 	private int ironRequired = 150;
 	private int stoneRequired = 150;
+	private final int RANGE_PHYSICALL_ATTACK_INCREMENT = 2;
+	private final int COLLISION_RAY_INCREMENT = 2;
 
 	public boolean hasNext()
 	{
@@ -58,6 +60,10 @@ public enum Level
 					-( player.getPlayerLevel().ordinal() + 1 * stoneRequired ) );
 			// player.putResources( Resources.GO, -( player.getPlayerLevel().ordinal() + 1 *
 			// goldRequired ) );
+			player.setRangeOfPhysicallAttack( player.getRangeOfPhysicallAttack()
+					+ RANGE_PHYSICALL_ATTACK_INCREMENT );
+			player.setDistanceAttackRayOfCollision( player.getDistanceAttackRayOfCollision()
+					+ COLLISION_RAY_INCREMENT );
 			player.setLevel( Level.values()[player.getPlayerLevel().ordinal() + 1] );
 
 			return true;

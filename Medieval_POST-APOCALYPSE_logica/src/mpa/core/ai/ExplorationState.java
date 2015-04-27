@@ -52,7 +52,8 @@ class ExplorationState extends AIState
 	{
 		AIState nextState = null;
 
-		if( newBuildingsAdded && opponentAI.player.isThereAnyFreeSulbaltern() )
+		// if( newBuildingsAdded && opponentAI.player.isThereAnyFreeSulbaltern() )
+		if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings() )
 		{
 			nextState = new ConquestState();
 		}
