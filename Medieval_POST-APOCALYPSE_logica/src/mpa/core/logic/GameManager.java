@@ -5,6 +5,7 @@ import java.util.List;
 
 import mpa.core.logic.building.AbstractPrivateProperty;
 import mpa.core.logic.character.Player;
+import mpa.core.logic.tool.Potions;
 
 public class GameManager
 {
@@ -34,15 +35,6 @@ public class GameManager
 		this.players = players;
 	}
 
-	// public ArrayList<Pair<Integer, Integer>> computePath(Player player, float xGoal, float yGoal)
-	// {
-	// ProvaIntegerPathCalculator pathCalculator = new ProvaIntegerPathCalculator();
-	// return pathCalculator.computePath(world, xGoal, yGoal, player.getX(), player.getY());
-	//
-	// // una volta era Float
-	//
-	// // TODO
-	// }
 	public ArrayList<Pair<Integer, Integer>> computePath( Player player, float xGoal, float yGoal )
 	{
 		PathCalculatorThread pathCalculatorThread = new PathCalculatorThread( player, xGoal, yGoal );
@@ -75,6 +67,11 @@ public class GameManager
 	public ArrayList<Player> attackPhysically( Player attacker )
 	{
 		return CombatManager.getInstance().attackPhysically( attacker );
+	}
+
+	public ArrayList<Player> distanceAttack( Player attacker, Potions potion )
+	{
+		return CombatManager.getInstance().distanceAttack( attacker, potion );
 	}
 
 	// public ArrayList<Player> getPlayersIntTheRange( float xMin, float xMax, float yMin, float
