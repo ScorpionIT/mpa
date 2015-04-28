@@ -31,42 +31,37 @@ public class MapListPanel extends JPanel
 	public MapListPanel(MainMenuGamePanel mainPanel)
 	{
 
-		// TODO sistemare la visualizzazione dell'elenco delle mappe
-		// TODO sistemare l'anteprima delle icone nel menu principale di gioco
-
 		this.setOpaque(false);
 
 		this.mainPanel = mainPanel;
 		File folderDefaultMaps = new File(defaultMaps);
-		File[] listOfFilesDefaultFolder = folderDefaultMaps.listFiles();
+		final File[] listOfFilesDefaultFolder = folderDefaultMaps.listFiles();
 
 		File folderCustomMaps = new File(customMaps);
-		File[] listOfFilesCustomFolder = folderCustomMaps.listFiles();
+		final File[] listOfFilesCustomFolder = folderCustomMaps.listFiles();
 
 		data = new String[listOfFilesDefaultFolder.length + listOfFilesCustomFolder.length];
 
+		int dataIndex = 0;
 		for (int i = 0; i < listOfFilesDefaultFolder.length; i++)
 		{
 			if (listOfFilesDefaultFolder[i].isFile())
 			{
-				data[i] = listOfFilesDefaultFolder[i].getName().substring(0, listOfFilesDefaultFolder[i].getName().length() - 4);
+				data[dataIndex] = listOfFilesDefaultFolder[i].getName().substring(0, listOfFilesDefaultFolder[i].getName().length() - 4);
+				dataIndex++;
 			}
 		}
-		// for (int i = listOfFilesDefaultFolder.length; i < listOfFilesDefaultFolder.length +
-		// listOfFilesCustomFolder.length; i++)
-		// {
-		// if (listOfFilesCustomFolder[i - listOfFilesDefaultFolder.length].isFile())
-		// {
-		// data[i - listOfFilesDefaultFolder.length] = listOfFilesDefaultFolder[i -
-		// listOfFilesDefaultFolder.length].getName().substring(0,
-		// listOfFilesDefaultFolder[i - listOfFilesDefaultFolder.length].getName().length() - 4);
-		// }
-		// }
+		for (int i = 0; i < listOfFilesCustomFolder.length; i++)
+		{
+			if (listOfFilesCustomFolder[i].isFile())
+			{
+				data[dataIndex] = listOfFilesCustomFolder[i].getName().substring(0, listOfFilesCustomFolder[i].getName().length() - 4);
+			}
+		}
 
 		mapList = new JList<>(data);
 		mapList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		mapList.setBackground(new Color(255, 255, 204));
-		// mapList.setOpaque(false);
 		mapList.addListSelectionListener(new ListSelectionListener()
 		{
 
@@ -75,8 +70,15 @@ public class MapListPanel extends JPanel
 			{
 				if (!e.getValueIsAdjusting())
 				{
-					((MainMenuGamePanel) MapListPanel.this.mainPanel).setMap(MapListPanel.this.defaultMaps + "/" + mapList.getSelectedValue()
-							+ ".xml");
+					int selectedIndex = mapList.getSelectedIndex();
+					System.out.println(selectedIndex);
+					System.out.println(listOfFilesDefaultFolder.length);
+					if (selectedIndex < listOfFilesDefaultFolder.length)
+						((MainMenuGamePanel) MapListPanel.this.mainPanel).setMap(MapListPanel.this.defaultMaps + "/" + mapList.getSelectedValue()
+								+ ".xml");
+					else
+						((MainMenuGamePanel) MapListPanel.this.mainPanel).setMap(MapListPanel.this.customMaps + "/" + mapList.getSelectedValue()
+								+ ".xml");
 
 				}
 			}
@@ -85,14 +87,13 @@ public class MapListPanel extends JPanel
 		this.mainPanel = mainPanel;
 		this.setLayout(null);
 
-		mapList.setOpaque(false); // TODO
+		mapList.setOpaque(false);
 		mapList.setBounds(0, 0, mapList.getPreferredSize().width, mapList.getPreferredSize().width);
 		scrollPane = new JScrollPane()
 		{
 			@Override
 			protected void paintComponent(Graphics g)
 			{
-				// TODO Stub di metodo generato automaticamente
 				super.paintComponent(g);
 				try
 				{
@@ -100,7 +101,6 @@ public class MapListPanel extends JPanel
 					g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
 				} catch (IOException e)
 				{
-					// TODO Blocco catch generato automaticamente
 					e.printStackTrace();
 				}
 

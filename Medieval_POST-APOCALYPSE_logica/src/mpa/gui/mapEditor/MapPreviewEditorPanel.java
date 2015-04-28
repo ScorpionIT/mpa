@@ -28,18 +28,18 @@ public class MapPreviewEditorPanel extends MpaPanel
 	private String selectedObjectName;
 	private MainMapEditorPanel mainMapEditorPanel;
 	private boolean market = false;
+	private String texturePath = GameProperties.getInstance().getPath("TexturePath");
 
 	public MapPreviewEditorPanel(MainMapEditorPanel mainMapEditorPanel, HashMap<String, Image> imageLabels)
 	{
 
-		// TODO sistemare le x proporzionarle al mondo
 		this.mainMapEditorPanel = mainMapEditorPanel;
 		this.images = imageLabels;
 		this.setLayout(null);
 		try
 		{
 
-			backgroundImage = ImageIO.read(new File("Assets/Textures/grass-pattern.png"));
+			backgroundImage = ImageIO.read(new File(texturePath + "/grass-pattern.png"));
 		} catch (IOException e1)
 		{
 			e1.printStackTrace();
@@ -127,9 +127,11 @@ public class MapPreviewEditorPanel extends MpaPanel
 		{
 
 			Image image = images.get(element.getFirst());
-			g.setColor(Color.green);
-			g.drawRect((int) element.getSecond().getX(), (int) element.getSecond().getY(), (int) W((float) GameProperties.getInstance()
-					.getObjectWdth(element.getFirst())), (int) H((float) GameProperties.getInstance().getObjectHeight(element.getFirst())));
+			// g.setColor(Color.green);
+			// g.drawRect((int) element.getSecond().getX(), (int) element.getSecond().getY(), (int)
+			// W((float) GameProperties.getInstance()
+			// .getObjectWdth(element.getFirst())), (int) H((float)
+			// GameProperties.getInstance().getObjectHeight(element.getFirst())));
 			g.drawImage(image, (int) element.getSecond().getX(), (int) element.getSecond().getY(), (int) W((float) GameProperties.getInstance()
 					.getObjectWdth(element.getFirst())), (int) H((float) GameProperties.getInstance().getObjectHeight(element.getFirst())), this);
 
@@ -172,7 +174,7 @@ public class MapPreviewEditorPanel extends MpaPanel
 		super.setMapDimension(width, height);
 
 		Rectangle map = new Rectangle(0, 0, (int) width, (int) height);
-		// resize Object
+		// resize Object and remove objects outside the resized map
 		for (int i = 0; i < addedObjects.size(); i++)
 		{
 			Pair<String, Point> element = addedObjects.get(i);

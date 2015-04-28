@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 
 import mpa.core.logic.MapInfo;
 import mpa.core.logic.Pair;
+import mpa.core.util.GameProperties;
 
 public class MapPreview extends MpaPanel
 {
@@ -26,6 +27,8 @@ public class MapPreview extends MpaPanel
 	private HashMap<JLabel, Pair<Float, Float>> headQuartersLabel = new HashMap<>();
 	private MainMenuGamePanel mainMenuGamePanel;
 	private Image backgroundImage;
+	private String texturePath = GameProperties.getInstance().getPath("TexturePath");
+	private String imagesPreviewPath = GameProperties.getInstance().getPath("ImagesPreviewPath");
 
 	public MapPreview(MainMenuGamePanel mainMenuGamePanel)
 	{
@@ -33,7 +36,7 @@ public class MapPreview extends MpaPanel
 		this.setLayout(null);
 		try
 		{
-			backgroundImage = ImageIO.read(new File("Assets/Textures/grass-pattern.png"));
+			backgroundImage = ImageIO.read(new File(texturePath + "/grass-pattern.png"));
 		} catch (IOException e1)
 		{
 			e1.printStackTrace();
@@ -47,15 +50,13 @@ public class MapPreview extends MpaPanel
 
 		try
 		{
-			File folder = new File("./Assets/imagesPreview");
+			File folder = new File(imagesPreviewPath);
 			File[] listOfFiles = folder.listFiles();
 			for (int i = 0; i < listOfFiles.length; i++)
 			{
 				if (listOfFiles[i].isFile() && listOfFiles[i].getName().endsWith(".png"))
 				{
-					Image img = ImageIO.read(new File("./Assets/imagesPreview/" + listOfFiles[i].getName()));
-					// img = img.getScaledInstance(W(img.getWidth(null)), H(img.getHeight(null)),
-					// 0);
+					Image img = ImageIO.read(new File(imagesPreviewPath + "/" + listOfFiles[i].getName()));
 					images.put(listOfFiles[i].getName().substring(0, listOfFiles[i].getName().length() - 4), img);
 				}
 			}
@@ -70,11 +71,16 @@ public class MapPreview extends MpaPanel
 	public void loadMap(MapInfo mapInfo)
 	{
 		this.mapInfo = mapInfo;
-		ImageIcon imageIcon = new ImageIcon(images.get("headQuarter"));
+
 		this.headQuartersLabel.clear();
 
 		for (Pair<Float, Float> headQuarterPosition : mapInfo.getHeadQuarters())
 		{
+			Image image = images.get("headQuarter");
+			image = image.getScaledInstance(W(GameProperties.getInstance().getObjectWdth("headQuarter")), H(GameProperties.getInstance()
+					.getObjectHeight("headQuarter")), 0);
+
+			ImageIcon imageIcon = new ImageIcon(image);
 			JLabel jLabel = new JLabel(imageIcon);
 			jLabel.addMouseListener(new MouseAdapter()
 			{
@@ -93,8 +99,8 @@ public class MapPreview extends MpaPanel
 				}
 
 			});
-			jLabel.setBounds(graphicX(headQuarterPosition.getFirst()), graphicY(headQuarterPosition.getSecond()),
-					images.get("headQuarter").getWidth(null), images.get("headQuarter").getHeight(null));
+			jLabel.setBounds(graphicX(headQuarterPosition.getFirst()), graphicY(headQuarterPosition.getSecond()), W(GameProperties.getInstance()
+					.getObjectWdth("headQuarter")), H(GameProperties.getInstance().getObjectHeight("headQuarter")));
 			this.add(jLabel);
 
 			headQuartersLabel.put(jLabel, headQuarterPosition);
@@ -117,8 +123,8 @@ public class MapPreview extends MpaPanel
 		{
 
 			System.out.println(woodPosition.getFirst() + " " + woodPosition.getSecond());
-			g.drawImage(images.get("wood"), graphicX(woodPosition.getFirst()), graphicY(woodPosition.getSecond()), W(images.get("wood")
-					.getWidth(null)), H(images.get("wood").getHeight(null)), this);
+			g.drawImage(images.get("wood"), graphicX(woodPosition.getFirst()), graphicY(woodPosition.getSecond()), W(GameProperties.getInstance()
+					.getObjectWdth("wood")), H(GameProperties.getInstance().getObjectHeight("wood")), this);
 			// g.drawImage(images.get("wood"), graphicX(woodPosition.getFirst()),
 			// graphicY(woodPosition.getSecond()), images.get("wood").getWidth(null),
 			// images.get("wood").getHeight(null), this);
@@ -126,8 +132,8 @@ public class MapPreview extends MpaPanel
 		for (Pair<Float, Float> fieldPosition : mapInfo.getFields())
 		{
 
-			g.drawImage(images.get("field"), graphicX(fieldPosition.getFirst()), graphicY(fieldPosition.getSecond()),
-					W(images.get("field").getWidth(null)), H(images.get("field").getHeight(null)), this);
+			g.drawImage(images.get("field"), graphicX(fieldPosition.getFirst()), graphicY(fieldPosition.getSecond()), W(GameProperties.getInstance()
+					.getObjectWdth("field")), H(GameProperties.getInstance().getObjectHeight("field")), this);
 			// g.drawImage(images.get("field"), graphicX(fieldPosition.getFirst()),
 			// graphicY(fieldPosition.getSecond()),
 			// images.get("field").getWidth(null), images.get("field").getHeight(null), this);
@@ -135,8 +141,8 @@ public class MapPreview extends MpaPanel
 
 		for (Pair<Float, Float> cavesPosition : mapInfo.getCaves())
 		{
-			g.drawImage(images.get("cave"), graphicX(cavesPosition.getFirst()), graphicY(cavesPosition.getSecond()),
-					W(images.get("cave").getWidth(null)), H(images.get("cave").getHeight(null)), this);
+			g.drawImage(images.get("cave"), graphicX(cavesPosition.getFirst()), graphicY(cavesPosition.getSecond()), W(GameProperties.getInstance()
+					.getObjectWdth("cave")), H(GameProperties.getInstance().getObjectHeight("cave")), this);
 			// g.drawImage(images.get("cave"), graphicX(cavesPosition.getFirst()),
 			// graphicY(cavesPosition.getSecond()), images.get("cave")
 			// .getWidth(null), images.get("cave").getHeight(null), this);
@@ -145,8 +151,8 @@ public class MapPreview extends MpaPanel
 		// g.drawImage(images.get("market"), graphicX(mapInfo.getMarket().getFirst()),
 		// graphicY(mapInfo.getMarket().getSecond()),
 		// images.get("headQuarter").getWidth(null), images.get("market").getHeight(null), this);
-		g.drawImage(images.get("market"), graphicX(mapInfo.getMarket().getFirst()), graphicY(mapInfo.getMarket().getSecond()), W(images.get("market")
-				.getWidth(null)), H(images.get("market").getHeight(null)), this);
+		g.drawImage(images.get("market"), graphicX(mapInfo.getMarket().getFirst()), graphicY(mapInfo.getMarket().getSecond()), W(GameProperties
+				.getInstance().getObjectWdth("market")), H(GameProperties.getInstance().getObjectHeight("market")), this);
 
 	}
 
@@ -170,7 +176,7 @@ public class MapPreview extends MpaPanel
 	@Override
 	public void setMapDimension(float width, float height)
 	{
-		// TODO Stub di metodo generato automaticamente
+
 		super.setMapDimension(width, height);
 		loadImages();
 	}

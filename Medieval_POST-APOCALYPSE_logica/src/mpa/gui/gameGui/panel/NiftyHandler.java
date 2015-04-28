@@ -108,7 +108,8 @@ public class NiftyHandler
 		{
 			selectionPanel.setProductivityLabel(((AbstractResourceProducer) abstractObject).getProviding());
 		}
-		selectionPanel.setObjectOwner(((AbstractPrivateProperty) abstractObject).getOwner());
+		if (abstractObject instanceof AbstractPrivateProperty)
+			selectionPanel.setObjectOwner(((AbstractPrivateProperty) abstractObject).getOwner());
 		this.selectedObject = abstractObject;
 
 		Element findElementByName = nifty.getCurrentScreen().findElementByName("selectedLayer");

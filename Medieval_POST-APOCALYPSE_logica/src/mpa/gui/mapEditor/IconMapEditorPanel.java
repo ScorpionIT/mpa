@@ -73,7 +73,6 @@ public class IconMapEditorPanel extends JScrollPane
 	@Override
 	public void setBounds(int x, int y, int width, int height)
 	{
-		// TODO Stub di metodo generato automaticamente
 		super.setBounds(x, y, width, height);
 		this.iconPanel.setBounds(0, 0, width, height);
 		addImageIcon();

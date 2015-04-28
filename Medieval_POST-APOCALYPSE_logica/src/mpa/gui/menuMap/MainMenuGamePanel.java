@@ -78,8 +78,8 @@ public class MainMenuGamePanel extends JPanel
 				else
 				{
 					World world = MainMenuGamePanel.this.worldLoader.loadWorld(new WorldFromMapInfo());
-					GameManager.init(world,
-							MainMenuGamePanel.this.worldLoader.makePlayers(MainMenuGamePanel.this.playerName, world, MainMenuGamePanel.this.selectedHQ));
+					GameManager.init(world, MainMenuGamePanel.this.worldLoader.makePlayers(MainMenuGamePanel.this.playerName, world,
+							MainMenuGamePanel.this.selectedHQ));
 					// MainMenuPanel.this.removeAll();
 					// GameGui gameGui = new GameGui();
 					// gameGui.setBounds(0, 0, MainMenuPanel.this.screenWidth,
@@ -122,7 +122,6 @@ public class MainMenuGamePanel extends JPanel
 			backgroundImage = ImageIO.read(new File("Assets/BackgroundImages/mainMenu.jpg"));
 		} catch (IOException e1)
 		{
-			// TODO Blocco catch generato automaticamente
 			e1.printStackTrace();
 		}
 		this.setVisible(true);
