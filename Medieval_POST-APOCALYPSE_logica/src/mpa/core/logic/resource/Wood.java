@@ -8,9 +8,10 @@ public class Wood extends AbstractResourceProducer
 	private static final int PROVIDING = 35;
 	private static final int EXTRA_PROVIDING = 10;
 
-	public Wood(float x, float y, Player player)
+	public Wood( float x, float y, Player player )
 	{
-		super(x, y, GameProperties.getInstance().getObjectWdth("Wood"), GameProperties.getInstance().getObjectHeight("Wood"), player);
+		super( x, y, GameProperties.getInstance().getObjectWidth( "Wood" ), GameProperties
+				.getInstance().getObjectHeight( "Wood" ), player );
 		// TODO Auto-generated constructor stub
 	}
 
@@ -18,8 +19,9 @@ public class Wood extends AbstractResourceProducer
 	public void providePlayer()
 	{
 		readLock.lock();
-		if (owner != null)
-			owner.putResources(Resources.WOOD, PROVIDING + EXTRA_PROVIDING * owner.getPlayerLevel().ordinal());
+		if( owner != null )
+			owner.putResources( Resources.WOOD, PROVIDING + EXTRA_PROVIDING
+					* owner.getPlayerLevel().ordinal() );
 
 		readLock.unlock();
 	}

@@ -8,7 +8,7 @@ public class Market extends AbstractProperty
 
 	private Market( float x, float y )
 	{
-		super( x, y, GameProperties.getInstance().getObjectWdth( "Market" ), GameProperties
+		super( x, y, GameProperties.getInstance().getObjectWidth( "Market" ), GameProperties
 				.getInstance().getObjectHeight( "Market" ) );
 
 	}

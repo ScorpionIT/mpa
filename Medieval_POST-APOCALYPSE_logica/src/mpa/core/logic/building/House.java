@@ -6,9 +6,10 @@ import mpa.core.util.GameProperties;
 public class House extends AbstractPrivateProperty
 {
 
-	public House(float x, float y, Player player)
+	public House( float x, float y, Player player )
 	{
-		super(x, y, GameProperties.getInstance().getObjectWdth("Headquarter"), GameProperties.getInstance().getObjectHeight("Headquarter"), player); // TODO
+		super( x, y, GameProperties.getInstance().getObjectWidth( "Headquarter" ), GameProperties
+				.getInstance().getObjectHeight( "Headquarter" ), player ); // TODO
 	}
 
 }

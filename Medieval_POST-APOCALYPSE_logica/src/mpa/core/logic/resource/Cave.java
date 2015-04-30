@@ -8,17 +8,19 @@ public class Cave extends AbstractResourceProducer
 	private static final int PROVIDING = 20;
 	private static final int EXTRA_PROVIDING = 5;
 
-	public Cave(float x, float y, Player player)
+	public Cave( float x, float y, Player player )
 	{
-		super(x, y, GameProperties.getInstance().getObjectWdth("Cave"), GameProperties.getInstance().getObjectHeight("Cave"), player); // TODO
+		super( x, y, GameProperties.getInstance().getObjectWidth( "Cave" ), GameProperties
+				.getInstance().getObjectHeight( "Cave" ), player ); // TODO
 	}
 
 	@Override
 	public void providePlayer()
 	{
 		readLock.lock();
-		if (owner != null)
-			owner.putResources(Resources.STONE, PROVIDING + EXTRA_PROVIDING * owner.getPlayerLevel().ordinal());
+		if( owner != null )
+			owner.putResources( Resources.STONE, PROVIDING + EXTRA_PROVIDING
+					* owner.getPlayerLevel().ordinal() );
 		readLock.unlock();
 	}
 
