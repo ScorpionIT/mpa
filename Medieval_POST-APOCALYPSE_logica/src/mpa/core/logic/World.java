@@ -18,14 +18,14 @@ public class World
 	private ArrayList<AbstractResourceProducer> resourceProducers = new ArrayList<AbstractResourceProducer>();
 
 	// private Map<Integer, Point> headquartedPosition;
-	public World(float width, float height)
+	public World( float width, float height )
 	{
 		super();
 		this.width = width;
 		this.height = height;
 	}
 
-	public boolean addObject(AbstractObject obj)
+	public boolean addObject( AbstractObject obj )
 	{
 		float x = obj.getX();
 		float y = obj.getY();
@@ -35,19 +35,19 @@ public class World
 		float xMax = x + width / 2;
 		float yMin = y - height / 2;
 		float yMax = y + height / 2;
-		Pair<Float, Float> xPair = new Pair(xMin, xMax);
-		Pair<Float, Float> yPair = new Pair(yMin, yMax);
-		if (!objectX.containsKey(xPair))
-			objectX.put(xPair, new ArrayList<AbstractObject>());
-		objectX.get(xPair).add(obj);
-		if (!objectY.containsKey(yPair))
-			objectY.put(yPair, new ArrayList<AbstractObject>());
-		objectY.get(yPair).add(obj);
+		Pair<Float, Float> xPair = new Pair( xMin, xMax );
+		Pair<Float, Float> yPair = new Pair( yMin, yMax );
+		if( !objectX.containsKey( xPair ) )
+			objectX.put( xPair, new ArrayList<AbstractObject>() );
+		objectX.get( xPair ).add( obj );
+		if( !objectY.containsKey( yPair ) )
+			objectY.put( yPair, new ArrayList<AbstractObject>() );
+		objectY.get( yPair ).add( obj );
 
-		allObjects.add(obj);
+		allObjects.add( obj );
 
-		if (obj instanceof AbstractResourceProducer)
-			resourceProducers.add((AbstractResourceProducer) obj);
+		if( obj instanceof AbstractResourceProducer )
+			resourceProducers.add( ( AbstractResourceProducer ) obj );
 		return true;
 	}
 
@@ -76,36 +76,37 @@ public class World
 		return allObjects;
 	}
 
-	public ArrayList<AbstractObject> getObjectsXInTheRange(float x)
+	public ArrayList<AbstractObject> getObjectsXInTheRange( float x )
 	{
 		Set<Pair<Float, Float>> keySet = objectX.keySet();
 		ArrayList<AbstractObject> abstractObjectsX = new ArrayList<>();
-		for (Pair<Float, Float> pair : keySet)
+		for( Pair<Float, Float> pair : keySet )
 		{
-			if (x >= pair.getFirst() && x <= pair.getSecond())
+			if( x >= pair.getFirst() && x <= pair.getSecond() )
 			{
-				abstractObjectsX.addAll(objectX.get(pair));
+				abstractObjectsX.addAll( objectX.get( pair ) );
 			}
 		}
 		// System.out.println("getObjectsXInTheRange " + abstractObjectsX.size());
 		return abstractObjectsX;
 	}
 
-	public ArrayList<AbstractObject> getObjectsInTheRange(float xMin, float xMax, float yMin, float yMax)
+	public ArrayList<AbstractObject> getObjectsInTheRange( float xMin, float xMax, float yMin,
+			float yMax )
 	{
 		ArrayList<AbstractObject> objects = new ArrayList<>();
-		ArrayList<AbstractObject> objectsX = getObjectsXInTheRange((int) xMin, (int) xMax);
-		ArrayList<AbstractObject> objectsY = getObjectsXInTheRange((int) yMin, (int) yMax);
+		ArrayList<AbstractObject> objectsX = getObjectsXInTheRange( ( int ) xMin, ( int ) xMax );
+		ArrayList<AbstractObject> objectsY = getObjectsXInTheRange( ( int ) yMin, ( int ) yMax );
 
-		for (AbstractObject objX : objectsX)
+		for( AbstractObject objX : objectsX )
 		{
 			Iterator<AbstractObject> it = objectsY.iterator();
-			while (it.hasNext())
+			while( it.hasNext() )
 			{
 				AbstractObject objectY = it.next();
-				if (objX == objectY)
+				if( objX == objectY )
 				{
-					objects.add(objX);
+					objects.add( objX );
 					it.remove();
 				}
 			}
@@ -114,60 +115,64 @@ public class World
 		return objects;
 	}
 
-	public ArrayList<AbstractObject> getObjectsYInTheRange(float y)
+	public ArrayList<AbstractObject> getObjectsYInTheRange( float y )
 	{
 		Set<Pair<Float, Float>> keySet = objectY.keySet();
 		ArrayList<AbstractObject> abstractObjectsY = new ArrayList<>();
-		for (Pair<Float, Float> pair : keySet)
+		for( Pair<Float, Float> pair : keySet )
 		{
-			if (y >= pair.getFirst() && y <= pair.getSecond())
+			if( y >= pair.getFirst() && y <= pair.getSecond() )
 			{
-				abstractObjectsY.addAll(objectY.get(pair));
+				abstractObjectsY.addAll( objectY.get( pair ) );
 			}
 		}
 		// System.out.println("getObjectsYInTheRange " + abstractObjectsY.size());
 		return abstractObjectsY;
 	}
 
-	public ArrayList<AbstractObject> getObjectsXInTheRange(int xMin, int xMax)
+	public ArrayList<AbstractObject> getObjectsXInTheRange( int xMin, int xMax )
 	{
 		Set<Pair<Float, Float>> keySet = objectX.keySet();
 		ArrayList<AbstractObject> abstractObjectsX = new ArrayList<>();
-		for (Pair<Float, Float> pair : keySet)
+		for( Pair<Float, Float> pair : keySet )
 		{
-			if ((pair.getFirst() <= xMax && pair.getFirst() >= xMin) || (pair.getSecond() <= xMax && pair.getSecond() >= xMin))
-				abstractObjectsX.addAll(objectX.get(pair));
-			else if ((xMin >= pair.getFirst() && xMin <= pair.getSecond()) || (xMax >= pair.getFirst() && xMax <= pair.getSecond()))
-				abstractObjectsX.addAll(objectX.get(pair));
+			if( ( pair.getFirst() <= xMax && pair.getFirst() >= xMin )
+					|| ( pair.getSecond() <= xMax && pair.getSecond() >= xMin ) )
+				abstractObjectsX.addAll( objectX.get( pair ) );
+			else if( ( xMin >= pair.getFirst() && xMin <= pair.getSecond() )
+					|| ( xMax >= pair.getFirst() && xMax <= pair.getSecond() ) )
+				abstractObjectsX.addAll( objectX.get( pair ) );
 		}
-		System.err.println("numero abstract object x " + abstractObjectsX.size());
+		// System.err.println("numero abstract object x " + abstractObjectsX.size());
 		return abstractObjectsX;
 	}
 
-	public ArrayList<AbstractObject> getObjectsYInTheRange(int yMin, int yMax)
+	public ArrayList<AbstractObject> getObjectsYInTheRange( int yMin, int yMax )
 	{
 		Set<Pair<Float, Float>> keySet = objectY.keySet();
 		ArrayList<AbstractObject> abstractObjectsY = new ArrayList<>();
-		for (Pair<Float, Float> pair : keySet)
+		for( Pair<Float, Float> pair : keySet )
 		{
-			if (((pair.getFirst() < yMax && pair.getFirst() > yMin) || (pair.getSecond() < yMax && pair.getSecond() > yMin)))
-				abstractObjectsY.addAll(objectY.get(pair));
-			else if ((yMin >= pair.getFirst() && yMin <= pair.getSecond()) || (yMax >= pair.getFirst() && yMax <= pair.getSecond()))
-				abstractObjectsY.addAll(objectY.get(pair));
+			if( ( ( pair.getFirst() < yMax && pair.getFirst() > yMin ) || ( pair.getSecond() < yMax && pair
+					.getSecond() > yMin ) ) )
+				abstractObjectsY.addAll( objectY.get( pair ) );
+			else if( ( yMin >= pair.getFirst() && yMin <= pair.getSecond() )
+					|| ( yMax >= pair.getFirst() && yMax <= pair.getSecond() ) )
+				abstractObjectsY.addAll( objectY.get( pair ) );
 		}
-		System.err.println("numero abstract object y " + abstractObjectsY.size());
+		// System.err.println("numero abstract object y " + abstractObjectsY.size());
 		return abstractObjectsY;
 	}
 
 	@Override
 	public String toString()
 	{
-		String s = new String("ObjectX \n");
+		String s = new String( "ObjectX \n" );
 		Set<Pair<Float, Float>> keySet = objectX.keySet();
-		for (Pair<Float, Float> pair : keySet)
+		for( Pair<Float, Float> pair : keySet )
 		{
 			s += pair.getFirst() + " " + pair.getSecond() + "\n";
-			for (AbstractObject obj : objectX.get(pair))
+			for( AbstractObject obj : objectX.get( pair ) )
 			{
 				s += obj.getClass() + " ";
 			}
@@ -175,10 +180,10 @@ public class World
 			s += "ObjectY \n";
 		}
 		keySet = objectY.keySet();
-		for (Pair<Float, Float> pair : keySet)
+		for( Pair<Float, Float> pair : keySet )
 		{
 			s += pair.getFirst() + " " + pair.getSecond() + "\n";
-			for (AbstractObject obj : objectY.get(pair))
+			for( AbstractObject obj : objectY.get( pair ) )
 			{
 				s += obj.getClass() + " ";
 			}
@@ -207,21 +212,21 @@ public class World
 	// }
 	// }
 
-	public AbstractObject pickedObject(float xGoal, float yGoal)
+	public AbstractObject pickedObject( float xGoal, float yGoal )
 	{
-		ArrayList<AbstractObject> objectsXInTheRange = getObjectsXInTheRange(xGoal);
-		ArrayList<AbstractObject> objectsYInTheRange = getObjectsYInTheRange(yGoal);
+		ArrayList<AbstractObject> objectsXInTheRange = getObjectsXInTheRange( xGoal );
+		ArrayList<AbstractObject> objectsYInTheRange = getObjectsYInTheRange( yGoal );
 
-		objectsXInTheRange.addAll(objectsYInTheRange);
-		for (AbstractObject abstractObject : objectsXInTheRange)
+		objectsXInTheRange.addAll( objectsYInTheRange );
+		for( AbstractObject abstractObject : objectsXInTheRange )
 		{
-			System.out.println();
-			System.out.println();
-			System.out.println(abstractObject);
-			System.out.println();
-			System.out.println();
-			if (MyMath.distanceFloat((int) abstractObject.getX(), (int) abstractObject.getY(), (int) xGoal, (int) yGoal)
-					- abstractObject.getCollisionRay() <= 0)
+			// System.out.println();
+			// System.out.println();
+			// System.out.println(abstractObject);
+			// System.out.println();
+			// System.out.println();
+			if( MyMath.distanceFloat( ( int ) abstractObject.getX(), ( int ) abstractObject.getY(),
+					( int ) xGoal, ( int ) yGoal ) - abstractObject.getCollisionRay() <= 0 )
 			{
 				return abstractObject;
 			}

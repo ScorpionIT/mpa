@@ -210,7 +210,7 @@ public class Player extends AbstractCharacter
 		writeLock.unlock();
 	}
 
-	public int getResourceAmount( String type )
+	public int getResourceAmount( Resources type )
 	{
 		try
 		{

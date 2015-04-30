@@ -6,10 +6,13 @@ import javax.vecmath.Vector2f;
 
 import mpa.core.logic.AbstractObject;
 import mpa.core.logic.GameManager;
+import mpa.core.logic.character.Player;
 
 class ExplorationState extends AIState
 {
-	boolean newBuildingsAdded = false;
+	private boolean newBuildingsAdded = false;
+	private boolean isWalking = false;
+	private Vector2f pointToReach;
 
 	ExplorationState()
 	{
@@ -19,25 +22,36 @@ class ExplorationState extends AIState
 	@Override
 	void action( OpponentAI opponentAI )
 	{
-		if( opponentAI.player.getPath().isEmpty() )
+		Player p = opponentAI.player;
+		if( isWalking )
 		{
-			float playerX = opponentAI.player.getX();
-			float playerY = opponentAI.player.getY();
-			float ray = opponentAI.worldManager.ray;
-			ArrayList<AbstractObject> objectsInTheRange = GameManager
-					.getInstance()
-					.getWorld()
-					.getObjectsInTheRange( playerX - ray, playerX + ray, playerY - ray,
-							playerY + ray );
-
-			if( !objectsInTheRange.isEmpty() )
+			if( pointToReach.x == p.getX() && pointToReach.y == p.getY() )
 			{
+				isWalking = false;
 
-				for( AbstractObject abstractObject : objectsInTheRange )
-					opponentAI.addBuilding( abstractObject );
+				float playerX = p.getX();
+				float playerY = p.getY();
+				float ray = opponentAI.worldManager.ray;
+				ArrayList<AbstractObject> objectsInTheRange = GameManager
+						.getInstance()
+						.getWorld()
+						.getObjectsInTheRange( playerX - ray, playerX + ray, playerY - ray,
+								playerY + ray );
 
-				newBuildingsAdded = true;
+				if( !objectsInTheRange.isEmpty() )
+				{
+
+					for( AbstractObject abstractObject : objectsInTheRange )
+						opponentAI.addBuilding( abstractObject );
+
+					newBuildingsAdded = true;
+				}
 			}
+			else
+				return;
+		}
+		else
+		{
 
 			Vector2f goal = opponentAI.worldManager.getNextLocation( opponentAI.player );
 			if( goal != null )
@@ -52,18 +66,20 @@ class ExplorationState extends AIState
 	{
 		AIState nextState = null;
 
-		if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings() )
-			nextState = new ConquestState();
-		else if( opponentAI.player.canUpgrade() || opponentAI.player.canBuyPotions() )
-			nextState = new ProductionState();
-		else if( opponentAI.areThereWeakerPlayers() )
-			nextState = new CombatState();
-		else if( !opponentAI.knownAllTheWorld )
+		if( isWalking || !opponentAI.knownAllTheWorld )
 			nextState = this;
-		else
-			nextState = new WaitingState();
+		// else if( !opponentAI.knownBuildings.isEmpty() &&
+		// opponentAI.areThereConquerableBuildings() )
+		// nextState = new ConquestState();
+		// else if( opponentAI.player.canUpgrade() )
+		// nextState = new StrengtheningState();
+		// else if( opponentAI.player.canBuyPotions() )
+		// nextState = new ProductionState();
+		// else if( opponentAI.areThereWeakerPlayers() )
+		// nextState = new CombatState();
+		// else
+		// nextState = new WaitingState();
 
 		return nextState;
-
 	}
 }

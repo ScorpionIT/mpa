@@ -3,6 +3,8 @@ package mpa.core.logic;
 import java.util.ArrayList;
 import java.util.List;
 
+import mpa.core.ai.DifficultyLevel;
+import mpa.core.ai.OpponentAI;
 import mpa.core.logic.building.AbstractPrivateProperty;
 import mpa.core.logic.character.Player;
 import mpa.core.logic.fights.CombatManager;
@@ -12,6 +14,8 @@ public class GameManager
 {
 	private World world;
 	private List<Player> players;
+	private List<OpponentAI> AI_players;
+	private DifficultyLevel difficultyLevel;
 
 	private static GameManager gameManager = null;
 
@@ -20,20 +24,22 @@ public class GameManager
 		return gameManager;
 	}
 
-	public static void init( World world, List<Player> players )
+	public static void init( World world, DifficultyLevel level )
 	{
 		if( gameManager == null )
 		{
-			gameManager = new GameManager( world, players );
+			gameManager = new GameManager( world, level );
 			new PositionUpdater().start();
 			new ResourceUpdater().start();
 		}
 	}
 
-	private GameManager( World world, List<Player> players )
+	private GameManager( World world, DifficultyLevel level )
 	{
 		this.world = world;
-		this.players = players;
+		this.players = new ArrayList<Player>();
+		this.AI_players = new ArrayList<>();
+		this.difficultyLevel = level;
 	}
 
 	public ArrayList<Pair<Integer, Integer>> computePath( Player player, float xGoal, float yGoal )
@@ -41,6 +47,18 @@ public class GameManager
 		PathCalculatorThread pathCalculatorThread = new PathCalculatorThread( player, xGoal, yGoal );
 		pathCalculatorThread.start();
 		return pathCalculatorThread.getPath();
+	}
+
+	public void addPlayer( Player player )
+	{
+		players.add( player );
+	}
+
+	public void addAIPlayer( Player player )
+	{
+		AI_players.add( new OpponentAI( player, difficultyLevel ) );
+		players.add( player );
+		AI_players.get( AI_players.size() - 1 ).start();
 	}
 
 	public void updateCharacterPositions()

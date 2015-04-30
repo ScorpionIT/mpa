@@ -28,7 +28,19 @@ public class OpponentAI extends Thread
 	@Override
 	public void run()
 	{
+		while( true )
+		{
+			try
+			{
+				sleep( 500 );
+			} catch( InterruptedException e )
+			{
+				e.printStackTrace();
+			}
 
+			aiState.action( this );
+			aiState = aiState.changeState( this );
+		}
 	}
 
 	void addBuilding( AbstractObject building )

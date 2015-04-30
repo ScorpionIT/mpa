@@ -42,8 +42,8 @@ public class ProvaIntegerPathCalculator
 			}
 
 			/* TODO use geometry to make the shit up here work */
-			if( MyMath.distanceInteger( currentPosition.getCurrentNode().getFirst(), currentPosition
-					.getCurrentNode().getSecond(), ( int ) xGoal, ( int ) yGoal ) < increment )
+			if( MyMath.distanceInteger( currentPosition.getCurrentNode().getFirst(),
+					currentPosition.getCurrentNode().getSecond(), ( int ) xGoal, ( int ) yGoal ) < increment )
 			{
 				Pair<Integer, Integer> goal = new Pair<Integer, Integer>( ( int ) xGoal,
 						( int ) yGoal );
@@ -80,13 +80,13 @@ public class ProvaIntegerPathCalculator
 				if( pair.getFirst() > world.getWidth() || pair.getFirst() < 0
 						|| pair.getSecond() < 0 || pair.getSecond() > world.getHeight() )
 				{
-					System.out.println();
-					System.out.println();
-					System.out.println();
-					System.out.println( "conitnue lalalalalalalalal" );
-					System.out.println();
-					System.out.println();
-					System.out.println();
+					// System.out.println();
+					// System.out.println();
+					// System.out.println();
+					// System.out.println( "conitnue lalalalalalalalal" );
+					// System.out.println();
+					// System.out.println();
+					// System.out.println();
 					continue;
 				}
 				Pair<Integer, Integer> point = new Pair<Integer, Integer>( new Integer( pair
@@ -167,8 +167,9 @@ public class ProvaIntegerPathCalculator
 
 	private double computeCost( PathNode currentNode, Pair<Integer, Integer> newNode )
 	{
-		return( currentNode.getCost() + MyMath.distanceInteger( currentNode.getCurrentNode().getFirst(),
-				currentNode.getCurrentNode().getSecond(), newNode.getFirst(), newNode.getSecond() ) );
+		return( currentNode.getCost() + MyMath.distanceInteger( currentNode.getCurrentNode()
+				.getFirst(), currentNode.getCurrentNode().getSecond(), newNode.getFirst(), newNode
+				.getSecond() ) );
 	}
 
 	private ArrayList<Pair<Integer, Integer>> getPath( ArrayList<PathNode> closedList )
@@ -233,8 +234,9 @@ public class ProvaIntegerPathCalculator
 		{
 
 			double dist = list.get( i ).getCost()
-					+ MyMath.distanceInteger( list.get( i ).getCurrentNode().getFirst(), list.get( i )
-							.getCurrentNode().getSecond(), ( int ) xGoal, ( int ) yGoal );
+					+ MyMath.distanceInteger( list.get( i ).getCurrentNode().getFirst(),
+							list.get( i ).getCurrentNode().getSecond(), ( int ) xGoal,
+							( int ) yGoal );
 			if( dist < shortestDist )
 			{
 				shortestPoint = list.get( i );

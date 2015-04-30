@@ -30,15 +30,16 @@ public enum Level
 
 	private boolean areResourcesEnough( Player player )
 	{
-		if( player.getResourceAmount( "Iron" ) < ( player.getPlayerLevel().ordinal() + 1 )
+		if( player.getResourceAmount( Resources.IRON ) < ( player.getPlayerLevel().ordinal() + 1 )
 				* ironRequired )
 			return false;
-		else if( player.getResourceAmount( "Stone" ) < ( player.getPlayerLevel().ordinal() + 1 )
+		else if( player.getResourceAmount( Resources.STONE ) < ( player.getPlayerLevel().ordinal() + 1 )
 				* stoneRequired )
 			return false;
-		else if( player.getResourceAmount( "Gold" ) < ( player.getPlayerLevel().ordinal() + 1 )
-				* stoneRequired )
-			return false;
+		// else if( player.getResourceAmount( Resources. ) < ( player.getPlayerLevel().ordinal() + 1
+		// )
+		// * stoneRequired )
+		// return false;
 		else
 			return true;
 	}

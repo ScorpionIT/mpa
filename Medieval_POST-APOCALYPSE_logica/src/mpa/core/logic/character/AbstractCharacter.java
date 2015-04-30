@@ -15,7 +15,7 @@ public abstract class AbstractCharacter extends AbstractObject
 {
 	private static final float PACE = 5;
 
-	private ArrayList<Pair<Integer, Integer>> path;
+	private ArrayList<Pair<Integer, Integer>> path = new ArrayList<>();
 	private Pair<Float, Float> currentVector = new Pair<Float, Float>( new Float( 0.0 ), new Float(
 			0.0 ) );
 	private int numberOfIterationsPerVector;
@@ -76,9 +76,9 @@ public abstract class AbstractCharacter extends AbstractObject
 		currentVector.setFirst( currentVector.getFirst() / greatestCommonDivisor );
 		currentVector.setSecond( currentVector.getSecond() / greatestCommonDivisor );
 
-		System.out.println( numberOfIterationsPerVector );
-		System.out.println( "paceX = " + paceX );
-		System.out.println( "paceY = " + paceY );
+		// System.out.println( numberOfIterationsPerVector );
+		// System.out.println( "paceX = " + paceX );
+		// System.out.println( "paceY = " + paceY );
 
 	}
 
@@ -86,20 +86,20 @@ public abstract class AbstractCharacter extends AbstractObject
 	{
 		writeLock.lock();
 
-		System.out.println( "path assegnato per la " + counter++ + " volta" );
-		System.out.println( "size del path " + path.size() );
+		// System.out.println( "path assegnato per la " + counter++ + " volta" );
+		// System.out.println( "size del path " + path.size() );
 		this.path = path;
 
-		System.out.println();
-		System.out.println();
-		System.out.println( "Path : " );
+		// System.out.println();
+		// System.out.println();
+		// System.out.println( "Path : " );
 		for( Pair<Integer, Integer> pair : path )
 		{
-			System.out.println( pair );
+			// System.out.println( pair );
 
 		}
-		System.out.println();
-		System.out.println();
+		// System.out.println();
+		// System.out.println();
 		if( path.size() > 1 )
 		{
 			computeCurrentVector();
@@ -128,8 +128,8 @@ public abstract class AbstractCharacter extends AbstractObject
 				return false;
 
 			numberOfIterationsPerVector--;
-			System.out.println( "numero iterazioni " + numberOfIterationsPerVector );
-			System.out.println( "x=" + x + "| y=" + y );
+			// System.out.println( "numero iterazioni " + numberOfIterationsPerVector );
+			// System.out.println( "x=" + x + "| y=" + y );
 
 			if( numberOfIterationsPerVector <= 0 )
 			{
