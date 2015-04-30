@@ -43,9 +43,9 @@ public class MainMapEditorPanel extends JPanel
 	{
 
 		this.setLayout(null);
-		settingsMapEditorPanel = new SettingsMapEditorPanel(this);
 		buttonsEditorPanel = new ButtonsEditorPanel(this);
 		mapPreviewEditorPanel = new MapPreviewEditorPanel(this, imageLabels);
+		settingsMapEditorPanel = new SettingsMapEditorPanel(this);
 		submitButtonEditorPanel = new SubmitButtonEditorPanel(this);
 
 		loadImages();
@@ -71,10 +71,9 @@ public class MainMapEditorPanel extends JPanel
 
 	public void addSelectedIcon()
 	{
-		mapPreviewEditorPanel.addLabel();
+		mapPreviewEditorPanel.addLabel(false);
 	}
 
-	// TODO creare xml e controllare che ci sia una sola mappa con quel nome
 	// TODO mettere immagini ai bottoni
 
 	public void repaintMapPreviewEditorPanel()
@@ -98,7 +97,7 @@ public class MainMapEditorPanel extends JPanel
 		return iconMapEditorPanel.getImageLabelsPosition();
 	}
 
-	public boolean thereIsAnIntersection(Point rectangle, String objectName)
+	public boolean thereIsIntersection(Point rectangle, String objectName)
 	{
 		return mapPreviewEditorPanel.thereIsIntersection(rectangle, objectName);
 	}

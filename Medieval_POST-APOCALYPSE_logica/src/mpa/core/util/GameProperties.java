@@ -150,7 +150,7 @@ public class GameProperties
 
 	}
 
-	public Integer getObjectWdth(String key)
+	public Integer getObjectWidth(String key)
 	{
 		return objectWidth.get(key.toLowerCase());
 

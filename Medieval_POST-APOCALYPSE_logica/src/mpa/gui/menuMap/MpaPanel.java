@@ -56,4 +56,14 @@ public class MpaPanel extends JPanel
 		this.worldWidth = (int) width;
 		this.worldHeight = (int) height;
 	}
+
+	public int getWorldWidth()
+	{
+		return worldWidth;
+	}
+
+	public int getWorldHeight()
+	{
+		return worldHeight;
+	}
 }

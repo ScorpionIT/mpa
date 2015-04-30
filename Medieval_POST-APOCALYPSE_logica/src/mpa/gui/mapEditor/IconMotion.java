@@ -54,7 +54,7 @@ class IconMotion extends MouseInputAdapter
 	public void mouseReleased(MouseEvent e)
 	{
 
-		if (!mainMapEditorPanel.thereIsAnIntersection(selectedObjectPosition, selectedObjectName) && dragging)
+		if (dragging && !mainMapEditorPanel.thereIsIntersection(selectedObjectPosition, selectedObjectName))
 			mainMapEditorPanel.addSelectedIcon();
 		else
 			mainMapEditorPanel.setSelectedObject(null, null);
@@ -74,13 +74,13 @@ class IconMotion extends MouseInputAdapter
 			if (selectedObjectPosition.x > 0 && selectedObjectPosition.y > 0)
 			{
 
-				if (mainMapEditorPanel.thereIsAnIntersection(selectedObjectPosition, selectedObjectName))
+				if (mainMapEditorPanel.thereIsIntersection(selectedObjectPosition, selectedObjectName))
 					mainMapEditorPanel.paintImageInMapPreviewEditorPanel(Color.red);
 				else
 					mainMapEditorPanel.paintImageInMapPreviewEditorPanel(Color.green);
 			}
 
-			mainMapEditorPanel.repaintMapPreviewEditorPanel();
+			// mainMapEditorPanel.repaintMapPreviewEditorPanel();
 		}
 	}
 }

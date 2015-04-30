@@ -1,75 +1,105 @@
 package mpa.gui.mapEditor;
 
-import java.awt.Frame;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.LinkedHashMap;
-import java.util.Set;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import mpa.core.logic.Pair;
+import mpa.core.util.GameProperties;
 
 public class SettingsMapEditorPanel extends JPanel
 {
-	private LinkedHashMap<String, Pair<JTextField, JLabel>> fields = new LinkedHashMap();
+	private ArrayList<JLabel> jLabels = new ArrayList<>();
 
-	private String[] textFields = { "Map Name", "Map Width", "Map Height" };
+	private String[] textJLabels = { "Map Name", "Map Width", "Map Height" };
 
+	private JLabel widthLabel;
+	private JLabel heightLabel;
+
+	private JTextField mapNameField = new JTextField();
 	private MainMapEditorPanel mainMapEditorPanel;
-	private JButton submit;
+
+	private final int increment = 50;
+	private final int minDimension = 500;
+	private boolean setBounds = false;
+	private HashMap<String, Image> images = new HashMap<String, Image>();
 
 	public SettingsMapEditorPanel(MainMapEditorPanel mainMapEditorPanel)
 	{
 
 		this.mainMapEditorPanel = mainMapEditorPanel;
 		this.setLayout(null);
-		submit = new JButton("Set Properties");
-		submit.addMouseListener(new MouseAdapter()
+		addWidthLabel();
+		addMapNameField();
+		addHeightLabel();
+
+		this.mainMapEditorPanel.setMapDimension(minDimension, minDimension);
+		try
 		{
-			@Override
-			public void mouseReleased(MouseEvent e)
-			{
-				super.mouseReleased(e);
-				String width = fields.get("Map Width").getFirst().getText();
-				String height = fields.get("Map Height").getFirst().getText();
-				if (checkInputValue(width, height))
+			images.put("Plus", ImageIO.read(new File(GameProperties.getInstance().getPath("PannelIconPath") + "/plusIcon.png")));
+			images.put("Minus", ImageIO.read(new File(GameProperties.getInstance().getPath("PannelIconPath") + "/minusIcon.png")));
 
-				{
-
-					SettingsMapEditorPanel.this.mainMapEditorPanel.setMapDimension(Integer.parseInt(width), Integer.parseInt(height));
-				}
-
-			}
-		});
-		this.add(submit);
-		for (String field : textFields)
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		for (String field : textJLabels)
 		{
 
-			JTextField textField = new JTextField();
-			textField.setOpaque(false);
 			JLabel jLabel = new JLabel(field);
 			jLabel.setOpaque(false);
-			this.add(textField);
+
+			jLabels.add(jLabel);
 			this.add(jLabel);
-			fields.put(field, new Pair<JTextField, JLabel>(textField, jLabel));
+
 		}
 		this.setVisible(true);
 	}
 
 	public String getMapName()
 	{
-		return fields.get("Map Name").getFirst().getText();
+		return mapNameField.getText();
+	}
+
+	private void addWidthLabel()
+	{
+		widthLabel = new JLabel(Integer.toString(minDimension));
+		widthLabel.setOpaque(false);
+		this.add(widthLabel);
+
+	}
+
+	private void addHeightLabel()
+	{
+		heightLabel = new JLabel(Integer.toString(minDimension));
+		heightLabel.setOpaque(false);
+		this.add(heightLabel);
+
+	}
+
+	private void addMapNameField()
+	{
+		mapNameField = new JTextField();
+		mapNameField.setOpaque(false);
+		this.add(mapNameField);
+
 	}
 
 	private void setComponentsBounds()
 	{
 
-		int numberOfComponents = fields.size() * 2;
+		setBounds = true;
+		int numberOfComponents = jLabels.size() * 2;
 
 		int increment = (this.getHeight() - (this.getHeight() * 20 / 100)) / numberOfComponents;
 
@@ -77,40 +107,92 @@ public class SettingsMapEditorPanel extends JPanel
 		int xComponent = this.getWidth() * 10 / 100;
 		int width = this.getWidth() * 80 / 100;
 
-		Set<String> keySet = fields.keySet();
-
-		for (String key : keySet)
+		images.put("Plus", images.get("Plus").getScaledInstance(increment / 2, increment / 2, 0));
+		images.put("Minus", images.get("Minus").getScaledInstance(increment / 2, increment, 0));
+		for (int i = 0; i < jLabels.size(); i++)
 		{
-			Pair<JTextField, JLabel> pair = fields.get(key);
-			pair.getSecond().setBounds(xComponent, yComponent, width, increment);
-			yComponent += increment;
-			pair.getFirst().setBounds(xComponent, yComponent, width, increment);
-			yComponent += increment;
 
+			jLabels.get(i).setBounds(xComponent, yComponent, width, increment);
+			yComponent += increment;
+			if (i == 0)
+			{
+				mapNameField.setBounds(xComponent, yComponent, width, increment);
+				yComponent += increment;
+			}
+			if (i == 1)
+			{
+				addButtonListener(widthLabel, yComponent, xComponent, increment);
+				yComponent += increment;
+			}
+			if (i == 2)
+			{
+				addButtonListener(heightLabel, yComponent, xComponent, increment);
+				yComponent += increment;
+			}
 		}
-		submit.setBounds(width + xComponent - submit.getWidth(), yComponent + (this.getHeight() * 2 / 100), 140, 20);
+
+		// TODO mettere i bottoni + e - alla larghezza e alla lunghezza e mettere i listener per
+		// mario
+
 	}
 
-	private boolean checkInputValue(String width, String height)
+	private void addButtonListener(final JLabel label, int yComponent, int xComponent, int height)
 	{
-		if (width.equals("") || Integer.parseInt(width) < 500)
+
+		JButton plusButton = new JButton(new ImageIcon(images.get("Plus")));
+		JButton minusButton = new JButton(new ImageIcon(images.get("Minus")));
+		plusButton.setOpaque(false);
+		plusButton.setBorderPainted(false);
+		plusButton.setContentAreaFilled(false);
+		minusButton.setOpaque(false);
+		minusButton.setBorderPainted(false);
+		minusButton.setContentAreaFilled(false);
+
+		plusButton.addMouseListener(new MouseAdapter()
 		{
-			JOptionPane.showMessageDialog(new Frame(), "Inserisci la larghezza", "", JOptionPane.PLAIN_MESSAGE);
-			return false;
-		}
-		else if (height.equals("") || Integer.parseInt(height) < 500)
+			@Override
+			public void mouseReleased(MouseEvent e)
+			{
+				int mapDimension = Integer.parseInt(label.getText());
+				mapDimension += SettingsMapEditorPanel.this.increment;
+				label.setText(Integer.toString(mapDimension));
+				mainMapEditorPanel.setMapDimension(Integer.parseInt(widthLabel.getText()), Integer.parseInt(heightLabel.getText()));
+				SettingsMapEditorPanel.this.repaint();
+
+			}
+		});
+		minusButton.addMouseListener(new MouseAdapter()
 		{
-			JOptionPane.showMessageDialog(new Frame(), "Inserisci l'altezza", "", JOptionPane.PLAIN_MESSAGE);
-			return false;
-		}
-		return true;
+			@Override
+			public void mouseReleased(MouseEvent e)
+			{
+				int mapDimension = Integer.parseInt(label.getText());
+				mapDimension -= SettingsMapEditorPanel.this.increment;
+				if (mapDimension >= minDimension)
+				{
+					label.setText(Integer.toString(mapDimension));
+					mainMapEditorPanel.setMapDimension(Integer.parseInt(widthLabel.getText()), Integer.parseInt(heightLabel.getText()));
+					SettingsMapEditorPanel.this.repaint();
+				}
+
+			}
+		});
+
+		label.setBounds(xComponent, yComponent, this.getWidth() * 65 / 100, height);
+		plusButton.setBounds(label.getWidth() + xComponent, yComponent, height / 2, height / 2);
+		minusButton.setBounds(plusButton.getX() + plusButton.getWidth() + plusButton.getWidth() / 2, yComponent, height / 2, height / 2);
+		SettingsMapEditorPanel.this.add(plusButton);
+		SettingsMapEditorPanel.this.add(minusButton);
+
 	}
 
 	@Override
 	public void setBounds(int x, int y, int width, int height)
 	{
 		super.setBounds(x, y, width, height);
-		setComponentsBounds();
+		if (!setBounds)
+			setComponentsBounds();
+
 		repaint();
 
 	}
