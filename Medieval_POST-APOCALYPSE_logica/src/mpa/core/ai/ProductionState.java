@@ -1,10 +1,14 @@
 package mpa.core.ai;
 
+import javax.vecmath.Vector2f;
+
+import mpa.core.logic.GameManager;
 import mpa.core.logic.character.Player;
 import mpa.core.logic.tool.Potions;
 
 class ProductionState extends AIState
 {
+	private boolean isWalking = false;
 
 	ProductionState()
 	{
@@ -16,37 +20,54 @@ class ProductionState extends AIState
 	{
 		Player p = opponentAI.player;
 
-		if( p.canUpgrade() )
-			p.upgradeLevel();
-		else
+		try
 		{
-			Potions potionNotToBuy = null;
-			int max = Integer.MIN_VALUE;
-			for( Potions potion : Potions.values() )
+			p.getWriteLock();
+
+			Vector2f collectionPoint = p.getHeadquarter().getCollectionPoint();
+			boolean canBuyPotions = p.canBuyPotions();
+
+			if( canBuyPotions && collectionPoint.x != p.getX() && p.getY() != collectionPoint.y )
 			{
-				int amount = p.getPotionAmount( potion );
-
-				if( amount > max )
-				{
-					potionNotToBuy = potion;
-					max = amount;
-				}
+				GameManager.getInstance().computePath( p, collectionPoint.x, collectionPoint.y );
+				isWalking = true;
+				return;
 			}
+			else if( canBuyPotions && collectionPoint.x == p.getX()
+					&& collectionPoint.y == p.getY() )
+			{
 
-			for( Potions value : Potions.values() )
-				while( p.canBuyPotion( value ) )
+				Potions potionNotToBuy = null;
+				int max = Integer.MIN_VALUE;
+				for( Potions potion : Potions.values() )
 				{
-					if( value != potionNotToBuy )
-					{
-						p.buyPotion( value );
+					int amount = p.getPotionAmount( potion );
 
-						if( p.getPotionAmount( value ) == p.getPotionAmount( potionNotToBuy )
-								&& p.canBuyPotion( value ) )
-						{
-							potionNotToBuy = value;
-						}
+					if( amount > max )
+					{
+						potionNotToBuy = potion;
+						max = amount;
 					}
 				}
+
+				for( Potions value : Potions.values() )
+					while( p.canBuyPotion( value ) )
+					{
+						if( value != potionNotToBuy )
+						{
+							p.buyPotion( value );
+
+							if( p.getPotionAmount( value ) == p.getPotionAmount( potionNotToBuy )
+									&& p.canBuyPotion( value ) )
+							{
+								potionNotToBuy = value;
+							}
+						}
+					}
+			}
+		} finally
+		{
+			p.leaveWriteLock();
 		}
 
 	}
@@ -56,7 +77,9 @@ class ProductionState extends AIState
 	{
 		AIState nextState = null;
 
-		if( !opponentAI.knownAllTheWorld )
+		if( isWalking || opponentAI.player.canBuyPotions() )
+			nextState = this;
+		else if( !opponentAI.knownAllTheWorld )
 			nextState = new ExplorationState();
 		else if( opponentAI.areThereWeakerPlayers() )
 			nextState = new CombatState();

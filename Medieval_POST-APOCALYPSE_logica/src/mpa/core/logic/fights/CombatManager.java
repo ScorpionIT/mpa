@@ -1,9 +1,10 @@
-package mpa.core.logic;
+package mpa.core.logic.fights;
 
 import java.util.ArrayList;
 
 import javax.vecmath.Vector2f;
 
+import mpa.core.logic.GameManager;
 import mpa.core.logic.character.Player;
 import mpa.core.logic.tool.Potions;
 import mpa.core.maths.MyMath;

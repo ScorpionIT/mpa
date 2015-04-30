@@ -52,23 +52,14 @@ class ExplorationState extends AIState
 	{
 		AIState nextState = null;
 
-		// if( newBuildingsAdded && opponentAI.player.isThereAnyFreeSulbaltern() )
 		if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings() )
-		{
 			nextState = new ConquestState();
-		}
 		else if( opponentAI.player.canUpgrade() || opponentAI.player.canBuyPotions() )
-		{
 			nextState = new ProductionState();
-		}
 		else if( opponentAI.areThereWeakerPlayers() )
-		{
 			nextState = new CombatState();
-		}
 		else if( !opponentAI.knownAllTheWorld )
-		{
 			nextState = this;
-		}
 		else
 			nextState = new WaitingState();
 

@@ -61,6 +61,11 @@ public class Player extends AbstractCharacter
 
 	}
 
+	public Headquarter getHeadquarter()
+	{
+		return headquarter;
+	}
+
 	public boolean pickUpTool( AbstractTool tool )
 	{
 		return this.bag.addTool( tool );

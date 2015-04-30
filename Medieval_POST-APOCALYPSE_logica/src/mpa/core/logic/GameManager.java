@@ -5,6 +5,7 @@ import java.util.List;
 
 import mpa.core.logic.building.AbstractPrivateProperty;
 import mpa.core.logic.character.Player;
+import mpa.core.logic.fights.CombatManager;
 import mpa.core.logic.tool.Potions;
 
 public class GameManager
@@ -72,6 +73,16 @@ public class GameManager
 	public ArrayList<Player> distanceAttack( Player attacker, Potions potion )
 	{
 		return CombatManager.getInstance().distanceAttack( attacker, potion );
+	}
+
+	public boolean occupyProperty( Player player, AbstractPrivateProperty property )
+	{
+		if( !property.isFree() || !player.isThereAnyFreeSulbaltern() )
+			return false;
+
+		property.setOwner( player );
+		player.employSubaltern( property );
+		return true;
 	}
 
 	// public ArrayList<Player> getPlayersIntTheRange( float xMin, float xMax, float yMin, float
