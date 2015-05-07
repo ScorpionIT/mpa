@@ -109,10 +109,11 @@ public class MainMenuGamePanel extends JPanel
 							mpa.gui.gameGui.GameGui app = new mpa.gui.gameGui.GameGui(
 									MainMenuGamePanel.this.selectedHQIndex );
 							AppSettings gameSettings = new AppSettings( false );
-							gameSettings.setResolution( java.awt.Toolkit.getDefaultToolkit()
-									.getScreenSize().width, java.awt.Toolkit.getDefaultToolkit()
-									.getScreenSize().height );
-							gameSettings.setFullscreen( true );
+							gameSettings.setResolution( 600, 400 );
+							// gameSettings.setResolution( java.awt.Toolkit.getDefaultToolkit()
+							// .getScreenSize().width, java.awt.Toolkit.getDefaultToolkit()
+							// .getScreenSize().height );
+							// gameSettings.setFullscreen( true );
 							gameSettings.setVSync( false );
 							gameSettings.setTitle( "Stellar Conquest" );
 							gameSettings.setUseInput( true );

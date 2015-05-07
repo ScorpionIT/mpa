@@ -279,10 +279,10 @@ public class GameGui extends SimpleApplication
 	private void loadCharacters()
 	{
 		int i = 0;
-		assetManager.registerLocator( "./Assets/Models/male_civilian_1.zip", ZipLocator.class );
+		assetManager.registerLocator( "./Assets/Models/SeanDevlin.zip", ZipLocator.class );
 		for( Player player : players )
 		{
-			Spatial model = assetManager.loadModel( "main.mesh.xml" );
+			Spatial model = assetManager.loadModel( "SeanDevlin.mesh.xml" );
 			if( i == playerIndex )
 			{
 				model.scale( 25.2f, 25.2f, 25.2f );
@@ -337,7 +337,7 @@ public class GameGui extends SimpleApplication
 					GameManager.getInstance().computePath( players.get( playerIndex ),
 							contactPoint.x, contactPoint.y );
 
-					path = players.get( 0 ).getPath();
+					path = players.get( playerIndex ).getPath();
 					drawPath();
 				}
 				else

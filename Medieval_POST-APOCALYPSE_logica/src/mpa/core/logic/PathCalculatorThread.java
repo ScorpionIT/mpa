@@ -26,8 +26,6 @@ public class PathCalculatorThread extends Thread
 	@Override
 	public void run()
 	{
-		// this.player.setPath( new ProvaIntegerPathCalculator().computePath( GameManager
-		// .getInstance().getWorld(), xGoal, yGoal, player.getX(), player.getY() ) );
 		path = null;
 		lock.lock();
 		path = new ProvaIntegerPathCalculator().computePath( GameManager.getInstance().getWorld(),

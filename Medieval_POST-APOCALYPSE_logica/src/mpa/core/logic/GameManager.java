@@ -3,6 +3,8 @@ package mpa.core.logic;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.vecmath.Vector2f;
+
 import mpa.core.ai.DifficultyLevel;
 import mpa.core.ai.OpponentAI;
 import mpa.core.logic.building.AbstractPrivateProperty;
@@ -74,6 +76,10 @@ public class GameManager
 
 	public boolean conquer( AbstractPrivateProperty abstractPrivateProperty, Player player )
 	{
+		Vector2f gatheringPlace = abstractPrivateProperty.getGatheringPlace();
+		if( gatheringPlace.x != player.x || gatheringPlace.y != player.y )
+			return false;
+
 		return player.employSubaltern( abstractPrivateProperty ) != null;
 
 	}

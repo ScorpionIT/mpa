@@ -32,12 +32,13 @@ public class OpponentAI extends Thread
 		{
 			try
 			{
-				sleep( 500 );
+				sleep( 1500 );
 			} catch( InterruptedException e )
 			{
 				e.printStackTrace();
 			}
 
+			System.out.println( "sto ciclando " );
 			aiState.action( this );
 			aiState = aiState.changeState( this );
 		}
@@ -86,15 +87,38 @@ public class OpponentAI extends Thread
 
 	boolean areThereConquerableBuildings()
 	{
+		System.out.println( "Ma mi chiami?!?!?!?!??!" );
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
 		for( AbstractObject b : knownBuildings )
 		{
 			if( b instanceof AbstractPrivateProperty
-					&& ( !( ( AbstractPrivateProperty ) b ).isFree()
-							&& isOpponentPlayerWeaker( ( ( AbstractPrivateProperty ) b ).getOwner() ) || ( ( AbstractPrivateProperty ) b )
-								.isFree() ) )
+					&& ( ( !( ( AbstractPrivateProperty ) b ).isFree() && isOpponentPlayerWeaker( ( ( AbstractPrivateProperty ) b )
+							.getOwner() ) ) || ( ( AbstractPrivateProperty ) b ).isFree() ) )
+			{
+				System.out.println( "sto per restituire true" );
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println();
 				return true;
+			}
 		}
 
+		System.out.println( "sto restituendo false" );
+		System.out.println();
+		System.out.println();
+		System.out.println();
 		return false;
 	}
 }

@@ -10,14 +10,19 @@ class WaitingState extends AIState
 	@Override
 	void action( OpponentAI opponentAI )
 	{
-		// TODO Auto-generated method stub
-
+		try
+		{
+			Thread.sleep( 500 );
+		} catch( InterruptedException e )
+		{
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	AIState changeState( OpponentAI opponentAI )
 	{
-		return null;
+		return this;
 	}
 
 }

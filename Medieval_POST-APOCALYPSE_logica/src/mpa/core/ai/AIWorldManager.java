@@ -25,7 +25,7 @@ public class AIWorldManager
 
 				break;
 			case EASY:
-				ray = 10f;
+				ray = 30f;
 				break;
 			case EXTREME:
 				ray = 200f;

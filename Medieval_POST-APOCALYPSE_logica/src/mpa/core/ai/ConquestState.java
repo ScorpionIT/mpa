@@ -29,16 +29,42 @@ public class ConquestState extends AIState
 	{
 		Player player = opponentAI.player;
 
+		System.out.println( "action dell'exploration" );
+		System.out.println();
+		System.out.println();
+
 		if( buildingToOccupy != null && walking )
 		{
+			System.out.println( "sono dentro l'if " );
 			Vector2f gathPlace = buildingToOccupy.getGatheringPlace();
 			if( player.getX() == gathPlace.x && player.getY() == gathPlace.y )
 			{
-				walking = false;
-				buildingToOccupy = null;
-				GameManager.getInstance().occupyProperty( player, buildingToOccupy );
+				if( GameManager.getInstance().occupyProperty( player, buildingToOccupy ) )
+				{
+					System.out.println();
+					System.out.println();
+					System.out.println();
+					System.out.println( "ho occupato " );
+					System.out.println();
+					System.out.println();
+					System.out.println();
+					System.out.println();
+				}
+				else
+				{
+					System.out.println();
+					System.out.println();
+					System.out.println();
+					System.out.println( "ci ho provato ma nulla" );
+					System.out.println();
+					System.out.println();
+					System.out.println();
+					System.out.println();
+				}
 			}
 
+			walking = false;
+			buildingToOccupy = null;
 			return;
 		}
 		int caves = 0;
@@ -119,15 +145,15 @@ public class ConquestState extends AIState
 		AIState nextState = null;
 		if( walking )
 			nextState = this;
-		else if( opponentAI.player.canUpgrade() || opponentAI.player.canBuyPotions() )
-			nextState = new ProductionState();
-
-		else if( opponentAI.areThereWeakerPlayers() )
-			nextState = new CombatState();
-		else if( !opponentAI.knownAllTheWorld )
-			nextState = new ExplorationState();
-		else
-			nextState = new WaitingState();
+		// else if( opponentAI.player.canUpgrade() || opponentAI.player.canBuyPotions() )
+		// nextState = new ProductionState();
+		//
+		// else if( opponentAI.areThereWeakerPlayers() )
+		// nextState = new CombatState();
+		// else if( !opponentAI.knownAllTheWorld )
+		// nextState = new ExplorationState();
+		// else
+		// nextState = new WaitingState();
 
 		return nextState;
 	}

@@ -23,8 +23,8 @@ public abstract class AbstractCharacter extends AbstractObject
 	protected String name;
 	protected int health; // 0 - 100
 	protected Inventory bag;
-	double paceX;
-	double paceY;
+	protected double paceX;
+	protected double paceY;
 
 	protected ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 	protected Lock readLock = lock.readLock();
@@ -131,7 +131,7 @@ public abstract class AbstractCharacter extends AbstractObject
 			// System.out.println( "numero iterazioni " + numberOfIterationsPerVector );
 			// System.out.println( "x=" + x + "| y=" + y );
 
-			if( numberOfIterationsPerVector <= 0 )
+			if( numberOfIterationsPerVector < 0 )
 			{
 				path.remove( 0 );
 				if( path.size() > 1 )
@@ -147,6 +147,15 @@ public abstract class AbstractCharacter extends AbstractObject
 			}
 			setX( ( ( float ) ( x + paceX ) ) );
 			setY( ( float ) ( y + paceY ) );
+
+			if( numberOfIterationsPerVector == 0 && path.size() == 1 )
+			{
+				Pair<Integer, Integer> finalPosition = path.get( 0 );
+				setX( finalPosition.getFirst() );
+				setY( finalPosition.getSecond() );
+				path.remove( 0 );
+
+			}
 
 			return true;
 
@@ -208,6 +217,12 @@ public abstract class AbstractCharacter extends AbstractObject
 	}
 
 	public String getName()
+	{
+		return name;
+	}
+
+	@Override
+	public String toString()
 	{
 		return name;
 	}

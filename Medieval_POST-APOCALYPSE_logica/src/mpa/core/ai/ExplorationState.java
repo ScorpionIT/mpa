@@ -12,53 +12,171 @@ class ExplorationState extends AIState
 {
 	private boolean newBuildingsAdded = false;
 	private boolean isWalking = false;
-	private Vector2f pointToReach;
+	private Vector2f pointToReach = null;
 
 	ExplorationState()
 	{
 		super();
 	}
 
+	private void addFoundBuildings( Vector2f player, float ray, OpponentAI opponentAI )
+	{
+		ArrayList<AbstractObject> objectsInTheRange = GameManager
+				.getInstance()
+				.getWorld()
+				.getObjectsInTheRange( player.x - ray, player.x + ray, player.y - ray,
+						player.y + ray );
+
+		if( !objectsInTheRange.isEmpty() )
+		{
+
+			for( AbstractObject abstractObject : objectsInTheRange )
+			{
+				opponentAI.addBuilding( abstractObject );
+				System.out.println( "ho aggiunto un edificio" );
+				System.out.println();
+				System.out.println();
+				System.out.println();
+			}
+
+		}
+
+	}
+
 	@Override
 	void action( OpponentAI opponentAI )
 	{
 		Player p = opponentAI.player;
-		if( isWalking )
+		float playerX = p.getX();
+		float playerY = p.getY();
+		float ray = opponentAI.worldManager.ray;
+
+		if( pointToReach != null )
 		{
-			if( pointToReach.x == p.getX() && pointToReach.y == p.getY() )
+			System.out.println( "player " + p + " in: " + playerX + ", " + playerY + "; "
+					+ pointToReach.x + ", " + pointToReach.y );
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println();
+
+			if( pointToReach.x == playerX && pointToReach.y == playerY || p.getPath().isEmpty() )
 			{
-				isWalking = false;
+				addFoundBuildings( new Vector2f( playerX, playerY ), ray, opponentAI );
 
-				float playerX = p.getX();
-				float playerY = p.getY();
-				float ray = opponentAI.worldManager.ray;
-				ArrayList<AbstractObject> objectsInTheRange = GameManager
-						.getInstance()
-						.getWorld()
-						.getObjectsInTheRange( playerX - ray, playerX + ray, playerY - ray,
-								playerY + ray );
-
-				if( !objectsInTheRange.isEmpty() )
+				pointToReach = opponentAI.worldManager.getNextLocation( opponentAI.player );
+				if( pointToReach != null )
 				{
+					isWalking = true;
 
-					for( AbstractObject abstractObject : objectsInTheRange )
-						opponentAI.addBuilding( abstractObject );
-
-					newBuildingsAdded = true;
+					while( Math.abs( pointToReach.x - p.getX() ) <= 2
+							&& Math.abs( pointToReach.y - p.getY() ) <= 2 )
+					{
+						addFoundBuildings( new Vector2f( playerX, playerY ), ray, opponentAI );
+						pointToReach = opponentAI.worldManager.getNextLocation( opponentAI.player );
+					}
+					GameManager.getInstance().computePath( opponentAI.player, pointToReach.x,
+							pointToReach.y );
+					System.out.println( "calcolato percorso " );
+					System.out.println();
+					System.out.println();
+					System.out.println();
 				}
+				else
+					opponentAI.knownAllTheWorld = true;
+
 			}
-			else
-				return;
 		}
 		else
 		{
+			pointToReach = opponentAI.worldManager.getNextLocation( opponentAI.player );
+			if( pointToReach != null )
+			{
+				isWalking = true;
 
-			Vector2f goal = opponentAI.worldManager.getNextLocation( opponentAI.player );
-			if( goal != null )
-				GameManager.getInstance().computePath( opponentAI.player, goal.x, goal.y );
+				while( Math.abs( pointToReach.x - p.getX() ) <= 2
+						&& Math.abs( pointToReach.y - p.getY() ) <= 2 )
+				{
+					addFoundBuildings( new Vector2f( playerX, playerY ), ray, opponentAI );
+					pointToReach = opponentAI.worldManager.getNextLocation( opponentAI.player );
+				}
+				GameManager.getInstance().computePath( opponentAI.player, pointToReach.x,
+						pointToReach.y );
+
+				System.out.println( "calcolato percorso " );
+				System.out.println();
+				System.out.println();
+				System.out.println();
+			}
 			else
 				opponentAI.knownAllTheWorld = true;
+
 		}
+
+		// if( isWalking )
+		// {
+		// System.out.println( "sto camminando" );
+		// System.out.println();
+		// System.out.println();
+		// System.out.println();
+		// System.out.println();
+		// if( pointToReach.x == p.getX() && pointToReach.y == p.getY() )
+		// {
+		// System.out.println( "sono nel secondo if??!?!?!" );
+		// System.out.println();
+		// System.out.println();
+		// System.out.println();
+		// System.out.println();
+		// System.out.println();
+		// System.out.println();
+		// isWalking = false;
+		//
+		// float playerX = p.getX();
+		// float playerY = p.getY();
+		// float ray = opponentAI.worldManager.ray;
+		// ArrayList<AbstractObject> objectsInTheRange = GameManager
+		// .getInstance()
+		// .getWorld()
+		// .getObjectsInTheRange( playerX - ray, playerX + ray, playerY - ray,
+		// playerY + ray );
+		//
+		// System.out.println( "size di obj in the range " + objectsInTheRange.size() );
+		// System.out.println();
+		// System.out.println();
+		// System.out.println();
+		// System.out.println();
+		// System.out.println();
+		// System.out.println();
+		//
+		// if( !objectsInTheRange.isEmpty() )
+		// {
+		//
+		// for( AbstractObject abstractObject : objectsInTheRange )
+		// {
+		// opponentAI.addBuilding( abstractObject );
+		// System.out.println( "ho aggiunto un edificio" );
+		// System.out.println();
+		// System.out.println();
+		// System.out.println();
+		// }
+		//
+		// newBuildingsAdded = true;
+		// }
+		// }
+		// }
+		// else
+		// {
+		//
+		// Vector2f goal = opponentAI.worldManager.getNextLocation( opponentAI.player );
+		// if( goal != null )
+		// {
+		// GameManager.getInstance().computePath( opponentAI.player, goal.x, goal.y );
+		// isWalking = true;
+		// pointToReach = goal;
+		// }
+		// else
+		// opponentAI.knownAllTheWorld = true;
+		// }
 	}
 
 	@Override
@@ -66,11 +184,9 @@ class ExplorationState extends AIState
 	{
 		AIState nextState = null;
 
-		if( isWalking || !opponentAI.knownAllTheWorld )
-			nextState = this;
-		// else if( !opponentAI.knownBuildings.isEmpty() &&
-		// opponentAI.areThereConquerableBuildings() )
-		// nextState = new ConquestState();
+		if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings() )
+			nextState = new ConquestState();
+
 		// else if( opponentAI.player.canUpgrade() )
 		// nextState = new StrengtheningState();
 		// else if( opponentAI.player.canBuyPotions() )
@@ -80,6 +196,26 @@ class ExplorationState extends AIState
 		// else
 		// nextState = new WaitingState();
 
-		return nextState;
+		else if( !opponentAI.knownAllTheWorld )
+			nextState = this;
+		else
+			nextState = new WaitingState();
+
+		// if( nextState instanceof ExplorationState )
+		// System.out.println( "ho scelto esplorazione " );
+		// else
+		// System.out.println( "ho scelto conquista" );
+		// if( nextState instanceof ExplorationState )
+		// System.out.println( "prox stato è Exp" );
+		// else if( nextState instanceof ConquestState )
+		// System.out.println( "prox stato è conq" );
+		// else if( nextState instanceof WaitingState )
+		// System.out.println( "prox stato è wait" );
+		// System.out.println();
+		// System.out.println();
+		// System.out.println();
+		// System.out.println();
+		return this;
+		// return nextState;
 	}
 }
