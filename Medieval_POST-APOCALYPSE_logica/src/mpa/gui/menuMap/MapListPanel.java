@@ -56,10 +56,12 @@ public class MapListPanel extends JPanel
 			if (listOfFilesCustomFolder[i].isFile())
 			{
 				data[dataIndex] = listOfFilesCustomFolder[i].getName().substring(0, listOfFilesCustomFolder[i].getName().length() - 4);
+				dataIndex++;
 			}
 		}
 
 		mapList = new JList<>(data);
+
 		mapList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		mapList.setBackground(new Color(255, 255, 204));
 		mapList.addListSelectionListener(new ListSelectionListener()
@@ -71,8 +73,7 @@ public class MapListPanel extends JPanel
 				if (!e.getValueIsAdjusting())
 				{
 					int selectedIndex = mapList.getSelectedIndex();
-					System.out.println(selectedIndex);
-					System.out.println(listOfFilesDefaultFolder.length);
+
 					if (selectedIndex < listOfFilesDefaultFolder.length)
 						((MainMenuGamePanel) MapListPanel.this.mainPanel).setMap(MapListPanel.this.defaultMaps + "/" + mapList.getSelectedValue()
 								+ ".xml");

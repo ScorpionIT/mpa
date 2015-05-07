@@ -122,7 +122,7 @@ public class MapPreview extends MpaPanel
 		for (Pair<Float, Float> woodPosition : mapInfo.getWoods())
 		{
 
-			System.out.println(woodPosition.getFirst() + " " + woodPosition.getSecond());
+			// System.out.println(woodPosition.getFirst() + " " + woodPosition.getSecond());
 			g.drawImage(images.get("wood"), graphicX(woodPosition.getFirst()), graphicY(woodPosition.getSecond()), W(GameProperties.getInstance()
 					.getObjectWidth("wood")), H(GameProperties.getInstance().getObjectHeight("wood")), this);
 			// g.drawImage(images.get("wood"), graphicX(woodPosition.getFirst()),
