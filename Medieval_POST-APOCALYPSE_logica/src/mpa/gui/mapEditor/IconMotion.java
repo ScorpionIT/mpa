@@ -29,7 +29,7 @@ class IconMotion extends MouseInputAdapter
 	public void mousePressed(MouseEvent e)
 	{
 
-		if (!mainMapEditorPanel.isMapDimensionValid())
+		if (mainMapEditorPanel.getDeleteMode())
 			return;
 		for (int i = 0; i < components.size(); i++)
 		{
@@ -41,6 +41,7 @@ class IconMotion extends MouseInputAdapter
 					break;
 
 				Rectangle rect = components.get(i).getSecond();
+
 				selectedObjectPosition = new Point(rect.x, rect.y);
 				selectedObjectName = components.get(i).getFirst();
 				mainMapEditorPanel.setSelectedObject(selectedObjectName, selectedObjectPosition);
@@ -55,7 +56,14 @@ class IconMotion extends MouseInputAdapter
 	{
 
 		if (dragging && !mainMapEditorPanel.thereIsIntersection(selectedObjectPosition, selectedObjectName))
-			mainMapEditorPanel.addSelectedIcon();
+		{
+			selectedObjectPosition.x = e.getX() - mainMapEditorPanel.getIconMapEditorWidth();
+			selectedObjectPosition.y = e.getY() + mainMapEditorPanel.getSettingsMapEditorHeight();
+			if (selectedObjectPosition.x > 0 && selectedObjectPosition.y > 0)
+			{
+				mainMapEditorPanel.addSelectedIcon();
+			}
+		}
 		else
 			mainMapEditorPanel.setSelectedObject(null, null);
 
@@ -65,7 +73,6 @@ class IconMotion extends MouseInputAdapter
 
 	public void mouseDragged(MouseEvent e)
 	{
-
 		if (dragging)
 		{
 			selectedObjectPosition.x = e.getX() - mainMapEditorPanel.getIconMapEditorWidth();

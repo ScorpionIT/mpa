@@ -26,8 +26,12 @@ class MapPreviewListener extends MouseInputAdapter
 
 	public void mousePressed(MouseEvent e)
 	{
-
 		Pair<String, Point> movingObject = mapPreviewEditorPanel.thereIsAnObject(e.getPoint());
+		if (mapPreviewEditorPanel.getDeleteMode())
+		{
+			mapPreviewEditorPanel.repaint();
+			return;
+		}
 		if (movingObject != null)
 		{
 			movingObjectPosition = new Point((int) movingObject.getSecond().getX(), (int) movingObject.getSecond().getY());
@@ -45,7 +49,7 @@ class MapPreviewListener extends MouseInputAdapter
 
 		if (dragging && !mapPreviewEditorPanel.thereIsIntersection(movingObjectPosition, movingObjectName))
 			mapPreviewEditorPanel.addLabel(true);
-		else
+		else if (dragging)
 			mapPreviewEditorPanel.resetMovingObject();
 
 		dragging = false;

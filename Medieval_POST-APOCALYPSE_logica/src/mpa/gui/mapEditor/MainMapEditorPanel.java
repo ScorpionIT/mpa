@@ -2,10 +2,12 @@ package mpa.gui.mapEditor;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Frame;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,6 +37,9 @@ public class MainMapEditorPanel extends JPanel
 	private HashMap<String, Image> imageLabels = new HashMap<String, Image>();
 	private final String imageFolder = GameProperties.getInstance().getPath("ImagesPreviewPath");
 	private final String mapFolder = GameProperties.getInstance().getPath("CustomMapsPath");
+	Image deleteCursor;
+
+	private boolean deleteMode = false;
 
 	// TODO creare un file proporties per le cartelle
 	private SubmitButtonEditorPanel submitButtonEditorPanel;
@@ -49,13 +54,45 @@ public class MainMapEditorPanel extends JPanel
 		submitButtonEditorPanel = new SubmitButtonEditorPanel(this);
 
 		loadImages();
-		iconMapEditorPanel = new IconMapEditorPanel(this, imageLabels);
+
+		iconMapEditorPanel = new IconMapEditorPanel(/* this, */imageLabels);
 
 		this.add(iconMapEditorPanel);
 		this.add(mapPreviewEditorPanel);
 		this.add(settingsMapEditorPanel);
 		this.add(buttonsEditorPanel);
 		this.add(submitButtonEditorPanel);
+
+	}
+
+	public void setDeleteMode(boolean deleteMode)
+	{
+		this.deleteMode = deleteMode;
+		if (this.deleteMode)
+		{
+			Toolkit kit;
+			try
+			{
+				kit = Toolkit.getDefaultToolkit();
+
+				Cursor cursor = Toolkit.getDefaultToolkit().createCustomCursor(deleteCursor, new Point(0, 0), "DeleteCursor");
+
+				this.setCursor(cursor);
+
+			} catch (Exception exp)
+			{
+				exp.printStackTrace();
+			}
+		}
+		else
+		{
+			this.setCursor(Cursor.getDefaultCursor());
+		}
+	}
+
+	public boolean getDeleteMode()
+	{
+		return deleteMode;
 
 	}
 
@@ -73,8 +110,6 @@ public class MainMapEditorPanel extends JPanel
 	{
 		mapPreviewEditorPanel.addLabel(false);
 	}
-
-	// TODO mettere immagini ai bottoni
 
 	public void repaintMapPreviewEditorPanel()
 	{
@@ -113,6 +148,15 @@ public class MainMapEditorPanel extends JPanel
 		super.setBounds(x, y, width, height);
 
 		buttonsEditorPanel.setBounds(0, 0, this.getWidth() * 15 / 100, this.getHeight() * 5 / 100);
+		try
+		{
+			deleteCursor = ImageIO.read(new File("./Assets/iconPanel/deleteIcon.png")).getScaledInstance(this.getWidth() * 2 / 100,
+					this.getWidth() * 2 / 100, 0);
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+
 		settingsMapEditorPanel.setBounds(0, this.getHeight() * 5 / 100, this.getWidth() * 15 / 100, this.getHeight() * 25 / 100);
 		mapPreviewEditorPanel.setBounds(this.getWidth() * 15 / 100, 0, this.getWidth() - settingsMapEditorPanel.getWidth(), this.getHeight());
 		if (!inizialized)
@@ -151,11 +195,6 @@ public class MainMapEditorPanel extends JPanel
 	public void paintImageInMapPreviewEditorPanel(Color color)
 	{
 		mapPreviewEditorPanel.paintSelectedObject(color);
-	}
-
-	public boolean isMapDimensionValid()
-	{
-		return this.mapWidth != 0 && this.mapHeight != 0;
 	}
 
 	public void undo()
@@ -207,7 +246,7 @@ public class MainMapEditorPanel extends JPanel
 	{
 		mapName = settingsMapEditorPanel.getMapName();
 		boolean isNameValid = true;
-		if (!isMapDimensionValid())
+		if (numberOfPlayers <= 0)
 			JOptionPane.showMessageDialog(new Frame(), "Inserire oggetti nella mappa", "", JOptionPane.PLAIN_MESSAGE);
 		else if (mapName == null || mapName.equals(""))
 			JOptionPane.showMessageDialog(new Frame(), "Inserire un nome valido per la mappa", "", JOptionPane.PLAIN_MESSAGE);
@@ -231,7 +270,6 @@ public class MainMapEditorPanel extends JPanel
 			if (isNameValid)
 			{
 				MapToXmlCreator.createXmlMap(mapPreviewEditorPanel.getAddedObjects(), mapName, mapWidth, mapHeight, numberOfPlayers);
-				// TODO converti in xml
 			}
 		}
 
@@ -240,6 +278,8 @@ public class MainMapEditorPanel extends JPanel
 	public void setSelectedObject(String selectedObjectName, Point selectedObjectPosition)
 	{
 		mapPreviewEditorPanel.setSelectedObject(selectedObjectPosition, selectedObjectName);
+		if (selectedObjectName == null)
+			mapPreviewEditorPanel.repaint();
 	}
 
 	public static void main(String[] args)

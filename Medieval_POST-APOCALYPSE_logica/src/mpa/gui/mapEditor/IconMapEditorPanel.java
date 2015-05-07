@@ -17,14 +17,14 @@ public class IconMapEditorPanel extends JScrollPane
 {
 
 	private JPanel iconPanel = new JPanel();
-	private MainMapEditorPanel mainMapEditorPanel;
+	// private MainMapEditorPanel mainMapEditorPanel;
 	private HashMap<String, Image> images;
 	private ArrayList<Pair<String, Rectangle>> imageLabelsPosition = new ArrayList<>();
 
-	public IconMapEditorPanel(MainMapEditorPanel mainMapEditorPanel, HashMap<String, Image> imageLabels)
+	public IconMapEditorPanel(/* MainMapEditorPanel mainMapEditorPanel, */HashMap<String, Image> imageLabels)
 	{
 
-		this.mainMapEditorPanel = mainMapEditorPanel;
+		// this.mainMapEditorPanel = mainMapEditorPanel;
 		this.images = imageLabels;
 
 		iconPanel.setLayout(null);
@@ -48,27 +48,27 @@ public class IconMapEditorPanel extends JScrollPane
 		return imageLabelsPosition;
 	}
 
-	private void addImageIcon()
-	{
-
-		int yComponent = 40;
-		Set<String> keySet = images.keySet();
-		for (String key : keySet)
-		{
-			ImageIcon imageIcon = new ImageIcon(images.get(key));
-			JLabel jLabel = new JLabel(imageIcon);
-			Rectangle rect = new Rectangle(iconPanel.getWidth() * 50 / 100 - (imageIcon.getIconWidth() / 2), yComponent, imageIcon.getIconWidth(),
-					imageIcon.getIconHeight());
-			// jLabel.addMouseListener(listener);
-			// jLabel.setTransferHandler(new TransferHandler("icon"));
-			imageLabelsPosition.add(new Pair<String, Rectangle>(key, rect));
-			jLabel.setBounds(rect);
-			yComponent += imageIcon.getIconHeight() + 40;
-
-			iconPanel.add(jLabel);
-		}
-
-	}
+	// private void addImageIcon()
+	// {
+	//
+	// int yComponent = 40;
+	// Set<String> keySet = images.keySet();
+	// for (String key : keySet)
+	// {
+	// ImageIcon imageIcon = new ImageIcon(images.get(key));
+	// JLabel jLabel = new JLabel(imageIcon);
+	// Rectangle rect = new Rectangle(iconPanel.getWidth() * 50 / 100 - (imageIcon.getIconWidth() /
+	// 2), yComponent, imageIcon.getIconWidth(),
+	// imageIcon.getIconHeight());
+	//
+	// imageLabelsPosition.add(new Pair<String, Rectangle>(key, rect));
+	// jLabel.setBounds(rect);
+	// yComponent += imageIcon.getIconHeight() + 100;
+	//
+	// iconPanel.add(jLabel);
+	// }
+	//
+	// }
 
 	@Override
 	public void setBounds(int x, int y, int width, int height)
@@ -76,6 +76,28 @@ public class IconMapEditorPanel extends JScrollPane
 		super.setBounds(x, y, width, height);
 		this.iconPanel.setBounds(0, 0, width, height);
 		addImageIcon();
+	}
+
+	private void addImageIcon()
+	{
+
+		Set<String> keySet = images.keySet();
+		int yComponent = 0;
+		int yIncrement = this.getHeight() / keySet.size();
+		for (String key : keySet)
+		{
+			ImageIcon imageIcon = new ImageIcon(images.get(key));
+			JLabel jLabel = new JLabel(imageIcon);
+			Rectangle rect = new Rectangle(iconPanel.getWidth() * 50 / 100 - (imageIcon.getIconWidth() / 2), yComponent, imageIcon.getIconWidth(),
+					imageIcon.getIconHeight());
+
+			imageLabelsPosition.add(new Pair<String, Rectangle>(key, rect));
+			jLabel.setBounds(rect);
+			yComponent += yIncrement;
+
+			iconPanel.add(jLabel);
+		}
+
 	}
 
 }

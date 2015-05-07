@@ -49,7 +49,6 @@ public class MapToXmlCreator
 
 		for (Pair<String, Point> object : objectsPosition)
 		{
-			System.out.println();
 			if (object.getFirst().toLowerCase().equals("headquarter"))
 			{
 				Element element = new Element("Headquarter");
@@ -118,6 +117,7 @@ public class MapToXmlCreator
 		printOnFile(map, mapName);
 
 	}
+
 	// public static void print(Element element)
 	// {
 	// XMLOutputter output = new XMLOutputter();

@@ -21,6 +21,7 @@ public class ButtonsEditorPanel extends JPanel
 	private MainMapEditorPanel mainMapEditorPanel;
 	private HashMap<String, Image> images = new HashMap<String, Image>();
 	private boolean setBounds = false;
+	private JButton delete;
 
 	public ButtonsEditorPanel(MainMapEditorPanel mainMapEditorPanel)
 	{
@@ -33,6 +34,7 @@ public class ButtonsEditorPanel extends JPanel
 			images.put("Undo", ImageIO.read(new File(GameProperties.getInstance().getPath("PannelIconPath") + "/undoIcon1.png")));
 			images.put("Redo", ImageIO.read(new File(GameProperties.getInstance().getPath("PannelIconPath") + "/redoIcon.png")));
 			images.put("Back", ImageIO.read(new File(GameProperties.getInstance().getPath("PannelIconPath") + "/backIcon.png")));
+			images.put("Delete", ImageIO.read(new File(GameProperties.getInstance().getPath("PannelIconPath") + "/deleteIcon.png")));
 
 		} catch (IOException e)
 		{
@@ -55,14 +57,14 @@ public class ButtonsEditorPanel extends JPanel
 	private void setComponentsBounds()
 	{
 		setBounds = true;
-		int xIncrement = this.getWidth() / 4;
-		int xComponent = xIncrement / 2;
+		// int xIncrement = this.getWidth() / 5;
 		int buttonDimension = this.getHeight() - this.getHeight() * 10 / 100;
+		int xIncrement = buttonDimension;
+		int xComponent = xIncrement / 2;
 		images.put("Undo", images.get("Undo").getScaledInstance(buttonDimension, buttonDimension, 0));
-		// images.put("Undo", images.get("Undo").getScaledInstance(xIncrement, this.getHeight() -
-		// this.getHeight() * 40 / 100, 0));
 		images.put("Redo", images.get("Redo").getScaledInstance(buttonDimension, buttonDimension, 0));
 		images.put("Back", images.get("Back").getScaledInstance(buttonDimension, buttonDimension, 0));
+		images.put("Delete", images.get("Delete").getScaledInstance(buttonDimension, buttonDimension, 0));
 
 		undo = new JButton(new ImageIcon(images.get("Undo")));
 		undo.setOpaque(false);
@@ -92,16 +94,33 @@ public class ButtonsEditorPanel extends JPanel
 		back.setOpaque(false);
 		back.setContentAreaFilled(false);
 
+		delete = new JButton(new ImageIcon(images.get("Delete")));
+		delete.setOpaque(false);
+		delete.setContentAreaFilled(false);
+		delete.addMouseListener(new java.awt.event.MouseAdapter()
+		{
+			@Override
+			public void mouseReleased(MouseEvent e)
+			{
+				super.mouseReleased(e);
+				if (ButtonsEditorPanel.this.mainMapEditorPanel.getDeleteMode())
+					ButtonsEditorPanel.this.mainMapEditorPanel.setDeleteMode(false);
+				else
+					ButtonsEditorPanel.this.mainMapEditorPanel.setDeleteMode(true);
+			}
+		});
+
 		this.add(undo);
 		this.add(redo);
 		this.add(back);
+		this.add(delete);
 
 		back.setBounds(xComponent, this.getHeight() * 5 / 100, buttonDimension, buttonDimension);
+		xComponent += xIncrement;
+		delete.setBounds(xComponent, this.getHeight() * 5 / 100, buttonDimension, buttonDimension);
 		xComponent += xIncrement * 2;
 		undo.setBounds(xComponent, this.getHeight() * 5 / 100, buttonDimension, buttonDimension);
-		// undo.setBounds(xComponent, this.getHeight() * 20 / 100, xIncrement, this.getHeight() -
-		// this.getHeight() * 40 / 100);
-		// xComponent += xIncrement;
+
 		redo.setBounds(undo.getX() + undo.getWidth(), this.getHeight() * 5 / 100, buttonDimension, buttonDimension);
 
 	}
