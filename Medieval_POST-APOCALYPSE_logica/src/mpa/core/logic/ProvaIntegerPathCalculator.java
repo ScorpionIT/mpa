@@ -2,6 +2,8 @@ package mpa.core.logic;
 
 import java.util.ArrayList;
 
+import javax.vecmath.Vector2f;
+
 import mpa.core.maths.MyMath;
 
 public class ProvaIntegerPathCalculator
@@ -9,13 +11,13 @@ public class ProvaIntegerPathCalculator
 
 	private static float increment = 30;
 
-	public ArrayList<Pair<Integer, Integer>> computePath( World world, float xGoal, float yGoal,
-			float xPlayer, float yPlayer )
+	public ArrayList<Vector2f> computePath( World world, float xGoal, float yGoal, float xPlayer,
+			float yPlayer )
 	{
 
 		ArrayList<PathNode> openList = new ArrayList<>();
-
 		ArrayList<PathNode> closedList = new ArrayList<>();
+
 		PathNode currentPosition = new PathNode( null, new Pair<Integer, Integer>( ( int ) xPlayer,
 				( int ) yPlayer ), 0 );
 		Pair<Float, Float> currentVector = new Pair<Float, Float>( ( xGoal - xPlayer ) / 300,
@@ -24,6 +26,7 @@ public class ProvaIntegerPathCalculator
 				currentVector.getFirst() );
 
 		openList.add( currentPosition );
+
 		while( openList.size() != 0 )
 		{
 			currentPosition = pointWithLowestCost( openList, xGoal, yGoal, world );
@@ -77,18 +80,11 @@ public class ProvaIntegerPathCalculator
 
 			for( Pair<Float, Float> pair : points )
 			{
-				if( pair.getFirst() > world.getWidth() || pair.getFirst() < 0
-						|| pair.getSecond() < 0 || pair.getSecond() > world.getHeight() )
-				{
-					// System.out.println();
-					// System.out.println();
-					// System.out.println();
-					// System.out.println( "conitnue lalalalalalalalal" );
-					// System.out.println();
-					// System.out.println();
-					// System.out.println();
-					continue;
-				}
+				// if( pair.getFirst() > world.getWidth() || pair.getFirst() < 0
+				// || pair.getSecond() < 0 || pair.getSecond() > world.getHeight() )
+				// {
+				// continue;
+				// }
 				Pair<Integer, Integer> point = new Pair<Integer, Integer>( new Integer( pair
 						.getFirst().intValue() ), new Integer( pair.getSecond().intValue() ) );
 				double computeCost = computeCost( currentPosition, point );
@@ -104,6 +100,21 @@ public class ProvaIntegerPathCalculator
 						{
 							openList.add( new PathNode( currentPosition.getCurrentNode(), point,
 									computeCost ) );
+
+							if( point.getFirst() < 0 || point.getFirst() > world.getWidth()
+									|| point.getSecond() < 0
+									|| point.getSecond() > world.getHeight() )
+							{
+								System.out.println();
+								System.out.println();
+								System.out.println();
+								System.out
+										.println( "sto aggiungendo qualcosa che non dovrei DDDDDDDDDDDDDDDDDD:" );
+								System.out.println();
+								System.out.println();
+								System.out.println();
+							}
+
 						}
 					}
 
@@ -112,7 +123,47 @@ public class ProvaIntegerPathCalculator
 
 		}
 
-		return getSmartestPath( getPath( closedList ) );
+		ArrayList<Pair<Integer, Integer>> smartestPath = getSmartestPath( getPath( closedList ) );
+
+		ArrayList<Vector2f> pathToReturn = new ArrayList<>();
+
+		for( Pair<Integer, Integer> p : smartestPath )
+		{
+			Vector2f v2f = new Vector2f( p.getFirst().floatValue(), p.getSecond().floatValue() );
+			pathToReturn.add( v2f );
+			if( v2f.x > world.getWidth() || v2f.x < 0 || v2f.y < 0 || v2f.y > world.getHeight() )
+			{
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println( "sto aggiungendo qualcosa che non dovrei :/" );
+				System.out.println();
+				System.out.println();
+				System.out.println();
+			}
+		}
+
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println( "closedList:" );
+		for( PathNode p : closedList )
+		{
+			System.out.println( p.getCurrentNode().getFirst() + " "
+					+ p.getCurrentNode().getSecond() );
+		}
+
+		System.out.println( "path to return" );
+		for( Vector2f v : pathToReturn )
+		{
+			System.out.println( v.x + " " + v.y );
+		}
+		pathToReturn.remove( pathToReturn.size() - 1 );
+		pathToReturn.add( new Vector2f( xGoal, yGoal ) );
+
+		System.out.println();
+
+		return pathToReturn;
 
 	}
 

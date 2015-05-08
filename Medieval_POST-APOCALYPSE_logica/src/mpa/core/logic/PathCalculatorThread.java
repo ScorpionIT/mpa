@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.vecmath.Vector2f;
+
 import mpa.core.logic.character.Player;
 
 public class PathCalculatorThread extends Thread
@@ -11,7 +13,7 @@ public class PathCalculatorThread extends Thread
 	private Player player;
 	private float xGoal;
 	private float yGoal;
-	ArrayList<Pair<Integer, Integer>> path;
+	ArrayList<Vector2f> path;
 	ReentrantLock lock = new ReentrantLock();
 	Condition cond = lock.newCondition();
 
@@ -35,7 +37,7 @@ public class PathCalculatorThread extends Thread
 		lock.unlock();
 	}
 
-	public ArrayList<Pair<Integer, Integer>> getPath()
+	public ArrayList<Vector2f> getPath()
 	{
 		try
 		{

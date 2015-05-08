@@ -8,16 +8,14 @@ import javax.vecmath.Vector2f;
 
 import mpa.core.logic.AbstractObject;
 import mpa.core.logic.Inventory;
-import mpa.core.logic.Pair;
 import mpa.core.maths.MyMath;
 
 public abstract class AbstractCharacter extends AbstractObject
 {
 	private static final float PACE = 5;
 
-	private ArrayList<Pair<Integer, Integer>> path = new ArrayList<>();
-	private Pair<Float, Float> currentVector = new Pair<Float, Float>( new Float( 0.0 ), new Float(
-			0.0 ) );
+	private ArrayList<Vector2f> path = new ArrayList<>();
+	private Vector2f currentVector = new Vector2f( 0.0f, 0.0f );
 	private int numberOfIterationsPerVector;
 
 	protected String name;
@@ -60,64 +58,41 @@ public abstract class AbstractCharacter extends AbstractObject
 
 	private void computeCurrentVector()
 	{
-		currentVector = new Pair<Float, Float>( ( float ) ( -path.get( 0 ).getFirst() + path
-				.get( 1 ).getFirst() ), ( float ) ( -path.get( 0 ).getSecond() + path.get( 1 )
-				.getSecond() ) );
+		currentVector = new Vector2f( ( float ) ( -path.get( 0 ).x + path.get( 1 ).x ),
+				( float ) ( -path.get( 0 ).y + path.get( 1 ).y ) );
 
-		numberOfIterationsPerVector = ( int ) ( MyMath.distanceInteger( path.get( 0 ).getFirst(),
-				path.get( 0 ).getSecond(), path.get( 1 ).getFirst(), path.get( 1 ).getSecond() ) / PACE );
-		paceX = currentVector.getFirst() / numberOfIterationsPerVector;
-		paceY = currentVector.getSecond() / numberOfIterationsPerVector;
+		numberOfIterationsPerVector = ( int ) ( MyMath.distanceFloat( path.get( 0 ).x,
+				path.get( 0 ).y, path.get( 1 ).x, path.get( 1 ).y ) / PACE );
+		paceX = currentVector.x / numberOfIterationsPerVector;
+		paceY = currentVector.y / numberOfIterationsPerVector;
 
 		int greatestCommonDivisor = MyMath.greatestCommonDivisor(
-				new Float( currentVector.getFirst() ).intValue(),
-				new Float( currentVector.getSecond() ).intValue() );
+				new Float( currentVector.x ).intValue(), new Float( currentVector.y ).intValue() );
 
-		currentVector.setFirst( currentVector.getFirst() / greatestCommonDivisor );
-		currentVector.setSecond( currentVector.getSecond() / greatestCommonDivisor );
-
-		// System.out.println( numberOfIterationsPerVector );
-		// System.out.println( "paceX = " + paceX );
-		// System.out.println( "paceY = " + paceY );
-
+		currentVector.set( currentVector.x / greatestCommonDivisor, currentVector.y
+				/ greatestCommonDivisor );
 	}
 
-	public void setPath( ArrayList<Pair<Integer, Integer>> path )
+	public void setPath( ArrayList<Vector2f> path )
 	{
 		writeLock.lock();
 
-		// System.out.println( "path assegnato per la " + counter++ + " volta" );
-		// System.out.println( "size del path " + path.size() );
 		this.path = path;
-
-		// System.out.println();
-		// System.out.println();
-		// System.out.println( "Path : " );
-		for( Pair<Integer, Integer> pair : path )
-		{
-			// System.out.println( pair );
-
-		}
-		// System.out.println();
-		// System.out.println();
 		if( path.size() > 1 )
 		{
 			computeCurrentVector();
 		}
 		else
 		{
-			Pair<Integer, Integer> point = new Pair<Integer, Integer>( path.get( 0 ).getFirst(),
-					path.get( 0 ).getSecond() );
-			currentVector = new Pair<Float, Float>( new Float( point.getFirst() - x ), new Float(
-					point.getSecond() - y ) );
+			Vector2f point = new Vector2f( path.get( 0 ).x, path.get( 0 ).y );
+			currentVector = new Vector2f( point.x - x, point.y - y );
 
-			numberOfIterationsPerVector = ( int ) ( MyMath.distanceInteger( ( int ) x,
-					point.getFirst(), ( int ) y, point.getSecond() ) / PACE );
+			numberOfIterationsPerVector = ( int ) ( MyMath.distanceFloat( x, point.x, y, point.y ) / PACE );
 		}
 		writeLock.unlock();
 	}
 
-	static int counter = 1;
+	int counter = 1;
 
 	public boolean movePlayer()
 	{
@@ -128,8 +103,6 @@ public abstract class AbstractCharacter extends AbstractObject
 				return false;
 
 			numberOfIterationsPerVector--;
-			// System.out.println( "numero iterazioni " + numberOfIterationsPerVector );
-			// System.out.println( "x=" + x + "| y=" + y );
 
 			if( numberOfIterationsPerVector < 0 )
 			{
@@ -148,13 +121,12 @@ public abstract class AbstractCharacter extends AbstractObject
 			setX( ( ( float ) ( x + paceX ) ) );
 			setY( ( float ) ( y + paceY ) );
 
-			if( numberOfIterationsPerVector == 0 && path.size() == 1 )
+			if( numberOfIterationsPerVector == 0 && path.size() == 2 )
 			{
-				Pair<Integer, Integer> finalPosition = path.get( 0 );
-				setX( finalPosition.getFirst() );
-				setY( finalPosition.getSecond() );
+				Vector2f finalPosition = path.get( 1 );
+				setX( finalPosition.x );
+				setY( finalPosition.y );
 				path.remove( 0 );
-
 			}
 
 			return true;
@@ -192,7 +164,7 @@ public abstract class AbstractCharacter extends AbstractObject
 		}
 	}
 
-	public ArrayList<Pair<Integer, Integer>> getPath()
+	public ArrayList<Vector2f> getPath()
 	{
 		try
 		{
@@ -209,7 +181,7 @@ public abstract class AbstractCharacter extends AbstractObject
 		try
 		{
 			readLock.lock();
-			return new Vector2f( currentVector.getFirst(), currentVector.getSecond() );
+			return new Vector2f( currentVector.x, currentVector.y );
 		} finally
 		{
 			readLock.unlock();

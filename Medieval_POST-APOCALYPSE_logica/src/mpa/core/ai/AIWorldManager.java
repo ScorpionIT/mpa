@@ -44,14 +44,24 @@ public class AIWorldManager
 		fragmentsY = ( int ) ( GameManager.getInstance().getWorld().getHeight() / ray );
 		computeOpenList();
 
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println( "ci sono " + openList.size() + " da visitare" );
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+
 	}
 
 	private void computeOpenList()
 	{
-		for( int i = 1; i <= fragmentsX; i++ )
-			for( int j = 1; j <= fragmentsY; j++ )
+		for( int i = 1; i < fragmentsX; i++ )
+			for( int j = 1; j < fragmentsY; j++ )
+			{
 				openList.add( new Vector2f( ray * i, ray * j ) );
-
+			}
 	}
 
 	Vector2f getNextLocation( Player player )

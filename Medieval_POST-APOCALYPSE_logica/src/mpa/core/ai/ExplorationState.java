@@ -33,10 +33,10 @@ class ExplorationState extends AIState
 			for( AbstractObject abstractObject : objectsInTheRange )
 			{
 				opponentAI.addBuilding( abstractObject );
-				System.out.println( "ho aggiunto un edificio" );
-				System.out.println();
-				System.out.println();
-				System.out.println();
+				// System.out.println( "ho aggiunto un edificio" );
+				// System.out.println();
+				// System.out.println();
+				// System.out.println();
 			}
 
 		}
@@ -63,6 +63,7 @@ class ExplorationState extends AIState
 			if( pointToReach.x == playerX && pointToReach.y == playerY || p.getPath().isEmpty() )
 			{
 				addFoundBuildings( new Vector2f( playerX, playerY ), ray, opponentAI );
+				// opponentAI.worldManager.pointReached();
 
 				pointToReach = opponentAI.worldManager.getNextLocation( opponentAI.player );
 				if( pointToReach != null )
@@ -77,18 +78,18 @@ class ExplorationState extends AIState
 					}
 					GameManager.getInstance().computePath( opponentAI.player, pointToReach.x,
 							pointToReach.y );
-					System.out.println( "calcolato percorso " );
-					System.out.println();
-					System.out.println();
-					System.out.println();
 				}
 				else
+				{
+					// opponentAI.worldManager.pointReached();
 					opponentAI.knownAllTheWorld = true;
+				}
 
 			}
 		}
 		else
 		{
+			// opponentAI.worldManager.pointReached();
 			pointToReach = opponentAI.worldManager.getNextLocation( opponentAI.player );
 			if( pointToReach != null )
 			{
@@ -103,80 +104,14 @@ class ExplorationState extends AIState
 				GameManager.getInstance().computePath( opponentAI.player, pointToReach.x,
 						pointToReach.y );
 
-				System.out.println( "calcolato percorso " );
-				System.out.println();
-				System.out.println();
-				System.out.println();
 			}
 			else
+			{
+				// opponentAI.worldManager.pointReached();
 				opponentAI.knownAllTheWorld = true;
+			}
 
 		}
-
-		// if( isWalking )
-		// {
-		// System.out.println( "sto camminando" );
-		// System.out.println();
-		// System.out.println();
-		// System.out.println();
-		// System.out.println();
-		// if( pointToReach.x == p.getX() && pointToReach.y == p.getY() )
-		// {
-		// System.out.println( "sono nel secondo if??!?!?!" );
-		// System.out.println();
-		// System.out.println();
-		// System.out.println();
-		// System.out.println();
-		// System.out.println();
-		// System.out.println();
-		// isWalking = false;
-		//
-		// float playerX = p.getX();
-		// float playerY = p.getY();
-		// float ray = opponentAI.worldManager.ray;
-		// ArrayList<AbstractObject> objectsInTheRange = GameManager
-		// .getInstance()
-		// .getWorld()
-		// .getObjectsInTheRange( playerX - ray, playerX + ray, playerY - ray,
-		// playerY + ray );
-		//
-		// System.out.println( "size di obj in the range " + objectsInTheRange.size() );
-		// System.out.println();
-		// System.out.println();
-		// System.out.println();
-		// System.out.println();
-		// System.out.println();
-		// System.out.println();
-		//
-		// if( !objectsInTheRange.isEmpty() )
-		// {
-		//
-		// for( AbstractObject abstractObject : objectsInTheRange )
-		// {
-		// opponentAI.addBuilding( abstractObject );
-		// System.out.println( "ho aggiunto un edificio" );
-		// System.out.println();
-		// System.out.println();
-		// System.out.println();
-		// }
-		//
-		// newBuildingsAdded = true;
-		// }
-		// }
-		// }
-		// else
-		// {
-		//
-		// Vector2f goal = opponentAI.worldManager.getNextLocation( opponentAI.player );
-		// if( goal != null )
-		// {
-		// GameManager.getInstance().computePath( opponentAI.player, goal.x, goal.y );
-		// isWalking = true;
-		// pointToReach = goal;
-		// }
-		// else
-		// opponentAI.knownAllTheWorld = true;
-		// }
 	}
 
 	@Override

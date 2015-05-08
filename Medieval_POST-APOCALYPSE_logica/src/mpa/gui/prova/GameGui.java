@@ -56,10 +56,10 @@ public class GameGui extends MpaPanel
 				// System.out.println("Ho calcolato il path");
 				// GameGui.this.repaint();
 
-				path = GameManager.getInstance().computePath(
-						GameManager.getInstance().getPlayers().get( 0 ),
-						new Float( worldX( e.getXOnScreen() ) ),
-						new Float( worldY( e.getYOnScreen() ) ) );
+				// path = GameManager.getInstance().computePath(
+				// GameManager.getInstance().getPlayers().get( 0 ),
+				// new Float( worldX( e.getXOnScreen() ) ),
+				// new Float( worldY( e.getYOnScreen() ) ) );
 
 				// if( point == null )
 				// {

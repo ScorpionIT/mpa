@@ -8,7 +8,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import mpa.core.logic.AbstractObject;
 import mpa.core.logic.GameManager;
-import mpa.core.logic.Pair;
 import mpa.core.logic.building.House;
 import mpa.core.logic.building.Market;
 import mpa.core.logic.character.Player;
@@ -53,8 +52,6 @@ public class GameGui extends SimpleApplication
 	boolean cursorOnTheTopEdge = false;
 	boolean cursorOnTheBottomEdge = false;
 	private float cameraHeight = 120;
-	private float lx = ( float ) Math.sqrt( Math.pow( cameraHeight / Math.sin( 10 ), 2 )
-			- Math.pow( cameraHeight, 2 ) );
 	private float lz = ( float ) Math.sqrt( Math.pow( cameraHeight / Math.sin( 40 ), 2 )
 			- Math.pow( cameraHeight, 2 ) );
 
@@ -64,7 +61,7 @@ public class GameGui extends SimpleApplication
 	private List<Player> players = GameManager.getInstance().getPlayers();
 	private int playerIndex;
 
-	private ArrayList<Pair<Integer, Integer>> path;
+	private ArrayList<javax.vecmath.Vector2f> path = new ArrayList<>();
 	BitmapText text;
 	NiftyHandler niftyHandler;
 
@@ -354,7 +351,7 @@ public class GameGui extends SimpleApplication
 	{
 		pathNodes.detachAllChildren();
 		int i = 0;
-		for( Pair<Integer, Integer> pair : path )
+		for( javax.vecmath.Vector2f pair : path )
 		{
 			Sphere sphereMesh;
 			Geometry sphereGeo;
@@ -378,8 +375,7 @@ public class GameGui extends SimpleApplication
 
 			sphereGeo.rotate( 1.6f, 0, 0 ); // Rotate it a bit
 
-			sphereGeo
-					.setLocalTranslation( ( float ) pair.getFirst(), 5, ( float ) pair.getSecond() );
+			sphereGeo.setLocalTranslation( pair.x, 5, pair.y );
 			pathNodes.attachChild( sphereGeo );
 		}
 	}

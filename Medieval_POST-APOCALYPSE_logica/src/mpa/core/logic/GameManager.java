@@ -44,7 +44,7 @@ public class GameManager
 		this.difficultyLevel = level;
 	}
 
-	public ArrayList<Pair<Integer, Integer>> computePath( Player player, float xGoal, float yGoal )
+	public ArrayList<Vector2f> computePath( Player player, float xGoal, float yGoal )
 	{
 		PathCalculatorThread pathCalculatorThread = new PathCalculatorThread( player, xGoal, yGoal );
 		pathCalculatorThread.start();
