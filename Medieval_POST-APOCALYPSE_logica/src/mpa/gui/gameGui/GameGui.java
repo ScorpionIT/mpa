@@ -51,7 +51,7 @@ public class GameGui extends SimpleApplication
 	boolean cursorOnTheLeftEdge = false;
 	boolean cursorOnTheTopEdge = false;
 	boolean cursorOnTheBottomEdge = false;
-	private float cameraHeight = 120;
+	private float cameraHeight = 280;// 120
 	private float lz = ( float ) Math.sqrt( Math.pow( cameraHeight / Math.sin( 40 ), 2 )
 			- Math.pow( cameraHeight, 2 ) );
 
@@ -95,6 +95,52 @@ public class GameGui extends SimpleApplication
 		setEventTriggers();
 
 		new GraphicUpdater( this ).start();
+	}
+
+	private void debuggingPath()
+	{
+		pathNodes.detachAllChildren();
+		for( int i = 0; i < players.size(); i++ )
+			if( i != playerIndex )
+			{
+				players.get( i ).getReadLock();
+				ArrayList<javax.vecmath.Vector2f> path2 = players.get( i ).getPath();
+
+				javax.vecmath.Vector2f vector2f;
+				if( path2.size() > 1 )
+				{
+					vector2f = path2.get( path2.size() - 1 );
+
+					Sphere sphereMesh;
+					Geometry sphereGeo;
+
+					sphereMesh = new Sphere( 32, 32, 2f );
+					sphereGeo = new Geometry( "" + i, sphereMesh );
+
+					sphereMesh.setTextureMode( Sphere.TextureMode.Projected ); // better quality on
+					// spheres
+					TangentBinormalGenerator.generate( sphereMesh ); // for lighting effect
+					Material sphereMat = new Material( assetManager,
+							"Common/MatDefs/Light/Lighting.j3md" );
+					sphereMat.setTexture( "DiffuseMap",
+							assetManager.loadTexture( "Textures/Terrain/Pond/Pond.jpg" ) );
+					sphereMat.setTexture( "NormalMap",
+							assetManager.loadTexture( "Textures/Terrain/Pond/Pond_normal.png" ) );
+					sphereMat.setBoolean( "UseMaterialColors", true );
+					sphereMat.setColor( "Diffuse", ColorRGBA.White );
+					sphereMat.setColor( "Specular", ColorRGBA.White );
+					sphereMat.setFloat( "Shininess", 64f ); // [0,128]
+					sphereGeo.setMaterial( sphereMat );
+
+					sphereGeo.rotate( 1.6f, 0, 0 ); // Rotate it a bit
+
+					sphereGeo.setLocalTranslation( vector2f.x, 5, vector2f.y );
+					pathNodes.attachChild( sphereGeo );
+				}
+
+				players.get( i ).leaveReadLock();
+
+			}
 	}
 
 	private void setDebuggingText()
@@ -459,6 +505,7 @@ public class GameGui extends SimpleApplication
 
 			i++;
 		}
+		// debuggingPath();
 	}
 
 	@Override

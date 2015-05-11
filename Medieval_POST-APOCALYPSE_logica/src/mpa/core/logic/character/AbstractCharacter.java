@@ -85,7 +85,8 @@ public abstract class AbstractCharacter extends AbstractObject
 		else
 		{
 			Vector2f point = new Vector2f( path.get( 0 ).x, path.get( 0 ).y );
-			currentVector = new Vector2f( point.x - x, point.y - y );
+			// currentVector = new Vector2f( point.x - x, point.y - y );
+			currentVector = new Vector2f( -point.x + x, -point.y + y );
 
 			numberOfIterationsPerVector = ( int ) ( MyMath.distanceFloat( x, point.x, y, point.y ) / PACE );
 		}
@@ -104,7 +105,7 @@ public abstract class AbstractCharacter extends AbstractObject
 
 			numberOfIterationsPerVector--;
 
-			if( numberOfIterationsPerVector < 0 )
+			if( numberOfIterationsPerVector <= 0 )
 			{
 				path.remove( 0 );
 				if( path.size() > 1 )
@@ -113,20 +114,38 @@ public abstract class AbstractCharacter extends AbstractObject
 				}
 				else
 				{
+					// if( path.size() == 1 )
+					// path.remove( 0 );
+
+					putThePlayerAtTheArrival();
 					return false;
 				}
 
 				numberOfIterationsPerVector--;
+				if( numberOfIterationsPerVector <= 0 )
+				{
+					putThePlayerAtTheArrival();
+					return false;
+				}
+			}
+
+			if( numberOfIterationsPerVector <= 0 )
+			{
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println( "sto per spostare nonostante non dovrei cazzo " );
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println();
 			}
 			setX( ( ( float ) ( x + paceX ) ) );
 			setY( ( float ) ( y + paceY ) );
 
 			if( numberOfIterationsPerVector == 0 && path.size() == 2 )
 			{
-				Vector2f finalPosition = path.get( 1 );
-				setX( finalPosition.x );
-				setY( finalPosition.y );
-				path.remove( 0 );
+				putThePlayerAtTheArrival();
 			}
 
 			return true;
@@ -136,6 +155,18 @@ public abstract class AbstractCharacter extends AbstractObject
 			writeLock.unlock();
 		}
 
+	}
+
+	private void putThePlayerAtTheArrival()
+	{
+		if( path.size() > 1 )
+		{
+			Vector2f finalPosition = path.get( 1 );
+			setX( finalPosition.x );
+			setY( finalPosition.y );
+			// path.remove( 0 );
+			path = null;
+		}
 	}
 
 	@Override

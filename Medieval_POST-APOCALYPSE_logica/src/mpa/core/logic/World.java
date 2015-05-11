@@ -87,7 +87,6 @@ public class World
 				abstractObjectsX.addAll( objectX.get( pair ) );
 			}
 		}
-		// System.out.println("getObjectsXInTheRange " + abstractObjectsX.size());
 		return abstractObjectsX;
 	}
 
@@ -113,6 +112,37 @@ public class World
 		}
 
 		return objects;
+	}
+
+	public ArrayList<AbstractObject> checkForCollision( float x, float y )
+	{
+		ArrayList<AbstractObject> objectsXInTheRange = getObjectsXInTheRange( x );
+		ArrayList<AbstractObject> objectsYInTheRange = getObjectsYInTheRange( y );
+
+		ArrayList<AbstractObject> collisions = new ArrayList<>();
+		ArrayList<AbstractObject> intersection = new ArrayList<>();
+
+		for( AbstractObject objX : objectsXInTheRange )
+		{
+			Iterator<AbstractObject> it = objectsYInTheRange.iterator();
+
+			while( it.hasNext() )
+			{
+				AbstractObject objY = it.next();
+				if( objX == objY )
+				{
+					intersection.add( objX );
+					it.remove();
+				}
+			}
+		}
+
+		for( AbstractObject obj : intersection )
+			if( MyMath.distanceFloat( x, y, obj.getX(), obj.getY() ) - obj.getCollisionRay() <= 0 )
+				collisions.add( obj );
+
+		return collisions;
+
 	}
 
 	public ArrayList<AbstractObject> getObjectsYInTheRange( float y )

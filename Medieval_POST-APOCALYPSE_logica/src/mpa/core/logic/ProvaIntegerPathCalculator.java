@@ -15,13 +15,27 @@ public class ProvaIntegerPathCalculator
 			float yPlayer )
 	{
 
+		if( xGoal < 0 || xGoal > world.getWidth() || yGoal < 0 || yGoal > world.getHeight() )
+		{
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println( "mi hai dato un goal sbagliato " );
+			System.out.println();
+			System.out.println();
+			System.out.println();
+		}
 		ArrayList<PathNode> openList = new ArrayList<>();
 		ArrayList<PathNode> closedList = new ArrayList<>();
 
 		PathNode currentPosition = new PathNode( null, new Pair<Integer, Integer>( ( int ) xPlayer,
 				( int ) yPlayer ), 0 );
-		Pair<Float, Float> currentVector = new Pair<Float, Float>( ( xGoal - xPlayer ) / 300,
-				( yGoal - yPlayer ) / 300 );
+		Pair<Float, Float> currentVector = new Pair<Float, Float>( ( xGoal - xPlayer ),
+				( yGoal - yPlayer ) );
+		int greatestCommonDivisor = MyMath.greatestCommonDivisor( currentVector.getFirst()
+				.intValue(), currentVector.getSecond().intValue() );
+		currentVector.setFirst( currentVector.getFirst() / greatestCommonDivisor );
+		currentVector.setSecond( currentVector.getSecond() / greatestCommonDivisor );
 		Pair<Float, Float> normalVector = new Pair<Float, Float>( -currentVector.getSecond(),
 				currentVector.getFirst() );
 
@@ -39,6 +53,7 @@ public class ProvaIntegerPathCalculator
 			{
 				Pair<Integer, Integer> goal = new Pair<Integer, Integer>( ( int ) xGoal,
 						( int ) yGoal );
+				// closedList.remove( currentPosition );
 				closedList.add( new PathNode( currentPosition.getCurrentNode(), goal, computeCost(
 						currentPosition, goal ) ) );
 				break;
@@ -48,14 +63,35 @@ public class ProvaIntegerPathCalculator
 			if( MyMath.distanceInteger( currentPosition.getCurrentNode().getFirst(),
 					currentPosition.getCurrentNode().getSecond(), ( int ) xGoal, ( int ) yGoal ) < increment )
 			{
+				Pair<Integer, Integer> point = currentPosition.getCurrentNode();
+				if( point.getFirst() < 0 || point.getFirst() > world.getWidth()
+						|| point.getSecond() < 0 || point.getSecond() > world.getHeight() )
+				{
+					System.out.println();
+					System.out.println();
+					System.out.println();
+					System.out.println( "abbiamo trovato il problema? " );
+					System.out.println();
+					System.out.println();
+					System.out.println();
+				}
 				Pair<Integer, Integer> goal = new Pair<Integer, Integer>( ( int ) xGoal,
 						( int ) yGoal );
 				closedList.add( new PathNode( currentPosition.getCurrentNode(), goal, computeCost(
 						currentPosition, goal ) ) );
 				break;
+
 			}
 
 			ArrayList<Pair<Float, Float>> points = new ArrayList<>();
+
+			Pair<Integer, Integer> currentNodePair = currentPosition.getCurrentNode();
+			currentVector.setFirst( -currentNodePair.getFirst() + xGoal );
+			currentVector.setSecond( -currentNodePair.getSecond() + yGoal );
+			greatestCommonDivisor = MyMath.greatestCommonDivisor( currentVector.getFirst()
+					.intValue(), currentVector.getSecond().intValue() );
+			currentVector.setFirst( currentVector.getFirst() / greatestCommonDivisor );
+			currentVector.setSecond( currentVector.getSecond() / greatestCommonDivisor );
 
 			// nord
 			points.add( new Pair<Float, Float>( currentPosition.getCurrentNode().getFirst()
@@ -69,11 +105,15 @@ public class ProvaIntegerPathCalculator
 			//
 
 			// est
+			normalVector.setFirst( currentVector.getSecond() );
+			normalVector.setSecond( -currentVector.getFirst() );
 			points.add( new Pair<Float, Float>( currentPosition.getCurrentNode().getFirst()
 					- increment * normalVector.getFirst(), currentPosition.getCurrentNode()
 					.getSecond() - increment * normalVector.getSecond() ) );
 
 			// ovest
+			normalVector.setFirst( -currentVector.getSecond() );
+			normalVector.setSecond( currentVector.getFirst() );
 			points.add( new Pair<Float, Float>( currentPosition.getCurrentNode().getFirst()
 					+ increment * normalVector.getFirst(), currentPosition.getCurrentNode()
 					.getSecond() + increment * normalVector.getSecond() ) );
@@ -137,31 +177,32 @@ public class ProvaIntegerPathCalculator
 				System.out.println();
 				System.out.println();
 				System.out.println( "sto aggiungendo qualcosa che non dovrei :/" );
+				System.out.println( "x=" + v2f.x + ", y=" + v2f.y );
 				System.out.println();
 				System.out.println();
 				System.out.println();
 			}
 		}
 
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println( "closedList:" );
-		for( PathNode p : closedList )
-		{
-			System.out.println( p.getCurrentNode().getFirst() + " "
-					+ p.getCurrentNode().getSecond() );
-		}
-
-		System.out.println( "path to return" );
-		for( Vector2f v : pathToReturn )
-		{
-			System.out.println( v.x + " " + v.y );
-		}
+		// System.out.println();
+		// System.out.println();
+		// System.out.println();
+		// System.out.println( "closedList:" );
+		// for( PathNode p : closedList )
+		// {
+		// System.out.println( p.getCurrentNode().getFirst() + " "
+		// + p.getCurrentNode().getSecond() );
+		// }
+		//
+		// System.out.println( "path to return" );
+		// for( Vector2f v : pathToReturn )
+		// {
+		// System.out.println( v.x + " " + v.y );
+		// }
 		pathToReturn.remove( pathToReturn.size() - 1 );
 		pathToReturn.add( new Vector2f( xGoal, yGoal ) );
 
-		System.out.println();
+		// System.out.println();
 
 		return pathToReturn;
 

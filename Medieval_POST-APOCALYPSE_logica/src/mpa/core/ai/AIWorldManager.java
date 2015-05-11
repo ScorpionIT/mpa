@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import javax.vecmath.Vector2f;
 
+import mpa.core.logic.AbstractObject;
 import mpa.core.logic.GameManager;
+import mpa.core.logic.building.AbstractProperty;
 import mpa.core.logic.character.Player;
 import mpa.core.maths.MyMath;
 
@@ -55,12 +57,41 @@ public class AIWorldManager
 
 	}
 
+	static int counter1 = 1;
+	static int counter2 = 1;
+
 	private void computeOpenList()
 	{
 		for( int i = 1; i < fragmentsX; i++ )
 			for( int j = 1; j < fragmentsY; j++ )
 			{
-				openList.add( new Vector2f( ray * i, ray * j ) );
+				Vector2f position = new Vector2f( ray * i, ray * j );
+
+				ArrayList<AbstractObject> collisions = GameManager.getInstance().getWorld()
+						.checkForCollision( position.x, position.y );
+				if( collisions.isEmpty() )
+				{
+					if( position.x < 0
+							|| position.x > GameManager.getInstance().getWorld().getWidth()
+							|| position.y < 0
+							|| position.y > GameManager.getInstance().getWorld().getHeight() )
+						System.out.println( "visiterò per la " + counter1++
+								+ " volta un posto fuori dalla mappa" );
+				}
+				else
+				{
+					position = ( ( AbstractProperty ) collisions.get( 0 ) ).getGatheringPlace();
+					if( position.x < 0
+							|| position.x > GameManager.getInstance().getWorld().getWidth()
+							|| position.y < 0
+							|| position.y > GameManager.getInstance().getWorld().getHeight() )
+						System.out.println( "visiterò per la " + counter1++
+								+ " volta un posto fuori dalla mappa" );
+					System.out.println( "visiterò per la " + counter2++
+							+ " volta un posto fuori dalla mappa che è un gatheringPlace" );
+
+				}
+				openList.add( position );
 			}
 	}
 

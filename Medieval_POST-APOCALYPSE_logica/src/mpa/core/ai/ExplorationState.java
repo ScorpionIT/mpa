@@ -6,6 +6,7 @@ import javax.vecmath.Vector2f;
 
 import mpa.core.logic.AbstractObject;
 import mpa.core.logic.GameManager;
+import mpa.core.logic.building.AbstractProperty;
 import mpa.core.logic.character.Player;
 
 class ExplorationState extends AIState
@@ -53,14 +54,15 @@ class ExplorationState extends AIState
 
 		if( pointToReach != null )
 		{
-			System.out.println( "player " + p + " in: " + playerX + ", " + playerY + "; "
-					+ pointToReach.x + ", " + pointToReach.y );
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			System.out.println();
+			// System.out.println( "player " + p + " in: " + playerX + ", " + playerY + "; "
+			// + pointToReach.x + ", " + pointToReach.y );
+			// System.out.println();
+			// System.out.println();
+			// System.out.println();
+			// System.out.println();
 
-			if( pointToReach.x == playerX && pointToReach.y == playerY || p.getPath().isEmpty() )
+			if( pointToReach.x == playerX && pointToReach.y == playerY || p.getPath() == null
+					|| p.getPath().isEmpty() )
 			{
 				addFoundBuildings( new Vector2f( playerX, playerY ), ray, opponentAI );
 				// opponentAI.worldManager.pointReached();
@@ -69,19 +71,30 @@ class ExplorationState extends AIState
 				if( pointToReach != null )
 				{
 					isWalking = true;
+					//
+					// while( Math.abs( pointToReach.x - p.getX() ) <= 2
+					// && Math.abs( pointToReach.y - p.getY() ) <= 2 )
+					// {
+					// addFoundBuildings( new Vector2f( playerX, playerY ), ray, opponentAI );
+					// pointToReach = opponentAI.worldManager.getNextLocation( opponentAI.player );
+					// }
 
-					while( Math.abs( pointToReach.x - p.getX() ) <= 2
-							&& Math.abs( pointToReach.y - p.getY() ) <= 2 )
+					ArrayList<AbstractObject> collisions = GameManager.getInstance().getWorld()
+							.checkForCollision( pointToReach.x, pointToReach.y );
+
+					if( collisions.isEmpty() )
+						GameManager.getInstance().computePath( opponentAI.player, pointToReach.x,
+								pointToReach.y );
+					else
 					{
-						addFoundBuildings( new Vector2f( playerX, playerY ), ray, opponentAI );
-						pointToReach = opponentAI.worldManager.getNextLocation( opponentAI.player );
+						Vector2f gatheringPlace = ( ( AbstractProperty ) collisions.get( 0 ) )
+								.getGatheringPlace();
+						GameManager.getInstance().computePath( p, gatheringPlace.x,
+								gatheringPlace.y );
 					}
-					GameManager.getInstance().computePath( opponentAI.player, pointToReach.x,
-							pointToReach.y );
 				}
 				else
 				{
-					// opponentAI.worldManager.pointReached();
 					opponentAI.knownAllTheWorld = true;
 				}
 
@@ -95,19 +108,21 @@ class ExplorationState extends AIState
 			{
 				isWalking = true;
 
-				while( Math.abs( pointToReach.x - p.getX() ) <= 2
-						&& Math.abs( pointToReach.y - p.getY() ) <= 2 )
-				{
-					addFoundBuildings( new Vector2f( playerX, playerY ), ray, opponentAI );
-					pointToReach = opponentAI.worldManager.getNextLocation( opponentAI.player );
-				}
-				GameManager.getInstance().computePath( opponentAI.player, pointToReach.x,
-						pointToReach.y );
+				ArrayList<AbstractObject> collisions = GameManager.getInstance().getWorld()
+						.checkForCollision( pointToReach.x, pointToReach.y );
 
+				if( collisions.isEmpty() )
+					GameManager.getInstance().computePath( opponentAI.player, pointToReach.x,
+							pointToReach.y );
+				else
+				{
+					Vector2f gatheringPlace = ( ( AbstractProperty ) collisions.get( 0 ) )
+							.getGatheringPlace();
+					GameManager.getInstance().computePath( p, gatheringPlace.x, gatheringPlace.y );
+				}
 			}
 			else
 			{
-				// opponentAI.worldManager.pointReached();
 				opponentAI.knownAllTheWorld = true;
 			}
 
