@@ -77,7 +77,8 @@ public class GameManager
 	public boolean conquer( AbstractPrivateProperty abstractPrivateProperty, Player player )
 	{
 		Vector2f gatheringPlace = abstractPrivateProperty.getGatheringPlace();
-		if( gatheringPlace.x != player.x || gatheringPlace.y != player.y )
+		if( ( ( int ) gatheringPlace.x ) != ( ( int ) player.x )
+				|| ( ( int ) gatheringPlace.y ) != ( ( int ) player.y ) )
 			return false;
 
 		return player.employSubaltern( abstractPrivateProperty ) != null;
@@ -104,47 +105,13 @@ public class GameManager
 		if( !property.isFree() || !player.isThereAnyFreeSulbaltern() )
 			return false;
 
+		System.out.println( "sto occupando " );
 		property.setOwner( player );
+		System.out.println( "vado in deadlock qua?" );
 		player.employSubaltern( property );
+		System.out.println( "ho occupato" );
 		return true;
 	}
-
-	// public ArrayList<Player> getPlayersIntTheRange( float xMin, float xMax, float yMin, float
-	// yMax )
-	// {
-	// try
-	// {
-	// for( Player p : players )
-	// p.getReadLock();
-	//
-	// ArrayList<Player> _players = new ArrayList<>();
-	//
-	// if( xMin > xMax )
-	// {
-	// float tmp = xMin;
-	// xMin = xMax;
-	// xMax = tmp;
-	// }
-	//
-	// if( yMin > yMax )
-	// {
-	// float tmp = yMin;
-	// xMin = yMax;
-	// xMax = tmp;
-	// }
-	//
-	// for( Player p : players )
-	// {
-	//
-	// }
-	//
-	// return _players;
-	// } finally
-	// {
-	// for( Player p : players )
-	// p.leaveReadLock();
-	// }
-	// }
 
 	@Override
 	public String toString()

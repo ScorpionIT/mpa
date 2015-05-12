@@ -35,22 +35,14 @@ public abstract class AbstractPrivateProperty extends AbstractProperty
 		}
 	}
 
-	public boolean setOwner( Player player )
+	public void setOwner( Player player )
 	{
-		try
-		{
-			writeLock.lock();
+		System.out.println( "sto per prendere il lock" );
+		writeLock.lock();
+		System.out.println( "lo prendo il lock?" );
+		this.owner = player;
 
-			if( owner == null )
-				return false;
-
-			this.owner = player;
-			return true;
-
-		} finally
-		{
-			writeLock.unlock();
-		}
+		writeLock.unlock();
 	}
 
 	public Player getOwner()

@@ -2,9 +2,13 @@ package mpa.core.ai;
 
 import java.util.ArrayList;
 
+import javax.vecmath.Vector2f;
+
 import mpa.core.logic.AbstractObject;
-import mpa.core.logic.building.AbstractPrivateProperty;
+import mpa.core.logic.building.House;
+import mpa.core.logic.building.Market;
 import mpa.core.logic.character.Player;
+import mpa.core.logic.resource.AbstractResourceProducer;
 import mpa.core.logic.tool.Potions;
 
 public class OpponentAI extends Thread
@@ -14,6 +18,11 @@ public class OpponentAI extends Thread
 	AIWorldManager worldManager;
 	ArrayList<Player> knownPlayers = new ArrayList<>();
 	ArrayList<AbstractObject> knownBuildings = new ArrayList<>();
+
+	private ArrayList<House> knownHeadQuarters = new ArrayList<>();
+	private ArrayList<AbstractResourceProducer> knownResourceProducers = new ArrayList<>();
+	private Vector2f market = null;
+
 	boolean knownAllTheWorld;
 
 	public OpponentAI( Player player, DifficultyLevel level )
@@ -28,6 +37,7 @@ public class OpponentAI extends Thread
 	@Override
 	public void run()
 	{
+		int c = 0;
 		while( true )
 		{
 			try
@@ -38,16 +48,56 @@ public class OpponentAI extends Thread
 				e.printStackTrace();
 			}
 
-			// System.out.println( "sto ciclando " );
+			System.out.println( "sto ciclando " + c++ );
 			aiState.action( this );
 			aiState = aiState.changeState( this );
 		}
 	}
 
-	void addBuilding( AbstractObject building )
+	private void addBuilding( AbstractObject building )
 	{
 		if( !knownBuildings.contains( building ) )
 			knownBuildings.add( building );
+
+		if( building instanceof AbstractResourceProducer
+				&& !knownResourceProducers.contains( building ) )
+			knownResourceProducers.add( ( AbstractResourceProducer ) building );
+		if( building instanceof House && !knownHeadQuarters.contains( building ) )
+			knownHeadQuarters.add( ( House ) building );
+		if( building instanceof Market )
+			market = Market.getInstance().getGatheringPlace();
+
+		System.out.println();
+		System.out.println( "ho aggiunto un building !!!" );
+		System.out.println();
+	}
+
+	void addBuildings( Vector2f position )
+	{
+		ArrayList<AbstractObject> newBuildings = worldManager.getBuildings( position );
+
+		for( AbstractObject obj : newBuildings )
+			addBuilding( obj );
+	}
+
+	public ArrayList<House> getKnownHeadQuarters()
+	{
+		return knownHeadQuarters;
+	}
+
+	public ArrayList<AbstractResourceProducer> getKnownResourceProducers()
+	{
+		return knownResourceProducers;
+	}
+
+	public Vector2f getMarket()
+	{
+		return market;
+	}
+
+	public boolean knowsTheMarket()
+	{
+		return market != null;
 	}
 
 	private boolean isOpponentPlayerWeaker( Player p )
@@ -88,13 +138,10 @@ public class OpponentAI extends Thread
 	boolean areThereConquerableBuildings()
 	{
 
-		for( AbstractObject b : knownBuildings )
+		for( AbstractResourceProducer b : knownResourceProducers )
 		{
-			if( b instanceof AbstractPrivateProperty
-					&& ( ( !( ( AbstractPrivateProperty ) b ).isFree() && isOpponentPlayerWeaker( ( ( AbstractPrivateProperty ) b )
-							.getOwner() ) ) || ( ( AbstractPrivateProperty ) b ).isFree() ) )
+			if( b.isFree() || ( isOpponentPlayerWeaker( b.getOwner() ) ) )
 				return true;
-
 		}
 		return false;
 	}

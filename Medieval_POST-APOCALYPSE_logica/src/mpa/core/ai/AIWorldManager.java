@@ -1,6 +1,7 @@
 package mpa.core.ai;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.vecmath.Vector2f;
 
@@ -18,6 +19,7 @@ public class AIWorldManager
 	float ray;
 	private int fragmentsX;
 	private int fragmentsY;
+	private HashMap<Vector2f, ArrayList<AbstractObject>> buildings = new HashMap<>();
 
 	public AIWorldManager( DifficultyLevel level )
 	{
@@ -69,6 +71,12 @@ public class AIWorldManager
 
 				ArrayList<AbstractObject> collisions = GameManager.getInstance().getWorld()
 						.checkForCollision( position.x, position.y );
+
+				ArrayList<AbstractObject> buildingList = GameManager
+						.getInstance()
+						.getWorld()
+						.getObjectsInTheRange( position.x - ray, position.x + ray,
+								position.y - ray, position.y + ray );
 				if( collisions.isEmpty() )
 				{
 					if( position.x < 0
@@ -91,6 +99,7 @@ public class AIWorldManager
 							+ " volta un posto fuori dalla mappa che è un gatheringPlace" );
 
 				}
+				buildings.put( position, buildingList );
 				openList.add( position );
 			}
 	}
@@ -120,5 +129,10 @@ public class AIWorldManager
 		}
 
 		return nextLocation;
+	}
+
+	ArrayList<AbstractObject> getBuildings( Vector2f position )
+	{
+		return buildings.get( position );
 	}
 }

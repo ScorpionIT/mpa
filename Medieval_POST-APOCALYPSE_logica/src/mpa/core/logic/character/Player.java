@@ -83,12 +83,10 @@ public class Player extends AbstractCharacter
 			if( subaltern.getAbstractPrivateProperty() == null )
 			{
 				subaltern.setAbstractPrivateProperty( abstractPrivateProperty );
-				subaltern.setAbstractPrivateProperty( abstractPrivateProperty );
 				employedSubalterns++;
 				return subaltern;
 			}
 		}
-
 		return null;
 	}
 

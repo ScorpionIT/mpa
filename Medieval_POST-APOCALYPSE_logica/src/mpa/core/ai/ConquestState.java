@@ -2,12 +2,11 @@ package mpa.core.ai;
 
 import javax.vecmath.Vector2f;
 
-import mpa.core.logic.AbstractObject;
 import mpa.core.logic.GameManager;
 import mpa.core.logic.building.AbstractPrivateProperty;
-import mpa.core.logic.building.AbstractProperty;
 import mpa.core.logic.character.DependentCharacter;
 import mpa.core.logic.character.Player;
+import mpa.core.logic.resource.AbstractResourceProducer;
 import mpa.core.logic.resource.Cave;
 import mpa.core.logic.resource.Field;
 import mpa.core.logic.resource.Mine;
@@ -30,42 +29,27 @@ public class ConquestState extends AIState
 		Player player = opponentAI.player;
 
 		System.out.println( "action dell'exploration" );
-		System.out.println();
-		System.out.println();
 
 		if( buildingToOccupy != null && walking )
 		{
 			System.out.println( "sono dentro l'if " );
 			Vector2f gathPlace = buildingToOccupy.getGatheringPlace();
-			if( player.getX() == gathPlace.x && player.getY() == gathPlace.y )
+			if( ( ( int ) player.getX() ) == ( ( int ) gathPlace.x )
+					&& ( ( int ) player.getY() ) == ( ( int ) gathPlace.y ) )
 			{
+				System.out.println( "sono dentro l'if cazzuto " );
 				if( GameManager.getInstance().occupyProperty( player, buildingToOccupy ) )
 				{
+					System.out.println( "dovrei aver occupato!!" );
 					System.out.println();
 					System.out.println();
 					System.out.println();
-					System.out.println( "ho occupato " );
-					System.out.println();
-					System.out.println();
-					System.out.println();
-					System.out.println();
-				}
-				else
-				{
-					System.out.println();
-					System.out.println();
-					System.out.println();
-					System.out.println( "ci ho provato ma nulla" );
-					System.out.println();
-					System.out.println();
-					System.out.println();
-					System.out.println();
+					walking = false;
+					buildingToOccupy = null;
 				}
 			}
-
-			walking = false;
-			buildingToOccupy = null;
-			return;
+			else
+				return;
 		}
 		int caves = 0;
 		int fields = 0;
@@ -101,12 +85,15 @@ public class ConquestState extends AIState
 			bestChoice = Wood.class;
 
 		float shortestDistance = Float.MAX_VALUE;
-		AbstractObject _building = null;
+		AbstractResourceProducer _building = null;
 		float _distance = Float.MAX_VALUE;
-		AbstractObject _building2 = null;
+		AbstractResourceProducer _building2 = null;
 
-		for( AbstractObject building : opponentAI.knownBuildings )
+		for( AbstractResourceProducer building : opponentAI.getKnownResourceProducers() )
 		{
+			if( building.getOwner() == player )
+				continue;
+
 			float distance = MyMath.distanceFloat( player.getX(), player.getY(), building.getX(),
 					building.getY() );
 
@@ -125,16 +112,24 @@ public class ConquestState extends AIState
 
 		if( _building2 != null )
 		{
-			buildingToOccupy = ( AbstractPrivateProperty ) _building2;
-			Vector2f gatheringPlace = ( ( AbstractProperty ) _building2 ).getGatheringPlace();
+			buildingToOccupy = _building2;
+			Vector2f gatheringPlace = _building2.getGatheringPlace();
 			GameManager.getInstance().computePath( player, gatheringPlace.x, gatheringPlace.y );
+			System.out.println( "ho calcolato il percorso? 1" );
+			System.err.println( "il nuovo posto sarebbe un " + _building2.getClass().getName()
+					+ " in pos " + gatheringPlace.x + ", " + gatheringPlace.y );
+			System.out.println();
 			walking = true;
 		}
 		else if( _building != null )
 		{
-			buildingToOccupy = ( AbstractPrivateProperty ) _building;
-			Vector2f gatheringPlace = ( ( AbstractProperty ) _building ).getGatheringPlace();
+			buildingToOccupy = _building;
+			Vector2f gatheringPlace = _building.getGatheringPlace();
 			GameManager.getInstance().computePath( player, gatheringPlace.x, gatheringPlace.y );
+			System.out.println( "ho calcolato il percorso? 2" );
+			System.err.println( "il nuovo posto sarebbe un " + _building.getClass().getName()
+					+ " in pos " + gatheringPlace.x + ", " + gatheringPlace.y );
+			System.out.println();
 			walking = true;
 		}
 	}
@@ -143,8 +138,10 @@ public class ConquestState extends AIState
 	AIState changeState( OpponentAI opponentAI )
 	{
 		AIState nextState = null;
-		if( walking )
+		if( walking && buildingToOccupy != null )
 			nextState = this;
+		else
+			nextState = new ExplorationState();
 		// else if( opponentAI.player.canUpgrade() || opponentAI.player.canBuyPotions() )
 		// nextState = new ProductionState();
 		//

@@ -114,9 +114,6 @@ public abstract class AbstractCharacter extends AbstractObject
 				}
 				else
 				{
-					// if( path.size() == 1 )
-					// path.remove( 0 );
-
 					putThePlayerAtTheArrival();
 					return false;
 				}
@@ -129,17 +126,6 @@ public abstract class AbstractCharacter extends AbstractObject
 				}
 			}
 
-			if( numberOfIterationsPerVector <= 0 )
-			{
-				System.out.println();
-				System.out.println();
-				System.out.println();
-				System.out.println( "sto per spostare nonostante non dovrei cazzo " );
-				System.out.println();
-				System.out.println();
-				System.out.println();
-				System.out.println();
-			}
 			setX( ( ( float ) ( x + paceX ) ) );
 			setY( ( float ) ( y + paceY ) );
 
@@ -159,12 +145,11 @@ public abstract class AbstractCharacter extends AbstractObject
 
 	private void putThePlayerAtTheArrival()
 	{
-		if( path.size() > 1 )
+		if( path.size() >= 1 && path.size() <= 2 )
 		{
-			Vector2f finalPosition = path.get( 1 );
+			Vector2f finalPosition = path.get( path.size() - 1 );
 			setX( finalPosition.x );
 			setY( finalPosition.y );
-			// path.remove( 0 );
 			path = null;
 		}
 	}

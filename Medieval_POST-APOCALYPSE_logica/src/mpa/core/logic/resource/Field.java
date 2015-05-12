@@ -41,12 +41,10 @@ public class Field extends AbstractResourceProducer
 	@Override
 	public void providePlayer()
 	{
-		readLock.lock();
-		if( owner == null )
-			return;
-		else
+		writeLock.lock();
+		if( owner != null )
 		{
-			if( this.currentFieldState.ordinal() < FieldState.values().length )
+			if( this.currentFieldState.ordinal() < FieldState.values().length - 1 )
 			{
 				this.currentFieldState = FieldState.values()[currentFieldState.ordinal() + 1];
 			}
@@ -58,7 +56,7 @@ public class Field extends AbstractResourceProducer
 			}
 
 		}
-		readLock.unlock();
+		writeLock.unlock();
 	}
 
 	@Override

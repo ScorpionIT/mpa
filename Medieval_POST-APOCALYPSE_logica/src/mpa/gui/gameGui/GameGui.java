@@ -8,6 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import mpa.core.logic.AbstractObject;
 import mpa.core.logic.GameManager;
+import mpa.core.logic.building.AbstractProperty;
 import mpa.core.logic.building.House;
 import mpa.core.logic.building.Market;
 import mpa.core.logic.character.Player;
@@ -51,7 +52,7 @@ public class GameGui extends SimpleApplication
 	boolean cursorOnTheLeftEdge = false;
 	boolean cursorOnTheTopEdge = false;
 	boolean cursorOnTheBottomEdge = false;
-	private float cameraHeight = 280;// 120
+	private float cameraHeight = 200;// 120
 	private float lz = ( float ) Math.sqrt( Math.pow( cameraHeight / Math.sin( 40 ), 2 )
 			- Math.pow( cameraHeight, 2 ) );
 
@@ -185,6 +186,7 @@ public class GameGui extends SimpleApplication
 		Material mat2 = new Material( assetManager, "Common/MatDefs/Misc/Unshaded.j3md" );
 		mat2.setColor( "Color", ColorRGBA.Red );
 
+		int i = 0;
 		for( AbstractObject object : allObjects )
 		{
 			if( object instanceof House )
@@ -248,6 +250,39 @@ public class GameGui extends SimpleApplication
 				// loadModel.setLocalRotation( new Matrix3f( 1, 0, 0, 0, cos, -sin, 0, sin, cos ) );
 				// loadModel.scale( 2f );
 				// rootNode.attachChild( loadModel );
+
+			}
+
+			if( object instanceof AbstractProperty )
+			{
+				javax.vecmath.Vector2f gatheringPlace = ( ( AbstractProperty ) object )
+						.getGatheringPlace();
+
+				Sphere sphereMesh;
+				Geometry sphereGeo;
+
+				sphereMesh = new Sphere( 50, 50, 8f );
+				sphereGeo = new Geometry( "" + i++, sphereMesh );
+
+				sphereMesh.setTextureMode( Sphere.TextureMode.Projected ); // better quality on
+				// spheres
+				TangentBinormalGenerator.generate( sphereMesh ); // for lighting effect
+				Material sphereMat = new Material( assetManager,
+						"Common/MatDefs/Light/Lighting.j3md" );
+				sphereMat.setTexture( "DiffuseMap",
+						assetManager.loadTexture( "Textures/Terrain/Pond/Pond.jpg" ) );
+				sphereMat.setTexture( "NormalMap",
+						assetManager.loadTexture( "Textures/Terrain/Pond/Pond_normal.png" ) );
+				sphereMat.setBoolean( "UseMaterialColors", true );
+				sphereMat.setColor( "Diffuse", ColorRGBA.White );
+				sphereMat.setColor( "Specular", ColorRGBA.White );
+				sphereMat.setFloat( "Shininess", 64f ); // [0,128]
+				sphereGeo.setMaterial( sphereMat );
+
+				sphereGeo.rotate( 1.6f, 0, 0 ); // Rotate it a bit
+
+				sphereGeo.setLocalTranslation( gatheringPlace.x, 5, gatheringPlace.y );
+				pathNodes.attachChild( sphereGeo );
 
 			}
 
@@ -334,7 +369,7 @@ public class GameGui extends SimpleApplication
 			else
 			{
 				model.scale( 10.2f, 10.2f, 10.2f );
-				model.setLocalTranslation( new Vector3f( player.getX(), 30, player.getY() ) );
+				model.setLocalTranslation( new Vector3f( player.getX(), -20, player.getY() ) );
 			}
 			i++;
 			mobileObjects.attachChild( model );
@@ -501,7 +536,7 @@ public class GameGui extends SimpleApplication
 		for( Player p : players )
 		{
 			// if( i == 0 )
-			mobileObjects.getChild( i ).setLocalTranslation( p.getX(), 25, p.getY() );
+			mobileObjects.getChild( i ).setLocalTranslation( p.getX(), -10, p.getY() );
 
 			i++;
 		}
