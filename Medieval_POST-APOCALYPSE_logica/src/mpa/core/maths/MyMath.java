@@ -3,6 +3,8 @@ package mpa.core.maths;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.vecmath.Vector2f;
+
 import mpa.core.logic.AbstractObject;
 import mpa.core.logic.Pair;
 import mpa.core.logic.World;
@@ -86,6 +88,22 @@ public class MyMath
 				* vector.getSecond() );
 
 		return Math.sqrt( proj.getFirst() * proj.getFirst() + proj.getSecond() * proj.getSecond() );
+	}
+
+	public static float pointToLineDistance( float xMinLine, float yMinLine, float xMaxLine,
+			float yMaxLine, float xPoint, float yPoint )
+	{
+
+		Vector2f line = new Vector2f( -xMinLine + xMaxLine, -yMinLine + yMaxLine );
+		Vector2f pointToVector = new Vector2f( xPoint - xMinLine, yPoint - yMinLine );
+		float scalarProduct = ( pointToVector.x * line.x + pointToVector.y * line.y )
+				/ ( line.x * line.x + line.y * line.y );
+		Vector2f projectionOnLine = new Vector2f( line.x * scalarProduct, line.y * scalarProduct );
+
+		float distance = ( float ) Math.sqrt( Math.pow( pointToVector.x - projectionOnLine.x, 2 )
+				+ Math.pow( pointToVector.y - projectionOnLine.y, 2 ) );
+		return distance;
+
 	}
 
 	public static int greatestCommonDivisor( int p, int q )

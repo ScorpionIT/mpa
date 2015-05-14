@@ -30,8 +30,12 @@ public class PathCalculatorThread extends Thread
 	{
 		path = null;
 		lock.lock();
-		path = new ProvaIntegerPathCalculator().computePath( GameManager.getInstance().getWorld(),
-				xGoal, yGoal, player.getX(), player.getY() );
+		// path = new ProvaIntegerPathCalculator().computePath(
+		// GameManager.getInstance().getWorld(),
+		// xGoal, yGoal, player.getX(), player.getY() );
+
+		path = new PathCalculatorImplementation( new Vector2f( player.getX(), player.getY() ),
+				new Vector2f( xGoal, yGoal ) ).computePath();
 		this.player.setPath( path );
 		cond.signal();
 		lock.unlock();

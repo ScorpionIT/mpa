@@ -58,9 +58,9 @@ public class GameManager
 
 	public void addAIPlayer( Player player )
 	{
-		AI_players.add( new OpponentAI( player, difficultyLevel ) );
-		players.add( player );
-		AI_players.get( AI_players.size() - 1 ).start();
+		// AI_players.add( new OpponentAI( player, difficultyLevel ) );
+		// players.add( player );
+		// AI_players.get( AI_players.size() - 1 ).start();
 	}
 
 	public void updateCharacterPositions()

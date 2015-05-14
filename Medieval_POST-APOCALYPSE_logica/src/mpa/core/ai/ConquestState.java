@@ -28,11 +28,11 @@ public class ConquestState extends AIState
 	{
 		Player player = opponentAI.player;
 
-		System.out.println( "action dell'exploration" );
+		// System.out.println( "action dell'exploration" );
 
 		if( buildingToOccupy != null && walking )
 		{
-			System.out.println( "sono dentro l'if " );
+			// System.out.println( "sono dentro l'if " );
 			Vector2f gathPlace = buildingToOccupy.getGatheringPlace();
 			if( ( ( int ) player.getX() ) == ( ( int ) gathPlace.x )
 					&& ( ( int ) player.getY() ) == ( ( int ) gathPlace.y ) )
@@ -40,10 +40,10 @@ public class ConquestState extends AIState
 				System.out.println( "sono dentro l'if cazzuto " );
 				if( GameManager.getInstance().occupyProperty( player, buildingToOccupy ) )
 				{
-					System.out.println( "dovrei aver occupato!!" );
-					System.out.println();
-					System.out.println();
-					System.out.println();
+					// System.out.println( "dovrei aver occupato!!" );
+					// System.out.println();
+					// System.out.println();
+					// System.out.println();
 					walking = false;
 					buildingToOccupy = null;
 				}
@@ -115,10 +115,10 @@ public class ConquestState extends AIState
 			buildingToOccupy = _building2;
 			Vector2f gatheringPlace = _building2.getGatheringPlace();
 			GameManager.getInstance().computePath( player, gatheringPlace.x, gatheringPlace.y );
-			System.out.println( "ho calcolato il percorso? 1" );
-			System.err.println( "il nuovo posto sarebbe un " + _building2.getClass().getName()
-					+ " in pos " + gatheringPlace.x + ", " + gatheringPlace.y );
-			System.out.println();
+			// System.out.println( "ho calcolato il percorso? 1" );
+			// System.err.println( "il nuovo posto sarebbe un " + _building2.getClass().getName()
+			// + " in pos " + gatheringPlace.x + ", " + gatheringPlace.y );
+			// System.out.println();
 			walking = true;
 		}
 		else if( _building != null )
@@ -126,10 +126,10 @@ public class ConquestState extends AIState
 			buildingToOccupy = _building;
 			Vector2f gatheringPlace = _building.getGatheringPlace();
 			GameManager.getInstance().computePath( player, gatheringPlace.x, gatheringPlace.y );
-			System.out.println( "ho calcolato il percorso? 2" );
-			System.err.println( "il nuovo posto sarebbe un " + _building.getClass().getName()
-					+ " in pos " + gatheringPlace.x + ", " + gatheringPlace.y );
-			System.out.println();
+			// System.out.println( "ho calcolato il percorso? 2" );
+			// System.err.println( "il nuovo posto sarebbe un " + _building.getClass().getName()
+			// + " in pos " + gatheringPlace.x + ", " + gatheringPlace.y );
+			// System.out.println();
 			walking = true;
 		}
 	}

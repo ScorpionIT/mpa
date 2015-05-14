@@ -27,14 +27,14 @@ class ExplorationState extends AIState
 		{
 			// if( pointToReach.x == playerX && pointToReach.y == playerY || p.getPath() == null
 			// || p.getPath().isEmpty() )
-			System.out.println( "sono entrato nel primo if " );
-			System.out.println( ( ( int ) pointToReach.x ) + "=?" + ( ( int ) playerX ) + "; "
-					+ ( ( int ) pointToReach.y ) + "=?" + ( ( int ) playerY ) );
+			// System.out.println( "sono entrato nel primo if " );
+			// System.out.println( ( ( int ) pointToReach.x ) + "=?" + ( ( int ) playerX ) + "; "
+			// + ( ( int ) pointToReach.y ) + "=?" + ( ( int ) playerY ) );
 
 			if( isWalking && ( ( int ) pointToReach.x ) == ( ( int ) playerX )
 					&& ( ( int ) pointToReach.y ) == ( ( int ) playerY ) )
 			{
-				System.out.println( "sono nel secondo if?!?!" );
+				// System.out.println( "sono nel secondo if?!?!" );
 				opponentAI.addBuildings( pointToReach );
 
 				pointToReach = opponentAI.worldManager.getNextLocation( opponentAI.player );

@@ -32,10 +32,10 @@ public class ProvaIntegerPathCalculator
 				( int ) yPlayer ), 0 );
 		Pair<Float, Float> currentVector = new Pair<Float, Float>( ( xGoal - xPlayer ),
 				( yGoal - yPlayer ) );
-		int greatestCommonDivisor = MyMath.greatestCommonDivisor( currentVector.getFirst()
-				.intValue(), currentVector.getSecond().intValue() );
-		currentVector.setFirst( currentVector.getFirst() / greatestCommonDivisor );
-		currentVector.setSecond( currentVector.getSecond() / greatestCommonDivisor );
+		// int greatestCommonDivisor = MyMath.greatestCommonDivisor( currentVector.getFirst()
+		// .intValue(), currentVector.getSecond().intValue() );
+		// currentVector.setFirst( currentVector.getFirst() / greatestCommonDivisor );
+		// currentVector.setSecond( currentVector.getSecond() / greatestCommonDivisor );
 		Pair<Float, Float> normalVector = new Pair<Float, Float>( -currentVector.getSecond(),
 				currentVector.getFirst() );
 
@@ -85,13 +85,13 @@ public class ProvaIntegerPathCalculator
 
 			ArrayList<Pair<Float, Float>> points = new ArrayList<>();
 
-			Pair<Integer, Integer> currentNodePair = currentPosition.getCurrentNode();
-			currentVector.setFirst( -currentNodePair.getFirst() + xGoal );
-			currentVector.setSecond( -currentNodePair.getSecond() + yGoal );
-			greatestCommonDivisor = MyMath.greatestCommonDivisor( currentVector.getFirst()
-					.intValue(), currentVector.getSecond().intValue() );
-			currentVector.setFirst( currentVector.getFirst() / greatestCommonDivisor );
-			currentVector.setSecond( currentVector.getSecond() / greatestCommonDivisor );
+			// Pair<Integer, Integer> currentNodePair = currentPosition.getCurrentNode();
+			// currentVector.setFirst( -currentNodePair.getFirst() + xGoal );
+			// currentVector.setSecond( -currentNodePair.getSecond() + yGoal );
+			// greatestCommonDivisor = MyMath.greatestCommonDivisor( currentVector.getFirst()
+			// .intValue(), currentVector.getSecond().intValue() );
+			// currentVector.setFirst( currentVector.getFirst() / greatestCommonDivisor );
+			// currentVector.setSecond( currentVector.getSecond() / greatestCommonDivisor );
 
 			// nord
 			points.add( new Pair<Float, Float>( currentPosition.getCurrentNode().getFirst()
@@ -105,15 +105,15 @@ public class ProvaIntegerPathCalculator
 			//
 
 			// est
-			normalVector.setFirst( currentVector.getSecond() );
-			normalVector.setSecond( -currentVector.getFirst() );
+			// normalVector.setFirst( currentVector.getSecond() );
+			// normalVector.setSecond( -currentVector.getFirst() );
 			points.add( new Pair<Float, Float>( currentPosition.getCurrentNode().getFirst()
 					- increment * normalVector.getFirst(), currentPosition.getCurrentNode()
 					.getSecond() - increment * normalVector.getSecond() ) );
 
 			// ovest
-			normalVector.setFirst( -currentVector.getSecond() );
-			normalVector.setSecond( currentVector.getFirst() );
+			// normalVector.setFirst( -currentVector.getSecond() );
+			// normalVector.setSecond( currentVector.getFirst() );
 			points.add( new Pair<Float, Float>( currentPosition.getCurrentNode().getFirst()
 					+ increment * normalVector.getFirst(), currentPosition.getCurrentNode()
 					.getSecond() + increment * normalVector.getSecond() ) );

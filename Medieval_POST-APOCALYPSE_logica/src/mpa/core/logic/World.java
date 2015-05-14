@@ -145,6 +145,36 @@ public class World
 
 	}
 
+	public ArrayList<AbstractObject> checkForCollisionInTheRange( float xMin, float xMax,
+			float yMin, float yMax )
+	{
+		if( xMin > xMax )
+		{
+			float tmp = xMax;
+			xMax = xMin;
+			xMin = tmp;
+		}
+		if( yMin > yMax )
+		{
+			float tmp = yMax;
+			yMax = yMin;
+			yMin = tmp;
+		}
+		ArrayList<AbstractObject> collisions = new ArrayList<>();
+
+		ArrayList<AbstractObject> objectsInTheRange = getObjectsInTheRange( xMin, xMax, yMin, yMax );
+
+		for( AbstractObject obj : objectsInTheRange )
+		{
+			if( MyMath.pointToLineDistance( xMin, yMin, xMax, yMax, obj.getX(), obj.getY() )
+					- obj.getCollisionRay() - 10 <= 6f )
+				collisions.add( obj );
+		}
+
+		return collisions;
+
+	}
+
 	public ArrayList<AbstractObject> getObjectsYInTheRange( float y )
 	{
 		Set<Pair<Float, Float>> keySet = objectY.keySet();

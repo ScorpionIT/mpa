@@ -48,7 +48,7 @@ public class OpponentAI extends Thread
 				e.printStackTrace();
 			}
 
-			System.out.println( "sto ciclando " + c++ );
+			// System.out.println( "sto ciclando " + c++ );
 			aiState.action( this );
 			aiState = aiState.changeState( this );
 		}
@@ -67,9 +67,9 @@ public class OpponentAI extends Thread
 		if( building instanceof Market )
 			market = Market.getInstance().getGatheringPlace();
 
-		System.out.println();
-		System.out.println( "ho aggiunto un building !!!" );
-		System.out.println();
+		// System.out.println();
+		// System.out.println( "ho aggiunto un building !!!" );
+		// System.out.println();
 	}
 
 	void addBuildings( Vector2f position )

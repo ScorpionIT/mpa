@@ -82,7 +82,7 @@ public abstract class AbstractCharacter extends AbstractObject
 		{
 			computeCurrentVector();
 		}
-		else
+		else if( path.size() == 1 )
 		{
 			Vector2f point = new Vector2f( path.get( 0 ).x, path.get( 0 ).y );
 			// currentVector = new Vector2f( point.x - x, point.y - y );
