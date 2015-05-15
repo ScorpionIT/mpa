@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import mpa.core.logic.building.Market;
 import mpa.core.logic.resource.AbstractResourceProducer;
 import mpa.core.maths.MyMath;
 
@@ -95,7 +96,7 @@ public class World
 	{
 		ArrayList<AbstractObject> objects = new ArrayList<>();
 		ArrayList<AbstractObject> objectsX = getObjectsXInTheRange( ( int ) xMin, ( int ) xMax );
-		ArrayList<AbstractObject> objectsY = getObjectsXInTheRange( ( int ) yMin, ( int ) yMax );
+		ArrayList<AbstractObject> objectsY = getObjectsYInTheRange( ( int ) yMin, ( int ) yMax );
 
 		for( AbstractObject objX : objectsX )
 		{
@@ -164,8 +165,16 @@ public class World
 
 		ArrayList<AbstractObject> objectsInTheRange = getObjectsInTheRange( xMin, xMax, yMin, yMax );
 
+		System.out.println( "la size di objectsInTheRange è " + objectsInTheRange.size() );
+
 		for( AbstractObject obj : objectsInTheRange )
 		{
+			if( obj instanceof Market )
+				System.out.println( "MARKET PORCO" );
+
+			System.out.println( "point to line :"
+					+ MyMath.pointToLineDistance( xMin, yMin, xMax, yMax, obj.getX(), obj.getY() ) );
+			System.out.println( obj.getClass().getName() );
 			if( MyMath.pointToLineDistance( xMin, yMin, xMax, yMax, obj.getX(), obj.getY() )
 					- obj.getCollisionRay() - 10 <= 6f )
 				collisions.add( obj );
@@ -203,7 +212,7 @@ public class World
 					|| ( xMax >= pair.getFirst() && xMax <= pair.getSecond() ) )
 				abstractObjectsX.addAll( objectX.get( pair ) );
 		}
-		// System.err.println("numero abstract object x " + abstractObjectsX.size());
+		System.out.println( "numero abstract object x " + abstractObjectsX.size() );
 		return abstractObjectsX;
 	}
 
@@ -220,7 +229,7 @@ public class World
 					|| ( yMax >= pair.getFirst() && yMax <= pair.getSecond() ) )
 				abstractObjectsY.addAll( objectY.get( pair ) );
 		}
-		// System.err.println("numero abstract object y " + abstractObjectsY.size());
+		System.out.println( "numero abstract object y " + abstractObjectsY.size() );
 		return abstractObjectsY;
 	}
 

@@ -18,6 +18,8 @@ public class PathCalculatorImplementation
 	public PathCalculatorImplementation( Vector2f startingPoint, Vector2f goal )
 	{
 		super();
+		System.out.println( "mi hai passato " + startingPoint.x + ", " + startingPoint.y );
+		System.out.println( "mi hai passato " + goal.x + ", " + goal.y );
 		this.startingPoint = startingPoint;
 		this.goal = goal;
 	}
@@ -25,23 +27,19 @@ public class PathCalculatorImplementation
 	public ArrayList<Vector2f> computePath()
 	{
 
-		MyPathNode currentPosition = new MyPathNode( null, startingPoint, 0 );
-		openList.add( currentPosition );
+		MyPathNode currentPosition = null;
+		openList.add( new MyPathNode( null, startingPoint, 0 ) );
 
 		Vector2f currentVector = new Vector2f( -startingPoint.x + goal.x, -startingPoint.y + goal.y );
-		int greatestCommonDivisor = MyMath.greatestCommonDivisor( ( int ) currentVector.x,
-				( int ) currentVector.y );
 
-		currentVector.set( currentVector.x / greatestCommonDivisor, currentVector.y
-				/ greatestCommonDivisor );
+		currentVector = computeCurrentVector( startingPoint, goal );
+		System.out.println( "currentVector vale " + currentVector.x + ", " + currentVector.y );
 
 		Vector2f normalVector = new Vector2f();
 
-		// int iteration = 1;
+		int iteration = 0;
 		while( !openList.isEmpty() )
 		{
-			// System.out.println( "all'iterazione " + iteration++ + " la size della openList è "
-			// + openList.size() );
 			currentPosition = bestPoint();
 			addToClosedList( currentPosition );
 
@@ -53,14 +51,11 @@ public class PathCalculatorImplementation
 			{
 				closedList.add( new MyPathNode( currentPoint, goal, computeCost( currentPosition,
 						goal ) ) );
+				System.out.println( "ci entro?" );
 				break;
 			}
 
-			currentVector.set( -currentPoint.x + goal.x, -currentPoint.y + goal.y );
-			greatestCommonDivisor = MyMath.greatestCommonDivisor( ( int ) currentVector.x,
-					( int ) currentVector.y );
-			currentVector.set( currentVector.x / greatestCommonDivisor, currentVector.y
-					/ greatestCommonDivisor );
+			currentVector = computeCurrentVector( currentPoint, goal );
 
 			// North
 			Vector2f point = new Vector2f( currentPoint.x + currentVector.x * increment,
@@ -75,7 +70,7 @@ public class PathCalculatorImplementation
 					computeCost( currentPosition, point ) ) );
 
 			// East
-			normalVector.set( currentVector.y, -currentVector.x );
+			normalVector = computeNormalVector( currentVector );
 			point = new Vector2f( currentPoint.x + normalVector.x * increment, currentPoint.y
 					+ normalVector.y * increment );
 			addToOpenList( new MyPathNode( currentPoint, point,
@@ -91,11 +86,31 @@ public class PathCalculatorImplementation
 
 		System.out.println();
 		System.out.println();
-		System.err.println( "la size della closedList è " + closedList.size() );
+		System.err.println( "la size della closedList è " + closedList.size() + " iterazioni "
+				+ iteration );
 		System.out.println();
 		System.out.println();
 
 		return getPath();
+	}
+
+	private Vector2f computeCurrentVector( Vector2f start, Vector2f arrival )
+	{
+		Vector2f vector;
+
+		Vector2f point = new Vector2f( -start.x + arrival.x, -start.y + arrival.y );
+
+		if( Math.abs( point.x ) >= Math.abs( point.y ) )
+			vector = new Vector2f( 1, point.y / point.x );
+		else
+			vector = new Vector2f( point.x / point.y, 1 );
+
+		return vector;
+	}
+
+	private Vector2f computeNormalVector( Vector2f vector )
+	{
+		return new Vector2f( -vector.y, vector.x );
 	}
 
 	private ArrayList<Vector2f> getPath()
@@ -110,91 +125,115 @@ public class PathCalculatorImplementation
 			return path;
 		}
 
-		Vector2f currentPoint = null;
+		MyPathNode currentNode = closedList.get( closedList.size() - 1 );
+		Vector2f currentPoint = currentNode.getArrival();
+		Vector2f arrival;
 
-		Vector2f arrival = closedList.get( closedList.size() - 1 ).getArrival();
-
-		if( ( ( int ) arrival.x ) == ( ( int ) goal.x )
-				&& ( ( int ) arrival.y ) == ( ( int ) goal.y ) )
-			currentPoint = arrival;
-		else
-		{
-			for( MyPathNode node : closedList )
-			{
-				arrival = node.getArrival();
-				if( ( ( int ) arrival.x ) == ( ( int ) goal.x )
-						&& ( ( int ) arrival.y ) == ( ( int ) goal.y ) )
-				{
-					currentPoint = arrival;
-					break;
-				}
-			}
-		}
+		// if( ( ( int ) currentPoint.x ) != ( ( int ) goal.x )
+		// || ( ( int ) currentPoint.y ) != ( ( int ) goal.y ) )
+		// for( MyPathNode node : closedList )
+		// {
+		// arrival = node.getArrival();
+		// if( ( ( int ) arrival.x ) == ( ( int ) goal.x )
+		// && ( ( int ) arrival.y ) == ( ( int ) goal.y ) )
+		// {
+		// currentNode = node;
+		// break;
+		// }
+		//
+		// }
 
 		path.add( currentPoint );
+		currentPoint = currentNode.getStartingPoint();
 
-		System.out.println();
-		System.out.println();
-		System.out.print( "sono prima del for e currentPoint è " );
-		if( currentPoint == null )
-			System.out.println( " null " );
-		else
-			System.out.println( " non null" );
-		System.out.println();
-		System.out.println();
-
-		for( MyPathNode node : closedList )
+		int cont = 0;
+		while( currentPoint != null )
 		{
-			arrival = node.getArrival();
-
-			if( ( ( int ) arrival.x ) == ( ( int ) currentPoint.x )
-					&& ( ( int ) arrival.y ) == ( ( int ) currentPoint.y ) )
+			System.out.println( "lalalalalalal " + cont++ );
+			int index = 0;
+			for( MyPathNode node : closedList )
 			{
-				Vector2f newStartingPoint = node.getStartingPoint();
+				Vector2f tmp = node.getArrival();
 
-				if( newStartingPoint == null )
-					break;
-				else
+				if( ( ( int ) tmp.x ) == ( ( int ) currentPoint.x )
+						&& ( ( int ) tmp.y ) == ( ( int ) currentPoint.y ) )
 				{
-					path.add( 0, newStartingPoint );
-					currentPoint = newStartingPoint;
-					// closedList.remove( node );
+					path.add( 0, currentPoint );
+					currentPoint = node.getStartingPoint();
+					node = closedList.remove( index );
+					break;
 				}
+				index++;
 			}
 		}
-		return path;
 
-		// Vector2f furthestPoint = path.get( 0 );
-		// int index = 0;
-		//
-		// ArrayList<Vector2f> smartestPath = new ArrayList<>();
-		// smartestPath.add( startingPoint );
-		// path.remove( startingPoint );
-		//
-		// System.out.println( "sono uscito dal for? entro nel while" );
-		//
-		// while( furthestPoint != path.get( path.size() - 1 ) )
-		// {
-		// System.out.println( index );
-		// Vector2f pointToCheck = path.get( index++ );
-		// if( world.checkForCollisionInTheRange( furthestPoint.x, pointToCheck.x,
-		// furthestPoint.y, pointToCheck.y ).isEmpty() )
-		// furthestPoint = pointToCheck;
-		// else
-		// smartestPath.add( furthestPoint );
-		// }
-		// return smartestPath;
+		System.out.println( "sto restituendo " + path.size() );
+
+		// return path;
+
+		System.out.println();
+		System.out.println( "starting point= " + startingPoint.x + " " + startingPoint.y
+				+ " mentre path di 0 è " + path.get( 0 ).x + " " + path.get( 0 ).y );
+		System.out.println();
+
+		currentPoint = path.get( 0 );
+		Vector2f furthestPoint = path.get( 1 );
+		int index = 2;
+
+		ArrayList<Vector2f> smartestPath = new ArrayList<>();
+		smartestPath.add( path.get( 0 ) );
+
+		System.out.println( "sono uscito dal for? entro nel while e la size di path è " + index );
+
+		while( index < path.size() )
+		{
+			System.out.println( index );
+			Vector2f pointToCheck = path.get( index++ );
+			if( !world.checkForCollisionInTheRange( currentPoint.x, pointToCheck.x, currentPoint.y,
+					pointToCheck.y ).isEmpty() )
+			{
+				smartestPath.add( furthestPoint );
+				currentPoint = furthestPoint;
+			}
+			else
+			{
+				furthestPoint = pointToCheck;
+			}
+		}
+		smartestPath.add( goal );
+		System.out.println();
+		System.out.println( "la size è " + smartestPath.size() );
+		System.out.println();
+
+		return smartestPath;
 	}
+
+	// System.out.println();
+	// System.out.println();
+	// System.out.print( "sono prima del for e currentPoint è " );
+	// if( currentPoint == null )
+	// System.out.println( " null " );
+	// else
+	// System.out.println( " non null" );
+	// System.out.println();
+	// System.out.println();
 
 	private void addToOpenList( MyPathNode currentNode )
 	{
+
 		Vector2f point = currentNode.getArrival();
+		System.out.println( "ma qua ci entro?!" );
 		if( isOutOfTheWorld( point.x, point.y ) )
 			return;
 
-		if( !world.checkForCollision( point.x, point.y ).isEmpty() )
+		Vector2f start = currentNode.getStartingPoint();
+
+		System.out.println( "passato controllo sul mondo" );
+
+		if( !world.checkForCollisionInTheRange( start.x, point.x, start.y, point.y ).isEmpty() )
 			return;
 
+		System.out.println( "passato controllo sulle collisioni" );
 		for( MyPathNode node : closedList )
 		{
 			Vector2f arrival = node.getArrival();
@@ -203,44 +242,29 @@ public class PathCalculatorImplementation
 				return;
 		}
 
+		System.out.println();
+		System.out.println( " ho aggiunto " );
+		System.out.println();
 		openList.add( currentNode );
 	}
 
 	private boolean isOutOfTheWorld( float x, float y )
 	{
-		float width = GameManager.getInstance().getWorld().getWidth();
-		float height = GameManager.getInstance().getWorld().getHeight();
+		float width = world.getWidth();
+		float height = world.getHeight();
 
-		return( x > width || x < 0 || y > height || y < 0 );
+		System.out.println( "la w=" + width + ", x=" + x );
+		System.out.println( "la h=" + height + ", y=" + y );
+
+		if( x > width || x < 0 || y > height || y < 0 )
+			return true;
+		return false;
 	}
 
 	private void addToClosedList( MyPathNode newNode )
 	{
-		// Vector2f newArrival = newNode.getArrival();
-		// Vector2f startingPoint = newNode.getStartingPoint();
-		//
-		// if( startingPoint == null )
-		// {
-		// closedList.add( newNode );
-		// return;
-		// }
-		//
-		// for( MyPathNode node : closedList )
-		// {
-		// Vector2f arrival = node.getArrival();
-		// if( ( ( int ) arrival.x ) == ( ( int ) newArrival.x )
-		// && ( ( int ) arrival.y ) == ( ( int ) newArrival.y ) )
-		// if( node.getCost() > newNode.getCost() )
-		// {
-		// node.setStartingPoint( startingPoint );
-		// node.setCost( newNode.getCost() );
-		// return;
-		// }
-		// }
-
 		closedList.add( newNode );
 		openList.remove( newNode );
-
 	}
 
 	private MyPathNode bestPoint()
@@ -248,6 +272,9 @@ public class PathCalculatorImplementation
 		MyPathNode bestNode = null;
 
 		float minCost = Float.MAX_VALUE;
+
+		if( openList.size() == 1 )
+			return openList.get( 0 );
 
 		for( MyPathNode node : openList )
 		{
@@ -265,8 +292,6 @@ public class PathCalculatorImplementation
 
 	private float computeCost( MyPathNode currentNode, Vector2f point )
 	{
-
 		return currentNode.getCost() + MyMath.distanceFloat( point.x, point.y, goal.x, goal.y );
-
 	}
 }

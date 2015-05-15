@@ -27,6 +27,7 @@ public class WorldFromMapInfo implements WorldCreator
 
 		Market.initiate( mapInfo.getMarket().getFirst(), mapInfo.getMarket().getSecond() );
 
+		System.out.println( "Market= " + Market.getInstance().getWidth() );
 		world.addObject( Market.getInstance() );
 		return world;
 	}
