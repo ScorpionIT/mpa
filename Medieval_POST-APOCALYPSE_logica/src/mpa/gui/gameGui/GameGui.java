@@ -21,6 +21,10 @@ import mpa.gui.gameGui.listener.GameGuiKeyActionListener;
 import mpa.gui.gameGui.listener.GameGuiMouseListener;
 import mpa.gui.gameGui.panel.NiftyHandler;
 
+import com.jme3.animation.AnimChannel;
+import com.jme3.animation.AnimControl;
+import com.jme3.animation.AnimEventListener;
+import com.jme3.animation.LoopMode;
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.asset.plugins.ZipLocator;
@@ -49,7 +53,7 @@ import com.jme3.texture.Texture;
 import com.jme3.texture.Texture.WrapMode;
 import com.jme3.util.TangentBinormalGenerator;
 
-public class GameGui extends SimpleApplication
+public class GameGui extends SimpleApplication implements AnimEventListener
 {
 	private ReentrantLock lock = new ReentrantLock();
 	boolean cursorOnTheRightEdge = false;
@@ -369,6 +373,7 @@ public class GameGui extends SimpleApplication
 				model.scale(35.2f, 35.2f, 35.2f);
 				// model.scale(10.2f, 10.2f, 10.2f);
 				model.setLocalTranslation(new Vector3f(player.getX(), -20, player.getY()));
+
 			}
 			i++;
 			mobileObjects.attachChild(model);
@@ -427,9 +432,28 @@ public class GameGui extends SimpleApplication
 		players = GameManager.getInstance().getPlayers();
 
 		int i = 0;
+		AnimControl control;
+		AnimChannel channel = null;
 		for (Player p : players)
 		{
 			// if( i == 0 )
+			if (p.getPath() != null && !p.getPath().isEmpty())
+			{
+
+				control = mobileObjects.getChild(i).getControl(AnimControl.class);
+				control.clearListeners();
+				control.addListener(this);
+				channel = control.createChannel();
+				channel.setAnim("WALK", 0.80f);
+				channel.setLoopMode(LoopMode.Loop);
+
+			}
+			else
+			{
+				// if (channel != null)
+				// channel.setAnim(null);
+
+			}
 			mobileObjects.getChild(i).setLocalTranslation(p.getX(), -10, p.getY());
 
 			i++;
@@ -533,5 +557,19 @@ public class GameGui extends SimpleApplication
 	public void setCursorOnTheTopEdge(boolean cursorOnTheTopEdge)
 	{
 		this.cursorOnTheTopEdge = cursorOnTheTopEdge;
+	}
+
+	@Override
+	public void onAnimChange(AnimControl arg0, AnimChannel arg1, String arg2)
+	{
+		// TODO Stub di metodo generato automaticamente
+
+	}
+
+	@Override
+	public void onAnimCycleDone(AnimControl arg0, AnimChannel arg1, String arg2)
+	{
+		// TODO Stub di metodo generato automaticamente
+
 	}
 }
