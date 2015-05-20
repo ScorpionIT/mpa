@@ -22,7 +22,22 @@ class WaitingState extends AIState
 	@Override
 	AIState changeState( OpponentAI opponentAI )
 	{
-		return this;
+		AIState nextState = null;
+		if( !opponentAI.knownAllTheWorld )
+			nextState = new ExplorationState();
+		else if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings() )
+			nextState = new ConquestState();
+		else if( opponentAI.player.canUpgrade() || opponentAI.player.canBuyPotions() )
+			nextState = new ProductionState();
+
+		// else if( opponentAI.areThereWeakerPlayers() )
+		// nextState = new CombatState();
+		// else if( !opponentAI.knownAllTheWorld )
+		// nextState = new ExplorationState();
+		// else
+		// nextState = new WaitingState();
+
+		return nextState;
 	}
 
 }

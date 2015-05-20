@@ -20,8 +20,6 @@ public class Player extends AbstractCharacter
 
 	private Level level;
 
-	// private Weapon weapon = null;
-
 	private int MP;
 	private float rangeOfPhysicallAttack = 5;
 	private int physicallAttackDamage = 0;

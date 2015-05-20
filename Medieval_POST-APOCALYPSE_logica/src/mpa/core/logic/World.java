@@ -18,7 +18,6 @@ public class World
 	private ArrayList<AbstractObject> allObjects = new ArrayList<>();
 	private ArrayList<AbstractResourceProducer> resourceProducers = new ArrayList<AbstractResourceProducer>();
 
-	// private Map<Integer, Point> headquartedPosition;
 	public World( float width, float height )
 	{
 		super();
@@ -172,11 +171,11 @@ public class World
 			if( obj instanceof Market )
 				System.out.println( "MARKET PORCO" );
 
-			System.out.println( "point to line :"
-					+ MyMath.pointToLineDistance( xMin, yMin, xMax, yMax, obj.getX(), obj.getY() ) );
-			System.out.println( obj.getClass().getName() );
+			// System.out.println( "point to line :"
+			// + MyMath.pointToLineDistance( xMin, yMin, xMax, yMax, obj.getX(), obj.getY() ) );
+			// System.out.println( obj.getClass().getName() );
 			if( MyMath.pointToLineDistance( xMin, yMin, xMax, yMax, obj.getX(), obj.getY() )
-					- obj.getCollisionRay() - 10 <= 6f )
+					- obj.getCollisionRay() - 10f <= 1f )
 				collisions.add( obj );
 		}
 
@@ -195,7 +194,6 @@ public class World
 				abstractObjectsY.addAll( objectY.get( pair ) );
 			}
 		}
-		// System.out.println("getObjectsYInTheRange " + abstractObjectsY.size());
 		return abstractObjectsY;
 	}
 

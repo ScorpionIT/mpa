@@ -77,8 +77,8 @@ class ExplorationState extends AIState
 		if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings() )
 			nextState = new ConquestState();
 
-		// else if( opponentAI.player.canUpgrade() )
-		// nextState = new StrengtheningState();
+		else if( opponentAI.player.canUpgrade() )
+			nextState = new StrengtheningState();
 		// else if( opponentAI.player.canBuyPotions() )
 		// nextState = new ProductionState();
 		// else if( opponentAI.areThereWeakerPlayers() )

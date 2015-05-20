@@ -20,12 +20,13 @@ class StrengtheningState extends AIState
 		Player p = opponentAI.player;
 		try
 		{
-			p.getWriteLock();
+			// p.getWriteLock();
 
 			if( isWalking )
 				return;
 			Vector2f collectionPoint = p.getHeadquarter().getCollectionPoint();
-			if( p.getX() == collectionPoint.x && p.getY() == collectionPoint.y )
+			if( ( ( int ) p.getX() ) == ( ( int ) collectionPoint.x )
+					&& ( ( int ) p.getY() ) == ( ( int ) collectionPoint.y ) )
 			{
 				if( p.canUpgrade() )
 					p.upgradeLevel();
@@ -38,7 +39,7 @@ class StrengtheningState extends AIState
 			}
 		} finally
 		{
-			p.leaveWriteLock();
+			// p.leaveWriteLock();
 		}
 	}
 
@@ -47,14 +48,14 @@ class StrengtheningState extends AIState
 	{
 		AIState nextState = null;
 
-		if( opponentAI.player.canUpgrade() )
+		if( opponentAI.player.canUpgrade() || isWalking )
 			nextState = this;
-		else if( opponentAI.player.canBuyPotions() )
-			nextState = new ProductionState();
-		else if( !opponentAI.knownAllTheWorld )
-			nextState = new ExplorationState();
-		else if( opponentAI.areThereWeakerPlayers() )
-			nextState = new CombatState();
+		// else if( opponentAI.player.canBuyPotions() )
+		// nextState = new ProductionState();
+		// else if( !opponentAI.knownAllTheWorld )
+		// nextState = new ExplorationState();
+		// else if( opponentAI.areThereWeakerPlayers() )
+		// nextState = new CombatState();
 		else if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings() )
 			nextState = new ConquestState();
 		else

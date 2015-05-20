@@ -30,7 +30,7 @@ public abstract class AbstractCharacter extends AbstractObject
 
 	public AbstractCharacter( String name, float x, float y, int health, int bagDimension )
 	{
-		super( x, y, 0, 0 ); // TODO
+		super( x, y, 15, 15 ); // TODO
 		this.name = name;
 		this.health = health;
 		this.bag = new Inventory( bagDimension );

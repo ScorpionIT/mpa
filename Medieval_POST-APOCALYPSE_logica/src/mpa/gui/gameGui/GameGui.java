@@ -432,6 +432,9 @@ public class GameGui extends SimpleApplication
 	{
 		pathNodes.detachAllChildren();
 		int i = 0;
+
+		if( path == null || path.isEmpty() )
+			return;
 		for( javax.vecmath.Vector2f pair : path )
 		{
 			Sphere sphereMesh;

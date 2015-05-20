@@ -44,11 +44,10 @@ public class GameManager
 		this.difficultyLevel = level;
 	}
 
-	public ArrayList<Vector2f> computePath( Player player, float xGoal, float yGoal )
+	public void computePath( Player player, float xGoal, float yGoal )
 	{
 		PathCalculatorThread pathCalculatorThread = new PathCalculatorThread( player, xGoal, yGoal );
 		pathCalculatorThread.start();
-		return pathCalculatorThread.getPath();
 	}
 
 	public void addPlayer( Player player )
@@ -105,11 +104,8 @@ public class GameManager
 		if( !property.isFree() || !player.isThereAnyFreeSulbaltern() )
 			return false;
 
-		System.out.println( "sto occupando " );
 		property.setOwner( player );
-		System.out.println( "vado in deadlock qua?" );
 		player.employSubaltern( property );
-		System.out.println( "ho occupato" );
 		return true;
 	}
 

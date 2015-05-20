@@ -140,11 +140,11 @@ public class ConquestState extends AIState
 		AIState nextState = null;
 		if( walking && buildingToOccupy != null )
 			nextState = this;
-		else
+		else if( !opponentAI.knownAllTheWorld )
 			nextState = new ExplorationState();
-		// else if( opponentAI.player.canUpgrade() || opponentAI.player.canBuyPotions() )
-		// nextState = new ProductionState();
-		//
+		else if( opponentAI.player.canUpgrade() || opponentAI.player.canBuyPotions() )
+			nextState = new ProductionState();
+
 		// else if( opponentAI.areThereWeakerPlayers() )
 		// nextState = new CombatState();
 		// else if( !opponentAI.knownAllTheWorld )
