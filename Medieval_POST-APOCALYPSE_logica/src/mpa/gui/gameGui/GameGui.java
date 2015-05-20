@@ -244,15 +244,15 @@ public class GameGui extends SimpleApplication
 
 			else if (object instanceof Wood)
 			{
-				// assetManager.registerLocator( "Assets/Models/wood.zip", ZipLocator.class );
-				//
-				// Spatial loadModel = assetManager.loadModel( "wood.mesh.xml" );
-				// loadModel.setLocalTranslation( new Vector3f( object.getX(), 0, object.getY() ) );
-				// float cos = FastMath.cos( 90 );
-				// float sin = FastMath.sin( 90 );
-				// loadModel.setLocalRotation( new Matrix3f( 1, 0, 0, 0, cos, -sin, 0, sin, cos ) );
-				// loadModel.scale( 2f );
-				// rootNode.attachChild( loadModel );
+				assetManager.registerLocator("Assets/Models/Wood.zip", ZipLocator.class);
+
+				Spatial loadModel = assetManager.loadModel("Tree.mesh.xml");
+				loadModel.setLocalTranslation(new Vector3f(object.getX(), 0, object.getY()));
+				float cos = FastMath.cos(90);
+				float sin = FastMath.sin(90);
+				loadModel.setLocalRotation(new Matrix3f(1, 0, 0, 0, cos, -sin, 0, sin, cos));
+				loadModel.scale(6f);
+				rootNode.attachChild(loadModel);
 
 			}
 

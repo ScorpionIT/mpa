@@ -101,12 +101,12 @@ public class MapPreviewEditorPanel extends MpaPanel
 			String objName = getObjectName(addedObjects.get(i));
 
 			Rectangle rect = new Rectangle((int) (addedObjects.get(i).getSecond().getX()), (int) addedObjects.get(i).getSecond().getY(),
-					(int) W((float) GameProperties.getInstance().getObjectWidth(objName)), (int) H((float) GameProperties.getInstance()
-							.getObjectWidth(objName)));
+					(int) W((float) GameProperties.getInstance().getObjectWidth(objName) * 2), (int) H((float) GameProperties.getInstance()
+							.getObjectWidth(objName) * 2));
 
 			Rectangle rect1 = new Rectangle((int) selectedLabelBounds.getX(), (int) selectedLabelBounds.getY(), (int) W((float) GameProperties
-					.getInstance().getObjectWidth(getObjectName(selectedObjectName))), (int) H((float) GameProperties.getInstance().getObjectHeight(
-					getObjectName(selectedObjectName))));
+					.getInstance().getObjectWidth(getObjectName(selectedObjectName)) * 2), (int) H((float) GameProperties.getInstance()
+					.getObjectHeight(getObjectName(selectedObjectName)) * 2));
 
 			if (rect.intersects(rect1))
 			{
@@ -127,11 +127,11 @@ public class MapPreviewEditorPanel extends MpaPanel
 			g.setColor(selectedObjectColor);
 			String selectedName = getObjectName(selectedObjectName);
 			g.drawRect((int) (this.selectedObjectPosition.getX()), (int) this.selectedObjectPosition.getY(), (int) W((float) GameProperties
-					.getInstance().getObjectWidth(selectedName)), (int) H((float) GameProperties.getInstance().getObjectHeight(selectedName)));
+					.getInstance().getObjectWidth(selectedName) * 2), (int) H((float) GameProperties.getInstance().getObjectHeight(selectedName) * 2));
 
 			g.drawImage(images.get(selectedName), (int) (this.selectedObjectPosition.getX()), (int) this.selectedObjectPosition.getY(),
-					(int) W((float) GameProperties.getInstance().getObjectWidth(selectedName)), (int) H((float) GameProperties.getInstance()
-							.getObjectHeight(selectedName)), this);
+					(int) W((float) GameProperties.getInstance().getObjectWidth(selectedName) * 2), (int) H((float) GameProperties.getInstance()
+							.getObjectHeight(selectedName) * 2), this);
 		}
 
 		for (Pair<String, Point> element : addedObjects)
@@ -141,7 +141,7 @@ public class MapPreviewEditorPanel extends MpaPanel
 			Image image = images.get(elementName);
 
 			g.drawImage(image, (int) element.getSecond().getX(), (int) element.getSecond().getY(), (int) W((float) GameProperties.getInstance()
-					.getObjectWidth(elementName)), (int) H((float) GameProperties.getInstance().getObjectHeight(elementName)), this);
+					.getObjectWidth(elementName) * 2), (int) H((float) GameProperties.getInstance().getObjectHeight(elementName) * 2), this);
 
 		}
 
@@ -254,8 +254,8 @@ public class MapPreviewEditorPanel extends MpaPanel
 
 			Rectangle objectBounds = new Rectangle((int) worldX((float) element.getSecond().getX()),
 					(int) worldY((float) element.getSecond().getY()), (int) W((float) GameProperties.getInstance().getObjectWidth(
-							getObjectName(element.getFirst()))), (int) H((float) GameProperties.getInstance().getObjectHeight(
-							getObjectName(elementName))));
+							getObjectName(element.getFirst())) * 2), (int) H((float) GameProperties.getInstance().getObjectHeight(
+							getObjectName(elementName)) * 2));
 
 			if (!map.contains(objectBounds))
 			{
@@ -275,7 +275,11 @@ public class MapPreviewEditorPanel extends MpaPanel
 	public void setSelectedObject(Point elementPosition, String selectedObjectName)
 	{
 
+		Integer objectWeight = GameProperties.getInstance().getObjectWidth(getObjectName(selectedObjectName));
+		Integer objectHeight = GameProperties.getInstance().getObjectHeight(getObjectName(selectedObjectName));
+
 		this.selectedObjectName = selectedObjectName + " " + indexObject;
+		elementPosition.setLocation(elementPosition.getX() - objectWeight / 2, elementPosition.getY() - objectHeight / 2);
 		this.selectedObjectPosition = elementPosition;
 		indexObject++;
 
@@ -317,7 +321,9 @@ public class MapPreviewEditorPanel extends MpaPanel
 		for (Pair<String, Point> addedObject : addedObjects)
 		{
 			addedObject.setFirst(getObjectName(addedObject.getFirst()));
-			addedObject.getSecond().setLocation(worldX((float) addedObject.getSecond().getX()), worldY((float) addedObject.getSecond().getY()));
+			addedObject.getSecond().setLocation(
+					worldX((float) (addedObject.getSecond().getX() + GameProperties.getInstance().getObjectWidth(getObjectName(addedObject)))),
+					worldY((float) addedObject.getSecond().getY() + GameProperties.getInstance().getObjectHeight(getObjectName(addedObject))));
 		}
 		return addedObjects;
 	}
