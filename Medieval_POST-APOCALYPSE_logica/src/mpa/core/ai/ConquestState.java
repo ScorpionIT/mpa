@@ -28,29 +28,25 @@ public class ConquestState extends AIState
 	{
 		Player player = opponentAI.player;
 
-		// System.out.println( "action dell'exploration" );
-
+		System.out.println( "Conquest State" );
 		if( buildingToOccupy != null && walking )
 		{
-			// System.out.println( "sono dentro l'if " );
 			Vector2f gathPlace = buildingToOccupy.getGatheringPlace();
 			if( ( ( int ) player.getX() ) == ( ( int ) gathPlace.x )
 					&& ( ( int ) player.getY() ) == ( ( int ) gathPlace.y ) )
 			{
 				System.out.println( "sono dentro l'if cazzuto " );
-				if( GameManager.getInstance().occupyProperty( player, buildingToOccupy ) )
-				{
-					// System.out.println( "dovrei aver occupato!!" );
-					// System.out.println();
-					// System.out.println();
-					// System.out.println();
-					walking = false;
-					buildingToOccupy = null;
-				}
+				GameManager.getInstance().occupyProperty( player, buildingToOccupy );
+				walking = false;
+				buildingToOccupy = null;
 			}
 			else
 				return;
 		}
+
+		if( !player.isThereAnyFreeSulbaltern() )
+			return;
+
 		int caves = 0;
 		int fields = 0;
 		int mines = 0;
@@ -115,10 +111,6 @@ public class ConquestState extends AIState
 			buildingToOccupy = _building2;
 			Vector2f gatheringPlace = _building2.getGatheringPlace();
 			GameManager.getInstance().computePath( player, gatheringPlace.x, gatheringPlace.y );
-			// System.out.println( "ho calcolato il percorso? 1" );
-			// System.err.println( "il nuovo posto sarebbe un " + _building2.getClass().getName()
-			// + " in pos " + gatheringPlace.x + ", " + gatheringPlace.y );
-			// System.out.println();
 			walking = true;
 		}
 		else if( _building != null )
@@ -126,10 +118,6 @@ public class ConquestState extends AIState
 			buildingToOccupy = _building;
 			Vector2f gatheringPlace = _building.getGatheringPlace();
 			GameManager.getInstance().computePath( player, gatheringPlace.x, gatheringPlace.y );
-			// System.out.println( "ho calcolato il percorso? 2" );
-			// System.err.println( "il nuovo posto sarebbe un " + _building.getClass().getName()
-			// + " in pos " + gatheringPlace.x + ", " + gatheringPlace.y );
-			// System.out.println();
 			walking = true;
 		}
 	}
@@ -142,8 +130,12 @@ public class ConquestState extends AIState
 			nextState = this;
 		else if( !opponentAI.knownAllTheWorld )
 			nextState = new ExplorationState();
-		else if( opponentAI.player.canUpgrade() || opponentAI.player.canBuyPotions() )
-			nextState = new ProductionState();
+		else if( opponentAI.player.canUpgrade() )
+			nextState = new StrengtheningState();
+		else
+			nextState = new WaitingState();
+		// else if( opponentAI.player.canBuyPotions() )
+		// nextState = new ProductionState();
 
 		// else if( opponentAI.areThereWeakerPlayers() )
 		// nextState = new CombatState();

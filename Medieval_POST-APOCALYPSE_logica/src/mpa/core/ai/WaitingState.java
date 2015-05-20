@@ -10,6 +10,7 @@ class WaitingState extends AIState
 	@Override
 	void action( OpponentAI opponentAI )
 	{
+		System.out.println( "Waiting State " );
 		try
 		{
 			Thread.sleep( 500 );
@@ -25,10 +26,13 @@ class WaitingState extends AIState
 		AIState nextState = null;
 		if( !opponentAI.knownAllTheWorld )
 			nextState = new ExplorationState();
-		else if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings() )
+		else if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings()
+				&& opponentAI.player.isThereAnyFreeSulbaltern() )
 			nextState = new ConquestState();
 		else if( opponentAI.player.canUpgrade() || opponentAI.player.canBuyPotions() )
 			nextState = new ProductionState();
+		else
+			nextState = this;
 
 		// else if( opponentAI.areThereWeakerPlayers() )
 		// nextState = new CombatState();

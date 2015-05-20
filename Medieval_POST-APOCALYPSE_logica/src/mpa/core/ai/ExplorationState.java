@@ -19,25 +19,20 @@ class ExplorationState extends AIState
 	@Override
 	void action( OpponentAI opponentAI )
 	{
+		System.out.println( "Exploration State" );
 		Player p = opponentAI.player;
 		float playerX = p.getX();
 		float playerY = p.getY();
 
 		if( pointToReach != null )
 		{
-			// if( pointToReach.x == playerX && pointToReach.y == playerY || p.getPath() == null
-			// || p.getPath().isEmpty() )
-			// System.out.println( "sono entrato nel primo if " );
-			// System.out.println( ( ( int ) pointToReach.x ) + "=?" + ( ( int ) playerX ) + "; "
-			// + ( ( int ) pointToReach.y ) + "=?" + ( ( int ) playerY ) );
-
 			if( isWalking && ( ( int ) pointToReach.x ) == ( ( int ) playerX )
 					&& ( ( int ) pointToReach.y ) == ( ( int ) playerY ) )
 			{
-				// System.out.println( "sono nel secondo if?!?!" );
 				opponentAI.addBuildings( pointToReach );
 
 				pointToReach = opponentAI.worldManager.getNextLocation( opponentAI.player );
+
 				if( pointToReach != null )
 				{
 					GameManager.getInstance().computePath( opponentAI.player, pointToReach.x,
@@ -47,6 +42,7 @@ class ExplorationState extends AIState
 				else
 				{
 					opponentAI.knownAllTheWorld = true;
+					isWalking = false;
 				}
 
 			}
@@ -74,7 +70,8 @@ class ExplorationState extends AIState
 	{
 		AIState nextState = null;
 
-		if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings() )
+		if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings()
+				&& opponentAI.player.isThereAnyFreeSulbaltern() )
 			nextState = new ConquestState();
 
 		else if( opponentAI.player.canUpgrade() )
@@ -90,22 +87,6 @@ class ExplorationState extends AIState
 			nextState = this;
 		else
 			nextState = new WaitingState();
-
-		// if( nextState instanceof ExplorationState )
-		// System.out.println( "ho scelto esplorazione " );
-		// else
-		// System.out.println( "ho scelto conquista" );
-		// if( nextState instanceof ExplorationState )
-		// System.out.println( "prox stato è Exp" );
-		// else if( nextState instanceof ConquestState )
-		// System.out.println( "prox stato è conq" );
-		// else if( nextState instanceof WaitingState )
-		// System.out.println( "prox stato è wait" );
-		// System.out.println();
-		// System.out.println();
-		// System.out.println();
-		// System.out.println();
-		// return this;
 		return nextState;
 	}
 }

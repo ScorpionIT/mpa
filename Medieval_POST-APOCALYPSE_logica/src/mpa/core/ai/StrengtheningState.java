@@ -17,6 +17,7 @@ class StrengtheningState extends AIState
 	@Override
 	void action( OpponentAI opponentAI )
 	{
+		System.out.println( "Strengthening State" );
 		Player p = opponentAI.player;
 		try
 		{
@@ -25,11 +26,20 @@ class StrengtheningState extends AIState
 			if( isWalking )
 				return;
 			Vector2f collectionPoint = p.getHeadquarter().getCollectionPoint();
-			if( ( ( int ) p.getX() ) == ( ( int ) collectionPoint.x )
+			if( ( p.getPath() == null || p.getPath().isEmpty() )
+					&& ( ( int ) p.getX() ) == ( ( int ) collectionPoint.x )
 					&& ( ( int ) p.getY() ) == ( ( int ) collectionPoint.y ) )
 			{
 				if( p.canUpgrade() )
 					p.upgradeLevel();
+
+				System.out.println();
+				System.out.println();
+				System.out.println( "ho uppato di livello" );
+				System.out.println();
+				System.out.println();
+
+				isWalking = false;
 			}
 
 			else if( p.canUpgrade() )
@@ -56,8 +66,11 @@ class StrengtheningState extends AIState
 		// nextState = new ExplorationState();
 		// else if( opponentAI.areThereWeakerPlayers() )
 		// nextState = new CombatState();
-		else if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings() )
+		else if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings()
+				&& opponentAI.player.isThereAnyFreeSulbaltern() )
 			nextState = new ConquestState();
+		else if( !opponentAI.knownAllTheWorld )
+			nextState = new ExplorationState();
 		else
 			nextState = new WaitingState();
 

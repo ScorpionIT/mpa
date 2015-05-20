@@ -48,7 +48,6 @@ public class OpponentAI extends Thread
 				e.printStackTrace();
 			}
 
-			// System.out.println( "sto ciclando " + c++ );
 			aiState.action( this );
 			aiState = aiState.changeState( this );
 		}

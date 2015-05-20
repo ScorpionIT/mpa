@@ -13,7 +13,7 @@ public class AbstractProperty extends AbstractObject
 	{
 		super( x, y, width, height );
 
-		gatheringPlace = new Vector2f( x + width / 2 + 10, y + height / 2 + 10 );
+		gatheringPlace = new Vector2f( x - width / 2f - 10f, y + height / 2f + 10f );
 
 	}
 

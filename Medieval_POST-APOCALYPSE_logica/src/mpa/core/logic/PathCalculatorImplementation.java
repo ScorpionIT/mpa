@@ -33,8 +33,13 @@ public class PathCalculatorImplementation
 		currentVector = computeCurrentVector( startingPoint, goal );
 		Vector2f normalVector = new Vector2f();
 
+		int iteration = 0;
+
 		while( !openList.isEmpty() )
 		{
+			// if( iteration >= 20 )
+			// System.out.println( "sono probabilmente in loop, iterazione numero " + iteration );
+
 			currentPosition = bestPoint();
 			addToClosedList( currentPosition );
 
@@ -82,10 +87,6 @@ public class PathCalculatorImplementation
 					point ) ) ) )
 				noPointAdded = false;
 
-			// if( !noPointAdded )
-			// increment /= 2;
-			// }
-
 			if( noPointAdded )
 			{
 				// North-West
@@ -118,7 +119,7 @@ public class PathCalculatorImplementation
 
 			}
 
-			if( openList.isEmpty() )
+			if( openList.isEmpty() && increment > 5 )
 			{
 				increment /= 2;
 				openList.add( currentPosition );
@@ -126,6 +127,8 @@ public class PathCalculatorImplementation
 			}
 			else
 				increment = 30;
+
+			iteration++;
 
 		}
 
@@ -169,7 +172,6 @@ public class PathCalculatorImplementation
 		path.add( currentPoint );
 		currentPoint = currentNode.getStartingPoint();
 
-		int cont = 0;
 		while( currentPoint != null )
 		{
 			int index = 0;
@@ -202,6 +204,7 @@ public class PathCalculatorImplementation
 			{
 				smartestPath.add( furthestPoint );
 				currentPoint = furthestPoint;
+				index--;
 			}
 			else
 			{

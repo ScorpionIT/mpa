@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-import mpa.core.logic.building.Market;
 import mpa.core.logic.resource.AbstractResourceProducer;
 import mpa.core.maths.MyMath;
 
@@ -164,13 +163,10 @@ public class World
 
 		ArrayList<AbstractObject> objectsInTheRange = getObjectsInTheRange( xMin, xMax, yMin, yMax );
 
-		System.out.println( "la size di objectsInTheRange è " + objectsInTheRange.size() );
+		// System.out.println( "la size di objectsInTheRange è " + objectsInTheRange.size() );
 
 		for( AbstractObject obj : objectsInTheRange )
 		{
-			if( obj instanceof Market )
-				System.out.println( "MARKET PORCO" );
-
 			// System.out.println( "point to line :"
 			// + MyMath.pointToLineDistance( xMin, yMin, xMax, yMax, obj.getX(), obj.getY() ) );
 			// System.out.println( obj.getClass().getName() );
@@ -197,20 +193,23 @@ public class World
 		return abstractObjectsY;
 	}
 
-	public ArrayList<AbstractObject> getObjectsXInTheRange( int xMin, int xMax )
+	public ArrayList<AbstractObject> getObjectsXInTheRange( float xMin, float xMax )
 	{
 		Set<Pair<Float, Float>> keySet = objectX.keySet();
 		ArrayList<AbstractObject> abstractObjectsX = new ArrayList<>();
 		for( Pair<Float, Float> pair : keySet )
 		{
-			if( ( pair.getFirst() <= xMax && pair.getFirst() >= xMin )
-					|| ( pair.getSecond() <= xMax && pair.getSecond() >= xMin ) )
+			if( ( pair.getFirst().intValue() <= ( ( int ) xMax ) && pair.getFirst().intValue() >= ( ( int ) xMin ) )
+					|| ( pair.getSecond().intValue() <= ( ( int ) xMax ) && pair.getSecond()
+							.intValue() >= ( ( int ) xMin ) ) )
 				abstractObjectsX.addAll( objectX.get( pair ) );
-			else if( ( xMin >= pair.getFirst() && xMin <= pair.getSecond() )
-					|| ( xMax >= pair.getFirst() && xMax <= pair.getSecond() ) )
+			else if( ( ( ( int ) xMin ) >= pair.getFirst().intValue() && ( ( int ) xMin ) <= pair
+					.getSecond().intValue() )
+					|| ( ( ( int ) xMax ) >= pair.getFirst().intValue() && ( ( int ) xMax ) <= pair
+							.getSecond().intValue() ) )
 				abstractObjectsX.addAll( objectX.get( pair ) );
 		}
-		System.out.println( "numero abstract object x " + abstractObjectsX.size() );
+		// System.out.println( "numero abstract object x " + abstractObjectsX.size() );
 		return abstractObjectsX;
 	}
 
@@ -220,14 +219,17 @@ public class World
 		ArrayList<AbstractObject> abstractObjectsY = new ArrayList<>();
 		for( Pair<Float, Float> pair : keySet )
 		{
-			if( ( ( pair.getFirst() < yMax && pair.getFirst() > yMin ) || ( pair.getSecond() < yMax && pair
-					.getSecond() > yMin ) ) )
+			if( ( pair.getFirst().intValue() <= ( ( int ) yMax ) && pair.getFirst().intValue() >= ( ( int ) yMin ) )
+					|| ( pair.getSecond().intValue() <= ( ( int ) yMax ) && pair.getSecond()
+							.intValue() >= ( ( int ) yMin ) ) )
 				abstractObjectsY.addAll( objectY.get( pair ) );
-			else if( ( yMin >= pair.getFirst() && yMin <= pair.getSecond() )
-					|| ( yMax >= pair.getFirst() && yMax <= pair.getSecond() ) )
+			else if( ( ( ( int ) yMin ) >= pair.getFirst().intValue() && ( ( int ) yMin ) <= pair
+					.getSecond().intValue() )
+					|| ( ( ( int ) yMax ) >= pair.getFirst().intValue() && ( ( int ) yMax ) <= pair
+							.getSecond().intValue() ) )
 				abstractObjectsY.addAll( objectY.get( pair ) );
 		}
-		System.out.println( "numero abstract object y " + abstractObjectsY.size() );
+		// System.out.println( "numero abstract object y " + abstractObjectsY.size() );
 		return abstractObjectsY;
 	}
 
@@ -259,26 +261,6 @@ public class World
 		return s;
 	}
 
-	// public ArrayList<AbstractObject> getObjectsInTheRange( int xMin, int xMax, int yMin, int yMax
-	// )
-	// {
-	// ArrayList<AbstractObject> intersection = new ArrayList<>();
-	//
-	// for( AbstractObject objectX : objectsX )
-	// {
-	// Iterator<AbstractObject> it = objectsY.iterator();
-	// while( it.hasNext() )
-	// {
-	// AbstractObject objectY = it.next();
-	// if( objectX == objectY )
-	// {
-	// intersection.add( objectX );
-	// it.remove();
-	// }
-	// }
-	// }
-	// }
-
 	public AbstractObject pickedObject( float xGoal, float yGoal )
 	{
 		ArrayList<AbstractObject> objectsXInTheRange = getObjectsXInTheRange( xGoal );
@@ -287,11 +269,6 @@ public class World
 		objectsXInTheRange.addAll( objectsYInTheRange );
 		for( AbstractObject abstractObject : objectsXInTheRange )
 		{
-			// System.out.println();
-			// System.out.println();
-			// System.out.println(abstractObject);
-			// System.out.println();
-			// System.out.println();
 			if( MyMath.distanceFloat( ( int ) abstractObject.getX(), ( int ) abstractObject.getY(),
 					( int ) xGoal, ( int ) yGoal ) - abstractObject.getCollisionRay() <= 0 )
 			{
