@@ -11,6 +11,11 @@ import mpa.core.logic.World;
 
 public class MyMath
 {
+	private static float scalarProduct( Vector2f u, Vector2f v )
+	{
+		return( ( u.x * v.x ) + ( u.y + v.y ) );
+	}
+
 	public static double distanceInteger( Integer x1, Integer y1, Integer x2, Integer y2 )
 	{
 		return Math.sqrt( Math.pow( ( x2 - x1 ), 2 ) + Math.pow( ( y2 - y1 ), 2 ) );
@@ -121,4 +126,11 @@ public class MyMath
 		return greatestCommonDivisor( q, p % q );
 	}
 
+	public static float angleBetweenVectors( Vector2f u, Vector2f v )
+	{
+		float cosine = scalarProduct( u, v )
+				/ ( distanceFloat( 0, 0, u.x, u.y ) * distanceFloat( 0, 0, v.x, v.y ) );
+
+		return ( float ) Math.acos( cosine );
+	}
 }

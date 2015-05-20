@@ -17,6 +17,7 @@ public abstract class AbstractCharacter extends AbstractObject
 	private ArrayList<Vector2f> path = new ArrayList<>();
 	private Vector2f currentVector = new Vector2f( 0.0f, 0.0f );
 	private int numberOfIterationsPerVector;
+	private float rotationAngle;
 
 	protected String name;
 	protected int health; // 0 - 100
@@ -58,6 +59,7 @@ public abstract class AbstractCharacter extends AbstractObject
 
 	private void computeCurrentVector()
 	{
+		Vector2f oldVector = new Vector2f( currentVector );
 		currentVector = new Vector2f( ( float ) ( -path.get( 0 ).x + path.get( 1 ).x ),
 				( float ) ( -path.get( 0 ).y + path.get( 1 ).y ) );
 
@@ -71,6 +73,8 @@ public abstract class AbstractCharacter extends AbstractObject
 
 		currentVector.set( currentVector.x / greatestCommonDivisor, currentVector.y
 				/ greatestCommonDivisor );
+
+		rotationAngle = MyMath.angleBetweenVectors( oldVector, currentVector );
 	}
 
 	public void setPath( ArrayList<Vector2f> path )
@@ -198,6 +202,18 @@ public abstract class AbstractCharacter extends AbstractObject
 		{
 			readLock.lock();
 			return new Vector2f( currentVector.x, currentVector.y );
+		} finally
+		{
+			readLock.unlock();
+		}
+	}
+
+	public float getRotationAngle()
+	{
+		try
+		{
+			readLock.lock();
+			return rotationAngle;
 		} finally
 		{
 			readLock.unlock();
