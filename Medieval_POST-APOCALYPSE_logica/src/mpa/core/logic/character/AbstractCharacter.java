@@ -45,7 +45,7 @@ public abstract class AbstractCharacter extends AbstractObject
 			currentVector = new Vector2f( 1f, currentVector.y / currentVector.x );
 		else
 			currentVector = new Vector2f( currentVector.x / currentVector.y, 1f );
-		rotationAngle = MyMath.angleBetweenVectors( new Vector2f( 0, -1 ), currentVector );
+		rotationAngle = MyMath.getRotationAngle( new Vector2f( 0, -1 ), currentVector );
 		System.out.println();
 		System.out.println( "ANGOLOMYMATH = " + rotationAngle + " con vectora = " + currentVector.x
 				+ " " + currentVector.y );
@@ -91,15 +91,17 @@ public abstract class AbstractCharacter extends AbstractObject
 		currentVector.set( currentVector.x / greatestCommonDivisor, currentVector.y
 				/ greatestCommonDivisor );
 
-		rotationAngle = MyMath.angleBetweenVectors( oldVector, currentVector );
-		System.out.println();
-		System.out.println( "ANGOLO = " + rotationAngle );
-		System.out.println();
+		rotationAngle = MyMath.getRotationAngle( oldVector, currentVector );
+		// System.out.println();
+		// System.out.println( "ANGOLO = " + rotationAngle );
+		// System.out.println();
 	}
 
 	public void setPath( ArrayList<Vector2f> path )
 	{
 		writeLock.lock();
+
+		System.out.println( "mi hai passato un path di " + path.size() );
 
 		this.path = path;
 		if( path.size() > 1 )
@@ -134,6 +136,9 @@ public abstract class AbstractCharacter extends AbstractObject
 				path.remove( 0 );
 				if( path.size() > 1 )
 				{
+					System.out.println();
+					System.out.println( "sono nell'if strano strano" );
+					System.out.println();
 					computeCurrentVector();
 				}
 				else

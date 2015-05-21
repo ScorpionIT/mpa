@@ -126,10 +126,84 @@ public class MyMath
 		return greatestCommonDivisor( q, p % q );
 	}
 
-	public static float angleBetweenVectors( Vector2f u, Vector2f v )
+	static int calling = 0;
+
+	public static float getRotationAngle( Vector2f from, Vector2f to )
 	{
-		float cosine = scalarProduct( u, v )
-				/ ( distanceFloat( 0, 0, u.x, u.y ) * distanceFloat( 0, 0, v.x, v.y ) );
+		System.out.println();
+		System.out.println( ++calling + " CALLING " );
+		System.out.println();
+		float angle = angleBetweenVectors( from, to );
+		Vector2f[] vectors = new Vector2f[2];
+		vectors[0] = from;
+		vectors[1] = to;
+
+		int[] quarters = new int[2];
+		float direction = 1f;
+
+		for( int i = 0; i < 2; i++ )
+		{
+			Vector2f tmp = vectors[i];
+			if( tmp.x >= 0f && tmp.y >= 0f ) // i-vector is in the first quarter
+				quarters[i] = 1;
+			else if( tmp.x <= 0f && tmp.y >= 0f ) // i-vector is in the second quarter
+				quarters[i] = 2;
+			else if( tmp.x <= 0f && tmp.y <= 0f ) // i-vector is in the third quarter
+				quarters[i] = 3;
+			else if( tmp.x >= 0f && tmp.y <= 0f ) // i-vector is in the fourth quarter
+				quarters[i] = 4;
+		}
+
+		System.out.println();
+		System.out.println( "from si trova nel quadrante " + quarters[0] );
+		System.out.println( "to si trova nel quadrante " + quarters[1] );
+		System.out.println();
+
+		if( quarters[0] == quarters[1] )
+		{
+			float angle_y_from = angleBetweenVectors( new Vector2f( 0, 1 ), from );
+			float angle_y_to = angleBetweenVectors( new Vector2f( 0, 1 ), to );
+
+			switch( quarters[0] )
+			{
+				case 1: // both in the first quarter
+					if( angle_y_from < angle_y_to )
+						direction = -1f;
+					break;
+
+				case 2:
+					if( angle_y_from > angle_y_to ) // both in the second quarter
+						direction = -1f;
+					break;
+
+				case 3:
+					if( angle_y_from > angle_y_to ) // both in the third quarter
+						direction = -1f;
+				case 4:
+					if( angle_y_from < angle_y_to ) // both in the fourth quarter
+						direction = -1f;
+			}
+
+		}
+		else
+		{
+			if( quarters[0] > quarters[1] )
+				direction = -1f;
+			if( quarters[0] == 4 && quarters[1] == 1 )
+				direction = 1f;
+		}
+
+		System.out.println();
+		System.out.println( "sto per restituire l'angolo  " + angle * direction );
+		System.out.println();
+
+		return angle * direction * -1f;
+	}
+
+	private static float angleBetweenVectors( Vector2f from, Vector2f to )
+	{
+		float cosine = scalarProduct( from, to )
+				/ ( distanceFloat( 0, 0, from.x, from.y ) * distanceFloat( 0, 0, to.x, to.y ) );
 
 		System.out.println();
 		System.out.println( "COSINE MYMATH =  " + cosine );

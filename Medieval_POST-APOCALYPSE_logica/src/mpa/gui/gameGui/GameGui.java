@@ -397,7 +397,7 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 			mobileObjects.attachChild( model );
 
 			Quaternion quad = new Quaternion();
-			quad.fromAngleAxis( -player.getRotationAngle(), new Vector3f( 0, 1, 0 ) );
+			quad.fromAngleAxis( player.getRotationAngle(), new Vector3f( 0, 1, 0 ) );
 			model.setLocalRotation( quad );
 		}
 	}
@@ -437,7 +437,7 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 			if( rotationAngle != 0f )
 			{
 				Quaternion quad = new Quaternion();
-				quad.fromAngleAxis( rotationAngle * -1, new Vector3f( 0, 1, 0 ) );
+				quad.fromAngleAxis( rotationAngle, new Vector3f( 0, 1, 0 ) );
 				mobObject.setLocalRotation( quad );
 			}
 
