@@ -45,6 +45,7 @@ public class OpponentPropertiesPanel
 
 		numberOfPlayerForPage = 100 / (heightPanel);
 		numberOfPages = (players.size() - 1) / numberOfPlayerForPage;
+		numberOfPages++;
 		System.out.println("NUMERO DI PAGINE " + numberOfPages + " E NUMERO DI PLAYER E' " + (players.size() - 1));
 
 		initButtons();
@@ -61,6 +62,11 @@ public class OpponentPropertiesPanel
 			}
 		};
 
+		// TODO ripartire dalla prima prima pagina
+
+		// TODO salta il player attuale
+
+		// TODO alzare il bottone
 		// mainPanelBuilder.set("horizontal", "false");
 		// mainPanelBuilder.set("autoScroll", "bottom");
 		mainPanelBuilder.set("width", "60%");
@@ -85,6 +91,10 @@ public class OpponentPropertiesPanel
 		buttonBackBuilder.interactOnClick("onClickButtonBack()");
 
 		buttonBackBuilder.visible(false);
+		if (numberOfPages == 1)
+		{
+			buttonForwardBuilder.visible(false);
+		}
 	}
 
 	private void inizializePanels(List<Player> players)
@@ -93,24 +103,26 @@ public class OpponentPropertiesPanel
 		int y = 3;
 
 		int index = 0;
-		for (int i = 0; i < players.size() && i != this.gameGui.getPlayerIndex(); i++)
+		for (int i = 0; i < players.size() /* && i != this.gameGui.getPlayerIndex() */; i++)
 		{
 			if (index % numberOfPlayerForPage == 0)
 			{
 				y = 3;
 			}
+			if (i != this.gameGui.getPlayerIndex())
+			{
+				HashMap<Resources, Integer> resources = players.get(i).getResources();
 
-			HashMap<Resources, Integer> resources = players.get(i).getResources();
+				OpponentResourcesPanel opponentResourcesPanel = new OpponentResourcesPanel(resources, x, y, 80, heightPanel, players.get(i).getName());
+				playersResources.put(players.get(i).getName(), opponentResourcesPanel);
 
-			OpponentResourcesPanel opponentResourcesPanel = new OpponentResourcesPanel(resources, x, y, 80, heightPanel, players.get(i).getName());
-			playersResources.put(players.get(i).getName(), opponentResourcesPanel);
+				// TODO SISTEMARE LA VISIBILITÀ
+				changeVisibility(i, opponentResourcesPanel);
+				mainPanelBuilder.panel(opponentResourcesPanel.getPanel());
 
-			changeVisibility(i, opponentResourcesPanel);
-			mainPanelBuilder.panel(opponentResourcesPanel.getPanel());
-
-			y += heightPanel;
-			index++;
-
+				y += heightPanel;
+				index++;
+			}
 		}
 	}
 

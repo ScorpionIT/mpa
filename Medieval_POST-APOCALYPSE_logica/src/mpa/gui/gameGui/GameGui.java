@@ -498,14 +498,14 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 		Set<Resources> keySet = resources.keySet();
 		for (Resources key : keySet)
 		{
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			System.out.println(niftyHandler);
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			System.out.println();
+			// System.out.println();
+			// System.out.println();
+			// System.out.println();
+			// System.out.println(niftyHandler);
+			// System.out.println();
+			// System.out.println();
+			// System.out.println();
+			// System.out.println();
 			niftyHandler.setResourceValue(key, resources.get(key));
 		}
 
