@@ -48,8 +48,10 @@ public class WorldLoader
 				selectedHQIndex = i;
 			}
 			else
+			{
+				player.setName( "Paola Maledetta " + i );
 				GameManager.getInstance().addAIPlayer( player );
-
+			}
 		}
 
 		return selectedHQIndex;

@@ -8,6 +8,7 @@ import javax.vecmath.Vector2f;
 
 import mpa.core.logic.AbstractObject;
 import mpa.core.logic.Inventory;
+import mpa.core.logic.building.Headquarter;
 import mpa.core.maths.MyMath;
 
 public abstract class AbstractCharacter extends AbstractObject
@@ -19,6 +20,8 @@ public abstract class AbstractCharacter extends AbstractObject
 	private int numberOfIterationsPerVector;
 	private float rotationAngle;
 
+	protected Headquarter headquarter;
+
 	protected String name;
 	protected int health; // 0 - 100
 	protected Inventory bag;
@@ -29,12 +32,26 @@ public abstract class AbstractCharacter extends AbstractObject
 	protected Lock readLock = lock.readLock();
 	protected Lock writeLock = lock.writeLock();
 
-	public AbstractCharacter( String name, float x, float y, int health, int bagDimension )
+	public AbstractCharacter( String name, float x, float y, int health, int bagDimension,
+			Headquarter headquarter )
 	{
 		super( x, y, 15, 15 ); // TODO
 		this.name = name;
 		this.health = health;
 		this.bag = new Inventory( bagDimension );
+		this.headquarter = headquarter;
+		this.currentVector = new Vector2f( -x + headquarter.getX(), -y + headquarter.getY() );
+		if( Math.abs( currentVector.x ) >= Math.abs( currentVector.y ) )
+			currentVector = new Vector2f( 1f, currentVector.y / currentVector.x );
+		else
+			currentVector = new Vector2f( currentVector.x / currentVector.y, 1f );
+		rotationAngle = MyMath.angleBetweenVectors( new Vector2f( 0, -1 ), currentVector );
+		System.out.println();
+		System.out.println( "ANGOLOMYMATH = " + rotationAngle + " con vectora = " + currentVector.x
+				+ " " + currentVector.y );
+		System.out.println( "HQ = " + headquarter.getX() + " " + headquarter.getY() );
+		System.out.println( "Player = " + x + " " + y );
+		System.out.println();
 	}
 
 	public void getWriteLock()
@@ -75,6 +92,9 @@ public abstract class AbstractCharacter extends AbstractObject
 				/ greatestCommonDivisor );
 
 		rotationAngle = MyMath.angleBetweenVectors( oldVector, currentVector );
+		System.out.println();
+		System.out.println( "ANGOLO = " + rotationAngle );
+		System.out.println();
 	}
 
 	public void setPath( ArrayList<Vector2f> path )
@@ -216,8 +236,14 @@ public abstract class AbstractCharacter extends AbstractObject
 			return rotationAngle;
 		} finally
 		{
+			rotationAngle = 0f;
 			readLock.unlock();
 		}
+	}
+
+	public void setName( String name )
+	{
+		this.name = name;
 	}
 
 	public String getName()

@@ -13,7 +13,6 @@ import mpa.core.logic.tool.Potions;
 
 public class Player extends AbstractCharacter
 {
-	private Headquarter headquarter;
 	private ArrayList<DependentCharacter> subalterns;
 
 	private int employedSubalterns = 0;
@@ -33,16 +32,15 @@ public class Player extends AbstractCharacter
 	public Player( String name, float x, float y, int health, Level level, Headquarter headquarter,
 			int bagDimension )
 	{
-		super( name, x, y, health, bagDimension );
-		this.headquarter = headquarter;
+		super( name, x, y, health, bagDimension, headquarter );
 		subalterns = new ArrayList<DependentCharacter>();
 		this.level = level;
-		for( int i = 0; i < level.getNumberOfSubalterns( level ); i++ )
-		{
-			subalterns.add( new DependentCharacter( "ERia", headquarter.getX(), headquarter.getY(),
-					100, 100, null, level, this ) );
-
-		}
+		// for( int i = 0; i < level.getNumberOfSubalterns( level ); i++ )
+		// {
+		// subalterns.add( new DependentCharacter( "ERia", headquarter.getX(), headquarter.getY(),
+		// 100, 100, null, level, this, headquarter ) );
+		//
+		// }
 
 		MP = 100;
 

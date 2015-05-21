@@ -13,7 +13,7 @@ public class MyMath
 {
 	private static float scalarProduct( Vector2f u, Vector2f v )
 	{
-		return( ( u.x * v.x ) + ( u.y + v.y ) );
+		return( ( u.x * v.x ) + ( u.y * v.y ) );
 	}
 
 	public static double distanceInteger( Integer x1, Integer y1, Integer x2, Integer y2 )
@@ -131,6 +131,9 @@ public class MyMath
 		float cosine = scalarProduct( u, v )
 				/ ( distanceFloat( 0, 0, u.x, u.y ) * distanceFloat( 0, 0, v.x, v.y ) );
 
+		System.out.println();
+		System.out.println( "COSINE MYMATH =  " + cosine );
+		System.out.println();
 		return ( float ) Math.acos( cosine );
 	}
 }

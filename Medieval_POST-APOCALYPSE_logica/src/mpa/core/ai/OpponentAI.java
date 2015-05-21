@@ -48,8 +48,8 @@ public class OpponentAI extends Thread
 				e.printStackTrace();
 			}
 
-			aiState.action( this );
-			aiState = aiState.changeState( this );
+			// aiState.action( this );
+			// aiState = aiState.changeState( this );
 		}
 	}
 

@@ -2,6 +2,7 @@ package mpa.core.logic.character;
 
 import mpa.core.logic.Level;
 import mpa.core.logic.building.AbstractPrivateProperty;
+import mpa.core.logic.building.Headquarter;
 
 public class DependentCharacter extends AbstractCharacter
 {
@@ -10,9 +11,10 @@ public class DependentCharacter extends AbstractCharacter
 	private Player boss;
 
 	public DependentCharacter( String name, float f, float g, int health, int bagDimension,
-			AbstractPrivateProperty abstractPrivateProperty, Level level, Player boss )
+			AbstractPrivateProperty abstractPrivateProperty, Level level, Player boss,
+			Headquarter headquarter )
 	{
-		super( name, f, g, health, bagDimension );
+		super( name, f, g, health, bagDimension, headquarter );
 		this.level = level;
 		this.abstractPrivateProperty = abstractPrivateProperty;
 		this.boss = boss;
