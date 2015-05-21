@@ -68,7 +68,8 @@ public class MainMenuGamePanel extends JPanel
 			@Override
 			public void mouseReleased(MouseEvent e)
 			{
-				if (playerName == null)
+				playerName = inputNamePanel.getPlayerName();
+				if (playerName == null || playerName.equals(""))
 				{
 					JOptionPane.showMessageDialog(new Frame(), "Inserisci il nome che preferisci", "", JOptionPane.PLAIN_MESSAGE);
 				}
@@ -142,6 +143,7 @@ public class MainMenuGamePanel extends JPanel
 		mapInfo = worldLoader.getMapInfo();
 		mapPreview.setMapDimension(mapInfo.getWidth(), mapInfo.getHeight());
 		mapPreview.loadMap(mapInfo);
+		selectedHQ = null;
 		this.repaint();
 	}
 
@@ -184,7 +186,7 @@ public class MainMenuGamePanel extends JPanel
 
 	private void addInputNamePanel()
 	{
-		inputNamePanel = new InputNamePanel(this);
+		inputNamePanel = new InputNamePanel();
 		inputNamePanel.setBounds(40, 45, screenWidth * 50 / 100, screenHeight * 40 / 100);
 		inputNamePanel.setOpaque(false);
 		this.add(inputNamePanel);

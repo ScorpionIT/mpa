@@ -8,7 +8,6 @@ import de.lessvoid.nifty.screen.ScreenController;
 public class NiftyController implements ScreenController
 {
 
-	private Nifty nifty;
 	private GameGui gameGui;
 
 	public NiftyController(GameGui gameGui)
@@ -21,6 +20,19 @@ public class NiftyController implements ScreenController
 	{
 
 		gameGui.occupy();
+
+	}
+
+	public void onClickButtonForward()
+	{
+
+		gameGui.forwardOpponentResourcesPanel();
+
+	}
+
+	public void onClickButtonBack()
+	{
+		gameGui.backOpponentResourcesPanel();
 
 	}
 

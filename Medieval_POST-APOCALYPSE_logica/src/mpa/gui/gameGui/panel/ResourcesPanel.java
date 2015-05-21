@@ -19,18 +19,20 @@ public class ResourcesPanel
 
 	private HashMap<String, LabelBuilder> resourcesValueLabel = new HashMap<>();
 
-	private Set<Resources> resourcesName = GameManager.getInstance().getPlayers().get(0).getResources().keySet();
-	private int widthPanel = 100 / resourcesName.size();
+	private Set<Resources> resources = null;
+	private int widthPanel;
 	private int xPanel = 0;
 
-	public ResourcesPanel()
+	public ResourcesPanel(int indexCurrentPlayer)
 	{
-
+		resources = GameManager.getInstance().getPlayers().get(indexCurrentPlayer).getResources().keySet();
+		widthPanel = 100 / resources.size();
 		initResources();
 		initResourcePanel();
 
 	}
 
+	// TODO UNIRE CON L'ALTRO PANNELLO DELLE RISORSE
 	private void initResourcePanel()
 	{
 		resourcesPanel = new PanelBuilder("resources")
@@ -59,9 +61,8 @@ public class ResourcesPanel
 	{
 
 		xPanel = 0;
-		for (Resources resourceName : resourcesName)
+		for (Resources resourceName : resources)
 		{
-
 			resourcesPanel.panel(getPanelBuilder(resourceName.toString(), resourceName.toString() + ".png"));
 			xPanel += widthPanel;
 		}
@@ -120,7 +121,7 @@ public class ResourcesPanel
 	private void initResources()
 	{
 
-		for (Resources resoruceName : resourcesName)
+		for (Resources resoruceName : resources)
 		{
 			resourcesValueLabel.put(resoruceName.toString(), new LabelBuilder("Avaible" + resoruceName)
 			{
@@ -130,6 +131,11 @@ public class ResourcesPanel
 			});
 		}
 
+	}
+
+	public PanelBuilder get()
+	{
+		return resourcesPanel;
 	}
 
 	public Element build(Nifty nifty, Screen currentScreen, Element parent)
