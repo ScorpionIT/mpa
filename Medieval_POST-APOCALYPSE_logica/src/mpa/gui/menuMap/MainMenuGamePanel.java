@@ -10,6 +10,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -44,12 +46,12 @@ public class MainMenuGamePanel extends JPanel
 	int screenHeight;
 	DifficultyLevel difficultyLevelSelected = null;
 
-	public MainMenuGamePanel(int x, int y, int width, int height)
+	public MainMenuGamePanel( int x, int y, int width, int height )
 	{
 
-		this.setSize(width, height);
-		this.setLocation(x, y);
-		this.setLayout(null);
+		this.setSize( width, height );
+		this.setLocation( x, y );
+		this.setLayout( null );
 		screenWidth = this.getWidth();
 		screenHeight = this.getHeight();
 
@@ -61,32 +63,37 @@ public class MainMenuGamePanel extends JPanel
 
 		addDifficultyPanel();
 
-		buttonPlay = new Button("Play");
-		buttonPlay.setBackground(new Color(224, 224, 224));
-		buttonPlay.addMouseListener(new MouseAdapter()
+		buttonPlay = new Button( "Play" );
+		buttonPlay.setBackground( new Color( 224, 224, 224 ) );
+		buttonPlay.addMouseListener( new MouseAdapter()
 		{
 			@Override
-			public void mouseReleased(MouseEvent e)
+			public void mouseReleased( MouseEvent e )
 			{
 				playerName = inputNamePanel.getPlayerName();
-				if (playerName == null || playerName.equals(""))
+				if( playerName == null || playerName.equals( "" ) )
 				{
-					JOptionPane.showMessageDialog(new Frame(), "Inserisci il nome che preferisci", "", JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog( new Frame(), "Inserisci il nome che preferisci",
+							"", JOptionPane.PLAIN_MESSAGE );
 				}
-				else if (selectedHQ == null)
-					JOptionPane.showMessageDialog(new Frame(), "Seleziona il quartier generale", "", JOptionPane.PLAIN_MESSAGE);
-				else if (difficultyLevelSelected == null)
-					JOptionPane.showMessageDialog(new Frame(), "Seleziona la difficoltà", "", JOptionPane.PLAIN_MESSAGE);
+				else if( selectedHQ == null )
+					JOptionPane.showMessageDialog( new Frame(), "Seleziona il quartier generale",
+							"", JOptionPane.PLAIN_MESSAGE );
+				else if( difficultyLevelSelected == null )
+					JOptionPane.showMessageDialog( new Frame(), "Seleziona la difficoltà", "",
+							JOptionPane.PLAIN_MESSAGE );
 				else
 				{
-					World world = MainMenuGamePanel.this.worldLoader.loadWorld(new WorldFromMapInfo());
+					World world = MainMenuGamePanel.this.worldLoader
+							.loadWorld( new WorldFromMapInfo() );
 					// GameManager.init(world,
 					// MainMenuGamePanel.this.worldLoader.makePlayers(MainMenuGamePanel.this.playerName,
 					// world,
 					// MainMenuGamePanel.this.selectedHQ));
-					GameManager.init(world, difficultyLevelSelected);
-					MainMenuGamePanel.this.selectedHQIndex = MainMenuGamePanel.this.worldLoader.makePlayers(MainMenuGamePanel.this.playerName, world,
-							MainMenuGamePanel.this.selectedHQ);
+					GameManager.init( world, difficultyLevelSelected );
+					MainMenuGamePanel.this.selectedHQIndex = MainMenuGamePanel.this.worldLoader
+							.makePlayers( MainMenuGamePanel.this.playerName, world,
+									MainMenuGamePanel.this.selectedHQ );
 					// MainMenuPanel.this.removeAll();
 					// GameGui gameGui = new GameGui();
 					// gameGui.setBounds(0, 0, MainMenuPanel.this.screenWidth,
@@ -97,59 +104,62 @@ public class MainMenuGamePanel extends JPanel
 					// MainMenuPanel.this.updateUI();
 					// mpa.gui.gameGui.GameGui app = new mpa.gui.gameGui.GameGui();
 					// app.start();
-					Thread t = new Thread(new Runnable()
+					Logger.getLogger( "" ).setLevel( Level.OFF );
+					Thread t = new Thread( new Runnable()
 					{
 						@Override
 						public void run()
 						{
-							mpa.gui.gameGui.GameGui app = new mpa.gui.gameGui.GameGui(MainMenuGamePanel.this.selectedHQIndex);
-							AppSettings gameSettings = new AppSettings(false);
-							gameSettings.setResolution(800, 600);
+							mpa.gui.gameGui.GameGui app = new mpa.gui.gameGui.GameGui(
+									MainMenuGamePanel.this.selectedHQIndex );
+							AppSettings gameSettings = new AppSettings( false );
+							gameSettings.setResolution( 800, 600 );
 							// gameSettings.setResolution( java.awt.Toolkit.getDefaultToolkit()
 							// .getScreenSize().width, java.awt.Toolkit.getDefaultToolkit()
 							// .getScreenSize().height );
 							// gameSettings.setFullscreen( true );
-							gameSettings.setVSync(false);
-							gameSettings.setTitle("Stellar Conquest");
-							gameSettings.setUseInput(true);
-							gameSettings.setFrameRate(500);
-							gameSettings.setSamples(0);
-							gameSettings.setRenderer("LWJGL-OpenGL2");
-							app.setSettings(gameSettings);
-							app.setShowSettings(false);
+							gameSettings.setVSync( false );
+							gameSettings.setTitle( "Stellar Conquest" );
+							gameSettings.setUseInput( true );
+							gameSettings.setFrameRate( 500 );
+							gameSettings.setSamples( 0 );
+							gameSettings.setRenderer( "LWJGL-OpenGL2" );
+							app.setSettings( gameSettings );
+							app.setShowSettings( false );
 							app.start();
 						}
-					});
+					} );
 					t.start();
 				}
 			}
-		});
-		buttonPlay.setBounds(this.getWidth() - this.getWidth() * 10 / 100, 52 + screenHeight * 80 / 100, screenWidth * 10 / this.getWidth() * 10, 30);
-		this.add(buttonPlay);
+		} );
+		buttonPlay.setBounds( this.getWidth() - this.getWidth() * 10 / 100,
+				52 + screenHeight * 80 / 100, screenWidth * 10 / this.getWidth() * 10, 30 );
+		this.add( buttonPlay );
 		try
 		{
-			backgroundImage = ImageIO.read(new File("Assets/BackgroundImages/mainMenu.jpg"));
-		} catch (IOException e1)
+			backgroundImage = ImageIO.read( new File( "Assets/BackgroundImages/mainMenu.jpg" ) );
+		} catch( IOException e1 )
 		{
 			e1.printStackTrace();
 		}
-		this.setVisible(true);
+		this.setVisible( true );
 	}
 
-	public void setMap(String mapName)
+	public void setMap( String mapName )
 	{
 		mapPreview.removeAll();
-		worldLoader.loadMapInfo(new MapFromXMLCreator(), mapName);
+		worldLoader.loadMapInfo( new MapFromXMLCreator(), mapName );
 		mapInfo = worldLoader.getMapInfo();
-		mapPreview.setMapDimension(mapInfo.getWidth(), mapInfo.getHeight());
-		mapPreview.loadMap(mapInfo);
+		mapPreview.setMapDimension( mapInfo.getWidth(), mapInfo.getHeight() );
+		mapPreview.loadMap( mapInfo );
 		selectedHQ = null;
 		this.repaint();
 	}
 
-	public void setSelectedHeadQuarter(Pair<Float, Float> headQuarterPosition)
+	public void setSelectedHeadQuarter( Pair<Float, Float> headQuarterPosition )
 	{
-		if (mapInfo.getHeadQuarters().contains(headQuarterPosition))
+		if( mapInfo.getHeadQuarters().contains( headQuarterPosition ) )
 			selectedHQ = headQuarterPosition;
 	}
 
@@ -158,75 +168,78 @@ public class MainMenuGamePanel extends JPanel
 		return selectedHQ;
 	}
 
-	public void setPlayerName(String playerName)
+	public void setPlayerName( String playerName )
 	{
 		this.playerName = playerName;
 	}
 
-	public void setDifficultyLevel(DifficultyLevel difficultyLevel)
+	public void setDifficultyLevel( DifficultyLevel difficultyLevel )
 	{
 		this.difficultyLevelSelected = difficultyLevel;
 	}
 
 	private void addMapPreviewPanel()
 	{
-		mapPreview = new MapPreview(this);
-		mapPreview.setBounds(screenWidth * 55 / 100, 30, screenWidth * 45 / 100 - 30, screenHeight * 55 / 100);
+		mapPreview = new MapPreview( this );
+		mapPreview.setBounds( screenWidth * 55 / 100, 30, screenWidth * 45 / 100 - 30,
+				screenHeight * 55 / 100 );
 		mapPreview.repaint();
-		this.add(mapPreview);
+		this.add( mapPreview );
 	}
 
 	private void addMapListPanel()
 	{
-		mapListPanel = new MapListPanel(this);
-		mapListPanel.setBounds(screenWidth * 80 / 100, 50 + screenHeight * 60 / 100, screenWidth * 19 / 100 + 5, screenHeight * 20 / 100);
-		System.out.println(mapListPanel.getBounds());
-		this.add(mapListPanel);
+		mapListPanel = new MapListPanel( this );
+		mapListPanel.setBounds( screenWidth * 80 / 100, 50 + screenHeight * 60 / 100,
+				screenWidth * 19 / 100 + 5, screenHeight * 20 / 100 );
+		System.out.println( mapListPanel.getBounds() );
+		this.add( mapListPanel );
 	}
 
 	private void addInputNamePanel()
 	{
 		inputNamePanel = new InputNamePanel();
-		inputNamePanel.setBounds(40, 45, screenWidth * 50 / 100, screenHeight * 40 / 100);
-		inputNamePanel.setOpaque(false);
-		this.add(inputNamePanel);
+		inputNamePanel.setBounds( 40, 45, screenWidth * 50 / 100, screenHeight * 40 / 100 );
+		inputNamePanel.setOpaque( false );
+		this.add( inputNamePanel );
 	}
 
 	private void addDifficultyPanel()
 	{
-		difficultyPanel = new DifficultyPanel(this);
-		difficultyPanel.setBounds(40, screenHeight * 60 / 100, screenWidth * 45 / 100, screenHeight * 25 / 100);
+		difficultyPanel = new DifficultyPanel( this );
+		difficultyPanel.setBounds( 40, screenHeight * 60 / 100, screenWidth * 45 / 100,
+				screenHeight * 25 / 100 );
 		this.repaint();
-		this.add(difficultyPanel);
+		this.add( difficultyPanel );
 	}
 
 	@Override
-	protected void paintComponent(Graphics g)
+	protected void paintComponent( Graphics g )
 	{
-		super.paintComponent(g);
-		g.drawImage(backgroundImage, 0, 0, screenWidth, screenHeight, this);
+		super.paintComponent( g );
+		g.drawImage( backgroundImage, 0, 0, screenWidth, screenHeight, this );
 	}
 
-	public static void main(String[] args)
+	public static void main( String[] args )
 	{
 
 		int screenWidth = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
 		int screenHeight = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
 
 		JFrame frame = new JFrame();
-		frame.setLocation(0, 0);
+		frame.setLocation( 0, 0 );
 
-		frame.setSize(screenWidth, screenHeight);
-		MainMenuGamePanel mainMenuGamePanel = new MainMenuGamePanel(screenWidth * 15 / 100, screenHeight * 10 / 100, screenWidth * 70 / 100,
-				screenHeight * 80 / 100);
+		frame.setSize( screenWidth, screenHeight );
+		MainMenuGamePanel mainMenuGamePanel = new MainMenuGamePanel( screenWidth * 15 / 100,
+				screenHeight * 10 / 100, screenWidth * 70 / 100, screenHeight * 80 / 100 );
 
-		frame.setContentPane(new Panel());
-		frame.getContentPane().setBackground(Color.BLACK);
-		frame.getContentPane().add(mainMenuGamePanel);
-		frame.getContentPane().setLayout(null);
-		frame.getContentPane().setVisible(true);;
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setContentPane( new Panel() );
+		frame.getContentPane().setBackground( Color.BLACK );
+		frame.getContentPane().add( mainMenuGamePanel );
+		frame.getContentPane().setLayout( null );
+		frame.getContentPane().setVisible( true );;
+		frame.setVisible( true );
+		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 	}
 
 }

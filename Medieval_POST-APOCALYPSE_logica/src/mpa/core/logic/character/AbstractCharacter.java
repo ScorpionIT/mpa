@@ -16,9 +16,9 @@ public abstract class AbstractCharacter extends AbstractObject
 	private static final float PACE = 5;
 
 	private ArrayList<Vector2f> path = new ArrayList<>();
+	private Vector2f previousVector;
 	private Vector2f currentVector = new Vector2f( 0.0f, 0.0f );
 	private int numberOfIterationsPerVector;
-	private float rotationAngle;
 
 	protected Headquarter headquarter;
 
@@ -45,13 +45,8 @@ public abstract class AbstractCharacter extends AbstractObject
 			currentVector = new Vector2f( 1f, currentVector.y / currentVector.x );
 		else
 			currentVector = new Vector2f( currentVector.x / currentVector.y, 1f );
-		rotationAngle = MyMath.getRotationAngle( new Vector2f( 0, -1 ), currentVector );
-		System.out.println();
-		System.out.println( "ANGOLOMYMATH = " + rotationAngle + " con vectora = " + currentVector.x
-				+ " " + currentVector.y );
-		System.out.println( "HQ = " + headquarter.getX() + " " + headquarter.getY() );
-		System.out.println( "Player = " + x + " " + y );
-		System.out.println();
+
+		previousVector = new Vector2f( 0, 1 );
 	}
 
 	public void getWriteLock()
@@ -76,7 +71,7 @@ public abstract class AbstractCharacter extends AbstractObject
 
 	private void computeCurrentVector()
 	{
-		Vector2f oldVector = new Vector2f( currentVector );
+		previousVector = new Vector2f( currentVector );
 		currentVector = new Vector2f( ( float ) ( -path.get( 0 ).x + path.get( 1 ).x ),
 				( float ) ( -path.get( 0 ).y + path.get( 1 ).y ) );
 
@@ -85,23 +80,17 @@ public abstract class AbstractCharacter extends AbstractObject
 		paceX = currentVector.x / numberOfIterationsPerVector;
 		paceY = currentVector.y / numberOfIterationsPerVector;
 
-		int greatestCommonDivisor = MyMath.greatestCommonDivisor(
-				new Float( currentVector.x ).intValue(), new Float( currentVector.y ).intValue() );
-
-		currentVector.set( currentVector.x / greatestCommonDivisor, currentVector.y
-				/ greatestCommonDivisor );
-
-		rotationAngle = MyMath.getRotationAngle( oldVector, currentVector );
-		// System.out.println();
-		// System.out.println( "ANGOLO = " + rotationAngle );
-		// System.out.println();
+		if( Math.abs( currentVector.x ) >= Math.abs( currentVector.y ) )
+			currentVector = new Vector2f( 1f, currentVector.y / currentVector.x );
+		else
+			currentVector = new Vector2f( currentVector.x / currentVector.y, 1f );
 	}
 
 	public void setPath( ArrayList<Vector2f> path )
 	{
 		writeLock.lock();
 
-		System.out.println( "mi hai passato un path di " + path.size() );
+		// System.out.println( "mi hai passato un path di " + path.size() );
 
 		this.path = path;
 		if( path.size() > 1 )
@@ -221,6 +210,18 @@ public abstract class AbstractCharacter extends AbstractObject
 		}
 	}
 
+	public Vector2f getPreviousVector()
+	{
+		try
+		{
+			readLock.lock();
+			return previousVector;
+		} finally
+		{
+			readLock.unlock();
+		}
+	}
+
 	public Vector2f getPlayerDirection()
 	{
 		try
@@ -233,19 +234,6 @@ public abstract class AbstractCharacter extends AbstractObject
 		}
 	}
 
-	public float getRotationAngle()
-	{
-		try
-		{
-			readLock.lock();
-			return rotationAngle;
-		} finally
-		{
-			rotationAngle = 0f;
-			readLock.unlock();
-		}
-	}
-
 	public void setName( String name )
 	{
 		this.name = name;
@@ -254,6 +242,18 @@ public abstract class AbstractCharacter extends AbstractObject
 	public String getName()
 	{
 		return name;
+	}
+
+	public Vector2f getCurrentVector()
+	{
+		try
+		{
+			readLock.lock();
+			return currentVector;
+		} finally
+		{
+			readLock.unlock();
+		}
 	}
 
 	@Override

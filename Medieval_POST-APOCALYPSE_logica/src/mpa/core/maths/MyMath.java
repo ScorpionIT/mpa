@@ -130,10 +130,10 @@ public class MyMath
 
 	public static float getRotationAngle( Vector2f from, Vector2f to )
 	{
-		System.out.println();
-		System.out.println( ++calling + " CALLING " );
-		System.out.println();
 		float angle = angleBetweenVectors( from, to );
+		// System.out.println();
+		// System.out.println( ++calling + " CALLING e l'angolo calcolato è " + angle );
+		// System.out.println();
 		Vector2f[] vectors = new Vector2f[2];
 		vectors[0] = from;
 		vectors[1] = to;
@@ -154,10 +154,10 @@ public class MyMath
 				quarters[i] = 4;
 		}
 
-		System.out.println();
-		System.out.println( "from si trova nel quadrante " + quarters[0] );
-		System.out.println( "to si trova nel quadrante " + quarters[1] );
-		System.out.println();
+		// System.out.println();
+		// System.out.println( "from si trova nel quadrante " + quarters[0] );
+		// System.out.println( "to si trova nel quadrante " + quarters[1] );
+		// System.out.println();
 
 		if( quarters[0] == quarters[1] )
 		{
@@ -171,16 +171,18 @@ public class MyMath
 						direction = -1f;
 					break;
 
-				case 2:
-					if( angle_y_from > angle_y_to ) // both in the second quarter
+				case 2: // both in the second quarter
+					if( angle_y_from > angle_y_to )
 						direction = -1f;
 					break;
 
-				case 3:
-					if( angle_y_from > angle_y_to ) // both in the third quarter
+				case 3: // both in the third quarter
+					if( angle_y_from > angle_y_to )
 						direction = -1f;
-				case 4:
-					if( angle_y_from < angle_y_to ) // both in the fourth quarter
+					break;
+
+				case 4: // both in the fourth quarter
+					if( angle_y_from < angle_y_to )
 						direction = -1f;
 			}
 
@@ -193,11 +195,15 @@ public class MyMath
 				direction = 1f;
 		}
 
+		System.out.println( "angolo col vechhio metodo =" + angle * direction );
+
+		// angle = ( float ) ( Math.atan2( to.y, to.x ) - Math.atan2( from.y, from.x ) );
+
 		System.out.println();
-		System.out.println( "sto per restituire l'angolo  " + angle * direction );
+		System.out.println( "sto per restituire l'angolo  " + angle );
 		System.out.println();
 
-		return angle * direction * -1f;
+		return angle * direction;
 	}
 
 	private static float angleBetweenVectors( Vector2f from, Vector2f to )
@@ -205,9 +211,9 @@ public class MyMath
 		float cosine = scalarProduct( from, to )
 				/ ( distanceFloat( 0, 0, from.x, from.y ) * distanceFloat( 0, 0, to.x, to.y ) );
 
-		System.out.println();
-		System.out.println( "COSINE MYMATH =  " + cosine );
-		System.out.println();
+		// System.out.println();
+		// System.out.println( "COSINE MYMATH =  " + cosine );
+		// System.out.println();
 		return ( float ) Math.acos( cosine );
 	}
 }
