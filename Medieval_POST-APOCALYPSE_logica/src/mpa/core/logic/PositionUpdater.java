@@ -19,7 +19,6 @@ public class PositionUpdater extends Thread
 				GameManager.getInstance().updateCharacterPositions();
 			} catch( InterruptedException e )
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

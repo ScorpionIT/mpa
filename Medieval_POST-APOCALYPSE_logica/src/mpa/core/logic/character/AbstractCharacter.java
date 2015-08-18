@@ -231,11 +231,24 @@ public abstract class AbstractCharacter extends AbstractObject
 		try
 		{
 			readLock.lock();
-			return new Vector2f( currentVector.x, currentVector.y );
+			return currentVector;
 		} finally
 		{
 			readLock.unlock();
 		}
+	}
+
+	public void setPlayerDirection( Vector2f focus )
+	{
+		previousVector = new Vector2f( currentVector );
+		currentVector = new Vector2f( ( float ) ( -x + focus.x ), ( float ) ( -y + focus.y ) );
+
+		float absX = Math.abs( currentVector.x );
+		float absY = Math.abs( currentVector.y );
+		if( absX >= absY )
+			currentVector = new Vector2f( currentVector.x / absX, currentVector.y / absX );
+		else
+			currentVector = new Vector2f( currentVector.x / absY, currentVector.y / absY );
 	}
 
 	public void setName( String name )

@@ -20,8 +20,8 @@ public class Player extends AbstractCharacter
 	private Level level;
 
 	private int MP;
-	private float rangeOfPhysicallAttack = 5;
-	private int physicallAttackDamage = 0;
+	private float rangeOfPhysicallAttack = 15;
+	private int physicallAttackDamage = 5;
 	private float rangeOfDistanceAttack = 12;
 	private float distanceAttackRayOfCollision = 4;
 
@@ -32,7 +32,7 @@ public class Player extends AbstractCharacter
 	public Player( String name, float x, float y, int health, Level level, Headquarter headquarter,
 			int bagDimension )
 	{
-		super( name, x, y, health, bagDimension, headquarter );
+		super( name, x, y, 5, bagDimension, headquarter );
 		subalterns = new ArrayList<DependentCharacter>();
 		this.level = level;
 		// for( int i = 0; i < level.getNumberOfSubalterns( level ); i++ )
@@ -99,6 +99,14 @@ public class Player extends AbstractCharacter
 
 	}
 
+	public void die()
+	{
+		writeLock.lock();
+		for( DependentCharacter subaltern : subalterns )
+			subaltern.leaveProperty();
+		writeLock.unlock();
+	}
+
 	public ArrayList<DependentCharacter> getFreeSubalterns()
 	{
 		ArrayList<DependentCharacter> freeSubalterns = new ArrayList<>();
@@ -125,18 +133,20 @@ public class Player extends AbstractCharacter
 
 	}
 
-	public void inflictDamage( int damage )
+	public boolean inflictDamage( int damage )
 	{
-		writeLock.lock();
+		try
+		{
+			writeLock.lock();
+			health -= damage;
+			System.out.println( "la sua vita dopo l'attacco è " + health );
+			return health <= 0;
 
-		if( damage >= health )
+		} finally
 		{
 
+			writeLock.unlock();
 		}
-		else
-			health -= damage;
-
-		writeLock.unlock();
 
 	}
 

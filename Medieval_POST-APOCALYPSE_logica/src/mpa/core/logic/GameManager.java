@@ -2,6 +2,9 @@ package mpa.core.logic;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 
 import javax.vecmath.Vector2f;
 
@@ -18,12 +21,25 @@ public class GameManager
 	private List<Player> players;
 	private List<OpponentAI> AI_players;
 	private DifficultyLevel difficultyLevel;
+	private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+	private ReadLock readLock = lock.readLock();
+	private WriteLock writeLock = lock.writeLock();
 
 	private static GameManager gameManager = null;
 
 	public static GameManager getInstance()
 	{
 		return gameManager;
+	}
+
+	public void takeLock()
+	{
+		readLock.lock();
+	}
+
+	public void leaveLock()
+	{
+		readLock.unlock();
 	}
 
 	public static void init( World world, DifficultyLevel level )
@@ -59,13 +75,15 @@ public class GameManager
 	{
 		AI_players.add( new OpponentAI( player, difficultyLevel ) );
 		players.add( player );
-		AI_players.get( AI_players.size() - 1 ).start();
+		// AI_players.get( AI_players.size() - 1 ).start();
 	}
 
 	public void updateCharacterPositions()
 	{
+		readLock.lock();
 		for( Player player : players )
 			player.movePlayer();
+		readLock.unlock();
 	}
 
 	public World getWorld()
@@ -84,6 +102,17 @@ public class GameManager
 
 	}
 
+	public void killPlayer( Player p )
+	{
+		writeLock.lock();
+		p.die();
+		if( players.contains( p ) )
+			players.remove( p );
+		if( AI_players.contains( p ) )
+			AI_players.remove( p );
+		writeLock.unlock();
+	}
+
 	public List<Player> getPlayers()
 	{
 		return players;
@@ -91,6 +120,7 @@ public class GameManager
 
 	public ArrayList<Player> attackPhysically( Player attacker )
 	{
+		System.out.println( "sto per attaccare" );
 		return CombatManager.getInstance().attackPhysically( attacker );
 	}
 

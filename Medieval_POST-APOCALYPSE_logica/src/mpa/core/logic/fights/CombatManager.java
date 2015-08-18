@@ -30,9 +30,11 @@ public class CombatManager
 	public ArrayList<Player> attackPhysically( Player attacker )
 	{
 
+		ArrayList<Player> deadPlayers = new ArrayList<>();
 		try
 		{
 			attacker.getReadLock();
+			GameManager.getInstance().takeLock();
 
 			ArrayList<Player> hitPlayers = new ArrayList<>();
 			if( attacker.getMP() < MP_REQUIRED_FOR_PHYSICALL_ATTACK )
@@ -49,27 +51,40 @@ public class CombatManager
 
 				if( attacker.getName().compareTo( p.getName() ) <= 0 )
 				{
-					attacker.getWriteLock();
+					// attacker.getWriteLock();
 					p.getWriteLock();
 				}
 				else
 				{
 					p.getWriteLock();
-					attacker.getWriteLock();
+					// attacker.getWriteLock();
 				}
+				float distanceFloat = MyMath.distanceFloat( attacker.getX() + direction.x
+						* attacker.getRangeOfPhysicallAttack(), attacker.getY() + direction.y
+						* attacker.getRangeOfPhysicallAttack(), p.getX(), p.getY() );
 
+				System.out.println( "la distanza è " + distanceFloat );
+
+				float distanceFloat2 = MyMath.distanceFloat( attacker.getX(), attacker.getY(),
+						p.getX(), p.getY() );
+
+				System.out.println( "distano " + distanceFloat2 );
 				if( MyMath.distanceFloat(
 						attacker.getX() + direction.x * attacker.getRangeOfPhysicallAttack(),
 						attacker.getY() + direction.y * attacker.getRangeOfPhysicallAttack(),
 						p.getX(), p.getY() ) <= 1
-						|| MyMath.distanceFloat( attacker.getX(), attacker.getY(), p.getX(),
-								p.getY() ) <= attacker.getRangeOfPhysicallAttack() )
+						|| distanceFloat2 <= attacker.getRangeOfPhysicallAttack() )
 				{
-					p.inflictDamage( attacker.getPhysicallAttackDamage() );
-					hitPlayers.add( p );
+					if( p.inflictDamage( attacker.getPhysicallAttackDamage() ) )
+					{
+						System.out.println( "è morto?" );
+						deadPlayers.add( p );
+					}
+					else
+						hitPlayers.add( p );
 				}
 
-				attacker.leaveWriteLock();
+				// attacker.leaveWriteLock();
 				p.leaveWriteLock();
 			}
 
@@ -77,6 +92,9 @@ public class CombatManager
 
 		} finally
 		{
+			GameManager.getInstance().leaveLock();
+			for( Player dead : deadPlayers )
+				GameManager.getInstance().killPlayer( dead );
 			attacker.leaveReadLock();
 		}
 	}

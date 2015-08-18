@@ -10,8 +10,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -104,7 +102,7 @@ public class MainMenuGamePanel extends JPanel
 					// MainMenuPanel.this.updateUI();
 					// mpa.gui.gameGui.GameGui app = new mpa.gui.gameGui.GameGui();
 					// app.start();
-					Logger.getLogger( "" ).setLevel( Level.OFF );
+					// Logger.getLogger( "" ).setLevel( Level.OFF );
 					Thread t = new Thread( new Runnable()
 					{
 						@Override

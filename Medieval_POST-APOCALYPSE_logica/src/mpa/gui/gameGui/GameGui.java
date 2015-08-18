@@ -60,15 +60,14 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	boolean cursorOnTheLeftEdge = false;
 	boolean cursorOnTheTopEdge = false;
 	boolean cursorOnTheBottomEdge = false;
-	private float cameraHeight = 500;// 120
+	private float cameraHeight = 220;// 120
+	private float scalingFactor = 2.2f;
 	private float lz = ( float ) Math.sqrt( Math.pow( cameraHeight / Math.sin( 40 ), 2 )
 			- Math.pow( cameraHeight, 2 ) );
 
 	private Node groundNode;
 	private Node mobileObjects = new Node( "Mobile Objects" );
 	private Node pathNodes = new Node();
-	private List<Player> players = GameManager.getInstance().getPlayers();
-	private HashMap<Player, javax.vecmath.Vector2f> playerVectors = new HashMap<>();
 	private int playerIndex;
 
 	private ArrayList<javax.vecmath.Vector2f> path = new ArrayList<>();
@@ -86,8 +85,6 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	{
 		super();
 		this.playerIndex = playerIndex;
-		for( Player p : players )
-			playerVectors.put( p, p.getCurrentVector() );
 
 	}
 
@@ -123,11 +120,12 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	private void debuggingPath()
 	{
 		pathNodes.detachAllChildren();
-		for( int i = 0; i < players.size(); i++ )
+		for( int i = 0; i < GameManager.getInstance().getPlayers().size(); i++ )
 			if( i != playerIndex )
 			{
-				players.get( i ).getReadLock();
-				ArrayList<javax.vecmath.Vector2f> path2 = players.get( i ).getPath();
+				GameManager.getInstance().getPlayers().get( i ).getReadLock();
+				ArrayList<javax.vecmath.Vector2f> path2 = GameManager.getInstance().getPlayers()
+						.get( i ).getPath();
 
 				javax.vecmath.Vector2f vector2f;
 				if( path2.size() > 1 )
@@ -161,7 +159,7 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 					pathNodes.attachChild( sphereGeo );
 				}
 
-				players.get( i ).leaveReadLock();
+				GameManager.getInstance().getPlayers().get( i ).leaveReadLock();
 
 			}
 	}
@@ -336,8 +334,12 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 		inputManager.addListener( mouseActionListener, "Shift_Map_Negative_X",
 				"Shift_Map_Positive_X", "Shift_Map_Negative_Y", "Shift_Map_Positive_Y" );
 
+		// inputManager.addRawInputListener( new MyButtonListener() );
 		inputManager.addMapping( "Click", new MouseButtonTrigger( 0 ) );
 		inputManager.addListener( clickActionListener, "Click" );
+
+		inputManager.addMapping( "attack", new MouseButtonTrigger( 1 ) );
+		inputManager.addListener( clickActionListener, "attack" );
 
 	}
 
@@ -385,19 +387,18 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	{
 		int i = 0;
 		assetManager.registerLocator( "./Assets/Models/SeanDevlin.zip", ZipLocator.class );
-		for( Player player : players )
+		for( Player player : GameManager.getInstance().getPlayers() )
 		{
 			Spatial model = assetManager.loadModel( "SeanDevlin.mesh.xml" );
 			if( i == playerIndex )
 			{
-				model.scale( 15.2f, 15.2f, 15.2f );
-				model.setLocalTranslation( new Vector3f( player.getX(), 95, player.getY() ) );
+				model.scale( scalingFactor, scalingFactor, scalingFactor );
+				model.setLocalTranslation( new Vector3f( player.getX(), 5, player.getY() ) );
 			}
 			else
 			{
-				model.scale( 15.2f, 15.2f, 15.2f );
-				// model.scale(10.2f, 10.2f, 10.2f);
-				model.setLocalTranslation( new Vector3f( player.getX(), -20, player.getY() ) );
+				model.scale( scalingFactor, scalingFactor, scalingFactor );
+				model.setLocalTranslation( new Vector3f( player.getX(), 5, player.getY() ) );
 
 			}
 			i++;
@@ -415,11 +416,13 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 
 	private void updateMobileObjects()
 	{
-		players = GameManager.getInstance().getPlayers();
-
+		GameManager.getInstance().takeLock();
 		int i = 0;
 		AnimControl control;
 		AnimChannel channel = null;
+		List<Player> players = GameManager.getInstance().getPlayers();
+		if( mobileObjects.getChildren().size() > players.size() )
+			mobileObjects.getChildren().remove( 0 );
 		for( Player p : players )
 		{
 			Spatial mobObject = mobileObjects.getChild( i );
@@ -441,7 +444,6 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 			// // channel.setAnim(null);
 			//
 			// }
-			javax.vecmath.Vector2f knownVector = playerVectors.get( p );
 			javax.vecmath.Vector2f currentVector = p.getCurrentVector();
 			mobObject.setLocalTranslation( p.getX(), 0, p.getY() );
 
@@ -449,6 +451,7 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 			mobObject.setLocalRotation( quad );
 			i++;
 		}
+		GameManager.getInstance().leaveLock();
 	}
 
 	public void drawPath()
@@ -551,11 +554,6 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	public Node getPathNodes()
 	{
 		return pathNodes;
-	}
-
-	public List<Player> getPlayers()
-	{
-		return players;
 	}
 
 	public int getPlayerIndex()
