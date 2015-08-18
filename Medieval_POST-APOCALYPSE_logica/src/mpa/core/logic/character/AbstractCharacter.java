@@ -41,10 +41,12 @@ public abstract class AbstractCharacter extends AbstractObject
 		this.bag = new Inventory( bagDimension );
 		this.headquarter = headquarter;
 		this.currentVector = new Vector2f( -x + headquarter.getX(), -y + headquarter.getY() );
-		if( Math.abs( currentVector.x ) >= Math.abs( currentVector.y ) )
-			currentVector = new Vector2f( 1f, currentVector.y / currentVector.x );
+		float absX = Math.abs( currentVector.x );
+		float absY = Math.abs( currentVector.y );
+		if( absX >= absY )
+			currentVector = new Vector2f( currentVector.x / absX, currentVector.y / absX );
 		else
-			currentVector = new Vector2f( currentVector.x / currentVector.y, 1f );
+			currentVector = new Vector2f( currentVector.x / absY, currentVector.y / absY );
 
 		previousVector = new Vector2f( 0, 1 );
 	}
@@ -80,10 +82,12 @@ public abstract class AbstractCharacter extends AbstractObject
 		paceX = currentVector.x / numberOfIterationsPerVector;
 		paceY = currentVector.y / numberOfIterationsPerVector;
 
-		if( Math.abs( currentVector.x ) >= Math.abs( currentVector.y ) )
-			currentVector = new Vector2f( 1f, currentVector.y / currentVector.x );
+		float absX = Math.abs( currentVector.x );
+		float absY = Math.abs( currentVector.y );
+		if( absX >= absY )
+			currentVector = new Vector2f( currentVector.x / absX, currentVector.y / absX );
 		else
-			currentVector = new Vector2f( currentVector.x / currentVector.y, 1f );
+			currentVector = new Vector2f( currentVector.x / absY, currentVector.y / absY );
 	}
 
 	public void setPath( ArrayList<Vector2f> path )

@@ -48,8 +48,8 @@ public class OpponentAI extends Thread
 				e.printStackTrace();
 			}
 
-			// aiState.action( this );
-			// aiState = aiState.changeState( this );
+			aiState.action( this );
+			aiState = aiState.changeState( this );
 		}
 	}
 
@@ -65,10 +65,6 @@ public class OpponentAI extends Thread
 			knownHeadQuarters.add( ( House ) building );
 		if( building instanceof Market )
 			market = Market.getInstance().getGatheringPlace();
-
-		// System.out.println();
-		// System.out.println( "ho aggiunto un building !!!" );
-		// System.out.println();
 	}
 
 	void addBuildings( Vector2f position )
