@@ -16,14 +16,21 @@ public class Wood extends AbstractResourceProducer
 	}
 
 	@Override
-	public void providePlayer()
+	public boolean providePlayer()
 	{
-		readLock.lock();
-		if( owner != null )
-			owner.putResources( Resources.WOOD, PROVIDING + EXTRA_PROVIDING
-					* owner.getPlayerLevel().ordinal() );
-
-		readLock.unlock();
+		try
+		{
+			readLock.lock();
+			if( !super.providePlayer() )
+				return false;
+			if( owner != null )
+				owner.putResources( Resources.WOOD, PROVIDING + EXTRA_PROVIDING
+						* owner.getPlayerLevel().ordinal() );
+			return true;
+		} finally
+		{
+			readLock.unlock();
+		}
 	}
 
 	@Override

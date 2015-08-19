@@ -1,5 +1,6 @@
 package mpa.gui.gameGui.listener;
 
+import mpa.core.logic.GameManager;
 import mpa.gui.gameGui.GameGui;
 
 import com.jme3.input.controls.ActionListener;
@@ -9,26 +10,27 @@ public class GameGuiKeyActionListener implements ActionListener
 
 	private GameGui gameGui;
 
-	public GameGuiKeyActionListener(GameGui gameGui)
+	public GameGuiKeyActionListener( GameGui gameGui )
 	{
 		this.gameGui = gameGui;
 	}
 
 	@Override
-	public void onAction(String name, boolean keyPressed, float tpf)
+	public void onAction( String name, boolean keyPressed, float tpf )
 	{
 
-		if ("Tab".equals(name) && keyPressed)
+		if( "Tab".equals( name ) )
 		{
-
-			gameGui.getNiftyHandler().setOpponentPropertiesPanel();
+			if( keyPressed )
+				gameGui.getNiftyHandler().setOpponentPropertiesPanel();
+			else
+				gameGui.getNiftyHandler().removeOpponentPropertiesPanel();
 
 		}
-		else
+		else if( "pause".equals( name ) && keyPressed )
 		{
-
-			gameGui.getNiftyHandler().removeOpponentPropertiesPanel();
-
+			GameManager gm = GameManager.getInstance();
+			gm.setPause( !gm.getPauseState() );
 		}
 
 	}

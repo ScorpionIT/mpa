@@ -63,13 +63,10 @@ public class GameGuiClickListener implements ActionListener
 					if( GameManager.getInstance().getWorld()
 							.pickedObject( contactPoint.x, contactPoint.y ) == null )
 					{
-						GameManager.getInstance().computePath(
-								GameManager.getInstance().getPlayers()
-										.get( gameGui.getPlayerIndex() ), contactPoint.x,
-								contactPoint.y );
+						GameManager.getInstance().computePath( gameGui.getPlayingPlayer(),
+								contactPoint.x, contactPoint.y );
 
-						gameGui.setPath( GameManager.getInstance().getPlayers()
-								.get( gameGui.getPlayerIndex() ).getPath() );
+						gameGui.setPath( gameGui.getPlayingPlayer().getPath() );
 						gameGui.drawPath();
 					}
 					else
@@ -83,8 +80,7 @@ public class GameGuiClickListener implements ActionListener
 			}
 			else if( "attack".equals( name ) )
 			{
-				Player player = GameManager.getInstance().getPlayers()
-						.get( gameGui.getPlayerIndex() );
+				Player player = gameGui.getPlayingPlayer();
 
 				if( crs.getClosestCollision() != null )
 				{
@@ -95,7 +91,7 @@ public class GameGuiClickListener implements ActionListener
 							contactPoint.y ) );
 
 					ArrayList<Player> p = GameManager.getInstance().attackPhysically(
-							GameManager.getInstance().getPlayers().get( gameGui.getPlayerIndex() ) );
+							gameGui.getPlayingPlayer() );
 
 					if( p.isEmpty() )
 						System.out.println( "non ho colpito niente" );

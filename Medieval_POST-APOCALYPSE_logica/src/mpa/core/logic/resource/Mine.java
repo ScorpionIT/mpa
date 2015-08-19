@@ -16,15 +16,24 @@ public class Mine extends AbstractResourceProducer
 	}
 
 	@Override
-	public void providePlayer()
+	public boolean providePlayer()
 	{
-		readLock.lock();
+		try
+		{
+			readLock.lock();
 
-		if( owner != null )
-			owner.putResources( Resources.IRON, PROVIDING + EXTRA_PROVIDING
-					* owner.getPlayerLevel().ordinal() );
+			if( !super.providePlayer() )
+				return false;
 
-		readLock.unlock();
+			if( owner != null )
+				owner.putResources( Resources.IRON, PROVIDING + EXTRA_PROVIDING
+						* owner.getPlayerLevel().ordinal() );
+
+			return true;
+		} finally
+		{
+			readLock.unlock();
+		}
 	}
 
 	@Override

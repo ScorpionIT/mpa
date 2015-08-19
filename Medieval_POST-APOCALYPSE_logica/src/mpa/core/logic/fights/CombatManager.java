@@ -33,8 +33,10 @@ public class CombatManager
 		ArrayList<Player> deadPlayers = new ArrayList<>();
 		try
 		{
-			attacker.getReadLock();
 			GameManager.getInstance().takeLock();
+
+			attacker.getWriteLock();
+			attacker.stopMoving();
 
 			ArrayList<Player> hitPlayers = new ArrayList<>();
 			if( attacker.getMP() < MP_REQUIRED_FOR_PHYSICALL_ATTACK )
@@ -95,7 +97,7 @@ public class CombatManager
 			GameManager.getInstance().leaveLock();
 			for( Player dead : deadPlayers )
 				GameManager.getInstance().killPlayer( dead );
-			attacker.leaveReadLock();
+			attacker.leaveWriteLock();
 		}
 	}
 

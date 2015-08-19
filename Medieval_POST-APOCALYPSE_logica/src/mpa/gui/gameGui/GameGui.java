@@ -8,6 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import mpa.core.logic.AbstractObject;
 import mpa.core.logic.GameManager;
+import mpa.core.logic.building.AbstractPrivateProperty;
 import mpa.core.logic.building.AbstractProperty;
 import mpa.core.logic.building.House;
 import mpa.core.logic.building.Market;
@@ -68,7 +69,8 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	private Node groundNode;
 	private Node mobileObjects = new Node( "Mobile Objects" );
 	private Node pathNodes = new Node();
-	private int playerIndex;
+	private Player playingPlayer;
+	private HashMap<Player, Spatial> players = new HashMap<>();
 
 	private ArrayList<javax.vecmath.Vector2f> path = new ArrayList<>();
 	BitmapText text;
@@ -84,7 +86,7 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	public GameGui( int playerIndex )
 	{
 		super();
-		this.playerIndex = playerIndex;
+		playingPlayer = GameManager.getInstance().getPlayers().get( playerIndex );
 
 	}
 
@@ -121,7 +123,7 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	{
 		pathNodes.detachAllChildren();
 		for( int i = 0; i < GameManager.getInstance().getPlayers().size(); i++ )
-			if( i != playerIndex )
+			if( GameManager.getInstance().getPlayers().get( i ) != playingPlayer )
 			{
 				GameManager.getInstance().getPlayers().get( i ).getReadLock();
 				ArrayList<javax.vecmath.Vector2f> path2 = GameManager.getInstance().getPlayers()
@@ -341,6 +343,9 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 		inputManager.addMapping( "attack", new MouseButtonTrigger( 1 ) );
 		inputManager.addListener( clickActionListener, "attack" );
 
+		inputManager.addMapping( "pause", new KeyTrigger( KeyInput.KEY_P ) );
+		inputManager.addListener( keyActionListener, "pause" );
+
 	}
 
 	private void setLights()
@@ -385,12 +390,11 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 
 	private void loadCharacters()
 	{
-		int i = 0;
 		assetManager.registerLocator( "./Assets/Models/SeanDevlin.zip", ZipLocator.class );
 		for( Player player : GameManager.getInstance().getPlayers() )
 		{
 			Spatial model = assetManager.loadModel( "SeanDevlin.mesh.xml" );
-			if( i == playerIndex )
+			if( player == playingPlayer )
 			{
 				model.scale( scalingFactor, scalingFactor, scalingFactor );
 				model.setLocalTranslation( new Vector3f( player.getX(), 5, player.getY() ) );
@@ -401,8 +405,8 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 				model.setLocalTranslation( new Vector3f( player.getX(), 5, player.getY() ) );
 
 			}
-			i++;
 
+			players.put( player, model );
 			mobileObjects.attachChild( model );
 			javax.vecmath.Vector2f currentVector = player.getCurrentVector();
 			model.rotate( 0, FastMath.PI, 0 );
@@ -417,15 +421,29 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	private void updateMobileObjects()
 	{
 		GameManager.getInstance().takeLock();
-		int i = 0;
 		AnimControl control;
 		AnimChannel channel = null;
 		List<Player> players = GameManager.getInstance().getPlayers();
-		if( mobileObjects.getChildren().size() > players.size() )
-			mobileObjects.getChildren().remove( 0 );
+
+		List<Player> toRemove = new ArrayList<Player>();
+		if( this.players.size() > players.size() )
+		{
+			for( Player p : this.players.keySet() )
+				if( !players.contains( p ) )
+				{
+					toRemove.add( p );
+				}
+		}
+
+		for( Player p : toRemove )
+		{
+			mobileObjects.getChildren().remove( this.players.get( p ) );
+			this.players.remove( p );
+		}
+
 		for( Player p : players )
 		{
-			Spatial mobObject = mobileObjects.getChild( i );
+			Spatial mobObject = this.players.get( p );
 			// if( i == 0 )
 			// if( p.getPath() != null && !p.getPath().isEmpty() )
 			// {
@@ -449,8 +467,8 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 
 			quad.lookAt( new Vector3f( -currentVector.x, 0, -currentVector.y ), upVector );
 			mobObject.setLocalRotation( quad );
-			i++;
 		}
+
 		GameManager.getInstance().leaveLock();
 	}
 
@@ -502,10 +520,19 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 		lock.unlock();
 	}
 
+	private int count = 0;
+
 	@Override
 	public void simpleUpdate( float tpf )
 	{
 		updateMobileObjects();
+		if( count == 100 )
+		{
+			updateResourcePanel();
+			count = 0;
+		}
+		else
+			count++;
 		// super.simpleUpdate( tpf );
 	}
 
@@ -543,7 +570,9 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	public void occupy()
 	{
 		selectedObject = niftyHandler.getSelectedObject();
-
+		AbstractPrivateProperty pickedObj = ( AbstractPrivateProperty ) selectedObject;
+		GameManager.getInstance().conquer( pickedObj, playingPlayer );
+		niftyHandler.setSelectedPanel( selectedObject );
 	}
 
 	public Node getGroundNode()
@@ -554,11 +583,6 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	public Node getPathNodes()
 	{
 		return pathNodes;
-	}
-
-	public int getPlayerIndex()
-	{
-		return playerIndex;
 	}
 
 	public ArrayList<javax.vecmath.Vector2f> getPath()
@@ -620,6 +644,11 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	{
 		niftyHandler.changePageOpponentResourcesPanel( true );
 
+	}
+
+	public Player getPlayingPlayer()
+	{
+		return playingPlayer;
 	}
 
 }

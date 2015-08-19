@@ -11,6 +11,7 @@ import javax.vecmath.Vector2f;
 import mpa.core.ai.DifficultyLevel;
 import mpa.core.ai.OpponentAI;
 import mpa.core.logic.building.AbstractPrivateProperty;
+import mpa.core.logic.character.DependentCharacter;
 import mpa.core.logic.character.Player;
 import mpa.core.logic.fights.CombatManager;
 import mpa.core.logic.tool.Potions;
@@ -24,6 +25,8 @@ public class GameManager
 	private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 	private ReadLock readLock = lock.readLock();
 	private WriteLock writeLock = lock.writeLock();
+	private ArrayList<MyThread> gameThreads = new ArrayList<>();
+	private boolean pause = false;
 
 	private static GameManager gameManager = null;
 
@@ -47,8 +50,11 @@ public class GameManager
 		if( gameManager == null )
 		{
 			gameManager = new GameManager( world, level );
-			new PositionUpdater().start();
-			new ResourceUpdater().start();
+			gameManager.gameThreads.add( new PositionUpdater() );
+			gameManager.gameThreads.add( new ResourceUpdater() );
+
+			for( Thread t : gameManager.gameThreads )
+				t.start();
 		}
 	}
 
@@ -58,6 +64,7 @@ public class GameManager
 		this.players = new ArrayList<Player>();
 		this.AI_players = new ArrayList<>();
 		this.difficultyLevel = level;
+
 	}
 
 	public void computePath( Player player, float xGoal, float yGoal )
@@ -82,7 +89,11 @@ public class GameManager
 	{
 		readLock.lock();
 		for( Player player : players )
+		{
 			player.movePlayer();
+			for( DependentCharacter dC : player.getSubalterns() )
+				dC.movePlayer();
+		}
 		readLock.unlock();
 	}
 
@@ -96,9 +107,18 @@ public class GameManager
 		Vector2f gatheringPlace = abstractPrivateProperty.getGatheringPlace();
 		if( ( ( int ) gatheringPlace.x ) != ( ( int ) player.x )
 				|| ( ( int ) gatheringPlace.y ) != ( ( int ) player.y ) )
+		{
+			computePath( player, gatheringPlace.x, gatheringPlace.y );
 			return false;
+		}
 
-		return player.employSubaltern( abstractPrivateProperty ) != null;
+		DependentCharacter employSubaltern = player.employSubaltern( abstractPrivateProperty );
+		if( employSubaltern != null )
+		{
+			abstractPrivateProperty.setOwner( player );
+			return true;
+		}
+		return false;
 
 	}
 
@@ -137,6 +157,30 @@ public class GameManager
 		property.setOwner( player );
 		player.employSubaltern( property );
 		return true;
+	}
+
+	public void setPause( boolean pause )
+	{
+		this.pause = pause;
+
+		for( MyThread t : gameThreads )
+			if( this.pause )
+				t.setWorking( false );
+			else
+			{
+				System.out.println( "ci entro?!?!" );
+				t.setWorking( true );
+				synchronized( t )
+				{
+					t.notify();
+				}
+			}
+
+	}
+
+	public boolean getPauseState()
+	{
+		return pause;
 	}
 
 	@Override

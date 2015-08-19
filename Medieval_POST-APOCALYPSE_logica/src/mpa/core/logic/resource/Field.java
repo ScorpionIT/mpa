@@ -39,24 +39,32 @@ public class Field extends AbstractResourceProducer
 	}
 
 	@Override
-	public void providePlayer()
+	public boolean providePlayer()
 	{
-		writeLock.lock();
-		if( owner != null )
+		try
 		{
-			if( this.currentFieldState.ordinal() < FieldState.values().length - 1 )
+			writeLock.lock();
+			if( !super.providePlayer() )
+				return false;
+			if( owner != null )
 			{
-				this.currentFieldState = FieldState.values()[currentFieldState.ordinal() + 1];
-			}
-			else
-			{
-				owner.putResources( Resources.WHEAT, PROVIDING + EXTRA_PROVIDING
-						* owner.getPlayerLevel().ordinal() );
-				this.currentFieldState = FieldState.values()[0];
-			}
+				if( this.currentFieldState.ordinal() < FieldState.values().length - 1 )
+				{
+					this.currentFieldState = FieldState.values()[currentFieldState.ordinal() + 1];
+				}
+				else
+				{
+					owner.putResources( Resources.WHEAT, PROVIDING + EXTRA_PROVIDING
+							* owner.getPlayerLevel().ordinal() );
+					this.currentFieldState = FieldState.values()[0];
+				}
 
+			}
+			return true;
+		} finally
+		{
+			writeLock.unlock();
 		}
-		writeLock.unlock();
 	}
 
 	@Override

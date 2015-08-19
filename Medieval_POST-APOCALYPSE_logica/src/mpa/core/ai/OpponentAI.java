@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import javax.vecmath.Vector2f;
 
 import mpa.core.logic.AbstractObject;
+import mpa.core.logic.MyThread;
 import mpa.core.logic.building.House;
 import mpa.core.logic.building.Market;
 import mpa.core.logic.character.Player;
 import mpa.core.logic.resource.AbstractResourceProducer;
 import mpa.core.logic.tool.Potions;
 
-public class OpponentAI extends Thread
+public class OpponentAI extends MyThread
 {
 	Player player;
 	AIState aiState = new ExplorationState();
@@ -37,9 +38,9 @@ public class OpponentAI extends Thread
 	@Override
 	public void run()
 	{
-		int c = 0;
 		while( true )
 		{
+			super.run();
 			try
 			{
 				sleep( 1500 );

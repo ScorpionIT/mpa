@@ -3,6 +3,8 @@ package mpa.core.logic.character;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.vecmath.Vector2f;
+
 import mpa.core.logic.Level;
 import mpa.core.logic.building.AbstractPrivateProperty;
 import mpa.core.logic.building.Headquarter;
@@ -35,12 +37,13 @@ public class Player extends AbstractCharacter
 		super( name, x, y, 5, bagDimension, headquarter );
 		subalterns = new ArrayList<DependentCharacter>();
 		this.level = level;
-		// for( int i = 0; i < level.getNumberOfSubalterns( level ); i++ )
-		// {
-		// subalterns.add( new DependentCharacter( "ERia", headquarter.getX(), headquarter.getY(),
-		// 100, 100, null, level, this, headquarter ) );
-		//
-		// }
+		Vector2f gatheringPlace = headquarter.getGatheringPlace();
+		for( int i = 0; i < level.getNumberOfSubalterns( level ); i++ )
+		{
+			subalterns.add( new DependentCharacter( "ERia", gatheringPlace.x, gatheringPlace.y,
+					100, 100, level, this, headquarter ) );
+
+		}
 
 		MP = 100;
 
@@ -196,6 +199,9 @@ public class Player extends AbstractCharacter
 		writeLock.lock();
 		switch( type )
 		{
+			case STONE:
+				resources.put( Resources.STONE, resources.get( Resources.STONE ) + providing );
+				break;
 			case IRON:
 				resources.put( Resources.IRON, resources.get( Resources.IRON ) + providing );
 				break;

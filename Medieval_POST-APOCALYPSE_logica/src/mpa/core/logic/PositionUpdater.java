@@ -1,6 +1,6 @@
 package mpa.core.logic;
 
-public class PositionUpdater extends Thread
+public class PositionUpdater extends MyThread
 {
 	private static final long INTERVAL = 100;
 
@@ -13,6 +13,7 @@ public class PositionUpdater extends Thread
 	{
 		while( true )
 		{
+			super.run();
 			try
 			{
 				sleep( INTERVAL );

@@ -15,7 +15,7 @@ public abstract class AbstractCharacter extends AbstractObject
 {
 	private static final float PACE = 5;
 
-	private ArrayList<Vector2f> path = new ArrayList<>();
+	protected ArrayList<Vector2f> path = new ArrayList<>();
 	private Vector2f previousVector;
 	private Vector2f currentVector = new Vector2f( 0.0f, 0.0f );
 	private int numberOfIterationsPerVector;
@@ -93,8 +93,6 @@ public abstract class AbstractCharacter extends AbstractObject
 	public void setPath( ArrayList<Vector2f> path )
 	{
 		writeLock.lock();
-
-		// System.out.println( "mi hai passato un path di " + path.size() );
 
 		this.path = path;
 		if( path.size() > 1 )
@@ -236,6 +234,11 @@ public abstract class AbstractCharacter extends AbstractObject
 		{
 			readLock.unlock();
 		}
+	}
+
+	public void stopMoving()
+	{
+		path = null;
 	}
 
 	public void setPlayerDirection( Vector2f focus )

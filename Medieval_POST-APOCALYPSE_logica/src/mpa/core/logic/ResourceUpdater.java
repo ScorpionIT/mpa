@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import mpa.core.logic.resource.AbstractResourceProducer;
 
-public class ResourceUpdater extends Thread
+public class ResourceUpdater extends MyThread
 {
 	private ArrayList<AbstractResourceProducer> resources = GameManager.getInstance().getWorld()
 			.getResourceProducers();
@@ -16,6 +16,7 @@ public class ResourceUpdater extends Thread
 	{
 		while( true )
 		{
+			super.run();
 			try
 			{
 				sleep( INTERVAL );
@@ -26,6 +27,7 @@ public class ResourceUpdater extends Thread
 
 			for( AbstractResourceProducer resource : resources )
 			{
+				System.out.println( resource );
 				resource.providePlayer();
 			}
 		}

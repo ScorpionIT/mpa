@@ -15,13 +15,24 @@ public class Cave extends AbstractResourceProducer
 	}
 
 	@Override
-	public void providePlayer()
+	public boolean providePlayer()
 	{
-		readLock.lock();
-		if( owner != null )
-			owner.putResources( Resources.STONE, PROVIDING + EXTRA_PROVIDING
-					* owner.getPlayerLevel().ordinal() );
-		readLock.unlock();
+		try
+		{
+			readLock.lock();
+			if( !super.providePlayer() )
+				return false;
+			if( owner != null )
+			{
+				owner.putResources( Resources.STONE, PROVIDING + EXTRA_PROVIDING
+						* owner.getPlayerLevel().ordinal() );
+				System.out.println( "ho aggiunto pietra" );
+			}
+			return true;
+		} finally
+		{
+			readLock.unlock();
+		}
 	}
 
 	@Override
