@@ -40,7 +40,7 @@ public class SelectionPanel
 		{
 			{
 				x("10%");
-				y("30%");
+				y("34%");
 			}
 
 		};
@@ -56,7 +56,7 @@ public class SelectionPanel
 		{
 			{
 				x("10%");
-				y("20%");
+				y("22%");
 			}
 		};
 
@@ -111,10 +111,12 @@ public class SelectionPanel
 		if (player == null)
 		{
 			this.occupyButton.visible(true);
+			objectOwner.visible(false);
 		}
 		else
 		{
-			this.objectOwner.text(player.getName());
+			this.objectOwner.text("Owner: " + player.getName());
+			objectOwner.visible(true);
 			occupyButton.visible(false);
 		}
 

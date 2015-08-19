@@ -10,27 +10,30 @@ public class GameGuiKeyActionListener implements ActionListener
 
 	private GameGui gameGui;
 
-	public GameGuiKeyActionListener( GameGui gameGui )
+	public GameGuiKeyActionListener(GameGui gameGui)
 	{
 		this.gameGui = gameGui;
 	}
 
 	@Override
-	public void onAction( String name, boolean keyPressed, float tpf )
+	public void onAction(String name, boolean keyPressed, float tpf)
 	{
 
-		if( "Tab".equals( name ) )
+		if ("Tab".equals(name))
 		{
-			if( keyPressed )
+			if (keyPressed)
 				gameGui.getNiftyHandler().setOpponentPropertiesPanel();
 			else
+			{
 				gameGui.getNiftyHandler().removeOpponentPropertiesPanel();
+				gameGui.getNiftyHandler().turnToPageOne();
+			}
 
 		}
-		else if( "pause".equals( name ) && keyPressed )
+		else if ("pause".equals(name) && keyPressed)
 		{
 			GameManager gm = GameManager.getInstance();
-			gm.setPause( !gm.getPauseState() );
+			gm.setPause(!gm.getPauseState());
 		}
 
 	}
