@@ -2,6 +2,7 @@ package mpa.gui.gameGui.panel;
 
 import mpa.core.logic.AbstractObject;
 import mpa.core.logic.building.AbstractPrivateProperty;
+import mpa.core.logic.character.Player.Item;
 import mpa.core.logic.resource.AbstractResourceProducer;
 import mpa.core.logic.resource.Resources;
 import mpa.gui.gameGui.GameGui;
@@ -27,6 +28,7 @@ public class NiftyHandler
 	private ResourcesPanel resourcesPanel;
 	private AbstractObject selectedObject;
 	private OpponentPropertiesPanel opponentPropertiesPanel;
+	private ChoosePanel choosePanel;
 	private GameGui gameGui;
 
 	public NiftyHandler(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort,
@@ -38,23 +40,6 @@ public class NiftyHandler
 		NiftyController controller = new NiftyController(gameGui);
 
 		initNifty(controller, assetManager);
-		// ScreenController screenController = nifty.getCurrentScreen().getScreenController();
-
-		// stateManager.attach( AppS screenController );
-
-		// TimerTask timerTask = new TimerTask()
-		// {
-		// public void run()
-		// {
-		// gameGui.updateResourcePanel();
-		//
-		// }
-		// };
-		//
-		// Timer timer = new Timer(true);
-		// timer.scheduleAtFixedRate(timerTask, 0, 1000);
-
-		// gameGui.updateResourcePanel();
 
 		guiViewPort.addProcessor(niftyDisplay);
 	}
@@ -89,6 +74,13 @@ public class NiftyHandler
 					}
 				});
 
+				layer(new LayerBuilder("chooseLayer")
+				{
+					{
+						childLayoutAbsolute();
+					}
+				});
+
 			}
 		}.build(nifty));
 
@@ -103,12 +95,13 @@ public class NiftyHandler
 
 		opponentPropertiesPanel = new OpponentPropertiesPanel(gameGui);
 
+		choosePanel = new ChoosePanel();
+
 		Element findElementByName = nifty.getCurrentScreen().findElementByName("resourcesLayer");
 		findElementByName.add(resourcesPanel.build(nifty, nifty.getCurrentScreen(), findElementByName));
 
 		findElementByName = nifty.getCurrentScreen().findElementByName("selectedLayer");
 		findElementByName.add(selectionPanel.build(nifty, nifty.getCurrentScreen(), findElementByName));
-
 	}
 
 	public void setSelectedPanel(final AbstractObject abstractObject)
@@ -146,6 +139,53 @@ public class NiftyHandler
 
 			selectedObject = null;
 		}
+
+	}
+
+	public void relocateChoosePanel(int x, int y)
+	{
+		if ((x + choosePanel.getWidth()) > gameGui.windowWidth())
+		{
+			x -= choosePanel.getWidth();
+		}
+
+		if ((y + choosePanel.getHeight()) > gameGui.windowHeight() - (gameGui.windowHeight() * 10 / 100))
+		{
+			y -= choosePanel.getHeight();
+		}
+		choosePanel.changePosition(x, y);
+		removeChoosePanel();
+		choosePanel.setVisible(true);
+		Element findElementByName = nifty.getCurrentScreen().findElementByName("chooseLayer");
+		findElementByName.add(choosePanel.build(nifty, nifty.getCurrentScreen(), findElementByName));
+
+	}
+
+	public void changeChoosenElement(boolean back)
+	{
+		choosePanel.changeChoosenElement(back);
+		removeChoosePanel();
+		choosePanel.setVisible(true);
+		Element findElementByName = nifty.getCurrentScreen().findElementByName("chooseLayer");
+		findElementByName.add(choosePanel.build(nifty, nifty.getCurrentScreen(), findElementByName));
+
+	}
+
+	public void initChoosenElementPanel()
+	{
+		choosePanel.initSelectedElment();
+	}
+
+	public void removeChoosePanel()
+	{
+
+		if (nifty.getCurrentScreen().findElementByName("#choosePanel") != null)
+		{
+			nifty.getCurrentScreen().findElementByName("#choosePanel").markForRemoval();
+			nifty.removeElement(nifty.getCurrentScreen(), nifty.getCurrentScreen().findElementByName("#choosePanel"));
+
+		}
+		choosePanel.setVisible(false);
 
 	}
 
@@ -237,5 +277,10 @@ public class NiftyHandler
 		opponentPropertiesPanel.changePage(back);
 		removeOpponentPropertiesPanel();
 		setOpponentPropertiesPanel();
+	}
+
+	public Item getSelectedItem()
+	{
+		return choosePanel.getSelectedElement();
 	}
 }
