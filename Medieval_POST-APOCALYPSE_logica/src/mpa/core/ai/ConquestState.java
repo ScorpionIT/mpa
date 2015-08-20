@@ -1,5 +1,7 @@
 package mpa.core.ai;
 
+import java.util.ArrayList;
+
 import javax.vecmath.Vector2f;
 
 import mpa.core.logic.GameManager;
@@ -44,13 +46,12 @@ public class ConquestState extends AIState
 				return;
 		}
 
-		if( !player.isThereAnyFreeSulbaltern() )
-			return;
+		final int caves = 0;
+		final int fields = 1;
+		final int mines = 2;
+		final int woods = 3;
 
-		int caves = 0;
-		int fields = 0;
-		int mines = 0;
-		int woods = 0;
+		int[] resourcesAmount = new int[4];
 
 		for( DependentCharacter dependentCharacter : player.getSubalterns() )
 		{
@@ -59,27 +60,70 @@ public class ConquestState extends AIState
 			if( building != null )
 			{
 				if( building instanceof Wood )
-					woods++;
+					resourcesAmount[woods]++;
 				else if( building instanceof Field )
-					fields++;
+					resourcesAmount[fields]++;
 				else if( building instanceof Mine )
-					mines++;
+					resourcesAmount[mines]++;
 				else if( building instanceof Cave )
-					caves++;
+					resourcesAmount[caves]++;
 			}
 		}
 
 		Class<?> bestChoice = null;
+		int minAmount = Integer.MAX_VALUE;
+		int indexBestChoice = 0;
 
-		if( caves < fields )
-			bestChoice = Cave.class;
-		else if( fields < mines )
-			bestChoice = Field.class;
-		else if( mines < woods )
-			bestChoice = Mine.class;
-		else
-			bestChoice = Wood.class;
+		for( int i = 0; i < 4; i++ )
+			if( resourcesAmount[i] < minAmount )
+			{
+				minAmount = resourcesAmount[i];
+				indexBestChoice = i;
+				if( resourcesAmount[i] == 0 && i == fields )
+					break;
+			}
 
+		int maxAmount = 0;
+		int resourceToFreeIndex = 0;
+		Class<?> resourceToFree = null;
+		for( int i = 0; i < 4; i++ )
+			if( resourcesAmount[i] > maxAmount )
+			{
+				maxAmount = resourcesAmount[i];
+				resourceToFreeIndex = i;
+			}
+
+		switch( indexBestChoice )
+		{
+			case caves:
+				bestChoice = Cave.class;
+				break;
+			case fields:
+				bestChoice = Field.class;
+				break;
+			case mines:
+				bestChoice = Mine.class;
+				break;
+			case woods:
+				bestChoice = Wood.class;
+				break;
+		}
+
+		switch( resourceToFreeIndex )
+		{
+			case caves:
+				resourceToFree = Cave.class;
+				break;
+			case fields:
+				resourceToFree = Field.class;
+				break;
+			case mines:
+				resourceToFree = Mine.class;
+				break;
+			case woods:
+				resourceToFree = Wood.class;
+				break;
+		}
 		float shortestDistance = Float.MAX_VALUE;
 		AbstractResourceProducer _building = null;
 		float _distance = Float.MAX_VALUE;
@@ -104,6 +148,25 @@ public class ConquestState extends AIState
 				_distance = distance;
 			}
 
+		}
+
+		if( !player.isThereAnyFreeSulbaltern() )
+		{
+			if( minAmount == 0 )
+			{
+				ArrayList<DependentCharacter> subalterns = player.getSubalterns();
+
+				for( DependentCharacter dC : subalterns )
+				{
+					AbstractPrivateProperty privateProperty = dC.getAbstractPrivateProperty();
+					if( privateProperty != null
+							&& privateProperty.getClass().equals( resourceToFree.getClass() ) )
+					{
+						player.freeSubaltern( dC );
+						break;
+					}
+				}
+			}
 		}
 
 		if( _building2 != null )

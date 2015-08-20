@@ -15,12 +15,18 @@ import mpa.core.logic.tool.Potions;
 
 public class Player extends AbstractCharacter
 {
+	public enum Item
+	{
+		WEAPON, HP_POTION, MP_POTION, GRANADE, FLASH_BANG
+	}
+
 	private ArrayList<DependentCharacter> subalterns;
 
 	private int employedSubalterns = 0;
 
 	private Level level;
 
+	private Item selectedItem = Item.WEAPON;
 	private int MP;
 	private float rangeOfPhysicallAttack = 15;
 	private int physicallAttackDamage = 5;
@@ -157,7 +163,7 @@ public class Player extends AbstractCharacter
 	{
 		if( subalterns.contains( dependentCharacter ) )
 		{
-			dependentCharacter.setAbstractPrivateProperty( null );
+			dependentCharacter.leaveProperty();
 			employedSubalterns--;
 			return true;
 
@@ -455,6 +461,25 @@ public class Player extends AbstractCharacter
 		}
 	}
 
+	public void setSelectedItem( Item it )
+	{
+		writeLock.lock();
+		selectedItem = it;
+		writeLock.unlock();
+	}
+
+	public Item getSelectedItem()
+	{
+		try
+		{
+			readLock.lock();
+			return selectedItem;
+		} finally
+		{
+			readLock.unlock();
+		}
+	}
+
 	public void setPhysicallAttackDamage( int physicallAttackDamage )
 	{
 		writeLock.lock();
@@ -464,7 +489,49 @@ public class Player extends AbstractCharacter
 
 	public HashMap<Resources, Integer> getResources()
 	{
-		return resources;
+		try
+		{
+			readLock.lock();
+			return resources;
+		} finally
+		{
+			readLock.unlock();
+		}
 	}
 
+	public Potions takePotion( Potions potion )
+	{
+		try
+		{
+			writeLock.lock();
+			potions.put( potion, potions.get( potion ) - 1 );
+			return potion;
+		} finally
+		{
+			writeLock.unlock();
+		}
+	}
+
+	public boolean restoreHealth( Potions potion )
+	{
+		if( !( potion.equals( Potions.HP ) || potion.equals( Potions.MP ) ) )
+			return false;
+
+		if( ( potion.equals( Potions.HP ) && health == 100 )
+				|| ( potion.equals( Potions.MP ) && MP == 100 ) )
+		{
+			potions.put( potion, potions.get( potion ) + 1 );
+			return false;
+		}
+
+		if( potion.equals( Potions.HP ) )
+			;
+		// add HPs
+		else
+			// add MPs
+			;
+
+		return true;
+
+	}
 }

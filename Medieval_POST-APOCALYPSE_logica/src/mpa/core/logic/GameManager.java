@@ -13,6 +13,7 @@ import mpa.core.ai.OpponentAI;
 import mpa.core.logic.building.AbstractPrivateProperty;
 import mpa.core.logic.character.DependentCharacter;
 import mpa.core.logic.character.Player;
+import mpa.core.logic.character.Player.Item;
 import mpa.core.logic.fights.CombatManager;
 import mpa.core.logic.tool.Potions;
 
@@ -147,6 +148,30 @@ public class GameManager
 	public ArrayList<Player> distanceAttack( Player attacker, Potions potion )
 	{
 		return CombatManager.getInstance().distanceAttack( attacker, potion );
+	}
+
+	public ArrayList<Player> playerAction( Player p )
+	{
+		Item selectedItem = p.getSelectedItem();
+		ArrayList<Player> hitPlayers = null;
+
+		switch( selectedItem )
+		{
+			case WEAPON:
+				hitPlayers = attackPhysically( p );
+				break;
+			case GRANADE:
+				hitPlayers = distanceAttack( p, p.takePotion( Potions.GRANADE ) );
+				break;
+			case FLASH_BANG:
+				hitPlayers = distanceAttack( p, p.takePotion( Potions.FLASH_BANG ) );
+				break;
+			default:
+				hitPlayers = new ArrayList<>();
+				hitPlayers.add( p );
+
+		}
+		return hitPlayers;
 	}
 
 	public boolean occupyProperty( Player player, AbstractPrivateProperty property )

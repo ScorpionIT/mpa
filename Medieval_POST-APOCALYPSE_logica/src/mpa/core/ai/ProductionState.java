@@ -3,6 +3,7 @@ package mpa.core.ai;
 import javax.vecmath.Vector2f;
 
 import mpa.core.logic.GameManager;
+import mpa.core.logic.building.Market;
 import mpa.core.logic.character.Player;
 import mpa.core.logic.tool.Potions;
 
@@ -15,6 +16,12 @@ class ProductionState extends AIState
 		super();
 	}
 
+	private void sell()
+	{
+		Market m = Market.getInstance();
+
+	}
+
 	@Override
 	void action( OpponentAI opponentAI )
 	{
@@ -24,46 +31,54 @@ class ProductionState extends AIState
 		{
 			p.getWriteLock();
 
-			Vector2f collectionPoint = p.getHeadquarter().getCollectionPoint();
+			Vector2f collectionPoint = Market.getInstance().getGatheringPlace();
 			boolean canBuyPotions = p.canBuyPotions();
 
-			if( canBuyPotions && collectionPoint.x != p.getX() && p.getY() != collectionPoint.y )
+			if( collectionPoint.x != p.getX() && p.getY() != collectionPoint.y )
 			{
 				GameManager.getInstance().computePath( p, collectionPoint.x, collectionPoint.y );
 				isWalking = true;
 				return;
 			}
-			else if( canBuyPotions && collectionPoint.x == p.getX()
-					&& collectionPoint.y == p.getY() )
+			else if( collectionPoint.x != p.getX() && p.getY() != collectionPoint.y )
 			{
 
-				Potions potionNotToBuy = null;
-				int max = Integer.MIN_VALUE;
-				for( Potions potion : Potions.values() )
+				if( !canBuyPotions )
 				{
-					int amount = p.getPotionAmount( potion );
-
-					if( amount > max )
-					{
-						potionNotToBuy = potion;
-						max = amount;
-					}
+					sell();
 				}
+				else
+				{
 
-				for( Potions value : Potions.values() )
-					while( p.canBuyPotion( value ) )
+					Potions potionNotToBuy = null;
+					int max = Integer.MIN_VALUE;
+					for( Potions potion : Potions.values() )
 					{
-						if( value != potionNotToBuy )
-						{
-							p.buyPotion( value );
+						int amount = p.getPotionAmount( potion );
 
-							if( p.getPotionAmount( value ) == p.getPotionAmount( potionNotToBuy )
-									&& p.canBuyPotion( value ) )
-							{
-								potionNotToBuy = value;
-							}
+						if( amount > max )
+						{
+							potionNotToBuy = potion;
+							max = amount;
 						}
 					}
+
+					for( Potions value : Potions.values() )
+						while( p.canBuyPotion( value ) )
+						{
+							if( value != potionNotToBuy )
+							{
+								p.buyPotion( value );
+
+								if( p.getPotionAmount( value ) == p
+										.getPotionAmount( potionNotToBuy )
+										&& p.canBuyPotion( value ) )
+								{
+									potionNotToBuy = value;
+								}
+							}
+						}
+				}
 			}
 		} finally
 		{

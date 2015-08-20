@@ -29,6 +29,8 @@ public class DependentCharacter extends AbstractCharacter
 	public void setAbstractPrivateProperty( AbstractPrivateProperty abstractPrivateProperty )
 	{
 		this.abstractPrivateProperty = abstractPrivateProperty;
+		abstractPrivateProperty.setOwner( boss );
+
 	}
 
 	public Level getLevel()
