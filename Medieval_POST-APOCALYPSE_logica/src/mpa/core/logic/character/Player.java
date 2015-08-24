@@ -28,10 +28,11 @@ public class Player extends AbstractCharacter
 
 	private Item selectedItem = Item.WEAPON;
 	private int MP;
-	private float rangeOfPhysicallAttack = 15;
+	private float rangeOfPhysicallAttack = 12;
 	private int physicallAttackDamage = 5;
-	private float rangeOfDistanceAttack = 12;
-	private float distanceAttackRayOfCollision = 4;
+	private float rangeOfDistanceAttack = 20;
+	private float distanceAttackRayOfCollision = 12;
+	private boolean flashed = false;
 
 	private HashMap<Resources, Integer> resources = new HashMap<>();
 
@@ -62,7 +63,7 @@ public class Player extends AbstractCharacter
 		potions.put( Potions.HP, 0 );
 		potions.put( Potions.MP, 0 );
 		potions.put( Potions.GRANADE, 10 );
-		potions.put( Potions.FLASH_BANG, 0 );
+		potions.put( Potions.FLASH_BANG, 10 );
 
 	}
 
@@ -510,6 +511,26 @@ public class Player extends AbstractCharacter
 		{
 			writeLock.unlock();
 		}
+	}
+
+	public boolean isFlashed()
+	{
+		try
+		{
+			readLock.lock();
+			return flashed;
+		} finally
+		{
+			readLock.unlock();
+		}
+	}
+
+	public void setFlashed()
+	{
+		// writeLock.lock();
+
+		flashed = !flashed;
+		// writeLock.unlock();
 	}
 
 	public boolean restoreHealth( Potions potion )

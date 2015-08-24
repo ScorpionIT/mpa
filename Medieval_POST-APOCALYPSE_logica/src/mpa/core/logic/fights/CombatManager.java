@@ -101,22 +101,27 @@ public class CombatManager
 		}
 	}
 
-	private ArrayList<Player> flashBangAttack( Player attacker )
+	private ArrayList<Player> granadeAttack( Player attacker, Vector2f target, boolean isFlashBang )
 	{
 		ArrayList<Player> hitPlayers = new ArrayList<>();
-
-		// TODO
-
-		return hitPlayers;
-	}
-
-	private ArrayList<Player> granadeAttack( Player attacker )
-	{
-		ArrayList<Player> hitPlayers = new ArrayList<>();
+		ArrayList<Player> deadPlayers = new ArrayList<>();
 
 		try
 		{
-			attacker.getReadLock();
+			GameManager.getInstance().takeLock();
+
+			float distanceToTarget = MyMath.distanceFloat( attacker.getX(), attacker.getY(),
+					target.x, target.y );
+
+			if( distanceToTarget > attacker.getRangeOfDistanceAttack() )
+			{
+				target = new Vector2f( attacker.getX() + attacker.getPlayerDirection().x
+						* attacker.getRangeOfDistanceAttack(), attacker.getY()
+						+ attacker.getPlayerDirection().y * attacker.getRangeOfDistanceAttack() );
+			}
+
+			attacker.getWriteLock();
+			attacker.stopMoving();
 
 			if( attacker.getMP() < MP_REQUIRED_FOR_DISTANCE_ATTACK
 					|| attacker.getPotionAmount( Potions.GRANADE ) == 0 )
@@ -146,21 +151,33 @@ public class CombatManager
 					// attacker.getWriteLock();
 				}
 
-				float distance = MyMath.distanceFloat(
-						attacker.getX() + direction.x * attacker.getRangeOfDistanceAttack(),
-						attacker.getX() + direction.y * attacker.getRangeOfDistanceAttack(),
-						p.getX(), p.getY() );
+				float distance = MyMath.distanceFloat( target.x, target.y, p.getX(), p.getY() );
 
 				float collisionRay = attacker.getDistanceAttackRayOfCollision();
 
 				if( distance <= collisionRay )
 				{
-					p.inflictDamage( Potions.granadeDamage()
-							- ( int ) ( distance * 100 / collisionRay ) );
-					hitPlayers.add( p );
+
+					if( isFlashBang )
+					{
+						p.setFlashed();
+						GameManager.getInstance().startFlashTimer( p );
+						hitPlayers.add( p );
+					}
+					else
+					{
+						int damage = ( int ) ( ( Potions.granadeDamage() * distance ) / collisionRay );
+						if( p.inflictDamage( Potions.granadeDamage() - damage ) )
+						{
+							System.out.println( "è morto?" );
+							deadPlayers.add( p );
+						}
+						else
+							hitPlayers.add( p );
+					}
 				}
 
-				attacker.leaveWriteLock();
+				// attacker.leaveWriteLock();
 				p.leaveWriteLock();
 
 			}
@@ -168,19 +185,23 @@ public class CombatManager
 			return hitPlayers;
 		} finally
 		{
-			attacker.leaveReadLock();
+			GameManager.getInstance().leaveLock();
+			for( Player dead : deadPlayers )
+				GameManager.getInstance().killPlayer( dead );
+			attacker.leaveWriteLock();
 		}
 
 	}
 
-	public ArrayList<Player> distanceAttack( Player attacker, Potions potion )
+	public ArrayList<Player> distanceAttack( Player attacker, Potions potion, Vector2f target )
 	{
 
 		switch( potion )
 		{
 			case GRANADE:
-				return granadeAttack( attacker );
+				return granadeAttack( attacker, target, false );
 			case FLASH_BANG:
+				return granadeAttack( attacker, target, true );
 
 			default:
 				ArrayList<Player> players = new ArrayList<Player>();

@@ -1,6 +1,7 @@
 package mpa.core.logic;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
@@ -28,6 +29,7 @@ public class GameManager
 	private WriteLock writeLock = lock.writeLock();
 	private ArrayList<MyThread> gameThreads = new ArrayList<>();
 	private boolean pause = false;
+	private HashMap<Player, FlashBangThread> flashBangThreads = new HashMap<>();
 
 	private static GameManager gameManager = null;
 
@@ -65,7 +67,6 @@ public class GameManager
 		this.players = new ArrayList<Player>();
 		this.AI_players = new ArrayList<>();
 		this.difficultyLevel = level;
-
 	}
 
 	public void computePath( Player player, float xGoal, float yGoal )
@@ -77,13 +78,14 @@ public class GameManager
 	public void addPlayer( Player player )
 	{
 		players.add( player );
+		flashBangThreads.put( player, new FlashBangThread( player ) );
 	}
 
 	public void addAIPlayer( Player player )
 	{
 		OpponentAI newAI = new OpponentAI( player, difficultyLevel );
 		AI_players.add( newAI );
-		players.add( player );
+		addPlayer( player );
 		// newAI.start();
 	}
 
@@ -140,18 +142,18 @@ public class GameManager
 		return players;
 	}
 
-	public ArrayList<Player> attackPhysically( Player attacker )
+	private ArrayList<Player> attackPhysically( Player attacker )
 	{
 		System.out.println( "sto per attaccare" );
 		return CombatManager.getInstance().attackPhysically( attacker );
 	}
 
-	public ArrayList<Player> distanceAttack( Player attacker, Potions potion )
+	private ArrayList<Player> distanceAttack( Player attacker, Potions potion, Vector2f target )
 	{
-		return CombatManager.getInstance().distanceAttack( attacker, potion );
+		return CombatManager.getInstance().distanceAttack( attacker, potion, target );
 	}
 
-	public ArrayList<Player> playerAction( Player p )
+	public ArrayList<Player> playerAction( Player p, Vector2f target )
 	{
 		Item selectedItem = p.getSelectedItem();
 		ArrayList<Player> hitPlayers = null;
@@ -162,10 +164,10 @@ public class GameManager
 				hitPlayers = attackPhysically( p );
 				break;
 			case GRANADE:
-				hitPlayers = distanceAttack( p, p.takePotion( Potions.GRANADE ) );
+				hitPlayers = distanceAttack( p, p.takePotion( Potions.GRANADE ), target );
 				break;
 			case FLASH_BANG:
-				hitPlayers = distanceAttack( p, p.takePotion( Potions.FLASH_BANG ) );
+				hitPlayers = distanceAttack( p, p.takePotion( Potions.FLASH_BANG ), target );
 				break;
 			default:
 				hitPlayers = new ArrayList<>();
@@ -202,6 +204,25 @@ public class GameManager
 				}
 			}
 
+	}
+
+	public void startFlashTimer( Player p )
+	{
+		FlashBangThread flashBangThread = flashBangThreads.get( p );
+
+		System.out.println( "la dimensione è " + flashBangThreads.size() );
+		System.out.println( flashBangThreads.keySet().iterator().next().getName() );
+		if( flashBangThread.isAlive() )
+		{
+			synchronized( flashBangThread )
+			{
+				flashBangThread.notify();
+			}
+		}
+		else
+		{
+			flashBangThread.start();
+		}
 	}
 
 	public void changeSelectedItem( Player p, Item selected )

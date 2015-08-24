@@ -27,7 +27,6 @@ public class ResourceUpdater extends MyThread
 
 			for( AbstractResourceProducer resource : resources )
 			{
-				System.out.println( resource );
 				resource.providePlayer();
 			}
 		}
