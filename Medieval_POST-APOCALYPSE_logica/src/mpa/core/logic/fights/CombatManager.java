@@ -137,13 +137,13 @@ public class CombatManager
 
 				if( attacker.getName().compareTo( p.getName() ) <= 0 )
 				{
-					attacker.getWriteLock();
+					// attacker.getWriteLock();
 					p.getWriteLock();
 				}
 				else
 				{
 					p.getWriteLock();
-					attacker.getWriteLock();
+					// attacker.getWriteLock();
 				}
 
 				float distance = MyMath.distanceFloat(
@@ -176,10 +176,17 @@ public class CombatManager
 	public ArrayList<Player> distanceAttack( Player attacker, Potions potion )
 	{
 
-		if( potion.equals( Potions.FLASH_BANG ) )
-			; // TODO
+		switch( potion )
+		{
+			case GRANADE:
+				return granadeAttack( attacker );
+			case FLASH_BANG:
 
-		return granadeAttack( attacker );
+			default:
+				ArrayList<Player> players = new ArrayList<Player>();
+				players.add( attacker );
+				return players;
+		}
 
 	}
 }

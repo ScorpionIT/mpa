@@ -81,9 +81,10 @@ public class GameManager
 
 	public void addAIPlayer( Player player )
 	{
-		AI_players.add( new OpponentAI( player, difficultyLevel ) );
+		OpponentAI newAI = new OpponentAI( player, difficultyLevel );
+		AI_players.add( newAI );
 		players.add( player );
-		// AI_players.get( AI_players.size() - 1 ).start();
+		// newAI.start();
 	}
 
 	public void updateCharacterPositions()
@@ -201,6 +202,11 @@ public class GameManager
 				}
 			}
 
+	}
+
+	public void changeSelectedItem( Player p, Item selected )
+	{
+		p.setSelectedItem( selected );
 	}
 
 	public boolean getPauseState()

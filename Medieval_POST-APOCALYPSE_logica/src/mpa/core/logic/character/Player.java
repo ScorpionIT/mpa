@@ -61,7 +61,7 @@ public class Player extends AbstractCharacter
 
 		potions.put( Potions.HP, 0 );
 		potions.put( Potions.MP, 0 );
-		potions.put( Potions.GRANADE, 0 );
+		potions.put( Potions.GRANADE, 10 );
 		potions.put( Potions.FLASH_BANG, 0 );
 
 	}
