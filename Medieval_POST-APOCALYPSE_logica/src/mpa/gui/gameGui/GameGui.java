@@ -323,8 +323,9 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 		inputManager.addMapping("Click", new MouseButtonTrigger(0));
 		inputManager.addListener(clickActionListener, "Click");
 
+		inputManager.addMapping("ChooseItem", new KeyTrigger(KeyInput.KEY_LSHIFT));
 		inputManager.addMapping("attack", new MouseButtonTrigger(1));
-		inputManager.addListener(clickActionListener, "attack", "Wheel_DOWN", "Wheel_UP");
+		inputManager.addListener(clickActionListener, "attack", "Wheel_DOWN", "Wheel_UP", "ChooseItem");
 
 		inputManager.addMapping("pause", new KeyTrigger(KeyInput.KEY_P));
 		inputManager.addListener(keyActionListener, "pause");

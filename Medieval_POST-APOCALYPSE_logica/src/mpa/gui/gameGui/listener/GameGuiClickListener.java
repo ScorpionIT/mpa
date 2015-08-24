@@ -66,70 +66,68 @@ public class GameGuiClickListener implements ActionListener
 			}
 		}
 
-		if (isPressed)
+		else if ("Click".equals(name) && isPressed)
 		{
 
-			if ("Click".equals(name))
+			if (crs.getClosestCollision() != null)
 			{
+				gameGui.getNiftyHandler().emptySelectedPanel();
+				Vector2f contactPoint = new Vector2f(crs.getClosestCollision().getContactPoint().x, crs.getClosestCollision().getContactPoint().z);
 
-				if (crs.getClosestCollision() != null)
+				if (GameManager.getInstance().getWorld().pickedObject(contactPoint.x, contactPoint.y) == null)
 				{
-					gameGui.getNiftyHandler().emptySelectedPanel();
-					Vector2f contactPoint = new Vector2f(crs.getClosestCollision().getContactPoint().x, crs.getClosestCollision().getContactPoint().z);
+					GameManager.getInstance().computePath(gameGui.getPlayingPlayer(), contactPoint.x, contactPoint.y);
 
-					if (GameManager.getInstance().getWorld().pickedObject(contactPoint.x, contactPoint.y) == null)
-					{
-						GameManager.getInstance().computePath(gameGui.getPlayingPlayer(), contactPoint.x, contactPoint.y);
-
-						gameGui.setPath(gameGui.getPlayingPlayer().getPath());
-						gameGui.drawPath();
-					}
-					else
-					{
-
-						gameGui.getNiftyHandler().setSelectedPanel(GameManager.getInstance().getWorld().pickedObject(contactPoint.x, contactPoint.y));
-					}
+					gameGui.setPath(gameGui.getPlayingPlayer().getPath());
+					gameGui.drawPath();
 				}
-			}
-			else if ("attack".equals(name))
-			{
+				else
+				{
 
-				choosePanel = true;
-				niftyHandler.relocateChoosePanel((int) click.x, gameGui.windowHeight() - (int) click.y);
-
+					gameGui.getNiftyHandler().setSelectedPanel(GameManager.getInstance().getWorld().pickedObject(contactPoint.x, contactPoint.y));
+				}
 			}
 		}
-		else
+		else if ("ChooseItem".equals(name))
 		{
-			if ("attack".equals(name))
+			if (isPressed)
 			{
-
+				choosePanel = true;
+				niftyHandler.relocateChoosePanel((int) click.x, gameGui.windowHeight() - (int) click.y);
+			}
+			else
+			{
 				choosePanel = false;
 				Item selectedItem = niftyHandler.getSelectedItem();
+				GameManager.getInstance().changeSelectedItem(gameGui.getPlayingPlayer(), selectedItem);
+
 				niftyHandler.removeChoosePanel();
 				niftyHandler.initChoosenElementPanel();
-
-				Player player = gameGui.getPlayingPlayer();
-
-				// TODO cambiare azione in base all'item selezionato
-
-				if (crs.getClosestCollision() != null)
-				{
-
-					Vector2f contactPoint = new Vector2f(crs.getClosestCollision().getContactPoint().x, crs.getClosestCollision().getContactPoint().z);
-					player.setPlayerDirection(new javax.vecmath.Vector2f(contactPoint.x, contactPoint.y));
-
-					ArrayList<Player> p = GameManager.getInstance().attackPhysically(gameGui.getPlayingPlayer());
-
-					if (p.isEmpty())
-						System.out.println("non ho colpito niente");
-					else
-						for (Player pl : p)
-							System.out.println("ho colpito " + pl.getName());
-
-				}
 			}
+		}
 
+		else if ("attack".equals(name))
+		{
+
+			Player player = gameGui.getPlayingPlayer();
+
+			// TODO cambiare azione in base all'item selezionato
+
+			if (crs.getClosestCollision() != null)
+			{
+
+				Vector2f contactPoint = new Vector2f(crs.getClosestCollision().getContactPoint().x, crs.getClosestCollision().getContactPoint().z);
+				player.setPlayerDirection(new javax.vecmath.Vector2f(contactPoint.x, contactPoint.y));
+
+				ArrayList<Player> p = GameManager.getInstance().attackPhysically(gameGui.getPlayingPlayer());
+
+				if (p.isEmpty())
+					System.out.println("non ho colpito niente");
+				else
+					for (Player pl : p)
+						System.out.println("ho colpito " + pl.getName());
+
+			}
 		}
 	}
 	// @Override
