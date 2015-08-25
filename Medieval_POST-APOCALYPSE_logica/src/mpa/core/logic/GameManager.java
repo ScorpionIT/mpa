@@ -1,7 +1,6 @@
 package mpa.core.logic;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
@@ -27,9 +26,6 @@ public class GameManager
 	private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 	private ReadLock readLock = lock.readLock();
 	private WriteLock writeLock = lock.writeLock();
-	private ArrayList<MyThread> gameThreads = new ArrayList<>();
-	private boolean pause = false;
-	private HashMap<Player, FlashBangThread> flashBangThreads = new HashMap<>();
 
 	private static GameManager gameManager = null;
 
@@ -53,11 +49,9 @@ public class GameManager
 		if( gameManager == null )
 		{
 			gameManager = new GameManager( world, level );
-			gameManager.gameThreads.add( new PositionUpdater() );
-			gameManager.gameThreads.add( new ResourceUpdater() );
-
-			for( Thread t : gameManager.gameThreads )
-				t.start();
+			ThreadManager.getInstance().addGameThread( new PositionUpdater() );
+			ThreadManager.getInstance().addGameThread( new ResourceUpdater() );
+			ThreadManager.getInstance().startGameThreads();
 		}
 	}
 
@@ -78,7 +72,6 @@ public class GameManager
 	public void addPlayer( Player player )
 	{
 		players.add( player );
-		flashBangThreads.put( player, new FlashBangThread( player ) );
 	}
 
 	public void addAIPlayer( Player player )
@@ -187,42 +180,14 @@ public class GameManager
 		return true;
 	}
 
-	public void setPause( boolean pause )
+	public void setPause()
 	{
-		this.pause = pause;
-
-		for( MyThread t : gameThreads )
-			if( this.pause )
-				t.setWorking( false );
-			else
-			{
-				System.out.println( "ci entro?!?!" );
-				t.setWorking( true );
-				synchronized( t )
-				{
-					t.notify();
-				}
-			}
-
+		ThreadManager.getInstance().pause( !ThreadManager.getInstance().getPauseState() );
 	}
 
 	public void startFlashTimer( Player p )
 	{
-		FlashBangThread flashBangThread = flashBangThreads.get( p );
-
-		System.out.println( "la dimensione è " + flashBangThreads.size() );
-		System.out.println( flashBangThreads.keySet().iterator().next().getName() );
-		if( flashBangThread.isAlive() )
-		{
-			synchronized( flashBangThread )
-			{
-				flashBangThread.notify();
-			}
-		}
-		else
-		{
-			flashBangThread.start();
-		}
+		ThreadManager.getInstance().startFlashBangThread( p );
 	}
 
 	public void changeSelectedItem( Player p, Item selected )
@@ -232,7 +197,7 @@ public class GameManager
 
 	public boolean getPauseState()
 	{
-		return pause;
+		return ThreadManager.getInstance().getPauseState();
 	}
 
 	@Override

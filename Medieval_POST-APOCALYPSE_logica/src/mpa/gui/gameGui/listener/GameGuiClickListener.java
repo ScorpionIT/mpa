@@ -31,6 +31,8 @@ public class GameGuiClickListener implements ActionListener
 	@Override
 	public void onAction( String name, boolean isPressed, float tpf )
 	{
+		if( GameManager.getInstance().getPauseState() )
+			return;
 		NiftyHandler niftyHandler = gameGui.getNiftyHandler();
 		// System.out.println( "ci sono entrato  per la " + c++ );
 		Vector2f click = gameGui.getInputManager().getCursorPosition();
@@ -117,7 +119,7 @@ public class GameGuiClickListener implements ActionListener
 			}
 		}
 
-		else if( "attack".equals( name ) )
+		else if( "attack".equals( name ) && isPressed )
 		{
 
 			Player player = gameGui.getPlayingPlayer();

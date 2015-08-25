@@ -525,11 +525,11 @@ public class Player extends AbstractCharacter
 		}
 	}
 
-	public void setFlashed()
+	public void setFlashed( boolean flash )
 	{
 		// writeLock.lock();
 
-		flashed = !flashed;
+		flashed = flash;
 		// writeLock.unlock();
 	}
 

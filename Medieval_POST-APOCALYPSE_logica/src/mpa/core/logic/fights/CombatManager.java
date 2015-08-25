@@ -160,7 +160,7 @@ public class CombatManager
 
 					if( isFlashBang )
 					{
-						p.setFlashed();
+						p.setFlashed( true );
 						GameManager.getInstance().startFlashTimer( p );
 						hitPlayers.add( p );
 					}

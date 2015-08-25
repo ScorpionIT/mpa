@@ -2,40 +2,49 @@ package mpa.core.logic;
 
 import mpa.core.logic.character.Player;
 
-public class FlashBangThread extends MyThread
+public class FlashBangThread extends Thread
 {
 	private Player player;
-	private final long TIME_TO_WAKE = 3000;
+	private final long STANDARD_TIME_TO_WAKE = 15000;
+	private long timeToWake;
+	private long startingTime;
+	private long residualTime;
 
-	public FlashBangThread( Player player )
+	public FlashBangThread( Player player, long timeToSleep )
 	{
 		super();
+		if( timeToSleep != -1 )
+			timeToWake = timeToSleep;
+		else
+			timeToWake = STANDARD_TIME_TO_WAKE - 100 * player.getPlayerLevel().ordinal();
 		this.player = player;
 	}
 
-	@Override
-	public synchronized void run()
+	public long getResidualTime()
 	{
-		while( true )
-		{
-			try
-			{
-				super.run();
-				sleep( TIME_TO_WAKE - 100 * player.getPlayerLevel().ordinal() );
+		return residualTime;
+	}
 
-				player.getWriteLock();
-				player.setFlashed();
-				System.out.println( "stiamo camminando? " + player.isFlashed() );
-				player.leaveWriteLock();
-				while( !player.isFlashed() )
-				{
-					System.out.println( "merda" );
-					wait();
-				}
-			} catch( InterruptedException e )
+	@Override
+	public void run()
+	{
+		startingTime = System.currentTimeMillis();
+
+		residualTime = System.currentTimeMillis() - startingTime;
+		System.out.println( "TIME TO WAKE " + timeToWake );
+		while( residualTime < timeToWake )
+		{
+			System.out.println( residualTime + " " + isInterrupted() );
+			if( isInterrupted() )
 			{
-				e.printStackTrace();
+				return;
 			}
+			residualTime = System.currentTimeMillis() - startingTime;
 		}
+
+		player.getWriteLock();
+		player.setFlashed( false );
+		System.out.println( "stiamo camminando? " + player.isFlashed() );
+		player.leaveWriteLock();
 	}
 }
