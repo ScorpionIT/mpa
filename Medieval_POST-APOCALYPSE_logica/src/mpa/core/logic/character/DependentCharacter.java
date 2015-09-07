@@ -4,7 +4,6 @@ import mpa.core.logic.Level;
 import mpa.core.logic.building.AbstractPrivateProperty;
 import mpa.core.logic.building.Headquarter;
 import mpa.core.logic.resource.AbstractResourceProducer;
-import mpa.core.logic.resource.Resources;
 
 public class DependentCharacter extends AbstractCharacter
 {
@@ -12,10 +11,10 @@ public class DependentCharacter extends AbstractCharacter
 	private Level level;
 	private Player boss;
 
-	public DependentCharacter( String name, float x, float y, int health, int bagDimension,
-			Level level, Player boss, Headquarter headquarter )
+	public DependentCharacter( String name, float x, float y, int health, Level level, Player boss,
+			Headquarter headquarter )
 	{
-		super( name, x, y, health, bagDimension, headquarter );
+		super( name, x, y, health, headquarter );
 		this.level = level;
 		this.abstractPrivateProperty = null;
 		this.boss = boss;
@@ -81,7 +80,7 @@ public class DependentCharacter extends AbstractCharacter
 			{
 				( ( AbstractResourceProducer ) abstractPrivateProperty ).setWorking( true );
 
-				System.out.println( "stone " + boss.getResourceAmount( Resources.STONE ) );
+				System.out.println( "stone " + boss.getResourceAmount( "STONE" ) );
 			}
 
 		return b;

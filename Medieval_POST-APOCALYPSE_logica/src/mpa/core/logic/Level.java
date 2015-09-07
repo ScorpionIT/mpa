@@ -1,7 +1,6 @@
 package mpa.core.logic;
 
 import mpa.core.logic.character.Player;
-import mpa.core.logic.resource.Resources;
 
 public enum Level
 {
@@ -30,10 +29,10 @@ public enum Level
 
 	private boolean areResourcesEnough( Player player )
 	{
-		if( player.getResourceAmount( Resources.IRON ) < ( player.getPlayerLevel().ordinal() + 1 )
+		if( player.getResourceAmount( "IRON" ) < ( player.getPlayerLevel().ordinal() + 1 )
 				* ironRequired )
 			return false;
-		else if( player.getResourceAmount( Resources.STONE ) < ( player.getPlayerLevel().ordinal() + 1 )
+		else if( player.getResourceAmount( "STONE" ) < ( player.getPlayerLevel().ordinal() + 1 )
 				* stoneRequired )
 			return false;
 		// else if( player.getResourceAmount( Resources. ) < ( player.getPlayerLevel().ordinal() + 1
@@ -56,10 +55,8 @@ public enum Level
 	{
 		if( canUpgrade( player ) )
 		{
-			player.putResources( Resources.IRON,
-					-( player.getPlayerLevel().ordinal() + 1 * ironRequired ) );
-			player.putResources( Resources.STONE,
-					-( player.getPlayerLevel().ordinal() + 1 * stoneRequired ) );
+			player.putResources( "IRON", -( player.getPlayerLevel().ordinal() + 1 * ironRequired ) );
+			player.putResources( "STONE", -( player.getPlayerLevel().ordinal() + 1 * stoneRequired ) );
 			// player.putResources( Resources.GO, -( player.getPlayerLevel().ordinal() + 1 *
 			// goldRequired ) );
 			player.setRangeOfPhysicallAttack( player.getRangeOfPhysicallAttack()

@@ -11,21 +11,27 @@ import javax.vecmath.Vector2f;
 import mpa.core.ai.DifficultyLevel;
 import mpa.core.ai.OpponentAI;
 import mpa.core.logic.building.AbstractPrivateProperty;
+import mpa.core.logic.building.Tower;
+import mpa.core.logic.character.AbstractCharacter;
 import mpa.core.logic.character.DependentCharacter;
+import mpa.core.logic.character.Minion;
 import mpa.core.logic.character.Player;
 import mpa.core.logic.character.Player.Item;
 import mpa.core.logic.fights.CombatManager;
 import mpa.core.logic.tool.Potions;
+import mpa.core.util.GameProperties;
 
 public class GameManager
 {
 	private World world;
 	private List<Player> players;
 	private List<OpponentAI> AI_players;
+	private List<Tower> towers = new ArrayList<Tower>();
 	private DifficultyLevel difficultyLevel;
 	private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 	private ReadLock readLock = lock.readLock();
 	private WriteLock writeLock = lock.writeLock();
+	private ArrayList<Minion> minionsAlive = new ArrayList<>();
 
 	private static GameManager gameManager = null;
 
@@ -63,7 +69,7 @@ public class GameManager
 		this.difficultyLevel = level;
 	}
 
-	public void computePath( Player player, float xGoal, float yGoal )
+	public void computePath( AbstractCharacter player, float xGoal, float yGoal )
 	{
 		PathCalculatorThread pathCalculatorThread = new PathCalculatorThread( player, xGoal, yGoal );
 		pathCalculatorThread.start();
@@ -80,6 +86,16 @@ public class GameManager
 		AI_players.add( newAI );
 		addPlayer( player );
 		// newAI.start();
+	}
+
+	public ArrayList<Minion> createMinions( Player boss, int quantity, Player target )
+	{
+		ArrayList<Minion> minions = new ArrayList<>();
+
+		for( int i = 0; i < quantity; i++ )
+			minions.add( boss.createMinion( target ) );
+
+		return minions;
 	}
 
 	public void updateCharacterPositions()
@@ -135,7 +151,13 @@ public class GameManager
 		return players;
 	}
 
-	private ArrayList<Player> attackPhysically( Player attacker )
+	ArrayList<Player> attackPhysically( Player attacker )
+	{
+		System.out.println( "sto per attaccare" );
+		return CombatManager.getInstance().attackPhysically( attacker );
+	}
+
+	public ArrayList<Player> attackPhysically( Minion attacker )
 	{
 		System.out.println( "sto per attaccare" );
 		return CombatManager.getInstance().attackPhysically( attacker );
@@ -178,6 +200,49 @@ public class GameManager
 		property.setOwner( player );
 		player.employSubaltern( property );
 		return true;
+	}
+
+	public boolean createTower( Player p, Vector2f position )
+	{
+		try
+		{
+			p.getWriteLock();
+			if( !p.hasEnoughResources( GameProperties.getInstance().getPrices( "tower" ) ) )
+				return false;
+
+			Tower tower = new Tower( position.x, position.y, GameProperties.getInstance()
+					.getObjectWidth( "tower" ), GameProperties.getInstance().getObjectHeight(
+					"tower" ), p );
+			if( !world.addTower( tower ) )
+				return false;
+
+			p.takeResources( GameProperties.getInstance().getPrices( "tower" ) );
+			p.addTower( tower );
+			towers.add( tower );
+
+			return true;
+		} finally
+		{
+			p.leaveWriteLock();
+		}
+	}
+
+	void checkForTowerDamages()
+	{
+		for( Tower t : towers )
+		{
+			ArrayList<Player> hitPlayers = t.attack();
+
+			for( Player p : hitPlayers )
+				if( p.getHP() < 0 )
+					killPlayer( p );
+		}
+	}
+
+	public void destroyTower( Tower t )
+	{
+		world.destroyObject( t );
+		t.getOwner().removeTower( t );
 	}
 
 	public void setPause()

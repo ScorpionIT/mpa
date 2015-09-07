@@ -2,48 +2,46 @@ package mpa.core.logic.tool;
 
 import java.util.HashMap;
 
-import mpa.core.logic.resource.Resources;
-
 public class PotionManager
 {
 	private static PotionManager _instance = null;
 
-	private HashMap<Potions, HashMap<Resources, Integer>> priceList;
+	private HashMap<Potions, HashMap<String, Integer>> priceList;
 
 	private PotionManager()
 	{
 		priceList = new HashMap<>();
 
-		HashMap<Resources, Integer> price = new HashMap<>();
-		price.put( Resources.WHEAT, 10 );
-		price.put( Resources.HERBS, 15 );
-		price.put( Resources.STONE, 0 );
-		price.put( Resources.IRON, 0 );
-		price.put( Resources.WOOD, 0 );
+		HashMap<String, Integer> price = new HashMap<>();
+		price.put( "WHEAT", 10 );
+		price.put( "HERBS", 15 );
+		price.put( "STONE", 0 );
+		price.put( "IRON", 0 );
+		price.put( "WOOD", 0 );
 		priceList.put( Potions.HP, price );
 
 		price.clear();
-		price.put( Resources.WHEAT, 8 );
-		price.put( Resources.HERBS, 9 );
-		price.put( Resources.STONE, 0 );
-		price.put( Resources.IRON, 0 );
-		price.put( Resources.WOOD, 10 );
+		price.put( "WHEAT", 8 );
+		price.put( "HERBS", 9 );
+		price.put( "STONE", 0 );
+		price.put( "IRON", 0 );
+		price.put( "WOOD", 10 );
 		priceList.put( Potions.MP, price );
 
 		price.clear();
-		price.put( Resources.WHEAT, 0 );
-		price.put( Resources.HERBS, 9 );
-		price.put( Resources.STONE, 15 );
-		price.put( Resources.IRON, 18 );
-		price.put( Resources.WOOD, 14 );
+		price.put( "WHEAT", 0 );
+		price.put( "HERBS", 9 );
+		price.put( "STONE", 15 );
+		price.put( "IRON", 18 );
+		price.put( "WOOD", 14 );
 		priceList.put( Potions.GRANADE, price );
 
 		price.clear();
-		price.put( Resources.WHEAT, 10 );
-		price.put( Resources.HERBS, 9 );
-		price.put( Resources.STONE, 15 );
-		price.put( Resources.IRON, 14 );
-		price.put( Resources.WOOD, 12 );
+		price.put( "WHEAT", 10 );
+		price.put( "HERBS", 9 );
+		price.put( "STONE", 15 );
+		price.put( "IRON", 14 );
+		price.put( "WOOD", 12 );
 		priceList.put( Potions.FLASH_BANG, price );
 
 	}
@@ -56,7 +54,7 @@ public class PotionManager
 		return _instance;
 	}
 
-	public HashMap<Resources, Integer> getPrice( Potions type )
+	public HashMap<String, Integer> getPrice( Potions type )
 	{
 		return this.priceList.get( type );
 	}

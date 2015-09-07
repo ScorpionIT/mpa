@@ -6,18 +6,18 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.vecmath.Vector2f;
 
-import mpa.core.logic.character.Player;
+import mpa.core.logic.character.AbstractCharacter;
 
 public class PathCalculatorThread extends Thread
 {
-	private Player player;
+	private AbstractCharacter player;
 	private float xGoal;
 	private float yGoal;
 	ArrayList<Vector2f> path;
 	ReentrantLock lock = new ReentrantLock();
 	Condition cond = lock.newCondition();
 
-	public PathCalculatorThread( Player player, float xGoal, float yGoal )
+	public PathCalculatorThread( AbstractCharacter player, float xGoal, float yGoal )
 	{
 		this.player = player;
 		this.xGoal = xGoal;
@@ -35,7 +35,7 @@ public class PathCalculatorThread extends Thread
 		// xGoal, yGoal, player.getX(), player.getY() );
 
 		path = new PathCalculatorImplementation( new Vector2f( player.getX(), player.getY() ),
-				new Vector2f( xGoal, yGoal ) ).computePath();
+				new Vector2f( xGoal, yGoal ), player.getCollisionRay() ).computePath();
 		this.player.setPath( path );
 		cond.signal();
 		lock.unlock();

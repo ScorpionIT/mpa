@@ -32,13 +32,11 @@ public abstract class AbstractCharacter extends AbstractObject
 	protected Lock readLock = lock.readLock();
 	protected Lock writeLock = lock.writeLock();
 
-	public AbstractCharacter( String name, float x, float y, int health, int bagDimension,
-			Headquarter headquarter )
+	public AbstractCharacter( String name, float x, float y, int health, Headquarter headquarter )
 	{
 		super( x, y, 15, 15 ); // TODO
 		this.name = name;
 		this.health = health;
-		this.bag = new Inventory( bagDimension );
 		this.headquarter = headquarter;
 		this.currentVector = new Vector2f( -x + headquarter.getX(), -y + headquarter.getY() );
 		float absX = Math.abs( currentVector.x );
