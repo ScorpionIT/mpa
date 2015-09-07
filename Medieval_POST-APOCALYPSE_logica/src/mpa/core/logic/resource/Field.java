@@ -54,7 +54,7 @@ public class Field extends AbstractResourceProducer
 				}
 				else
 				{
-					owner.putResources( Resources.WHEAT, PROVIDING + EXTRA_PROVIDING
+					owner.putResources( "WHEAT", PROVIDING + EXTRA_PROVIDING
 							* owner.getPlayerLevel().ordinal() );
 					this.currentFieldState = FieldState.values()[0];
 				}

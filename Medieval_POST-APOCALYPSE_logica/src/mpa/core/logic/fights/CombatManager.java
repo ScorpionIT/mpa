@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.vecmath.Vector2f;
 
 import mpa.core.logic.GameManager;
+import mpa.core.logic.character.Minion;
 import mpa.core.logic.character.Player;
 import mpa.core.logic.tool.Potions;
 import mpa.core.maths.MyMath;
@@ -25,6 +26,67 @@ public class CombatManager
 			combatManager = new CombatManager();
 
 		return combatManager;
+	}
+
+	public ArrayList<Player> attackPhysically( Minion attacker )
+	{
+		ArrayList<Player> deadPlayers = new ArrayList<>();
+		try
+		{
+			GameManager.getInstance().takeLock();
+
+			attacker.getWriteLock();
+			attacker.stopMoving();
+
+			ArrayList<Player> hitPlayers = new ArrayList<>();
+
+			Vector2f direction = attacker.getPlayerDirection();
+
+			for( Player p : GameManager.getInstance().getPlayers() )
+			{
+				if( attacker.getName().compareTo( p.getName() ) <= 0 )
+				{
+					p.getWriteLock();
+				}
+
+				float distanceFloat = MyMath.distanceFloat( attacker.getX() + direction.x
+						* attacker.getRangeOfPhysicallAttack(), attacker.getY() + direction.y
+						* attacker.getRangeOfPhysicallAttack(), p.getX(), p.getY() );
+
+				System.out.println( "la distanza è " + distanceFloat );
+
+				float distanceFloat2 = MyMath.distanceFloat( attacker.getX(), attacker.getY(),
+						p.getX(), p.getY() );
+
+				System.out.println( "distano " + distanceFloat2 );
+				if( MyMath.distanceFloat(
+						attacker.getX() + direction.x * attacker.getRangeOfPhysicallAttack(),
+						attacker.getY() + direction.y * attacker.getRangeOfPhysicallAttack(),
+						p.getX(), p.getY() ) <= 1
+						|| distanceFloat2 <= attacker.getRangeOfPhysicallAttack() )
+				{
+					if( p.inflictDamage( attacker.getDamage() ) )
+					{
+						System.out.println( "è morto?" );
+						deadPlayers.add( p );
+					}
+					else
+						hitPlayers.add( p );
+				}
+
+				// attacker.leaveWriteLock();
+				p.leaveWriteLock();
+			}
+
+			return hitPlayers;
+
+		} finally
+		{
+			GameManager.getInstance().leaveLock();
+			for( Player dead : deadPlayers )
+				GameManager.getInstance().killPlayer( dead );
+			attacker.leaveWriteLock();
+		}
 	}
 
 	public ArrayList<Player> attackPhysically( Player attacker )

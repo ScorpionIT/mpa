@@ -39,7 +39,7 @@ public class WorldLoader
 			Vector2f gatheringPlace = headquarter.getGatheringPlace();
 
 			Player player = new Player( playerName, gatheringPlace.x, gatheringPlace.y, 100,
-					Level.NEWBIE, headquarter, 100 );
+					Level.NEWBIE, headquarter );
 			headquarter.setOwner( player );
 			world.addObject( headquarter );
 			if( selectedHQ.equals( headQuarters.get( i ) ) )

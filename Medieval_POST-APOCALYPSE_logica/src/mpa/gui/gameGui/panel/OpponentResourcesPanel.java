@@ -21,12 +21,13 @@ public class OpponentResourcesPanel
 	private int width;
 	private int y;
 	private int x;
-	private HashMap<Resources, Integer> resources;
+	private HashMap<String, Integer> resources;
 	private int widthPanel;
 	private String playerName;
 	private HashMap<String, LabelBuilder> resourcesValueLabel = new HashMap<>();
 
-	public OpponentResourcesPanel(HashMap<Resources, Integer> resources, int x, int y, int width, int height, String playerName)
+	public OpponentResourcesPanel( HashMap<String, Integer> resources, int x, int y, int width,
+			int height, String playerName )
 	{
 		this.resources = resources;
 		this.x = x;
@@ -34,7 +35,7 @@ public class OpponentResourcesPanel
 		this.width = width;
 		this.height = height;
 		this.playerName = playerName;
-		this.playerName = this.playerName.replaceAll("\\s+", "");
+		this.playerName = this.playerName.replaceAll( "\\s+", "" );
 
 		widthPanel = 100 / resources.size();
 		initResources();
@@ -44,18 +45,18 @@ public class OpponentResourcesPanel
 
 	private void initResourcePanel()
 	{
-		resourcesPanel = new PanelBuilder("#resources" + playerName)
+		resourcesPanel = new PanelBuilder( "#resources" + playerName )
 		{
 
 			{
 				childLayoutAbsoluteInside();
 
-				width(Integer.toString(width) + "%");
-				height(Integer.toString(height) + "%");
-				x(Integer.toString(x) + "%");
-				y(Integer.toString(y) + "%");
-				control(getLabelBuilder(playerName, x, 0, 100, 20));
-				visibleToMouse(true);
+				width( Integer.toString( width ) + "%" );
+				height( Integer.toString( height ) + "%" );
+				x( Integer.toString( x ) + "%" );
+				y( Integer.toString( y ) + "%" );
+				control( getLabelBuilder( playerName, x, 0, 100, 20 ) );
+				visibleToMouse( true );
 
 			}
 
@@ -69,74 +70,76 @@ public class OpponentResourcesPanel
 
 		xPanel = 0;
 
-		Set<Resources> keySet = resources.keySet();
-		for (final Resources resource : keySet)
+		Set<String> keySet = resources.keySet();
+		for( final String resource : keySet )
 		{
-			resourcesPanel.panel(getPanelBuilder(resource.toString(), resource.toString() + ".png"));
+			resourcesPanel.panel( getPanelBuilder( resource.toString(), resource.toString()
+					+ ".png" ) );
 			xPanel += widthPanel;
 		}
 	}
 
-	private ImageBuilder getImageBuilder(final String fileName)
+	private ImageBuilder getImageBuilder( final String fileName )
 	{
 		return new ImageBuilder()
 		{
 			{
-				filename(fileName);
+				filename( fileName );
 
-				y("40%");
-				width("35%");
-				height("35%");
+				y( "40%" );
+				width( "35%" );
+				height( "35%" );
 
 			}
 		};
 	}
 
-	private PanelBuilder getPanelBuilder(final String resourceName, final String fileName)
+	private PanelBuilder getPanelBuilder( final String resourceName, final String fileName )
 	{
 
-		return new PanelBuilder("#" + resourceName + "Panel" + playerName)
+		return new PanelBuilder( "#" + resourceName + "Panel" + playerName )
 		{
 			{
 				childLayoutCenter();
 
 				valignTop();
-				x(Integer.toString(xPanel) + "%");
-				y("30%");
+				x( Integer.toString( xPanel ) + "%" );
+				y( "30%" );
 
-				width(Integer.toString(widthPanel) + "%");
-				height("80%");
+				width( Integer.toString( widthPanel ) + "%" );
+				height( "80%" );
 
-				control(getLabelBuilder(resourceName));
-				image(getImageBuilder(fileName));
+				control( getLabelBuilder( resourceName ) );
+				image( getImageBuilder( fileName ) );
 
-				control(resourcesValueLabel.get(resourceName));
+				control( resourcesValueLabel.get( resourceName ) );
 			}
 		};
 	}
 
-	private LabelBuilder getLabelBuilder(final String text)
+	private LabelBuilder getLabelBuilder( final String text )
 	{
-		return new LabelBuilder("#" + text + "Label " + playerName)
+		return new LabelBuilder( "#" + text + "Label " + playerName )
 		{
 			{
-				text(text);
+				text( text );
 				valignTop();
 
 			}
 		};
 	}
 
-	private LabelBuilder getLabelBuilder(final String text, final int x, final int y, final int width, final int height)
+	private LabelBuilder getLabelBuilder( final String text, final int x, final int y,
+			final int width, final int height )
 	{
-		return new LabelBuilder("# " + "Label" + playerName)
+		return new LabelBuilder( "# " + "Label" + playerName )
 		{
 			{
-				text(text);
-				width(Integer.toString(width) + "%");
-				height(Integer.toString(height) + "%");
-				x(Integer.toString(x) + "%");
-				y(Integer.toString(y) + "%");
+				text( text );
+				width( Integer.toString( width ) + "%" );
+				height( Integer.toString( height ) + "%" );
+				x( Integer.toString( x ) + "%" );
+				y( Integer.toString( y ) + "%" );
 
 			}
 		};
@@ -145,28 +148,30 @@ public class OpponentResourcesPanel
 	private void initResources()
 	{
 
-		Set<Resources> keySet = resources.keySet();
-		for (final Resources resource : keySet)
+		Set<String> keySet = resources.keySet();
+		for( final String resource : keySet )
 		{
-			resourcesValueLabel.put(resource.toString(), new LabelBuilder("#Avaible " + resource.toString() + " Label " + playerName)
-			{
-				{
-					valignBottom();
-					text(Integer.toString(resources.get(resource)));
-				}
-			});
+			resourcesValueLabel.put( resource.toString(),
+					new LabelBuilder( "#Avaible " + resource.toString() + " Label " + playerName )
+					{
+						{
+							valignBottom();
+							text( Integer.toString( resources.get( resource ) ) );
+						}
+					} );
 		}
 
 	}
 
-	public void updateResources(HashMap<Resources, Integer> resources)
+	public void updateResources( HashMap<String, Integer> resources )
 	{
 		this.resources = resources;
 
-		Set<Resources> keySet = this.resources.keySet();
-		for (Resources resource : keySet)
+		Set<String> keySet = this.resources.keySet();
+		for( String resource : keySet )
 		{
-			resourcesValueLabel.get(resource.toString()).text(Integer.toString(resources.get(resource)));
+			resourcesValueLabel.get( resource.toString() ).text(
+					Integer.toString( resources.get( resource ) ) );
 		}
 	}
 
@@ -175,14 +180,14 @@ public class OpponentResourcesPanel
 		return resourcesPanel;
 	}
 
-	public Element build(Nifty nifty, Screen currentScreen, Element parent)
+	public Element build( Nifty nifty, Screen currentScreen, Element parent )
 	{
-		return resourcesPanel.build(nifty, currentScreen, parent);
+		return resourcesPanel.build( nifty, currentScreen, parent );
 	}
 
-	public LabelBuilder getResourceLabel(Resources resourceName)
+	public LabelBuilder getResourceLabel( Resources resourceName )
 	{
-		return resourcesValueLabel.get(resourceName);
+		return resourcesValueLabel.get( resourceName );
 	}
 
 }
