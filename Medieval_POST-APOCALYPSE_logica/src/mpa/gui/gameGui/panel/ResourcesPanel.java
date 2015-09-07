@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 import mpa.core.logic.character.Player;
+import mpa.core.logic.resource.Resources;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
@@ -18,7 +19,7 @@ public class ResourcesPanel
 
 	private HashMap<String, LabelBuilder> resourcesValueLabel = new HashMap<>();
 
-	private Set<String> resources = null;
+	private Set<Resources> resources = null;
 	private int widthPanel;
 	private int xPanel = 0;
 
@@ -60,7 +61,7 @@ public class ResourcesPanel
 	{
 
 		xPanel = 0;
-		for( String resourceName : resources )
+		for( Resources resourceName : resources )
 		{
 			resourcesPanel.panel( getPanelBuilder( resourceName.toString(), resourceName.toString()
 					+ ".png" ) );
@@ -121,7 +122,7 @@ public class ResourcesPanel
 	private void initResources()
 	{
 
-		for( String resoruceName : resources )
+		for( Resources resoruceName : resources )
 		{
 			resourcesValueLabel.put( resoruceName.toString(), new LabelBuilder( "Avaible"
 					+ resoruceName )

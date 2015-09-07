@@ -5,9 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-import javax.vecmath.Vector2f;
-
-import mpa.core.logic.building.Tower;
 import mpa.core.logic.resource.AbstractResourceProducer;
 import mpa.core.maths.MyMath;
 
@@ -15,8 +12,8 @@ public class World
 {
 	private float width;
 	private float height;
-	private HashMap<Vector2f, ArrayList<AbstractObject>> objectX = new HashMap<>();
-	private HashMap<Vector2f, ArrayList<AbstractObject>> objectY = new HashMap<>();
+	private HashMap<Pair<Float, Float>, ArrayList<AbstractObject>> objectX = new HashMap<>();
+	private HashMap<Pair<Float, Float>, ArrayList<AbstractObject>> objectY = new HashMap<>();
 	private ArrayList<AbstractObject> allObjects = new ArrayList<>();
 	private ArrayList<AbstractResourceProducer> resourceProducers = new ArrayList<AbstractResourceProducer>();
 
@@ -37,8 +34,8 @@ public class World
 		float xMax = x + width / 2;
 		float yMin = y - height / 2;
 		float yMax = y + height / 2;
-		Vector2f xPair = new Vector2f( xMin, xMax );
-		Vector2f yPair = new Vector2f( yMin, yMax );
+		Pair<Float, Float> xPair = new Pair( xMin, xMax );
+		Pair<Float, Float> yPair = new Pair( yMin, yMax );
 		if( !objectX.containsKey( xPair ) )
 			objectX.put( xPair, new ArrayList<AbstractObject>() );
 		objectX.get( xPair ).add( obj );
@@ -53,12 +50,12 @@ public class World
 		return true;
 	}
 
-	public HashMap<Vector2f, ArrayList<AbstractObject>> getObjectX()
+	public HashMap<Pair<Float, Float>, ArrayList<AbstractObject>> getObjectX()
 	{
 		return objectX;
 	}
 
-	public HashMap<Vector2f, ArrayList<AbstractObject>> getObjectY()
+	public HashMap<Pair<Float, Float>, ArrayList<AbstractObject>> getObjectY()
 	{
 		return objectY;
 	}
@@ -80,13 +77,13 @@ public class World
 
 	public ArrayList<AbstractObject> getObjectsXInTheRange( float x )
 	{
-		Set<Vector2f> keySet = objectX.keySet();
+		Set<Pair<Float, Float>> keySet = objectX.keySet();
 		ArrayList<AbstractObject> abstractObjectsX = new ArrayList<>();
-		for( Vector2f pos : keySet )
+		for( Pair<Float, Float> pair : keySet )
 		{
-			if( x >= pos.x && x <= pos.y )
+			if( x >= pair.getFirst() && x <= pair.getSecond() )
 			{
-				abstractObjectsX.addAll( objectX.get( pos ) );
+				abstractObjectsX.addAll( objectX.get( pair ) );
 			}
 		}
 		return abstractObjectsX;
@@ -116,7 +113,7 @@ public class World
 		return objects;
 	}
 
-	public ArrayList<AbstractObject> checkForCollision( float x, float y, float collisionRay )
+	public ArrayList<AbstractObject> checkForCollision( float x, float y )
 	{
 		ArrayList<AbstractObject> objectsXInTheRange = getObjectsXInTheRange( x );
 		ArrayList<AbstractObject> objectsYInTheRange = getObjectsYInTheRange( y );
@@ -140,8 +137,7 @@ public class World
 		}
 
 		for( AbstractObject obj : intersection )
-			if( MyMath.distanceFloat( x, y, obj.getX(), obj.getY() ) - obj.getCollisionRay()
-					- collisionRay <= 0 )
+			if( MyMath.distanceFloat( x, y, obj.getX(), obj.getY() ) - obj.getCollisionRay() <= 0 )
 				collisions.add( obj );
 
 		return collisions;
@@ -149,7 +145,7 @@ public class World
 	}
 
 	public ArrayList<AbstractObject> checkForCollisionInTheRange( float xMin, float xMax,
-			float yMin, float yMax, float collisionRay )
+			float yMin, float yMax )
 	{
 		if( xMin > xMax )
 		{
@@ -175,7 +171,7 @@ public class World
 			// + MyMath.pointToLineDistance( xMin, yMin, xMax, yMax, obj.getX(), obj.getY() ) );
 			// System.out.println( obj.getClass().getName() );
 			if( MyMath.pointToLineDistance( xMin, yMin, xMax, yMax, obj.getX(), obj.getY() )
-					- obj.getCollisionRay() - collisionRay <= 1f )
+					- obj.getCollisionRay() - 10f <= 1f )
 				collisions.add( obj );
 		}
 
@@ -185,13 +181,13 @@ public class World
 
 	public ArrayList<AbstractObject> getObjectsYInTheRange( float y )
 	{
-		Set<Vector2f> keySet = objectY.keySet();
+		Set<Pair<Float, Float>> keySet = objectY.keySet();
 		ArrayList<AbstractObject> abstractObjectsY = new ArrayList<>();
-		for( Vector2f pos : keySet )
+		for( Pair<Float, Float> pair : keySet )
 		{
-			if( y >= pos.x && y <= pos.y )
+			if( y >= pair.getFirst() && y <= pair.getSecond() )
 			{
-				abstractObjectsY.addAll( objectY.get( pos ) );
+				abstractObjectsY.addAll( objectY.get( pair ) );
 			}
 		}
 		return abstractObjectsY;
@@ -199,16 +195,19 @@ public class World
 
 	public ArrayList<AbstractObject> getObjectsXInTheRange( float xMin, float xMax )
 	{
-		Set<Vector2f> keySet = objectX.keySet();
+		Set<Pair<Float, Float>> keySet = objectX.keySet();
 		ArrayList<AbstractObject> abstractObjectsX = new ArrayList<>();
-		for( Vector2f pos : keySet )
+		for( Pair<Float, Float> pair : keySet )
 		{
-			if( ( ( int ) pos.x <= ( ( int ) xMax ) && ( int ) pos.x >= ( ( int ) xMin ) )
-					|| ( ( int ) pos.y <= ( ( int ) xMax ) && ( int ) pos.y >= ( ( int ) xMin ) ) )
-				abstractObjectsX.addAll( objectX.get( pos ) );
-			else if( ( ( ( int ) xMin ) >= ( int ) pos.x && ( ( int ) xMin ) <= ( int ) pos.y )
-					|| ( ( ( int ) xMax ) >= ( int ) pos.x && ( ( int ) xMax ) <= ( int ) pos.y ) )
-				abstractObjectsX.addAll( objectX.get( pos ) );
+			if( ( pair.getFirst().intValue() <= ( ( int ) xMax ) && pair.getFirst().intValue() >= ( ( int ) xMin ) )
+					|| ( pair.getSecond().intValue() <= ( ( int ) xMax ) && pair.getSecond()
+							.intValue() >= ( ( int ) xMin ) ) )
+				abstractObjectsX.addAll( objectX.get( pair ) );
+			else if( ( ( ( int ) xMin ) >= pair.getFirst().intValue() && ( ( int ) xMin ) <= pair
+					.getSecond().intValue() )
+					|| ( ( ( int ) xMax ) >= pair.getFirst().intValue() && ( ( int ) xMax ) <= pair
+							.getSecond().intValue() ) )
+				abstractObjectsX.addAll( objectX.get( pair ) );
 		}
 		// System.out.println( "numero abstract object x " + abstractObjectsX.size() );
 		return abstractObjectsX;
@@ -216,17 +215,21 @@ public class World
 
 	public ArrayList<AbstractObject> getObjectsYInTheRange( int yMin, int yMax )
 	{
-		Set<Vector2f> keySet = objectY.keySet();
+		Set<Pair<Float, Float>> keySet = objectY.keySet();
 		ArrayList<AbstractObject> abstractObjectsY = new ArrayList<>();
-		for( Vector2f pos : keySet )
+		for( Pair<Float, Float> pair : keySet )
 		{
-			if( ( ( int ) pos.x <= ( ( int ) yMax ) && ( int ) pos.x >= ( ( int ) yMin ) )
-					|| ( ( int ) pos.y <= ( ( int ) yMax ) && ( int ) pos.y >= ( ( int ) yMin ) ) )
-				abstractObjectsY.addAll( objectY.get( pos ) );
-			else if( ( ( ( int ) yMin ) >= ( int ) pos.x && ( ( int ) yMin ) <= ( int ) pos.y )
-					|| ( ( ( int ) yMax ) >= ( int ) pos.x && ( ( int ) yMax ) <= ( int ) pos.y ) )
-				abstractObjectsY.addAll( objectY.get( pos ) );
+			if( ( pair.getFirst().intValue() <= ( ( int ) yMax ) && pair.getFirst().intValue() >= ( ( int ) yMin ) )
+					|| ( pair.getSecond().intValue() <= ( ( int ) yMax ) && pair.getSecond()
+							.intValue() >= ( ( int ) yMin ) ) )
+				abstractObjectsY.addAll( objectY.get( pair ) );
+			else if( ( ( ( int ) yMin ) >= pair.getFirst().intValue() && ( ( int ) yMin ) <= pair
+					.getSecond().intValue() )
+					|| ( ( ( int ) yMax ) >= pair.getFirst().intValue() && ( ( int ) yMax ) <= pair
+							.getSecond().intValue() ) )
+				abstractObjectsY.addAll( objectY.get( pair ) );
 		}
+		// System.out.println( "numero abstract object y " + abstractObjectsY.size() );
 		return abstractObjectsY;
 	}
 
@@ -234,11 +237,11 @@ public class World
 	public String toString()
 	{
 		String s = new String( "ObjectX \n" );
-		Set<Vector2f> keySet = objectX.keySet();
-		for( Vector2f pos : keySet )
+		Set<Pair<Float, Float>> keySet = objectX.keySet();
+		for( Pair<Float, Float> pair : keySet )
 		{
-			s += pos.x + " " + pos.y + "\n";
-			for( AbstractObject obj : objectX.get( pos ) )
+			s += pair.getFirst() + " " + pair.getSecond() + "\n";
+			for( AbstractObject obj : objectX.get( pair ) )
 			{
 				s += obj.getClass() + " ";
 			}
@@ -246,10 +249,10 @@ public class World
 			s += "ObjectY \n";
 		}
 		keySet = objectY.keySet();
-		for( Vector2f pos : keySet )
+		for( Pair<Float, Float> pair : keySet )
 		{
-			s += pos.x + " " + pos.y + "\n";
-			for( AbstractObject obj : objectY.get( pos ) )
+			s += pair.getFirst() + " " + pair.getSecond() + "\n";
+			for( AbstractObject obj : objectY.get( pair ) )
 			{
 				s += obj.getClass() + " ";
 			}
@@ -279,27 +282,5 @@ public class World
 	public ArrayList<AbstractResourceProducer> getResourceProducers()
 	{
 		return resourceProducers;
-	}
-
-	public boolean addTower( Tower tower )
-	{
-
-		if( !checkForCollision( tower.getX(), tower.getY(), tower.getCollisionRay() ).isEmpty() )
-			return false;
-
-		addObject( tower );
-		return true;
-	}
-
-	public void destroyObject( AbstractObject obj )
-	{
-		for( Vector2f p : objectX.keySet() )
-			if( objectX.get( p ).contains( obj ) )
-				objectX.get( p ).remove( obj );
-
-		for( Vector2f p : objectY.keySet() )
-			if( objectY.get( p ).contains( obj ) )
-				objectY.get( p ).remove( obj );
-
 	}
 }

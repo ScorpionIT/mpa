@@ -68,10 +68,10 @@ public abstract class AbstractObject implements InterfaceAbstractObject
 		this.width = width;
 	}
 
-	public float getCollisionRay()
+	public double getCollisionRay()
 	{
 		float xMin = x - width / 2;
 		float yMin = y - height / 2;
-		return ( float ) Math.sqrt( Math.pow( ( xMin - x ), 2 ) + Math.pow( ( yMin - y ), 2 ) );
+		return Math.sqrt( Math.pow( ( xMin - x ), 2 ) + Math.pow( ( yMin - y ), 2 ) );
 	}
 }

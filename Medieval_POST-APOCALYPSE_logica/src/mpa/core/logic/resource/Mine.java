@@ -26,7 +26,7 @@ public class Mine extends AbstractResourceProducer
 				return false;
 
 			if( owner != null )
-				owner.putResources( "IRON", PROVIDING + EXTRA_PROVIDING
+				owner.putResources( Resources.IRON, PROVIDING + EXTRA_PROVIDING
 						* owner.getPlayerLevel().ordinal() );
 
 			return true;

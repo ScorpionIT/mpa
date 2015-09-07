@@ -14,14 +14,12 @@ public class PathCalculatorImplementation
 	private Vector2f startingPoint;
 	private Vector2f goal;
 	private float increment = 30;
-	private float playerRay;
 
-	public PathCalculatorImplementation( Vector2f startingPoint, Vector2f goal, float playerRay )
+	public PathCalculatorImplementation( Vector2f startingPoint, Vector2f goal )
 	{
 		super();
 		this.startingPoint = startingPoint;
 		this.goal = goal;
-		this.playerRay = playerRay;
 	}
 
 	public ArrayList<Vector2f> computePath()
@@ -47,7 +45,7 @@ public class PathCalculatorImplementation
 
 			Vector2f currentPoint = currentPosition.getArrival();
 			ArrayList<AbstractObject> collisions = world.checkForCollisionInTheRange(
-					currentPoint.x, goal.x, currentPoint.y, goal.y, playerRay );
+					currentPoint.x, goal.x, currentPoint.y, goal.y );
 
 			if( collisions.isEmpty() )
 			{
@@ -202,7 +200,7 @@ public class PathCalculatorImplementation
 		{
 			Vector2f pointToCheck = path.get( index++ );
 			if( !world.checkForCollisionInTheRange( currentPoint.x, pointToCheck.x, currentPoint.y,
-					pointToCheck.y, playerRay ).isEmpty() )
+					pointToCheck.y ).isEmpty() )
 			{
 				smartestPath.add( furthestPoint );
 				currentPoint = furthestPoint;
@@ -230,8 +228,7 @@ public class PathCalculatorImplementation
 
 		Vector2f start = currentNode.getStartingPoint();
 
-		if( !world.checkForCollisionInTheRange( start.x, point.x, start.y, point.y, playerRay )
-				.isEmpty() )
+		if( !world.checkForCollisionInTheRange( start.x, point.x, start.y, point.y ).isEmpty() )
 			return false;
 
 		for( MyPathNode node : closedList )

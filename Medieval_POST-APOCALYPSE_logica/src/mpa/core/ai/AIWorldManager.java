@@ -70,7 +70,7 @@ public class AIWorldManager
 				Vector2f position = new Vector2f( ray * i, ray * j );
 
 				ArrayList<AbstractObject> collisions = GameManager.getInstance().getWorld()
-						.checkForCollision( position.x, position.y, ray );
+						.checkForCollision( position.x, position.y );
 
 				ArrayList<AbstractObject> buildingList = GameManager
 						.getInstance()
