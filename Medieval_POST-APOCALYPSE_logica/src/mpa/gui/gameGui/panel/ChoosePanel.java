@@ -2,7 +2,6 @@ package mpa.gui.gameGui.panel;
 
 import java.util.ArrayList;
 
-import mpa.core.logic.character.Player.Item;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
@@ -13,7 +12,7 @@ public class ChoosePanel
 {
 
 	private PanelBuilder choosePanel;
-	private Item[] listObject = Item.values();
+	private String[] listObject;
 	private ArrayList<LabelBuilder> elementLabels = new ArrayList();
 
 	private final int width = 130;
@@ -29,58 +28,58 @@ public class ChoosePanel
 
 	private void initChoosePanel()
 	{
-		choosePanel = new PanelBuilder("#choosePanel")
+		choosePanel = new PanelBuilder( "#choosePanel" )
 		{
 
 			{
 				childLayoutAbsoluteInside();
 
-				width(Integer.toString(width));
-				height(Integer.toString(height));
+				width( Integer.toString( width ) );
+				height( Integer.toString( height ) );
 				alignRight();
 				valignTop();
-				visibleToMouse(true);
+				visibleToMouse( true );
 
-				style("nifty-panel-no-shadow");
+				style( "nifty-panel-no-shadow" );
 
 			}
 
 		};
 
-		int yIncrement = 100 / (listObject.length + 1);
+		int yIncrement = 100 / ( listObject.length + 1 );
 
 		int currentY = yIncrement / 2;
-		for (Item obj : listObject)
+		for( String obj : listObject )
 		{
 
-			LabelBuilder labelBuilder = getLabelBuilder(obj.name(), 25, currentY);
+			LabelBuilder labelBuilder = getLabelBuilder( obj, 25, currentY );
 			// labelBuilder.backgroundColor("#f008");
-			elementLabels.add(labelBuilder);
-			choosePanel.control(labelBuilder);
+			elementLabels.add( labelBuilder );
+			choosePanel.control( labelBuilder );
 			currentY += yIncrement;
 		}
 		initSelectedElment();
 
 	}
 
-	private LabelBuilder getLabelBuilder(final String text, final int x, final int y)
+	private LabelBuilder getLabelBuilder( final String text, final int x, final int y )
 	{
-		return new LabelBuilder(text + "Label")
+		return new LabelBuilder( text + "Label" )
 		{
 			{
 				childLayoutCenter();
-				text(text);
-				width("100%");
+				text( text );
+				width( "100%" );
 
-				y(Integer.toString(y) + "%");
+				y( Integer.toString( y ) + "%" );
 			}
 		};
 	}
 
-	public void changePosition(int x, int y)
+	public void changePosition( int x, int y )
 	{
-		choosePanel.x(Integer.toString(x));
-		choosePanel.y(Integer.toString(y));
+		choosePanel.x( Integer.toString( x ) );
+		choosePanel.y( Integer.toString( y ) );
 	}
 
 	public PanelBuilder get()
@@ -88,48 +87,55 @@ public class ChoosePanel
 		return choosePanel;
 	}
 
-	public Element build(Nifty nifty, Screen currentScreen, Element parent)
+	public Element build( Nifty nifty, Screen currentScreen, Element parent )
 	{
-		return choosePanel.build(nifty, currentScreen, parent);
+		return choosePanel.build( nifty, currentScreen, parent );
 	}
 
-	public void changeChoosenElement(boolean back)
+	public void changeChoosenElement( boolean back )
 	{
-		if (back)
+		if( back )
 		{
-			elementLabels.get(selectedElementIndex).backgroundColor("#0000");
+			elementLabels.get( selectedElementIndex ).backgroundColor( "#0000" );
 			selectedElementIndex -= 1;
-			if (selectedElementIndex < 0)
+			if( selectedElementIndex < 0 )
 				selectedElementIndex = elementLabels.size() - 1;
-			elementLabels.get(selectedElementIndex).backgroundColor("#f008");
+			elementLabels.get( selectedElementIndex ).backgroundColor( "#f008" );
 
 		}
 		else
 		{
-			elementLabels.get(selectedElementIndex).backgroundColor("#0000");
+			elementLabels.get( selectedElementIndex ).backgroundColor( "#0000" );
 			selectedElementIndex += 1;
-			if (selectedElementIndex > elementLabels.size() - 1)
+			if( selectedElementIndex > elementLabels.size() - 1 )
 				selectedElementIndex = 0;
-			elementLabels.get(selectedElementIndex).backgroundColor("#f008");
+			elementLabels.get( selectedElementIndex ).backgroundColor( "#f008" );
 		}
 	}
 
 	public void initSelectedElment()
 	{
-		elementLabels.get(selectedElementIndex).backgroundColor("#0000");
+		listObject = new String[5];
+		listObject[0] = new String( "WEAPON" );
+		listObject[1] = new String( "GRANADE" );
+		listObject[0] = new String( "FLASH_BANG" );
+		listObject[0] = new String( "HP_POTION" );
+		listObject[0] = new String( "MP_POTION" );
+
+		elementLabels.get( selectedElementIndex ).backgroundColor( "#0000" );
 		selectedElementIndex = 0;
-		elementLabels.get(selectedElementIndex).backgroundColor("#f008");
+		elementLabels.get( selectedElementIndex ).backgroundColor( "#f008" );
 	}
 
-	public Item getSelectedElement()
+	public String getSelectedElement()
 	{
 		return listObject[selectedElementIndex];
 
 	}
 
-	public void setVisible(boolean visible)
+	public void setVisible( boolean visible )
 	{
-		choosePanel.visible(visible);
+		choosePanel.visible( visible );
 	}
 
 	public int getHeight()

@@ -12,7 +12,7 @@ public class MapInfo
 	private ArrayList<Pair<Float, Float>> caves = new ArrayList<Pair<Float, Float>>();
 	private ArrayList<Pair<Float, Float>> woods = new ArrayList<Pair<Float, Float>>();
 	private ArrayList<Pair<Float, Float>> fields = new ArrayList<Pair<Float, Float>>();
-	private ArrayList<Pair<Float, Float>> mills = new ArrayList<Pair<Float, Float>>();
+	private ArrayList<Pair<Float, Float>> mines = new ArrayList<Pair<Float, Float>>();
 	private Pair<Float, Float> market;
 
 	public float getWidth()
@@ -20,7 +20,7 @@ public class MapInfo
 		return width;
 	}
 
-	public void setWidth(float width)
+	public void setWidth( float width )
 	{
 		this.width = width;
 	}
@@ -30,7 +30,7 @@ public class MapInfo
 		return height;
 	}
 
-	public void setHeight(float height)
+	public void setHeight( float height )
 	{
 		this.height = height;
 	}
@@ -40,7 +40,7 @@ public class MapInfo
 		return name;
 	}
 
-	public void setName(String name)
+	public void setName( String name )
 	{
 		this.name = name;
 	}
@@ -50,43 +50,43 @@ public class MapInfo
 		return numberOfPlayers;
 	}
 
-	public void setNumberOfPlayers(int numberOfPlayers)
+	public void setNumberOfPlayers( int numberOfPlayers )
 	{
 		this.numberOfPlayers = numberOfPlayers;
 	}
 
-	public boolean addHeadQuarter(Pair<Float, Float> position)
+	public boolean addHeadQuarter( Pair<Float, Float> position )
 	{
-		if (headQuarters.size() == numberOfPlayers)
+		if( headQuarters.size() == numberOfPlayers )
 			return false;
 
-		headQuarters.add(position);
+		headQuarters.add( position );
 		return true;
 	}
 
-	public void setMarket(Pair<Float, Float> market)
+	public void setMarket( Pair<Float, Float> market )
 	{
 		this.market = market;
 	}
 
-	public void addCave(Pair<Float, Float> position)
+	public void addCave( Pair<Float, Float> position )
 	{
-		caves.add(position);
+		caves.add( position );
 	}
 
-	public void addField(Pair<Float, Float> position)
+	public void addField( Pair<Float, Float> position )
 	{
-		fields.add(position);
+		fields.add( position );
 	}
 
-	public void addWood(Pair<Float, Float> position)
+	public void addWood( Pair<Float, Float> position )
 	{
-		woods.add(position);
+		woods.add( position );
 	}
 
-	public void addMill(Pair<Float, Float> position)
+	public void addMine( Pair<Float, Float> position )
 	{
-		mills.add(position);
+		mines.add( position );
 	}
 
 	public ArrayList<Pair<Float, Float>> getHeadQuarters()
@@ -99,9 +99,9 @@ public class MapInfo
 		return caves;
 	}
 
-	public ArrayList<Pair<Float, Float>> getMills()
+	public ArrayList<Pair<Float, Float>> getMines()
 	{
-		return mills;
+		return mines;
 	}
 
 	public ArrayList<Pair<Float, Float>> getWoods()
@@ -125,24 +125,24 @@ public class MapInfo
 		String s = "Name: " + name;
 		s += "\nWidth : " + width + " ; Height: " + height;
 		s += "\nHeadQuarters: ";
-		for (Pair<Float, Float> position : headQuarters)
+		for( Pair<Float, Float> position : headQuarters )
 		{
 			s += "\nHeadQuarter: " + position.getFirst() + " - " + position.getSecond();
 		}
 
 		s += "\nFields: ";
-		for (Pair<Float, Float> position : fields)
+		for( Pair<Float, Float> position : fields )
 		{
 			s += "\nField: " + position.getFirst() + " - " + position.getSecond();
 		}
 
 		s += "\nCaves: ";
-		for (Pair<Float, Float> position : caves)
+		for( Pair<Float, Float> position : caves )
 		{
 			s += "\nCave: " + position.getFirst() + " - " + position.getSecond();
 		}
 		s += "\nWoods: ";
-		for (Pair<Float, Float> position : woods)
+		for( Pair<Float, Float> position : woods )
 		{
 			s += "\nWoods: " + position.getFirst() + " - " + position.getSecond();
 		}

@@ -33,6 +33,9 @@ public class GameManager
 	private WriteLock writeLock = lock.writeLock();
 	private ArrayList<Minion> minionsAlive = new ArrayList<>();
 
+	private ArrayList<Player> deadPlayers = new ArrayList<>();
+	private ArrayList<Minion> deadMinions = new ArrayList<>();
+
 	private static GameManager gameManager = null;
 
 	public static GameManager getInstance()
@@ -50,7 +53,7 @@ public class GameManager
 		readLock.unlock();
 	}
 
-	public static void init( World world, DifficultyLevel level )
+	public static void init( World world, DifficultyLevel level, boolean multiplayer )
 	{
 		if( gameManager == null )
 		{
@@ -58,6 +61,11 @@ public class GameManager
 			ThreadManager.getInstance().addGameThread( new PositionUpdater() );
 			ThreadManager.getInstance().addGameThread( new ResourceUpdater() );
 			ThreadManager.getInstance().startGameThreads();
+
+			if( multiplayer )
+				;
+			else
+				;
 		}
 	}
 
@@ -143,13 +151,47 @@ public class GameManager
 			players.remove( p );
 		if( AI_players.contains( p ) )
 			AI_players.remove( p );
+
+		deadPlayers.add( p );
 		writeLock.unlock();
 	}
+
+	public void killMinion( Minion m )
+	{
+		deadMinions.add( m );
+		minionsAlive.remove( m );
+	}
+
+	// TODO killTowerCrusher
 
 	public List<Player> getPlayers()
 	{
 		return players;
 	}
+
+	ArrayList<Player> takeDeadPlayers()
+	{
+		try
+		{
+			return deadPlayers;
+		} finally
+		{
+			deadPlayers.clear();
+		}
+	}
+
+	ArrayList<Minion> takeDeadMinions()
+	{
+		try
+		{
+			return deadMinions;
+		} finally
+		{
+			deadMinions.clear();
+		}
+	}
+
+	// TODO takeDeadTowerCrushers
 
 	ArrayList<Player> attackPhysically( Player attacker )
 	{
@@ -202,25 +244,25 @@ public class GameManager
 		return true;
 	}
 
-	public boolean createTower( Player p, Vector2f position )
+	public Tower createTower( Player p, Vector2f position )
 	{
 		try
 		{
 			p.getWriteLock();
 			if( !p.hasEnoughResources( GameProperties.getInstance().getPrices( "tower" ) ) )
-				return false;
+				return null;
 
 			Tower tower = new Tower( position.x, position.y, GameProperties.getInstance()
 					.getObjectWidth( "tower" ), GameProperties.getInstance().getObjectHeight(
 					"tower" ), p );
 			if( !world.addTower( tower ) )
-				return false;
+				return null;
 
 			p.takeResources( GameProperties.getInstance().getPrices( "tower" ) );
 			p.addTower( tower );
 			towers.add( tower );
 
-			return true;
+			return tower;
 		} finally
 		{
 			p.leaveWriteLock();

@@ -1,5 +1,7 @@
 package mpa.core.logic;
 
+import javax.vecmath.Vector2f;
+
 public abstract class AbstractObject implements InterfaceAbstractObject
 {
 
@@ -8,6 +10,7 @@ public abstract class AbstractObject implements InterfaceAbstractObject
 
 	protected float width;
 	protected float height;
+	private String ID;
 
 	public AbstractObject( float x, float y, float width, float height )
 	{
@@ -68,10 +71,26 @@ public abstract class AbstractObject implements InterfaceAbstractObject
 		this.width = width;
 	}
 
+	public void setID( String ID )
+
+	{
+		this.ID = ID;
+	}
+
+	public String getID()
+	{
+		return ID;
+	}
+
 	public float getCollisionRay()
 	{
 		float xMin = x - width / 2;
 		float yMin = y - height / 2;
 		return ( float ) Math.sqrt( Math.pow( ( xMin - x ), 2 ) + Math.pow( ( yMin - y ), 2 ) );
+	}
+
+	public Vector2f getPosition()
+	{
+		return new Vector2f( x, y );
 	}
 }

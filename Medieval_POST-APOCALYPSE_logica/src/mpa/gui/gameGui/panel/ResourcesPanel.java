@@ -1,9 +1,9 @@
 package mpa.gui.gameGui.panel;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
-import mpa.core.logic.character.Player;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
@@ -22,9 +22,14 @@ public class ResourcesPanel
 	private int widthPanel;
 	private int xPanel = 0;
 
-	public ResourcesPanel( Player playingPlayer )
+	public ResourcesPanel()
 	{
-		resources = playingPlayer.getResources().keySet();
+		resources = new HashSet<>();
+		resources.add( "WOOD" );
+		resources.add( "WHEAT" );
+		resources.add( "IRON" );
+		resources.add( "STONE" );
+		resources.add( "HERBS" );
 		widthPanel = 100 / resources.size();
 		initResources();
 		initResourcePanel();

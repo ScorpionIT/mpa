@@ -88,7 +88,7 @@ public class MainMenuGamePanel extends JPanel
 					// MainMenuGamePanel.this.worldLoader.makePlayers(MainMenuGamePanel.this.playerName,
 					// world,
 					// MainMenuGamePanel.this.selectedHQ));
-					GameManager.init( world, difficultyLevelSelected );
+					GameManager.init( world, difficultyLevelSelected, false );
 					MainMenuGamePanel.this.selectedHQIndex = MainMenuGamePanel.this.worldLoader
 							.makePlayers( MainMenuGamePanel.this.playerName, world,
 									MainMenuGamePanel.this.selectedHQ );
@@ -108,8 +108,7 @@ public class MainMenuGamePanel extends JPanel
 						@Override
 						public void run()
 						{
-							mpa.gui.gameGui.playingGUI.GameGui app = new mpa.gui.gameGui.playingGUI.GameGui(
-									MainMenuGamePanel.this.selectedHQIndex );
+							mpa.gui.gameGui.playingGUI.GameGui app = new mpa.gui.gameGui.playingGUI.GameGui();
 							AppSettings gameSettings = new AppSettings( false );
 							gameSettings.setResolution( 800, 600 );
 							// gameSettings.setResolution( java.awt.Toolkit.getDefaultToolkit()

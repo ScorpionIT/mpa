@@ -1,57 +1,30 @@
 package mpa.gui.gameGui.playingGUI;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 
-import mpa.core.logic.AbstractObject;
 import mpa.core.logic.GameManager;
-import mpa.core.logic.building.AbstractPrivateProperty;
-import mpa.core.logic.building.AbstractProperty;
-import mpa.core.logic.building.House;
-import mpa.core.logic.building.Market;
-import mpa.core.logic.character.Player;
-import mpa.core.logic.resource.Cave;
-import mpa.core.logic.resource.Field;
-import mpa.core.logic.resource.Wood;
-import mpa.gui.gameGui.listener.GameGuiClickListener;
-import mpa.gui.gameGui.listener.GameGuiKeyActionListener;
 import mpa.gui.gameGui.listener.GameGuiMouseListener;
-import mpa.gui.gameGui.panel.NiftyHandler;
 
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.AnimEventListener;
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.plugins.FileLocator;
-import com.jme3.asset.plugins.ZipLocator;
-import com.jme3.font.BitmapText;
-import com.jme3.input.KeyInput;
-import com.jme3.input.MouseInput;
-import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
-import com.jme3.input.controls.KeyTrigger;
-import com.jme3.input.controls.MouseAxisTrigger;
-import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
-import com.jme3.math.Matrix3f;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
-import com.jme3.scene.shape.Sphere;
+import com.jme3.system.AppSettings;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture.WrapMode;
-import com.jme3.util.TangentBinormalGenerator;
 
 public class GameGui extends SimpleApplication implements AnimEventListener
 {
@@ -61,60 +34,46 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	boolean cursorOnTheTopEdge = false;
 	boolean cursorOnTheBottomEdge = false;
 	private float cameraHeight = 220;// 120
-	private float scalingFactor = 2.2f;
+	// private float scalingFactor = 2.2f;
 	private float lz = ( float ) Math.sqrt( Math.pow( cameraHeight / Math.sin( 40 ), 2 )
 			- Math.pow( cameraHeight, 2 ) );
 
 	private Node groundNode;
 	private Node mobileObjects = new Node( "Mobile Objects" );
 	private Node staticObjects = new Node( "Static Objects" );
-	private Node pathNodes = new Node();
-	private Player playingPlayer;
-	private HashMap<Player, Spatial> players = new HashMap<>();
 
-	private ArrayList<javax.vecmath.Vector2f> path = new ArrayList<>();
-	BitmapText text;
-	NiftyHandler niftyHandler;
-
-	private ActionListener clickActionListener;
+	// NiftyHandler niftyHandler;
 	private AnalogListener mouseActionListener;
-	private ActionListener keyActionListener;
 
-	private Quaternion quad = new Quaternion();
-	private Vector3f upVector = new Vector3f( 0, 1, 0 );
-
-	public GameGui( int playerIndex )
+	public GameGui()
 	{
 		super();
-		playingPlayer = GameManager.getInstance().getPlayers().get( playerIndex );
+	}
 
+	public AppSettings getSettings()
+	{
+		return settings;
 	}
 
 	@Override
 	public void simpleInitApp()
 	{
-		setDebuggingText();
 		initialCameraConfiguration();
 		setLights();
 
-		niftyHandler = new NiftyHandler( assetManager, inputManager, audioRenderer, guiViewPort,
-				stateManager, this );
+		// niftyHandler = new NiftyHandler( assetManager, inputManager, audioRenderer, guiViewPort,
+		// stateManager, this );
 		setCamera( new Vector3f( 250, cameraHeight, 250 ) );
 		updateResourcePanel();
 
 		groundNode = new Node( "Ground" );
 		groundNode.attachChild( makeFloor() );
 		rootNode.attachChild( groundNode );
+		GuiObjectManager.init( this );
 
-		loadCharacters();
-		rootNode.attachChild( mobileObjects );
-		rootNode.attachChild( pathNodes );
-
-		loadStaticObjects();
-		clickActionListener = new GameGuiClickListener( this );
-		mouseActionListener = new GameGuiMouseListener( this, settings );
-		keyActionListener = new GameGuiKeyActionListener( this );
-		setEventTriggers();
+		mouseActionListener = new GameGuiMouseListener( this );
+		inputManager.addListener( mouseActionListener, "Shift_Map_Negative_X",
+				"Shift_Map_Positive_X", "Shift_Map_Negative_Y", "Shift_Map_Positive_Y" );
 
 		new GraphicUpdater( this ).start();
 	}
@@ -139,65 +98,6 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 		staticObjects.detachChild( model );
 	}
 
-	private void debuggingPath()
-	{
-		pathNodes.detachAllChildren();
-		for( int i = 0; i < GameManager.getInstance().getPlayers().size(); i++ )
-			if( GameManager.getInstance().getPlayers().get( i ) != playingPlayer )
-			{
-				GameManager.getInstance().getPlayers().get( i ).getReadLock();
-				ArrayList<javax.vecmath.Vector2f> path2 = GameManager.getInstance().getPlayers()
-						.get( i ).getPath();
-
-				javax.vecmath.Vector2f vector2f;
-				if( path2.size() > 1 )
-				{
-					vector2f = path2.get( path2.size() - 1 );
-
-					Sphere sphereMesh;
-					Geometry sphereGeo;
-
-					sphereMesh = new Sphere( 32, 32, 2f );
-					sphereGeo = new Geometry( "" + i, sphereMesh );
-
-					sphereMesh.setTextureMode( Sphere.TextureMode.Projected ); // better quality on
-					// spheres
-					TangentBinormalGenerator.generate( sphereMesh ); // for lighting effect
-					Material sphereMat = new Material( assetManager,
-							"Common/MatDefs/Light/Lighting.j3md" );
-					sphereMat.setTexture( "DiffuseMap",
-							assetManager.loadTexture( "Textures/Terrain/Pond/Pond.jpg" ) );
-					sphereMat.setTexture( "NormalMap",
-							assetManager.loadTexture( "Textures/Terrain/Pond/Pond_normal.png" ) );
-					sphereMat.setBoolean( "UseMaterialColors", true );
-					sphereMat.setColor( "Diffuse", ColorRGBA.White );
-					sphereMat.setColor( "Specular", ColorRGBA.White );
-					sphereMat.setFloat( "Shininess", 64f ); // [0,128]
-					sphereGeo.setMaterial( sphereMat );
-
-					sphereGeo.rotate( 1.6f, 0, 0 ); // Rotate it a bit
-
-					sphereGeo.setLocalTranslation( vector2f.x, 5, vector2f.y );
-					pathNodes.attachChild( sphereGeo );
-				}
-
-				GameManager.getInstance().getPlayers().get( i ).leaveReadLock();
-
-			}
-	}
-
-	private void setDebuggingText()
-	{
-		guiNode.detachAllChildren();
-		guiFont = assetManager.loadFont( "Interface/Fonts/Default.fnt" );
-		text = new BitmapText( guiFont, false );
-		text.setSize( guiFont.getCharSet().getRenderedSize() );
-		text.setText( "Mouse x = " + inputManager.getCursorPosition().x + " y =  "
-				+ inputManager.getCursorPosition().y );
-		text.setLocalTranslation( 300, text.getLineHeight() + 200, 0 );
-		guiNode.attachChild( text );
-	}
-
 	protected Geometry makeFloor()
 	{
 		Box box = new Box( GameManager.getInstance().getWorld().getWidth() / 2, 0, GameManager
@@ -216,161 +116,6 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 		mat1.setTexture( "ColorMap", text1 );
 		floor.setMaterial( mat1 );
 		return floor;
-	}
-
-	private void loadStaticObjects()
-	{
-		ArrayList<AbstractObject> allObjects = GameManager.getInstance().getWorld().getAllObjects();
-
-		// Material mat1 = new Material( assetManager, "Common/MatDefs/Misc/Unshaded.j3md" );
-		// mat1.setColor( "Color", ColorRGBA.Blue );
-		//
-		// Material mat2 = new Material( assetManager, "Common/MatDefs/Misc/Unshaded.j3md" );
-		// mat2.setColor( "Color", ColorRGBA.Red );
-
-		int i = 0;
-		for( AbstractObject object : allObjects )
-		{
-			if( object instanceof House )
-			{
-				assetManager.registerLocator( "Assets/Models/tower.zip", ZipLocator.class );
-				Spatial loadModel = assetManager.loadModel( "tower.mesh.xml" );
-				loadModel.setLocalTranslation( new Vector3f( object.getX(), 0, object.getY() ) );
-				float cos = FastMath.cos( 130 + 180 );
-				float sin = FastMath.sin( 130 + 180 );
-				loadModel.setLocalRotation( new Matrix3f( cos, 0, sin, 0, 1, 0, -sin, 0, cos ) );
-				// loadModel.scale( 2f );
-				loadModel.scale( 0.2f );
-				rootNode.attachChild( loadModel );
-			}
-			else if( object instanceof Field )
-			{
-
-				assetManager.registerLocator( "Assets/Models/CornField.zip", ZipLocator.class );
-
-				Spatial loadModel = assetManager.loadModel( "CornField.mesh.xml" );
-				loadModel.setLocalTranslation( new Vector3f( object.getX(), 0, object.getY() ) );
-				float cos = FastMath.cos( 90 );
-				float sin = FastMath.sin( 90 );
-				loadModel.setLocalRotation( new Matrix3f( 1, 0, 0, 0, cos, -sin, 0, sin, cos ) );
-				loadModel.scale( 6f );
-				rootNode.attachChild( loadModel );
-			}
-
-			else if( object instanceof Cave )
-			{
-
-				assetManager.registerLocator( "Assets/Models/stones.zip", ZipLocator.class );
-
-				Spatial loadModel = assetManager.loadModel( "stones.mesh.xml" );
-				loadModel.setLocalTranslation( new Vector3f( object.getX(), 0, object.getY() ) );
-				float cos = FastMath.cos( 90 );
-				float sin = FastMath.sin( 90 );
-				loadModel.setLocalRotation( new Matrix3f( 1, 0, 0, 0, cos, -sin, 0, sin, cos ) );
-				loadModel.scale( 3f );
-				rootNode.attachChild( loadModel );
-			}
-			else if( object instanceof Market )
-			{
-				assetManager.registerLocator( "Assets/Models/wagen.zip", ZipLocator.class );
-
-				Spatial loadModel = assetManager.loadModel( "wagen.mesh.xml" );
-				loadModel.setLocalTranslation( new Vector3f( object.getX(), 0, object.getY() ) );
-
-				loadModel.scale( 0.1f );
-				rootNode.attachChild( loadModel );
-
-			}
-
-			else if( object instanceof Wood )
-			{
-				assetManager.registerLocator( "Assets/Models/Wood.zip", ZipLocator.class );
-
-				Spatial loadModel = assetManager.loadModel( "Tree.mesh.xml" );
-				loadModel.setLocalTranslation( new Vector3f( object.getX(), 0, object.getY() ) );
-				float cos = FastMath.cos( 90 );
-				float sin = FastMath.sin( 90 );
-				loadModel.setLocalRotation( new Matrix3f( 1, 0, 0, 0, cos, -sin, 0, sin, cos ) );
-				loadModel.scale( 6f );
-				rootNode.attachChild( loadModel );
-
-			}
-
-			if( object instanceof AbstractProperty )
-			{
-				javax.vecmath.Vector2f gatheringPlace = ( ( AbstractProperty ) object )
-						.getGatheringPlace();
-
-				Sphere sphereMesh;
-				Geometry sphereGeo;
-
-				sphereMesh = new Sphere( 50, 50, 8f );
-				sphereGeo = new Geometry( "" + i++, sphereMesh );
-
-				sphereMesh.setTextureMode( Sphere.TextureMode.Projected ); // better quality on
-				// spheres
-				TangentBinormalGenerator.generate( sphereMesh ); // for lighting effect
-				Material sphereMat = new Material( assetManager,
-						"Common/MatDefs/Light/Lighting.j3md" );
-				sphereMat.setTexture( "DiffuseMap",
-						assetManager.loadTexture( "Textures/Terrain/Pond/Pond.jpg" ) );
-				sphereMat.setTexture( "NormalMap",
-						assetManager.loadTexture( "Textures/Terrain/Pond/Pond_normal.png" ) );
-				sphereMat.setBoolean( "UseMaterialColors", true );
-				sphereMat.setColor( "Diffuse", ColorRGBA.White );
-				sphereMat.setColor( "Specular", ColorRGBA.White );
-				sphereMat.setFloat( "Shininess", 64f ); // [0,128]
-				sphereGeo.setMaterial( sphereMat );
-
-				sphereGeo.rotate( 1.6f, 0, 0 ); // Rotate it a bit
-
-				sphereGeo.setLocalTranslation( gatheringPlace.x, 5, gatheringPlace.y );
-				pathNodes.attachChild( sphereGeo );
-
-			}
-
-		}
-	}
-
-	public void setText( String text )
-	{
-		this.text.setText( "Mouse x = " + inputManager.getCursorPosition().x + " y =  "
-				+ inputManager.getCursorPosition().y + " " + text );
-
-	}
-
-	private void setEventTriggers()
-	{
-		inputManager.addMapping( "Shift_Map_Negative_X", new MouseAxisTrigger( MouseInput.AXIS_X,
-				true ) );
-
-		inputManager.addMapping( "Shift_Map_Positive_X", new MouseAxisTrigger( MouseInput.AXIS_X,
-				false ) );
-		inputManager.addMapping( "Shift_Map_Negative_Y", new MouseAxisTrigger( MouseInput.AXIS_Y,
-				true ) );
-		inputManager.addMapping( "Shift_Map_Positive_Y", new MouseAxisTrigger( MouseInput.AXIS_Y,
-				false ) );
-		inputManager.addMapping( "Wheel_DOWN", new MouseAxisTrigger( MouseInput.AXIS_WHEEL, true ) );
-		inputManager.addMapping( "Wheel_UP", new MouseAxisTrigger( MouseInput.AXIS_WHEEL, false ) );
-
-		inputManager.addMapping( "Tab", new KeyTrigger( KeyInput.KEY_TAB ) );
-		inputManager.addListener( keyActionListener, "Tab" );
-
-		inputManager.addListener( mouseActionListener, "Shift_Map_Negative_X",
-				"Shift_Map_Positive_X", "Shift_Map_Negative_Y", "Shift_Map_Positive_Y" );
-
-		// inputManager.addRawInputListener( new MyButtonListener() );
-		inputManager.addMapping( "Click", new MouseButtonTrigger( 0 ) );
-		inputManager.addListener( clickActionListener, "Click" );
-
-		inputManager.addMapping( "ChooseItem", new KeyTrigger( KeyInput.KEY_LSHIFT ) );
-		inputManager.addMapping( "attack", new MouseButtonTrigger( 1 ) );
-		inputManager.addListener( clickActionListener, "attack", "Wheel_DOWN", "Wheel_UP",
-				"ChooseItem" );
-
-		inputManager.addMapping( "pause", new KeyTrigger( KeyInput.KEY_P ) );
-		inputManager.addListener( keyActionListener, "pause" );
-
 	}
 
 	private void setLights()
@@ -413,130 +158,6 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 		inputManager.setCursorVisible( true );
 	}
 
-	private void loadCharacters()
-	{
-		assetManager.registerLocator( "./Assets/Models/SeanDevlin.zip", ZipLocator.class );
-		for( Player player : GameManager.getInstance().getPlayers() )
-		{
-			Spatial model = assetManager.loadModel( "SeanDevlin.mesh.xml" );
-			if( player == playingPlayer )
-			{
-				model.scale( scalingFactor, scalingFactor, scalingFactor );
-				model.setLocalTranslation( new Vector3f( player.getX(), 5, player.getY() ) );
-			}
-			else
-			{
-				model.scale( scalingFactor, scalingFactor, scalingFactor );
-				model.setLocalTranslation( new Vector3f( player.getX(), 5, player.getY() ) );
-
-			}
-
-			players.put( player, model );
-			mobileObjects.attachChild( model );
-			javax.vecmath.Vector2f currentVector = player.getCurrentVector();
-			model.rotate( 0, FastMath.PI, 0 );
-			// quad.fromAngleAxis(
-			// MyMath.getRotationAngle( new javax.vecmath.Vector2f( 0, 1 ), currentVector ),
-			// upVector );
-			quad.lookAt( new Vector3f( -currentVector.x, 0, -currentVector.y ), upVector );
-			model.setLocalRotation( quad );
-		}
-	}
-
-	private void updateMobileObjects()
-	{
-		GameManager.getInstance().takeLock();
-		AnimControl control;
-		AnimChannel channel = null;
-		List<Player> players = GameManager.getInstance().getPlayers();
-
-		List<Player> toRemove = new ArrayList<Player>();
-		if( this.players.size() > players.size() )
-		{
-			for( Player p : this.players.keySet() )
-				if( !players.contains( p ) )
-				{
-					toRemove.add( p );
-				}
-		}
-
-		for( Player p : toRemove )
-		{
-			mobileObjects.getChildren().remove( this.players.get( p ) );
-			this.players.remove( p );
-		}
-
-		for( Player p : players )
-		{
-			Spatial mobObject = this.players.get( p );
-			// if( i == 0 )
-			// if( p.getPath() != null && !p.getPath().isEmpty() )
-			// {
-			//
-			// control = mobObject.getControl( AnimControl.class );
-			// control.clearListeners();
-			// control.addListener( this );
-			// channel = control.createChannel();
-			// channel.setAnim( "WALK", 0.80f );
-			// channel.setLoopMode( LoopMode.Loop );
-			//
-			// }
-			// else
-			// {
-			// // if (channel != null)
-			// // channel.setAnim(null);
-			//
-			// }
-			javax.vecmath.Vector2f currentVector = p.getCurrentVector();
-			mobObject.setLocalTranslation( p.getX(), 0, p.getY() );
-
-			quad.lookAt( new Vector3f( -currentVector.x, 0, -currentVector.y ), upVector );
-			mobObject.setLocalRotation( quad );
-
-			// mobObject.lookAt( new Vector3f( -currentVector.x, 0, -currentVector.y ), upVector );
-		}
-
-		GameManager.getInstance().leaveLock();
-	}
-
-	public void drawPath()
-	{
-		pathNodes.detachAllChildren();
-		int i = 0;
-
-		if( path == null || path.isEmpty() )
-			return;
-		for( javax.vecmath.Vector2f pair : path )
-		{
-			Sphere sphereMesh;
-			Geometry sphereGeo;
-
-			sphereMesh = new Sphere( 32, 32, 2f );
-			sphereGeo = new Geometry( "" + i, sphereMesh );
-
-			sphereMesh.setTextureMode( Sphere.TextureMode.Projected ); // better quality on
-			// spheres
-			TangentBinormalGenerator.generate( sphereMesh ); // for lighting effect
-			Material sphereMat = new Material( assetManager, "Common/MatDefs/Light/Lighting.j3md" );
-			sphereMat.setTexture( "DiffuseMap",
-					assetManager.loadTexture( "Textures/Terrain/Pond/Pond.jpg" ) );
-			sphereMat.setTexture( "NormalMap",
-					assetManager.loadTexture( "Textures/Terrain/Pond/Pond_normal.png" ) );
-			sphereMat.setBoolean( "UseMaterialColors", true );
-			sphereMat.setColor( "Diffuse", ColorRGBA.White );
-			sphereMat.setColor( "Specular", ColorRGBA.White );
-			sphereMat.setFloat( "Shininess", 64f ); // [0,128]
-			sphereGeo.setMaterial( sphereMat );
-
-			sphereGeo.rotate( 1.6f, 0, 0 ); // Rotate it a bit
-
-			sphereGeo.setLocalTranslation( pair.x, 5, pair.y );
-			pathNodes.attachChild( sphereGeo );
-		}
-	}
-
-	private AbstractObject selectedObject;
-
 	public void takeLock()
 	{
 		lock.lock();
@@ -552,7 +173,6 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	@Override
 	public void simpleUpdate( float tpf )
 	{
-		updateMobileObjects();
 		if( count == 100 )
 		{
 			updateResourcePanel();
@@ -568,10 +188,10 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 		return cam.getDirection();
 	}
 
-	public NiftyHandler getNiftyHandler()
-	{
-		return niftyHandler;
-	}
+	// public NiftyHandler getNiftyHandler()
+	// {
+	// return niftyHandler;
+	// }
 
 	public void updateResourcePanel()
 	{
@@ -589,37 +209,14 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 			// System.out.println();
 			// System.out.println();
 			// System.out.println();
-			niftyHandler.setResourceValue( key, resources.get( key ) );
+			// niftyHandler.setResourceValue( key, resources.get( key ) );
 		}
 
-	}
-
-	public void occupy()
-	{
-		selectedObject = niftyHandler.getSelectedObject();
-		AbstractPrivateProperty pickedObj = ( AbstractPrivateProperty ) selectedObject;
-		GameManager.getInstance().conquer( pickedObj, playingPlayer );
-		niftyHandler.setSelectedPanel( selectedObject );
 	}
 
 	public Node getGroundNode()
 	{
 		return groundNode;
-	}
-
-	public Node getPathNodes()
-	{
-		return pathNodes;
-	}
-
-	public ArrayList<javax.vecmath.Vector2f> getPath()
-	{
-		return path;
-	}
-
-	public void setPath( ArrayList<javax.vecmath.Vector2f> path )
-	{
-		this.path = path;
 	}
 
 	public ReentrantLock getLock()
@@ -661,22 +258,17 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 
 	}
 
-	public void forwardOpponentResourcesPanel()
-	{
-		niftyHandler.changePageOpponentResourcesPanel( false );
-
-	}
-
-	public void backOpponentResourcesPanel()
-	{
-		niftyHandler.changePageOpponentResourcesPanel( true );
-
-	}
-
-	public Player getPlayingPlayer()
-	{
-		return playingPlayer;
-	}
+	// public void forwardOpponentResourcesPanel()
+	// {
+	// niftyHandler.changePageOpponentResourcesPanel( false );
+	//
+	// }
+	//
+	// public void backOpponentResourcesPanel()
+	// {
+	// niftyHandler.changePageOpponentResourcesPanel( true );
+	//
+	// }
 
 	public int windowWidth()
 	{

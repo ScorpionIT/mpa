@@ -3,19 +3,22 @@ package mpa.gui.gameGui.listener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import mpa.core.logic.AbstractObject;
 import mpa.core.logic.GameManager;
-import mpa.core.logic.character.Player;
-import mpa.core.logic.character.Player.Item;
+import mpa.core.logic.GameManagerProxy;
+import mpa.gui.gameGui.playingGUI.GuiObjectManager;
 
 import com.jme3.math.Vector2f;
 
 public class SinglePlayerController extends ListenerImplementation
 {
+	private GuiObjectManager gObjManager = GuiObjectManager.getInstance();
+	private GameManagerProxy gManagerProxy = GameManagerProxy.getInstance();
 
 	@Override
 	void setPause()
 	{
-		GameManager.getInstance().setPause();
+		gManagerProxy.setPause();
 	}
 
 	@Override
@@ -23,10 +26,10 @@ public class SinglePlayerController extends ListenerImplementation
 	{
 		HashMap<String, HashMap<String, Integer>> playersResourceAmount = new HashMap<>();
 
-		for( Player p : GameManager.getInstance().getPlayers() )
-		{
-			playersResourceAmount.put( p.getName(), p.getResources() );
-		}
+		// for( )
+		// {
+		// playersResourceAmount.put( p.getName(), p.getResources() );
+		// }
 
 		return playersResourceAmount;
 	}
@@ -34,52 +37,73 @@ public class SinglePlayerController extends ListenerImplementation
 	@Override
 	String getPickedObject( Vector2f click )
 	{
-		String pickedObject = GameManager.getInstance().getWorld().pickedObject( click.x, click.y )
-				.toString();
-		return null;
+		AbstractObject pickedObject = GameManager.getInstance().getWorld()
+				.pickedObject( click.x, click.y );
+
+		String obj = pickedObject.getClass().getSimpleName();
+		obj += ":" + pickedObject.getID();
+
+		return obj;
 
 	}
 
 	@Override
-	void changeItem( Item item )
+	void changeItem( String item )
 	{
-		// TODO Auto-generated method stub
-
+		gManagerProxy.changeSelectedItem( gObjManager.getPlayingPlayer(), item );
 	}
 
 	@Override
-	ArrayList<String> attack( Vector2f direction )
+	ArrayList<String> playerAction( Vector2f direction )
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return gManagerProxy.playerAction( gObjManager.getPlayingPlayer(),
+				new javax.vecmath.Vector2f( direction.x, direction.y ) );
 	}
 
 	@Override
 	boolean occupyProperty( String property )
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return gManagerProxy.occupyProperty( gObjManager.getPlayingPlayer(), property );
 	}
 
 	@Override
-	boolean createTower( Vector2f point )
+	String createTower( Vector2f point )
 	{
-		// TODO Auto-generated method stub
-		return false;
+		String tower = gManagerProxy.createTower( gObjManager.getPlayingPlayer(),
+				new javax.vecmath.Vector2f( point.x, point.y ) );
+
+		gObjManager.addTower( new javax.vecmath.Vector2f( point.x, point.y ), tower );
+		return tower;
+
 	}
 
 	@Override
-	boolean createMinions( String boss, String target, int quantity )
+	ArrayList<String> createMinions( String boss, String target, int quantity )
 	{
-		// TODO Auto-generated method stub
-		return false;
+		ArrayList<String> minions = gManagerProxy.createMinions( boss, quantity, target );
+		for( String m : minions )
+			gObjManager.addMinion( m );
+
+		return minions;
 	}
 
 	@Override
 	void updateInformation()
 	{
-		// TODO Auto-generated method stub
+		ArrayList<String> deadMinions = gManagerProxy.takeDeadMinions();
+		ArrayList<String> deadPlayers = gManagerProxy.takeDeadPlayers();
+		HashMap<String, javax.vecmath.Vector2f[]> playersPositions = gManagerProxy
+				.getPlayersPositions();
 
+		for( String m : deadMinions )
+			gObjManager.removeMinion( m );
+		for( String p : deadPlayers )
+			gObjManager.removePlayer( p );
+		for( String p : playersPositions.keySet() )
+		{
+			javax.vecmath.Vector2f[] positions = playersPositions.get( p );
+			gObjManager.updatePlayerPosition( p, positions[0], positions[1] );
+		}
 	}
 
 	@Override

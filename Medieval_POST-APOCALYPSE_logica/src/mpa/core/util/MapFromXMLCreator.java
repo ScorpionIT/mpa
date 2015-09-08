@@ -18,7 +18,7 @@ public class MapFromXMLCreator implements MapInfoCreator
 {
 
 	@Override
-	public MapInfo createMapInfo(String path)
+	public MapInfo createMapInfo( String path )
 	{
 
 		// TODO controllare che la struttura del file sia corretta prima di caricare.
@@ -28,75 +28,77 @@ public class MapFromXMLCreator implements MapInfoCreator
 		Document document;
 		try
 		{
-			document = builder.build(new File(path));
+			document = builder.build( new File( path ) );
 			mapInfo = new MapInfo();
-			for (Element element : document.getRootElement().getChildren())
+			for( Element element : document.getRootElement().getChildren() )
 			{
-				if (element.getName().toLowerCase().equals("name"))
+				if( element.getName().toLowerCase().equals( "name" ) )
 				{
-					mapInfo.setName(element.getValue());
+					mapInfo.setName( element.getValue() );
 				}
-				else if (element.getName().toLowerCase().equals("width"))
+				else if( element.getName().toLowerCase().equals( "width" ) )
 				{
-					mapInfo.setWidth(Float.parseFloat(element.getValue()));
+					mapInfo.setWidth( Float.parseFloat( element.getValue() ) );
 				}
-				else if (element.getName().toLowerCase().equals("height"))
+				else if( element.getName().toLowerCase().equals( "height" ) )
 				{
-					mapInfo.setHeight(Float.parseFloat(element.getValue()));
+					mapInfo.setHeight( Float.parseFloat( element.getValue() ) );
 				}
-				else if (element.getName().toLowerCase().equals("number"))
+				else if( element.getName().toLowerCase().equals( "number" ) )
 				{
-					mapInfo.setNumberOfPlayers(Integer.parseInt(element.getValue()));
+					mapInfo.setNumberOfPlayers( Integer.parseInt( element.getValue() ) );
 				}
 
-				else if (element.getName().toLowerCase().equals("objects"))
+				else if( element.getName().toLowerCase().equals( "objects" ) )
 				{
-					for (Element element2 : element.getChildren())
+					for( Element element2 : element.getChildren() )
 					{
-						if (element2.getName().toLowerCase().equals("headquarters"))
+						if( element2.getName().toLowerCase().equals( "headquarters" ) )
 						{
-							for (Pair<Float, Float> position : getBuildingCoordinates(element2))
+							for( Pair<Float, Float> position : getBuildingCoordinates( element2 ) )
 							{
-								mapInfo.addHeadQuarter(position);
+								mapInfo.addHeadQuarter( position );
 							}
 						}
-						else if (element2.getName().toLowerCase().equals("caves"))
+						else if( element2.getName().toLowerCase().equals( "caves" ) )
 						{
-							for (Pair<Float, Float> position : getBuildingCoordinates(element2))
+							for( Pair<Float, Float> position : getBuildingCoordinates( element2 ) )
 							{
-								mapInfo.addCave(position);
+								mapInfo.addCave( position );
 							}
 						}
-						else if (element2.getName().toLowerCase().equals("fields"))
+						else if( element2.getName().toLowerCase().equals( "fields" ) )
 						{
-							for (Pair<Float, Float> position : getBuildingCoordinates(element2))
+							for( Pair<Float, Float> position : getBuildingCoordinates( element2 ) )
 							{
-								mapInfo.addField(position);
+								mapInfo.addField( position );
 							}
 						}
-						else if (element2.getName().toLowerCase().equals("mills"))
+						else if( element2.getName().toLowerCase().equals( "mines" ) )
 						{
-							for (Pair<Float, Float> position : getBuildingCoordinates(element2))
+							for( Pair<Float, Float> position : getBuildingCoordinates( element2 ) )
 							{
-								mapInfo.addMill(position);
-							}
-						}
-
-						else if (element2.getName().toLowerCase().equals("woods"))
-						{
-							for (Pair<Float, Float> position : getBuildingCoordinates(element2))
-							{
-								mapInfo.addWood(position);
+								mapInfo.addMine( position );
 							}
 						}
 
-						else if (element2.getName().toLowerCase().equals("market"))
+						else if( element2.getName().toLowerCase().equals( "woods" ) )
+						{
+							for( Pair<Float, Float> position : getBuildingCoordinates( element2 ) )
+							{
+								mapInfo.addWood( position );
+							}
+						}
+
+						else if( element2.getName().toLowerCase().equals( "market" ) )
 						{
 							String value = element2.getValue();
-							String[] coordinates = value.split(",");
-							if (coordinates.length == 2)
+							String[] coordinates = value.split( "," );
+							if( coordinates.length == 2 )
 							{
-								mapInfo.setMarket(new Pair<Float, Float>(Float.parseFloat(coordinates[0]), Float.parseFloat(coordinates[1])));
+								mapInfo.setMarket( new Pair<Float, Float>( Float
+										.parseFloat( coordinates[0] ), Float
+										.parseFloat( coordinates[1] ) ) );
 							}
 
 						}
@@ -104,7 +106,7 @@ public class MapFromXMLCreator implements MapInfoCreator
 
 				}
 			}
-		} catch (JDOMException | IOException e)
+		} catch( JDOMException | IOException e )
 		{
 			e.printStackTrace(); // TODO
 		}
@@ -113,17 +115,18 @@ public class MapFromXMLCreator implements MapInfoCreator
 
 	}
 
-	private ArrayList<Pair<Float, Float>> getBuildingCoordinates(Element element)
+	private ArrayList<Pair<Float, Float>> getBuildingCoordinates( Element element )
 	{
 		List<Element> children = element.getChildren();
 		ArrayList<Pair<Float, Float>> points = new ArrayList<>();
-		for (Element element2 : children)
+		for( Element element2 : children )
 		{
 			String value = element2.getValue();
-			String[] coordinates = value.split(",");
-			if (coordinates.length == 2)
+			String[] coordinates = value.split( "," );
+			if( coordinates.length == 2 )
 			{
-				points.add(new Pair<Float, Float>(Float.parseFloat(coordinates[0]), Float.parseFloat(coordinates[1])));
+				points.add( new Pair<Float, Float>( Float.parseFloat( coordinates[0] ), Float
+						.parseFloat( coordinates[1] ) ) );
 			}
 
 		}
