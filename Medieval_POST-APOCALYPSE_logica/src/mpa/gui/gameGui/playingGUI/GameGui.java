@@ -1,4 +1,4 @@
-package mpa.gui.gameGui;
+package mpa.gui.gameGui.playingGUI;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,6 +67,7 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 
 	private Node groundNode;
 	private Node mobileObjects = new Node( "Mobile Objects" );
+	private Node staticObjects = new Node( "Static Objects" );
 	private Node pathNodes = new Node();
 	private Player playingPlayer;
 	private HashMap<Player, Spatial> players = new HashMap<>();
@@ -116,6 +117,26 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 		setEventTriggers();
 
 		new GraphicUpdater( this ).start();
+	}
+
+	void attachPlayer( Spatial model )
+	{
+		mobileObjects.attachChild( model );
+	}
+
+	void detachPlayer( Spatial model )
+	{
+		mobileObjects.detachChild( model );
+	}
+
+	void attachStaticObject( Spatial model )
+	{
+		staticObjects.attachChild( model );
+	}
+
+	void detachStaticObject( Spatial model )
+	{
+		staticObjects.detachChild( model );
 	}
 
 	private void debuggingPath()
@@ -201,11 +222,11 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	{
 		ArrayList<AbstractObject> allObjects = GameManager.getInstance().getWorld().getAllObjects();
 
-		Material mat1 = new Material( assetManager, "Common/MatDefs/Misc/Unshaded.j3md" );
-		mat1.setColor( "Color", ColorRGBA.Blue );
-
-		Material mat2 = new Material( assetManager, "Common/MatDefs/Misc/Unshaded.j3md" );
-		mat2.setColor( "Color", ColorRGBA.Red );
+		// Material mat1 = new Material( assetManager, "Common/MatDefs/Misc/Unshaded.j3md" );
+		// mat1.setColor( "Color", ColorRGBA.Blue );
+		//
+		// Material mat2 = new Material( assetManager, "Common/MatDefs/Misc/Unshaded.j3md" );
+		// mat2.setColor( "Color", ColorRGBA.Red );
 
 		int i = 0;
 		for( AbstractObject object : allObjects )
@@ -471,6 +492,8 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 
 			quad.lookAt( new Vector3f( -currentVector.x, 0, -currentVector.y ), upVector );
 			mobObject.setLocalRotation( quad );
+
+			// mobObject.lookAt( new Vector3f( -currentVector.x, 0, -currentVector.y ), upVector );
 		}
 
 		GameManager.getInstance().leaveLock();

@@ -1,7 +1,7 @@
 package mpa.gui.gameGui.listener;
 
 import mpa.core.logic.GameManager;
-import mpa.gui.gameGui.GameGui;
+import mpa.gui.gameGui.playingGUI.GameGui;
 
 import com.jme3.input.controls.ActionListener;
 

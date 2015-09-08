@@ -1,4 +1,4 @@
-package mpa.gui.gameGui;
+package mpa.gui.gameGui.playingGUI;
 
 public class GraphicUpdater extends Thread
 {

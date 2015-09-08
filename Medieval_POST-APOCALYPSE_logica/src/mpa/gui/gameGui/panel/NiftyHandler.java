@@ -4,7 +4,7 @@ import mpa.core.logic.AbstractObject;
 import mpa.core.logic.building.AbstractPrivateProperty;
 import mpa.core.logic.character.Player.Item;
 import mpa.core.logic.resource.AbstractResourceProducer;
-import mpa.gui.gameGui.GameGui;
+import mpa.gui.gameGui.playingGUI.GameGui;
 
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;

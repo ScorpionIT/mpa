@@ -1,6 +1,6 @@
 package mpa.gui.gameGui.panel;
 
-import mpa.gui.gameGui.GameGui;
+import mpa.gui.gameGui.playingGUI.GameGui;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;

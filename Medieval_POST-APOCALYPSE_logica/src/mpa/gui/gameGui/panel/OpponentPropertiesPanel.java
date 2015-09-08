@@ -8,7 +8,7 @@ import java.util.Map;
 
 import mpa.core.logic.GameManager;
 import mpa.core.logic.character.Player;
-import mpa.gui.gameGui.GameGui;
+import mpa.gui.gameGui.playingGUI.GameGui;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;

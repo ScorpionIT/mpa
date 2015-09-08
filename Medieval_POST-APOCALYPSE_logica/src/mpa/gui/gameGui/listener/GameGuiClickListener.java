@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import mpa.core.logic.GameManager;
 import mpa.core.logic.character.Player;
 import mpa.core.logic.character.Player.Item;
-import mpa.gui.gameGui.GameGui;
 import mpa.gui.gameGui.panel.NiftyHandler;
+import mpa.gui.gameGui.playingGUI.GameGui;
 
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.controls.ActionListener;

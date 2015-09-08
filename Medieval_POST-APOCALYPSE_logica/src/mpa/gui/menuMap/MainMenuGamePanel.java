@@ -108,7 +108,7 @@ public class MainMenuGamePanel extends JPanel
 						@Override
 						public void run()
 						{
-							mpa.gui.gameGui.GameGui app = new mpa.gui.gameGui.GameGui(
+							mpa.gui.gameGui.playingGUI.GameGui app = new mpa.gui.gameGui.playingGUI.GameGui(
 									MainMenuGamePanel.this.selectedHQIndex );
 							AppSettings gameSettings = new AppSettings( false );
 							gameSettings.setResolution( 800, 600 );
