@@ -29,6 +29,10 @@ import com.jme3.system.AppSettings;
 
 public class MainMenuGamePanel extends JPanel
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private MapInfo mapInfo;
 	private MapListPanel mapListPanel;
 	private MapPreview mapPreview;

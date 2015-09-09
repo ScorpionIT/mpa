@@ -61,6 +61,8 @@ public class GameManagerProxy
 
 	public static GameManagerProxy getInstance()
 	{
+		if( gameManagerProxy == null )
+			gameManagerProxy = new GameManagerProxy( GameManager.getInstance() );
 		return gameManagerProxy;
 	}
 

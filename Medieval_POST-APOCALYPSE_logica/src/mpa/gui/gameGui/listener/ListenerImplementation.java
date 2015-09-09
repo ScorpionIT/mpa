@@ -27,4 +27,6 @@ public abstract class ListenerImplementation
 
 	public abstract void createStateInformation();
 
+	public abstract void computePath( Vector2f click );
+
 }
