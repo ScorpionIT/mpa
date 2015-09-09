@@ -36,6 +36,8 @@ public class GuiObjectManager
 	private HashMap<String, Spatial> hitPlayers = new HashMap<>();
 	private float scalingFactor = 2.2f;
 
+	private float worldDimension;
+
 	private ActionListener clickActionListener;
 	private ActionListener keyActionListener;
 
@@ -43,7 +45,7 @@ public class GuiObjectManager
 	private Vector3f upVector = new Vector3f( 0, 1, 0 );
 	private String playingPlayer;
 
-	private GuiObjectManager( GameGui gameGui, boolean multiplayer )
+	private GuiObjectManager( GameGui gameGui, String playingPlayer, boolean multiplayer )
 	{
 		this.gameGui = gameGui;
 		if( !multiplayer )
@@ -52,12 +54,14 @@ public class GuiObjectManager
 			// clickActionListener = new GameGuiClickListener( listenerImplementation, gameGui );
 			// keyActionListener = new GameGuiKeyActionListener( listenerImplementation, gameGui );
 			setEventTriggers();
+			listenerImplementation.createStateInformation();
 		}
+		this.playingPlayer = playingPlayer;
 	}
 
-	static void init( GameGui gm )
+	static void init( GameGui gm, String playingPlayer )
 	{
-		_guiGuiObjectManager = new GuiObjectManager( gm, false );
+		_guiGuiObjectManager = new GuiObjectManager( gm, playingPlayer, false );
 	}
 
 	public static GuiObjectManager getInstance()
@@ -65,8 +69,19 @@ public class GuiObjectManager
 		return _guiGuiObjectManager;
 	}
 
+	public float getWorldDimension()
+	{
+		return worldDimension;
+	}
+
+	public void setWorldDimension( float worldDimension )
+	{
+		this.worldDimension = worldDimension;
+		gameGui.createWorld( worldDimension );
+	}
+
 	public void addPlayer( String name, Vector2f hqPosition, Vector2f gatheringPlace,
-			Vector2f direction, boolean isPlayingPlayer )
+			Vector2f direction )
 	{
 		gameGui.getAssetManager().registerLocator( "./Assets/Models/SeanDevlin.zip",
 				ZipLocator.class );
@@ -82,8 +97,6 @@ public class GuiObjectManager
 		headQuarters.put( name, hqModel );
 		gameGui.attachStaticObject( hqModel );
 
-		if( isPlayingPlayer )
-			playingPlayer = name;
 	}
 
 	public String getPlayingPlayer()

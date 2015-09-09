@@ -7,24 +7,24 @@ import com.jme3.math.Vector2f;
 
 public abstract class ListenerImplementation
 {
-	abstract void setPause();
+	public abstract void setPause();
 
-	abstract HashMap<String, HashMap<String, Integer>> getPlayersResourceAmount();
+	public abstract HashMap<String, HashMap<String, Integer>> getPlayersResourceAmount();
 
-	abstract String getPickedObject( Vector2f click );
+	public abstract String getPickedObject( Vector2f click );
 
-	abstract void changeItem( String item );
+	public abstract void changeItem( String item );
 
-	abstract ArrayList<String> playerAction( Vector2f direction );
+	public abstract ArrayList<String> playerAction( Vector2f direction );
 
-	abstract boolean occupyProperty( String property );
+	public abstract boolean occupyProperty( String property );
 
-	abstract String createTower( Vector2f point );
+	public abstract String createTower( Vector2f point );
 
-	abstract ArrayList<String> createMinions( String boss, String target, int quantity );
+	public abstract ArrayList<String> createMinions( String boss, String target, int quantity );
 
-	abstract void updateInformation();
+	public abstract void updateInformation();
 
-	abstract void createStateInformation();
+	public abstract void createStateInformation();
 
 }

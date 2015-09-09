@@ -45,9 +45,10 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	// NiftyHandler niftyHandler;
 	private AnalogListener mouseActionListener;
 
-	public GameGui()
+	public GameGui( String playingPlayer )
 	{
 		super();
+		GuiObjectManager.init( this, playingPlayer );
 	}
 
 	public AppSettings getSettings()
@@ -65,11 +66,6 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 		// stateManager, this );
 		setCamera( new Vector3f( 250, cameraHeight, 250 ) );
 		updateResourcePanel();
-
-		groundNode = new Node( "Ground" );
-		groundNode.attachChild( makeFloor() );
-		rootNode.attachChild( groundNode );
-		GuiObjectManager.init( this );
 
 		mouseActionListener = new GameGuiMouseListener( this );
 		inputManager.addListener( mouseActionListener, "Shift_Map_Negative_X",
@@ -98,14 +94,12 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 		staticObjects.detachChild( model );
 	}
 
-	protected Geometry makeFloor()
+	protected void makeFloor( float worldDimension )
 	{
-		Box box = new Box( GameManager.getInstance().getWorld().getWidth() / 2, 0, GameManager
-				.getInstance().getWorld().getHeight() / 2 );
+		Box box = new Box( worldDimension / 2, 0, worldDimension / 2 );
 
 		Geometry floor = new Geometry( "the Floor", box );
-		floor.setLocalTranslation( GameManager.getInstance().getWorld().getWidth() / 2, 0,
-				GameManager.getInstance().getWorld().getHeight() / 2 );
+		floor.setLocalTranslation( worldDimension / 2, 0, worldDimension / 2 );
 
 		assetManager.registerLocator( "Assets/Textures/", FileLocator.class );
 		Material mat1 = new Material( assetManager, "Common/MatDefs/Misc/Unshaded.j3md" );
@@ -115,7 +109,8 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 
 		mat1.setTexture( "ColorMap", text1 );
 		floor.setMaterial( mat1 );
-		return floor;
+
+		groundNode.attachChild( floor );
 	}
 
 	private void setLights()
@@ -278,5 +273,12 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	public int windowHeight()
 	{
 		return settings.getHeight();
+	}
+
+	public void createWorld( float dimension )
+	{
+		makeFloor( dimension );
+		groundNode = new Node( "Ground" );
+		rootNode.attachChild( groundNode );
 	}
 }

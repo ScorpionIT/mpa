@@ -33,6 +33,9 @@ public class GameManager
 	private WriteLock writeLock = lock.writeLock();
 	private ArrayList<Minion> minionsAlive = new ArrayList<>();
 
+	private IDPool minionIDs;
+	private IDPool towerCrusherIDs;
+
 	private ArrayList<Player> deadPlayers = new ArrayList<>();
 	private ArrayList<Minion> deadMinions = new ArrayList<>();
 
@@ -75,6 +78,8 @@ public class GameManager
 		this.players = new ArrayList<Player>();
 		this.AI_players = new ArrayList<>();
 		this.difficultyLevel = level;
+		minionIDs = new IDPool( 100 );
+		towerCrusherIDs = new IDPool( 100 );
 	}
 
 	public void computePath( AbstractCharacter player, float xGoal, float yGoal )
@@ -101,7 +106,7 @@ public class GameManager
 		ArrayList<Minion> minions = new ArrayList<>();
 
 		for( int i = 0; i < quantity; i++ )
-			minions.add( boss.createMinion( target ) );
+			minions.add( boss.createMinion( target, minionIDs.getID() ) );
 
 		return minions;
 	}

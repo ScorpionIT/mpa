@@ -21,6 +21,7 @@ public class Minion extends AbstractCharacter
 		this.boss = boss;
 		this.target = target;
 		this.targetPosition = new Vector2f( target.getX(), target.getY() );
+		setID( name );
 
 		GameManager.getInstance().computePath( this, target.getX(), target.getY() );
 	}

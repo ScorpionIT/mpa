@@ -108,7 +108,8 @@ public class MainMenuGamePanel extends JPanel
 						@Override
 						public void run()
 						{
-							mpa.gui.gameGui.playingGUI.GameGui app = new mpa.gui.gameGui.playingGUI.GameGui();
+							mpa.gui.gameGui.playingGUI.GameGui app = new mpa.gui.gameGui.playingGUI.GameGui(
+									playerName );
 							AppSettings gameSettings = new AppSettings( false );
 							gameSettings.setResolution( 800, 600 );
 							// gameSettings.setResolution( java.awt.Toolkit.getDefaultToolkit()

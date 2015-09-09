@@ -69,6 +69,46 @@ public class GameManagerProxy
 		gm.computePath( players.get( player ), xGoal, yGoal );
 	}
 
+	public HashMap<String, Vector2f> getFields()
+	{
+		HashMap<String, Vector2f> toReturn = new HashMap<>();
+
+		for( String s : fields.keySet() )
+			toReturn.put( s, fields.get( s ).getPosition() );
+
+		return toReturn;
+	}
+
+	public HashMap<String, Vector2f> getWoods()
+	{
+		HashMap<String, Vector2f> toReturn = new HashMap<>();
+
+		for( String s : woods.keySet() )
+			toReturn.put( s, woods.get( s ).getPosition() );
+
+		return toReturn;
+	}
+
+	public HashMap<String, Vector2f> getMines()
+	{
+		HashMap<String, Vector2f> toReturn = new HashMap<>();
+
+		for( String s : mines.keySet() )
+			toReturn.put( s, mines.get( s ).getPosition() );
+
+		return toReturn;
+	}
+
+	public HashMap<String, Vector2f> getCaves()
+	{
+		HashMap<String, Vector2f> toReturn = new HashMap<>();
+
+		for( String s : caves.keySet() )
+			toReturn.put( s, caves.get( s ).getPosition() );
+
+		return toReturn;
+	}
+
 	public ArrayList<String> createMinions( String boss, int quantity, String target )
 	{
 		ArrayList<Minion> createdMinions = gm.createMinions( players.get( boss ), quantity,
@@ -232,5 +272,42 @@ public class GameManagerProxy
 
 		return newPositions;
 
+	}
+
+	public HashMap<String, Vector2f[]> getMinionsPositions()
+	{
+		HashMap<String, Vector2f[]> newPositions = new HashMap<>();
+
+		for( String m : minions.keySet() )
+		{
+			Vector2f[] position = new Vector2f[2];
+			position[0] = minions.get( m ).getPosition();
+			position[1] = minions.get( m ).getPlayerDirection();
+			newPositions.put( m, position );
+		}
+
+		return newPositions;
+
+	}
+
+	// vector[0] position, vector[1] direction, vector[2] hq
+	public HashMap<String, Vector2f[]> getPlayers()
+	{
+		HashMap<String, Vector2f[]> players = new HashMap<>();
+		for( Player p : gm.getPlayers() )
+		{
+			Vector2f[] positions = new Vector2f[3];
+			positions[0] = p.getPosition();
+			positions[1] = p.getPlayerDirection();
+			positions[2] = p.getHeadquarter().getPosition();
+			players.put( p.getName(), positions );
+		}
+
+		return players;
+	}
+
+	public float worldDimension()
+	{
+		return gm.getWorld().getWidth();
 	}
 }

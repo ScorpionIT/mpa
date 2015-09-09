@@ -577,9 +577,9 @@ public class Player extends AbstractCharacter
 
 	}
 
-	public Minion createMinion( Player target )
+	public Minion createMinion( Player target, String ID )
 	{
-		return new Minion( "", headquarter.getGatheringPlace().x,
+		return new Minion( ID, headquarter.getGatheringPlace().x,
 				headquarter.getGatheringPlace().y, 5 + 2 * level.ordinal(), headquarter, this,
 				target );
 	}
