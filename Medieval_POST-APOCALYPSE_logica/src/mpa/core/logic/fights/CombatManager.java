@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import javax.vecmath.Vector2f;
 
 import mpa.core.logic.GameManager;
+import mpa.core.logic.building.Tower;
 import mpa.core.logic.character.Minion;
 import mpa.core.logic.character.Player;
+import mpa.core.logic.character.TowerCrusher;
 import mpa.core.logic.tool.Potions;
 import mpa.core.maths.MyMath;
 
@@ -161,6 +163,27 @@ public class CombatManager
 				GameManager.getInstance().killPlayer( dead );
 			attacker.leaveWriteLock();
 		}
+	}
+
+	public ArrayList<Tower> attackOnTower( TowerCrusher tC )
+	{
+		ArrayList<Tower> hitTowers = new ArrayList<>();
+
+		Tower target = tC.getTarget();
+
+		if( MyMath.distanceFloat( tC.getX(), tC.getY(), target.getX(), target.getY() ) <= tC
+				.getRangeOfAttack() )
+		{
+
+			if( target.inflictDamage( tC.getAttackStrength() ) )
+				GameManager.getInstance().destroyTower( target );
+
+			hitTowers.add( target );
+
+		}
+
+		return hitTowers;
+
 	}
 
 	private ArrayList<Player> granadeAttack( Player attacker, Vector2f target, boolean isFlashBang )

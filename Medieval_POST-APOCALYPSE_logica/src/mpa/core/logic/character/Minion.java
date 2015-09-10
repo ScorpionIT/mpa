@@ -29,6 +29,19 @@ public class Minion extends AbstractCharacter
 	@Override
 	public boolean movePlayer()
 	{
+		if( GameManager.getInstance().isPlayerDead( target ) )
+		{
+			for( Player p : GameManager.getInstance().getPlayers() )
+				if( p != boss )
+				{
+					target = p;
+					targetPosition = p.getPosition();
+					GameManager.getInstance()
+							.computePath( this, targetPosition.x, targetPosition.y );
+					break;
+				}
+		}
+
 		if( MyMath.distanceFloat( x, y, target.getX(), target.getY() ) < rangeOfPhysicallAttack )
 			GameManager.getInstance().attackPhysically( this );
 

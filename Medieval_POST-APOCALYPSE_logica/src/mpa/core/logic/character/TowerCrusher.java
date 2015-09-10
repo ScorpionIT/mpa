@@ -1,0 +1,78 @@
+package mpa.core.logic.character;
+
+import java.util.ArrayList;
+
+import mpa.core.logic.GameManager;
+import mpa.core.logic.building.Headquarter;
+import mpa.core.logic.building.Tower;
+import mpa.core.maths.MyMath;
+
+public class TowerCrusher extends AbstractCharacter
+{
+	private int attackStrength = 5;
+	private float rangeOfPhysicallAttack = 3;
+	private Player boss;
+	private Player enemy;
+	private Tower target;
+
+	public TowerCrusher( String name, float x, float y, int health, Headquarter headquarter,
+			Player boss, Player enemy, Tower target )
+	{
+		super( name, x, y, health, headquarter );
+		setID( name );
+		this.boss = boss;
+		this.target = target;
+		this.enemy = enemy;
+
+	}
+
+	@Override
+	public boolean movePlayer()
+	{
+		if( GameManager.getInstance().isTowerDestroyed( target ) )
+		{
+			if( GameManager.getInstance().isPlayerDead( enemy ) )
+				for( Player p : GameManager.getInstance().getPlayers() )
+					if( p != boss )
+					{
+						enemy = p;
+						break;
+					}
+			ArrayList<Tower> towers = enemy.getTowers();
+
+			float minDistance = Float.MAX_VALUE;
+
+			for( Tower t : towers )
+			{
+				float currentDistance = MyMath.distanceFloat( x, y, t.getX(), t.getY() );
+				if( currentDistance < minDistance )
+				{
+					target = t;
+					minDistance = currentDistance;
+				}
+			}
+			enemy = target.getOwner();
+			GameManager.getInstance().computePath( this, target.getX(), target.getY() );
+		}
+		if( MyMath.distanceFloat( x, y, target.getX(), target.getY() ) < rangeOfPhysicallAttack )
+			GameManager.getInstance().attackPhysically( this );
+
+		return super.movePlayer();
+	}
+
+	public Tower getTarget()
+	{
+		return target;
+	}
+
+	public int getAttackStrength()
+	{
+		return attackStrength;
+	}
+
+	public float getRangeOfAttack()
+	{
+		return rangeOfPhysicallAttack;
+	}
+
+}

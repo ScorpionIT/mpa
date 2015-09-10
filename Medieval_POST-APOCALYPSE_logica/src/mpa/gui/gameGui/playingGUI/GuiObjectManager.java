@@ -75,9 +75,10 @@ public class GuiObjectManager
 		Spatial playerModel = gameGui.getAssetManager().loadModel( "Monster.mesh.xml" );
 		playerModel.scale( scalingFactor, scalingFactor, scalingFactor );
 		playerModel.setLocalTranslation( new Vector3f( gatheringPlace.x, 10, gatheringPlace.y ) );
-		// Quaternion quad = new Quaternion();
-		// quad.lookAt(new Vector3f(gatheringPlace.x, 0, -gatheringPlace.y), upVector);
-		// playerModel.setLocalRotation(quad);
+		Quaternion quad = new Quaternion();
+		quad.lookAt( new Vector3f( gatheringPlace.x, 0, -gatheringPlace.y ), upVector );
+		playerModel.setLocalRotation( quad );
+		// playerModel.localToWorld( playerModel.getLocalTranslation(), new Vector3f( 0, 0, 1 ) );
 		players.put( name, playerModel );
 		gameGui.attachPlayer( playerModel );
 

@@ -60,9 +60,9 @@ public class Tower extends AbstractPrivateProperty
 			life -= damage - 2 * owner.getPlayerLevel().ordinal();
 
 			if( life <= 0 )
-				return false;
+				return true;
 
-			return true;
+			return false;
 		} finally
 		{
 			writeLock.unlock();

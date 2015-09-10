@@ -17,6 +17,7 @@ import mpa.core.logic.character.DependentCharacter;
 import mpa.core.logic.character.Minion;
 import mpa.core.logic.character.Player;
 import mpa.core.logic.character.Player.Item;
+import mpa.core.logic.character.TowerCrusher;
 import mpa.core.logic.fights.CombatManager;
 import mpa.core.logic.tool.Potions;
 import mpa.core.util.GameProperties;
@@ -322,4 +323,18 @@ public class GameManager
 		return s;
 	}
 
+	public void attackPhysically( TowerCrusher towerCrusher )
+	{
+		CombatManager.getInstance().attackOnTower( towerCrusher );
+	}
+
+	public boolean isPlayerDead( Player target )
+	{
+		return !players.contains( target );
+	}
+
+	public boolean isTowerDestroyed( Tower t )
+	{
+		return !towers.contains( t );
+	}
 }

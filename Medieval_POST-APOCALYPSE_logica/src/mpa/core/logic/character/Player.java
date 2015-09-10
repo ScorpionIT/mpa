@@ -577,6 +577,18 @@ public class Player extends AbstractCharacter
 
 	}
 
+	public ArrayList<Tower> getTowers()
+	{
+		try
+		{
+			readLock.lock();
+			return towers;
+		} finally
+		{
+			readLock.unlock();
+		}
+	}
+
 	public Minion createMinion( Player target, String ID )
 	{
 		return new Minion( ID, headquarter.getGatheringPlace().x,
