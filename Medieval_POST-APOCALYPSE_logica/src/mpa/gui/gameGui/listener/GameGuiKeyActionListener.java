@@ -1,39 +1,42 @@
 package mpa.gui.gameGui.listener;
 
-import mpa.gui.gameGui.playingGUI.GameGui;
+import mpa.gui.gameGui.panel.NiftyHandler;
 
 import com.jme3.input.controls.ActionListener;
 
 public class GameGuiKeyActionListener implements ActionListener
 {
 
-	private GameGui gameGui;
 	private ListenerImplementation handler;
+	private NiftyHandler niftyHandler;
 
-	public GameGuiKeyActionListener( ListenerImplementation l, GameGui gameGui )
+	public GameGuiKeyActionListener(ListenerImplementation handler, NiftyHandler niftyHandler)
 	{
-		this.gameGui = gameGui;
-		handler = l;
+		this.handler = handler;
+		this.niftyHandler = niftyHandler;
 	}
 
 	@Override
-	public void onAction( String name, boolean keyPressed, float tpf )
+	public void onAction(String name, boolean keyPressed, float tpf)
 	{
-		if( "pause".equals( name ) && keyPressed )
+		if ("pause".equals(name) && keyPressed)
 		{
-			System.out.println( "pausa" );
+			System.out.println("pausa");
 			handler.setPause();
 		}
 
-		if( "Tab".equals( name ) )
+		if ("Tab".equals(name))
 		{
-			// if( keyPressed )
-			// gameGui.getNiftyHandler().setOpponentPropertiesPanel();
-			// else
-			// {
-			// gameGui.getNiftyHandler().removeOpponentPropertiesPanel();
-			// gameGui.getNiftyHandler().turnToPageOne();
-			// }
+			if (keyPressed)
+			{
+				niftyHandler.setOpponentPropertiesPanel();
+
+			}
+			else
+			{
+				niftyHandler.removeOpponentPropertiesPanel();
+				niftyHandler.turnToPageOne();
+			}
 
 		}
 

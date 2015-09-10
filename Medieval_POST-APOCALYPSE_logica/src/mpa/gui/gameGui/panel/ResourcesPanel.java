@@ -1,8 +1,6 @@
 package mpa.gui.gameGui.panel;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
@@ -18,19 +16,13 @@ public class ResourcesPanel
 
 	private HashMap<String, LabelBuilder> resourcesValueLabel = new HashMap<>();
 
-	private Set<String> resources = null;
+	private String[] resources = { "WOOD", "WHEAT", "IRON", "STONE", "HERBS" };
 	private int widthPanel;
 	private int xPanel = 0;
 
 	public ResourcesPanel()
 	{
-		resources = new HashSet<>();
-		resources.add( "WOOD" );
-		resources.add( "WHEAT" );
-		resources.add( "IRON" );
-		resources.add( "STONE" );
-		resources.add( "HERBS" );
-		widthPanel = 100 / resources.size();
+		widthPanel = 100 / resources.length;
 		initResources();
 		initResourcePanel();
 
@@ -39,20 +31,20 @@ public class ResourcesPanel
 	// TODO UNIRE CON L'ALTRO PANNELLO DELLE RISORSE
 	private void initResourcePanel()
 	{
-		resourcesPanel = new PanelBuilder( "resources" )
+		resourcesPanel = new PanelBuilder("resources")
 		{
 
 			{
 				childLayoutAbsoluteInside();
 
-				width( "50%" );
-				height( "10%" );
+				width("50%");
+				height("10%");
 				alignRight();
 				valignTop();
-				x( "50%" );
-				y( "90%" );
-				backgroundColor( "#44f8" );
-				visibleToMouse( true );
+				x("50%");
+				y("90%");
+				// backgroundColor("#FFD425");
+				visibleToMouse(true);
 
 			}
 
@@ -65,58 +57,57 @@ public class ResourcesPanel
 	{
 
 		xPanel = 0;
-		for( String resourceName : resources )
+		for (String resourceName : resources)
 		{
-			resourcesPanel.panel( getPanelBuilder( resourceName.toString(), resourceName.toString()
-					+ ".png" ) );
+			resourcesPanel.panel(getPanelBuilder(resourceName.toString(), resourceName.toString() + ".png"));
 			xPanel += widthPanel;
 		}
 	}
 
-	private ImageBuilder getImageBuilder( final String fileName )
+	private ImageBuilder getImageBuilder(final String fileName)
 	{
 		return new ImageBuilder()
 		{
 			{
-				filename( fileName );
+				filename(fileName);
 
-				y( "35%" );
-				width( "40%" );
-				height( "40%" );
+				y("35%");
+				width("40%");
+				height("40%");
 
 			}
 		};
 	}
 
-	private PanelBuilder getPanelBuilder( final String resourceName, final String fileName )
+	private PanelBuilder getPanelBuilder(final String resourceName, final String fileName)
 	{
 
-		return new PanelBuilder( resourceName + "Panel" )
+		return new PanelBuilder(resourceName + "Panel")
 		{
 			{
 				childLayoutCenter();
 
 				valignTop();
-				x( Integer.toString( xPanel ) + "%" );
-				y( "0%" );
+				x(Integer.toString(xPanel) + "%");
+				y("0%");
 
-				width( Integer.toString( widthPanel ) + "%" );
-				height( "100%" );
+				width(Integer.toString(widthPanel) + "%");
+				height("100%");
 
-				control( getLabelBuilder( resourceName ) );
-				image( getImageBuilder( fileName ) );
+				control(getLabelBuilder(resourceName));
+				image(getImageBuilder(fileName));
 
-				control( resourcesValueLabel.get( resourceName ) );
+				control(resourcesValueLabel.get(resourceName));
 			}
 		};
 	}
 
-	private LabelBuilder getLabelBuilder( final String text )
+	private LabelBuilder getLabelBuilder(final String text)
 	{
-		return new LabelBuilder( text + "Label" )
+		return new LabelBuilder(text + "Label")
 		{
 			{
-				text( text );
+				text(text);
 				valignTop();
 
 			}
@@ -126,15 +117,14 @@ public class ResourcesPanel
 	private void initResources()
 	{
 
-		for( String resoruceName : resources )
+		for (String resoruceName : resources)
 		{
-			resourcesValueLabel.put( resoruceName.toString(), new LabelBuilder( "Avaible"
-					+ resoruceName )
+			resourcesValueLabel.put(resoruceName.toString(), new LabelBuilder("Avaible" + resoruceName)
 			{
 				{
 					valignBottom();
 				}
-			} );
+			});
 		}
 
 	}
@@ -144,13 +134,13 @@ public class ResourcesPanel
 		return resourcesPanel;
 	}
 
-	public Element build( Nifty nifty, Screen currentScreen, Element parent )
+	public Element build(Nifty nifty, Screen currentScreen, Element parent)
 	{
-		return resourcesPanel.build( nifty, currentScreen, parent );
+		return resourcesPanel.build(nifty, currentScreen, parent);
 	}
 
-	public LabelBuilder getResourceLabel( String resourceName )
+	public LabelBuilder getResourceLabel(String resourceName)
 	{
-		return resourcesValueLabel.get( resourceName );
+		return resourcesValueLabel.get(resourceName);
 	}
 }

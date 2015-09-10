@@ -14,39 +14,37 @@ public class WorldFromMapInfo implements WorldCreator
 	private int mineID = 0;
 
 	@Override
-	public World createWorld( MapInfo mapInfo )
+	public World createWorld(MapInfo mapInfo)
 	{
-		World world = new World( mapInfo.getWidth(), mapInfo.getHeight() );
-		for( Pair<Float, Float> position : mapInfo.getWoods() )
+		World world = new World(mapInfo.getWidth(), mapInfo.getHeight());
+		for (Pair<Float, Float> position : mapInfo.getWoods())
 		{
-			Wood wood = new Wood( position.getFirst(), position.getSecond(), null );
-			world.addObject( wood );
-			wood.setID( String.valueOf( woodID++ ) );
+			Wood wood = new Wood(position.getFirst(), position.getSecond(), null);
+			world.addObject(wood);
+			wood.setID(String.valueOf(woodID++));
 
 		}
-		for( Pair<Float, Float> position : mapInfo.getCaves() )
+		for (Pair<Float, Float> position : mapInfo.getCaves())
 		{
-			Cave cave = new Cave( position.getFirst(), position.getSecond(), null );
-			world.addObject( cave );
-			cave.setID( String.valueOf( caveID++ ) );
+			Cave cave = new Cave(position.getFirst(), position.getSecond(), null);
+			world.addObject(cave);
+			cave.setID(String.valueOf(caveID++));
 		}
-		for( Pair<Float, Float> position : mapInfo.getFields() )
+		for (Pair<Float, Float> position : mapInfo.getFields())
 		{
-			Field field = new Field( position.getFirst(), position.getSecond(), null );
-			world.addObject( field );
-			field.setID( String.valueOf( fieldID++ ) );
+			Field field = new Field(position.getFirst(), position.getSecond(), null);
+			world.addObject(field);
+			field.setID(String.valueOf(fieldID++));
 		}
-		for( Pair<Float, Float> position : mapInfo.getMines() )
+		for (Pair<Float, Float> position : mapInfo.getMines())
 		{
-			Mine mine = new Mine( position.getFirst(), position.getSecond(), null );
-			world.addObject( mine );
-			mine.setID( String.valueOf( mineID++ ) );
+			Mine mine = new Mine(position.getFirst(), position.getSecond(), null);
+			world.addObject(mine);
+			mine.setID(String.valueOf(mineID++));
 		}
 
-		Market.initiate( mapInfo.getMarket().getFirst(), mapInfo.getMarket().getSecond() );
+		Market.initiate(mapInfo.getMarket().getFirst(), mapInfo.getMarket().getSecond());
 
-		System.out.println( "Market= " + Market.getInstance().getWidth() );
-		world.addObject( Market.getInstance() );
 		return world;
 	}
 }

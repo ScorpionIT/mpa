@@ -18,6 +18,7 @@ public class GameProperties
 	private ArrayList<String> worldObjects = new ArrayList<>();
 	private HashMap<String, HashMap<String, Integer>> prices = new HashMap<>();
 	private HashMap<String, Float> collisionRays = new HashMap<>();
+	private HashMap<String, Integer> rotationAngle = new HashMap<>();
 
 	private GameProperties()
 	{
@@ -25,19 +26,20 @@ public class GameProperties
 		loadPaths();
 		loadDimensionObjects();
 		loadPrices();
+		loadRotationAngle();
 
-		for( String obj : objectHeght.keySet() )
+		for (String obj : objectHeght.keySet())
 		{
-			float xMin = objectWidth.get( obj ) / 2;
-			float yMin = objectHeght.get( obj ) / 2;
-			float collisionRay = ( float ) Math.sqrt( Math.pow( xMin, 2 ) + Math.pow( yMin, 2 ) );
-			collisionRays.put( obj, collisionRay );
+			float xMin = objectWidth.get(obj) / 2;
+			float yMin = objectHeght.get(obj) / 2;
+			float collisionRay = (float) Math.sqrt(Math.pow(xMin, 2) + Math.pow(yMin, 2));
+			collisionRays.put(obj, collisionRay);
 		}
 	}
 
 	public static GameProperties getInstance()
 	{
-		if( instance == null )
+		if (instance == null)
 		{
 			instance = new GameProperties();
 
@@ -53,11 +55,11 @@ public class GameProperties
 		FileInputStream fileInput = null;
 		try
 		{
-			fileInput = new FileInputStream( new File( "./Properties/Prices.properties" ) );
+			fileInput = new FileInputStream(new File("./Properties/Prices.properties"));
 			properties = new Properties();
-			properties.load( fileInput );
+			properties.load(fileInput);
 
-		} catch( IOException e )
+		} catch (IOException e)
 		{
 			e.printStackTrace();
 		} finally
@@ -66,44 +68,44 @@ public class GameProperties
 			try
 			{
 				fileInput.close();
-			} catch( IOException e )
+			} catch (IOException e)
 			{
 				e.printStackTrace();
 			}
 		}
 
 		Set<Object> keySet = properties.keySet();
-		for( Object object : keySet )
+		for (Object object : keySet)
 		{
-			String value = properties.getProperty( ( String ) object );
-			String[] values = value.split( "," );
+			String value = properties.getProperty((String) object);
+			String[] values = value.split(",");
 
 			HashMap<String, Integer> _prices = new HashMap<>();
 			int type = 0;
-			for( String price : values )
+			for (String price : values)
 			{
-				switch( type )
+				switch (type)
 				{
 					case 0:
-						_prices.put( "WHEAT", Integer.parseInt( price ) );
+						_prices.put("WHEAT", Integer.parseInt(price));
 						break;
 					case 1:
-						_prices.put( "WOOD", Integer.parseInt( price ) );
+						_prices.put("WOOD", Integer.parseInt(price));
 						break;
 					case 2:
-						_prices.put( "IRON", Integer.parseInt( price ) );
+						_prices.put("IRON", Integer.parseInt(price));
 						break;
 					case 3:
-						_prices.put( "STONE", Integer.parseInt( price ) );
+						_prices.put("STONE", Integer.parseInt(price));
 						break;
 					case 4:
-						_prices.put( "HERBS", Integer.parseInt( price ) );
+						_prices.put("HERBS", Integer.parseInt(price));
 						break;
 
 				}
 				type++;
 			}
-			prices.put( ( String ) object, _prices );
+			prices.put((String) object, _prices);
 		}
 	}
 
@@ -113,11 +115,11 @@ public class GameProperties
 		FileInputStream fileInput = null;
 		try
 		{
-			fileInput = new FileInputStream( new File( "./Properties/Buildings.properties" ) );
+			fileInput = new FileInputStream(new File("./Properties/Buildings.properties"));
 			properties = new Properties();
-			properties.load( fileInput );
+			properties.load(fileInput);
 
-		} catch( IOException e )
+		} catch (IOException e)
 		{
 			e.printStackTrace();
 		} finally
@@ -126,16 +128,16 @@ public class GameProperties
 			try
 			{
 				fileInput.close();
-			} catch( IOException e )
+			} catch (IOException e)
 			{
 				e.printStackTrace();
 			}
 		}
 
 		Set<Object> keySet = properties.keySet();
-		for( Object object : keySet )
+		for (Object object : keySet)
 		{
-			worldObjects.add( properties.getProperty( ( String ) object ) );
+			worldObjects.add(properties.getProperty((String) object));
 		}
 
 	}
@@ -147,11 +149,11 @@ public class GameProperties
 		FileInputStream fileInput = null;
 		try
 		{
-			fileInput = new FileInputStream( new File( "./Properties/Dimension.properties" ) );
+			fileInput = new FileInputStream(new File("./Properties/Dimension.properties"));
 			properties = new Properties();
-			properties.load( fileInput );
+			properties.load(fileInput);
 
-		} catch( IOException e )
+		} catch (IOException e)
 		{
 			e.printStackTrace();
 		} finally
@@ -160,21 +162,54 @@ public class GameProperties
 			try
 			{
 				fileInput.close();
-			} catch( IOException e )
+			} catch (IOException e)
 			{
 				e.printStackTrace();
 			}
 		}
-		for( String object : worldObjects )
+		for (String object : worldObjects)
 		{
 
-			String width = properties.getProperty( object + "Width" );
-			String height = properties.getProperty( object + "Height" );
-			if( width != null && height != null )
+			String width = properties.getProperty(object + "Width");
+			String height = properties.getProperty(object + "Height");
+			if (width != null && height != null)
 			{
-				objectWidth.put( object, Integer.parseInt( width ) );
-				objectHeght.put( object, Integer.parseInt( height ) );
+				objectWidth.put(object, Integer.parseInt(width));
+				objectHeght.put(object, Integer.parseInt(height));
 			}
+		}
+
+	}
+
+	private void loadRotationAngle()
+	{
+
+		Properties properties = null;
+		FileInputStream fileInput = null;
+		try
+		{
+			fileInput = new FileInputStream(new File("./Properties/Rotation.properties"));
+			properties = new Properties();
+			properties.load(fileInput);
+
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		} finally
+		{
+
+			try
+			{
+				fileInput.close();
+			} catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		Set<Object> keySet = properties.keySet();
+		for (Object object : keySet)
+		{
+			rotationAngle.put((String) object, Integer.parseInt(properties.getProperty((String) object)));
 		}
 
 	}
@@ -185,11 +220,11 @@ public class GameProperties
 		FileInputStream fileInput = null;
 		try
 		{
-			fileInput = new FileInputStream( new File( "./Properties/Paths.properties" ) );
+			fileInput = new FileInputStream(new File("./Properties/Paths.properties"));
 			properties = new Properties();
-			properties.load( fileInput );
+			properties.load(fileInput);
 
-		} catch( IOException e )
+		} catch (IOException e)
 		{
 			e.printStackTrace();
 		} finally
@@ -198,7 +233,7 @@ public class GameProperties
 			try
 			{
 				fileInput.close();
-			} catch( IOException e )
+			} catch (IOException e)
 			{
 				e.printStackTrace();
 			}
@@ -208,13 +243,13 @@ public class GameProperties
 
 	}
 
-	public String getPath( String key )
+	public String getPath(String key)
 	{
-		for( Entry<Object, Object> entry : paths )
+		for (Entry<Object, Object> entry : paths)
 		{
-			if( entry.getKey().equals( key ) )
+			if (entry.getKey().equals(key))
 			{
-				return ( String ) entry.getValue();
+				return (String) entry.getValue();
 			}
 
 		}
@@ -222,15 +257,15 @@ public class GameProperties
 
 	}
 
-	public Integer getObjectWidth( String key )
+	public Integer getObjectWidth(String key)
 	{
-		return objectWidth.get( key.toLowerCase() );
+		return objectWidth.get(key.toLowerCase());
 
 	}
 
-	public Integer getObjectHeight( String key )
+	public Integer getObjectHeight(String key)
 	{
-		return objectHeght.get( key.toLowerCase() );
+		return objectHeght.get(key.toLowerCase());
 
 	}
 
@@ -239,13 +274,27 @@ public class GameProperties
 		return worldObjects;
 	}
 
-	public HashMap<String, Integer> getPrices( String type )
+	public HashMap<String, Integer> getPrices(String type)
 	{
-		return prices.get( type );
+		return prices.get(type);
 	}
 
-	public float getCollisionRay( String type )
+	public float getCollisionRay(String type)
 	{
-		return collisionRays.get( type );
+		return collisionRays.get(type);
+	}
+
+	public int getRotationAngle(String object)
+	{
+
+		for (String modelName : rotationAngle.keySet())
+		{
+			if (object.contains(modelName))
+			{
+				return rotationAngle.get(modelName);
+			}
+
+		}
+		return 0;
 	}
 }
