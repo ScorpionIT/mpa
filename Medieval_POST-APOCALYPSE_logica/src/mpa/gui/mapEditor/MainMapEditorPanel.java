@@ -116,17 +116,6 @@ public class MainMapEditorPanel extends JPanel
 		mapPreviewEditorPanel.repaint();
 	}
 
-	public boolean isThereAMarket()
-	{
-		if (mapPreviewEditorPanel.isThereAMarket())
-		{
-			JOptionPane.showMessageDialog(new Frame(), "Ci può essere un solo market", "", JOptionPane.PLAIN_MESSAGE);
-			return true;
-		}
-		else
-			return false;
-	}
-
 	public ArrayList<Pair<String, Rectangle>> getIcons()
 	{
 		return iconMapEditorPanel.getImageLabelsPosition();

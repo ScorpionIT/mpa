@@ -15,7 +15,8 @@ public class GameGuiClickListener implements ActionListener
 	private ListenerImplementation listener;
 	private GameGui gameGui;
 	private boolean choosePanel = false;
-	NiftyHandler niftyHandler;;
+
+	NiftyHandler niftyHandler;
 
 	public GameGuiClickListener(ListenerImplementation listener, GameGui gameGui)
 	{
@@ -55,8 +56,15 @@ public class GameGuiClickListener implements ActionListener
 		System.out.println("ho cliccato su " + pickedObject);
 		if (!isPressed && pickedObject.equals("GROUND"))
 		{
-			System.out.println("ci entro?");
-			listener.computePath(contactPoint);
+			if (gameGui.canMove())
+			{
+				niftyHandler.removeSelectedPanel();
+			}
+			else
+			{
+				System.out.println("ci entro?");
+				listener.computePath(contactPoint);
+			}
 		}
 		else if (!pickedObject.equals("GROUND"))
 		{
@@ -66,6 +74,7 @@ public class GameGuiClickListener implements ActionListener
 			String objectProductivity = Integer.toString(listener.getPickedObjectProductivity(split[0], split[1]));
 
 			niftyHandler.setSelectedPanel(split[0], split[1], objectProductivity, pickedObjectOwner);
+			niftyHandler.relocateSelectionPanel((int) click.x, gameGui.windowHeight() - (int) click.y);
 		}
 
 		if ("Wheel_DOWN".equals(name))
@@ -151,5 +160,4 @@ public class GameGuiClickListener implements ActionListener
 			// }
 		}
 	}
-
 }

@@ -34,9 +34,10 @@ public class NiftyHandler
 	private ListenerImplementation playerController;
 
 	public NiftyHandler(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort,
-			AppStateManager stateManager, ListenerImplementation playerController)
+			AppStateManager stateManager, ListenerImplementation playerController, GameGui gameGui)
 	{
 		this.playerController = playerController;
+		this.gameGui = gameGui;
 		NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, guiViewPort, 2048, 2048);
 		nifty = niftyDisplay.getNifty();
 		NiftyController controller = new NiftyController(this);
@@ -89,7 +90,7 @@ public class NiftyHandler
 		nifty.gotoScreen("main");
 
 		assetManager.registerLocator("./Assets/BackgroundImages", FileLocator.class);
-		selectionPanel = new SelectionPanel();
+		selectionPanel = new SelectionPanel(gameGui.windowWidth(), gameGui.windowHeight());
 
 		assetManager.registerLocator("./Assets/iconResources", FileLocator.class);
 
@@ -102,35 +103,23 @@ public class NiftyHandler
 		Element findElementByName = nifty.getCurrentScreen().findElementByName("resourcesLayer");
 		findElementByName.add(resourcesPanel.build(nifty, nifty.getCurrentScreen(), findElementByName));
 
-		findElementByName = nifty.getCurrentScreen().findElementByName("selectedLayer");
-		findElementByName.add(selectionPanel.build(nifty, nifty.getCurrentScreen(), findElementByName));
+		// findElementByName = nifty.getCurrentScreen().findElementByName("selectedLayer");
+		// findElementByName.add(selectionPanel.build(nifty, nifty.getCurrentScreen(),
+		// findElementByName));
 	}
 
 	public void setSelectedPanel(String objectType, String objectID, String objectProductivity, String pickedObjectOwner)
 	{
 
-		removeSelectedPanel();
-		// String name = abstractObject.getClass().toString();
-		// System.out.println(name);
-		//
-		// String[] split = name.split("\\.");
-		//
-		// selectionPanel.setObjectName(split[split.length - 1]);
+		// removeSelectedPanel();
+
 		selectionPanel.setObjectName(objectType);
 		selectionPanel.setProductivityLabel(objectProductivity);
 		selectionPanel.setObjectOwner(pickedObjectOwner);
 
-		// if (abstractObject instanceof AbstractResourceProducer)
-		// {
-		// selectionPanel.setProductivityLabel(((AbstractResourceProducer)
-		// abstractObject).getProviding());
-		// }
-		// if (abstractObject instanceof AbstractPrivateProperty)
-		// selectionPanel.setObjectOwner(((AbstractPrivateProperty) abstractObject).getOwner());
-		// this.selectedObject = abstractObject;
-
-		Element findElementByName = nifty.getCurrentScreen().findElementByName("selectedLayer");
-		findElementByName.add(selectionPanel.build(nifty, nifty.getCurrentScreen(), findElementByName));
+		// Element findElementByName = nifty.getCurrentScreen().findElementByName("selectedLayer");
+		// findElementByName.add(selectionPanel.build(nifty, nifty.getCurrentScreen(),
+		// findElementByName));
 
 	}
 
@@ -142,7 +131,7 @@ public class NiftyHandler
 			System.out.println(nifty.getCurrentScreen().findElementByName("#selected"));
 			nifty.getCurrentScreen().findElementByName("#selected").markForRemoval();
 			nifty.removeElement(nifty.getCurrentScreen(), nifty.getCurrentScreen().findElementByName("#selected"));
-
+			selectionPanel.setVisible(false);
 			selectedObjectID = null;
 			selectedObjectType = null;
 
@@ -168,6 +157,26 @@ public class NiftyHandler
 		Element findElementByName = nifty.getCurrentScreen().findElementByName("chooseLayer");
 		findElementByName.add(choosePanel.build(nifty, nifty.getCurrentScreen(), findElementByName));
 
+	}
+
+	public void relocateSelectionPanel(int x, int y)
+	{
+		if ((x + selectionPanel.getWidth()) > gameGui.windowWidth())
+		{
+			System.out.println(choosePanel);
+			x -= selectionPanel.getWidth();
+		}
+
+		if ((y + selectionPanel.getHeight()) > gameGui.windowHeight() - (gameGui.windowHeight() * 10 / 100))
+		{
+			y -= selectionPanel.getHeight();
+		}
+		selectionPanel.changePosition(x, y);
+		removeSelectedPanel();
+
+		selectionPanel.setVisible(true);
+		Element findElementByName = nifty.getCurrentScreen().findElementByName("selectedLayer");
+		findElementByName.add(selectionPanel.build(nifty, nifty.getCurrentScreen(), findElementByName));
 	}
 
 	public void changeChoosenElement(boolean back)
@@ -211,11 +220,6 @@ public class NiftyHandler
 	public String getSelectedObjectID()
 	{
 		return selectedObjectID;
-	}
-
-	public boolean isVisibleSelectionPanel()
-	{
-		return selectionPanel.getIsVisible();
 	}
 
 	public void updateResourcePanel()
@@ -314,4 +318,10 @@ public class NiftyHandler
 	{
 		return choosePanel.getSelectedElement();
 	}
+
+	public boolean isVisibleSelectionPanel()
+	{
+		return selectionPanel.isVisible();
+	}
+
 }

@@ -15,9 +15,13 @@ public class SelectionPanel
 	private boolean isVisibleSelectionPanel = false;
 	private ImageBuilder occupyButton;
 	private LabelBuilder productivityLabel;
+	private int panelWidth;
+	private int panelHeight;
 
-	public SelectionPanel()
+	public SelectionPanel(int windowWidth, int windowHeight)
 	{
+		panelWidth = 20 * windowWidth / 100;
+		panelHeight = 20 * windowHeight / 100;
 		occupyButton = new ImageBuilder()
 		{
 			{
@@ -38,8 +42,6 @@ public class SelectionPanel
 		{
 			{
 				x("10%");
-				y("34%");
-				style("base-font");
 			}
 
 		};
@@ -55,7 +57,7 @@ public class SelectionPanel
 		{
 			{
 				x("10%");
-				y("22%");
+				y("25%");
 			}
 		};
 
@@ -65,10 +67,8 @@ public class SelectionPanel
 			{
 				childLayoutAbsoluteInside();
 
-				x("33%");
-				y("83%");
-				width("20%");
-				height("20%");
+				width(Integer.toString(panelWidth));
+				height(Integer.toString(panelHeight));
 
 				image(new ImageBuilder()
 				{
@@ -109,13 +109,16 @@ public class SelectionPanel
 	{
 		if (playerName == null)
 		{
+			productivityLabel.y("33%");
 			this.occupyButton.visible(true);
 			objectOwner.visible(false);
 		}
 		else
 		{
+			productivityLabel.y("37%");
 			this.objectOwner.text("Owner: " + playerName);
 			objectOwner.visible(true);
+
 			occupyButton.visible(false);
 		}
 
@@ -128,6 +131,10 @@ public class SelectionPanel
 			this.productivityLabel.text("Productivity: " + productivity);
 			this.productivityLabel.visible(true);
 		}
+		else
+		{
+			this.productivityLabel.visible(false);
+		}
 	}
 
 	public Element build(Nifty nifty, Screen currentScreen, Element parent)
@@ -136,8 +143,31 @@ public class SelectionPanel
 		return element;
 	}
 
-	public boolean getIsVisible()
+	public int getHeight()
+	{
+		return panelHeight;
+	}
+
+	public void changePosition(int x, int y)
+	{
+		selectionPanel.x(Integer.toString(x));
+		selectionPanel.y(Integer.toString(y));
+
+	}
+
+	public int getWidth()
+	{
+		return panelWidth;
+	}
+
+	public boolean isVisible()
 	{
 		return isVisibleSelectionPanel;
 	}
+
+	public void setVisible(boolean visible)
+	{
+		isVisibleSelectionPanel = visible;
+	}
+
 }

@@ -75,7 +75,7 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 
 		GuiObjectManager.init(this, playingPlayer);
 		System.out.println("dopo + " + GuiObjectManager.getInstance());
-		niftyHandler = new NiftyHandler(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, listenerImplementation);
+		niftyHandler = new NiftyHandler(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, listenerImplementation, this);
 		setCamera(new Vector3f(250, cameraHeight, 250));
 
 		niftyHandler.updateResourcePanel();
@@ -253,18 +253,6 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 
 	}
 
-	// public void forwardOpponentResourcesPanel()
-	// {
-	// niftyHandler.changePageOpponentResourcesPanel( false );
-	//
-	// }
-	//
-	// public void backOpponentResourcesPanel()
-	// {
-	// niftyHandler.changePageOpponentResourcesPanel( true );
-	//
-	// }
-
 	private void setEventTriggers()
 	{
 		inputManager.addMapping("Shift_Map_Negative_X", new MouseAxisTrigger(MouseInput.AXIS_X, true));
@@ -308,5 +296,10 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 		groundNode = new Node("Ground");
 		makeFloor(dimension);
 		rootNode.attachChild(groundNode);
+	}
+
+	public boolean canMove()
+	{
+		return niftyHandler.isVisibleSelectionPanel();
 	}
 }

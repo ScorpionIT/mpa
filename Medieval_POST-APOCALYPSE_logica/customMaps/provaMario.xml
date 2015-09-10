@@ -1,1 +1,21 @@
-<Map><Name>provaMario</Name><Width>500</Width><Height>500</Height><Number>2</Number><Objects><Headquarters><Headquarter>128,352</Headquarter><Headquarter>217,105</Headquarter></Headquarters><Fields><Field>363,258</Field><Field>70,34</Field><Field>310,39</Field></Fields><Caves><Cave>130,148</Cave><Cave>329,362</Cave></Caves><Market>360,83</Market></Objects></Map>
+<Map>
+	<Name>provaMario</Name>
+	<Width>500</Width>
+	<Height>500</Height>
+	<Number>2</Number>
+	<Objects>
+		<Headquarters>
+			<Headquarter>128,352</Headquarter>
+			<Headquarter>217,105</Headquarter>
+		</Headquarters>
+		<Fields>
+			<Field>363,258</Field>
+			<Field>70,34</Field>
+			<Field>310,39</Field>
+		</Fields>
+		<Caves>
+			<Cave>130,148</Cave>
+			<Cave>329,362</Cave>
+		</Caves>
+	</Objects>
+</Map>

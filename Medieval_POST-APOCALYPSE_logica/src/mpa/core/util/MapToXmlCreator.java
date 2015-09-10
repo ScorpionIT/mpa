@@ -45,7 +45,6 @@ public class MapToXmlCreator
 		Element mines = new Element("Mines");
 		Element woods = new Element("Woods");
 		Element mills = new Element("Mills");
-		Element market = null;
 
 		for (Pair<String, Point> object : objectsPosition)
 		{
@@ -76,12 +75,7 @@ public class MapToXmlCreator
 				mills.addContent(element);
 
 			}
-			else if (object.getFirst().toLowerCase().equals("market"))
-			{
-				market = new Element("Market");
-				market.setText(object.getSecond().x + "," + object.getSecond().y);
 
-			}
 			else if (object.getFirst().toLowerCase().equals("cave"))
 			{
 				Element element = new Element("Cave");
@@ -110,8 +104,6 @@ public class MapToXmlCreator
 			objects.addContent(caves);
 		if (woods.getChildren().size() != 0)
 			objects.addContent(woods);
-		if (market != null)
-			objects.addContent(market);
 
 		map.addContent(objects);
 		printOnFile(map, mapName);

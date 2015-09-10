@@ -12,49 +12,62 @@ public class GameGuiMouseListener implements AnalogListener
 	private GameGui gameGui;
 	private AppSettings appSettings;
 
-	public GameGuiMouseListener( GameGui gameGui )
+	public GameGuiMouseListener(GameGui gameGui)
 	{
 		this.gameGui = gameGui;
 		appSettings = gameGui.getSettings();
 	}
 
 	@Override
-	public void onAnalog( String name, float value, float tpf )
+	public void onAnalog(String name, float value, float tpf)
 	{
 		Vector2f mousePosition = gameGui.getInputManager().getCursorPosition();
 
 		gameGui.getLock().lock();
 
-		if( mousePosition.x <= 0 )
+		if (mousePosition.x <= 0)
 		{
-			gameGui.setCursorOnTheLeftEdge( true );
-			gameGui.setCursorOnTheRightEdge( false );
+			if (!gameGui.canMove())
+			{
+				gameGui.setCursorOnTheLeftEdge(true);
+				gameGui.setCursorOnTheRightEdge(false);
+			}
 		}
-		else if( mousePosition.x >= appSettings.getWidth() - 3 )
+		else if (mousePosition.x >= appSettings.getWidth() - 3)
 		{
-			gameGui.setCursorOnTheLeftEdge( false );
-			gameGui.setCursorOnTheRightEdge( true );
+			if (!gameGui.canMove())
+			{
+
+				gameGui.setCursorOnTheLeftEdge(false);
+				gameGui.setCursorOnTheRightEdge(true);
+			}
 		}
 		else
 		{
-			gameGui.setCursorOnTheLeftEdge( false );
-			gameGui.setCursorOnTheRightEdge( false );
+			gameGui.setCursorOnTheLeftEdge(false);
+			gameGui.setCursorOnTheRightEdge(false);
 		}
 
-		if( mousePosition.y <= 3 )
+		if (mousePosition.y <= 3)
 		{
-			gameGui.setCursorOnTheBottomEdge( true );
-			gameGui.setCursorOnTheTopEdge( false );
+			if (!gameGui.canMove())
+			{
+				gameGui.setCursorOnTheBottomEdge(true);
+				gameGui.setCursorOnTheTopEdge(false);
+			}
 		}
-		else if( mousePosition.y >= appSettings.getHeight() - 3 )
+		else if (mousePosition.y >= appSettings.getHeight() - 3)
 		{
-			gameGui.setCursorOnTheBottomEdge( false );
-			gameGui.setCursorOnTheTopEdge( true );
+			if (!gameGui.canMove())
+			{
+				gameGui.setCursorOnTheBottomEdge(false);
+				gameGui.setCursorOnTheTopEdge(true);
+			}
 		}
 		else
 		{
-			gameGui.setCursorOnTheBottomEdge( false );
-			gameGui.setCursorOnTheTopEdge( false );
+			gameGui.setCursorOnTheBottomEdge(false);
+			gameGui.setCursorOnTheTopEdge(false);
 		}
 
 		gameGui.getLock().unlock();

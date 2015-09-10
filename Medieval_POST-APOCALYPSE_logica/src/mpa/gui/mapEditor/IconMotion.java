@@ -37,9 +37,6 @@ class IconMotion extends MouseInputAdapter
 			Point point = e.getPoint();
 			if (components.get(i).getSecond().contains(point))
 			{
-				if (components.get(i).getFirst().toLowerCase().equals("market") && mainMapEditorPanel.isThereAMarket())
-					break;
-
 				Rectangle rect = components.get(i).getSecond();
 
 				selectedObjectPosition = new Point(rect.x, rect.y);

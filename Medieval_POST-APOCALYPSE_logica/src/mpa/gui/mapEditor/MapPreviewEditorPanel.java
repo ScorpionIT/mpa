@@ -28,7 +28,6 @@ public class MapPreviewEditorPanel extends MpaPanel
 	private Color selectedObjectColor;
 	private String selectedObjectName;
 	private MainMapEditorPanel mainMapEditorPanel;
-	private boolean market = false;
 	private Pair<Integer, Integer> oldMapDimension;
 	private String texturePath = GameProperties.getInstance().getPath("TexturePath");
 	private int indexObject = 0;
@@ -77,8 +76,7 @@ public class MapPreviewEditorPanel extends MpaPanel
 		{
 			if (getObjectName(selectedObjectName).toLowerCase().equals("headquarter"))
 				mainMapEditorPanel.addPlayer();
-			else if (getObjectName(selectedObjectName).toLowerCase().equals("market"))
-				market = true;
+
 			redoObjects.removeAllElements();
 			Pair<String, Point> pair = new Pair<String, Point>(selectedObjectName, selectedObjectPosition);
 			addedObjects.push(pair);
@@ -162,8 +160,7 @@ public class MapPreviewEditorPanel extends MpaPanel
 					addedObjects.add(removedObject);
 					if (getObjectName(removedObject.getFirst()).toLowerCase().equals("headquarter"))
 						mainMapEditorPanel.removePlayer();
-					else if (getObjectName(removedObject.getFirst()).toLowerCase().equals("market"))
-						market = false;
+
 				}
 				redoObjects.add(removeIfPresent);
 			}
@@ -173,8 +170,6 @@ public class MapPreviewEditorPanel extends MpaPanel
 				addedObjects.add(removedObject);
 				if (getObjectName(removedObject.getFirst()).toLowerCase().equals("headquarter"))
 					mainMapEditorPanel.addPlayer();
-				else if (getObjectName(removedObject.getFirst()).toLowerCase().equals("market"))
-					market = true;
 				redoObjects.add(removedObject);
 
 			}
@@ -218,8 +213,7 @@ public class MapPreviewEditorPanel extends MpaPanel
 				undoObjects.add(readdedObject);
 				if (getObjectName(readdedObject).toLowerCase().equals("headquarter"))
 					mainMapEditorPanel.addPlayer();
-				else if (getObjectName(readdedObject).toLowerCase().equals("market"))
-					market = true;
+
 			}
 
 		}
@@ -267,11 +261,6 @@ public class MapPreviewEditorPanel extends MpaPanel
 
 	}
 
-	public boolean isThereAMarket()
-	{
-		return market;
-	}
-
 	public void setSelectedObject(Point elementPosition, String selectedObjectName)
 	{
 
@@ -302,9 +291,8 @@ public class MapPreviewEditorPanel extends MpaPanel
 
 			if (objectBounds.contains(clickPosition))
 			{
-				if (getObjectName(addedObjects.get(i)).toLowerCase().equals("market"))
-					market = false;
-				else if (getObjectName(addedObjects.get(i)).toLowerCase().equals("headquarter"))
+
+				if (getObjectName(addedObjects.get(i)).toLowerCase().equals("headquarter"))
 					mainMapEditorPanel.removePlayer();
 				Pair<String, Point> removed = addedObjects.remove(i);
 				undoObjects.add(removed);
@@ -342,8 +330,7 @@ public class MapPreviewEditorPanel extends MpaPanel
 			Pair<String, Point> readdedObject = undoObjects.pop();
 			if (getObjectName(readdedObject).toLowerCase().equals("headquarter"))
 				mainMapEditorPanel.addPlayer();
-			else if (getObjectName(readdedObject).toLowerCase().equals("market"))
-				market = true;
+
 			addedObjects.push(readdedObject);
 
 			selectedObjectColor = null;

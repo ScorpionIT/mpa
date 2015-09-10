@@ -13,7 +13,7 @@ public class ChoosePanel
 
 	private PanelBuilder choosePanel;
 	private String[] listObject = { "WEAPON", "GRANADE", "FLASH_BANG", "HP_POTION", "MP_POTION" };
-	private ArrayList<LabelBuilder> elementLabels = new ArrayList();
+	private ArrayList<LabelBuilder> elementLabels = new ArrayList<LabelBuilder>();
 
 	private final int width = 130;
 	private final int height = 150;
@@ -53,7 +53,6 @@ public class ChoosePanel
 		{
 
 			LabelBuilder labelBuilder = getLabelBuilder(obj, 25, currentY);
-			// labelBuilder.backgroundColor("#f008");
 			elementLabels.add(labelBuilder);
 			choosePanel.control(labelBuilder);
 			currentY += yIncrement;

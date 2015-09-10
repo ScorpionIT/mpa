@@ -1,6 +1,5 @@
 package mpa.core.logic;
 
-import mpa.core.logic.building.Market;
 import mpa.core.logic.resource.Cave;
 import mpa.core.logic.resource.Field;
 import mpa.core.logic.resource.Mine;
@@ -42,8 +41,6 @@ public class WorldFromMapInfo implements WorldCreator
 			world.addObject(mine);
 			mine.setID(String.valueOf(mineID++));
 		}
-
-		Market.initiate(mapInfo.getMarket().getFirst(), mapInfo.getMarket().getSecond());
 
 		return world;
 	}

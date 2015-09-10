@@ -151,8 +151,6 @@ public class MapPreview extends MpaPanel
 		// g.drawImage(images.get("market"), graphicX(mapInfo.getMarket().getFirst()),
 		// graphicY(mapInfo.getMarket().getSecond()),
 		// images.get("headQuarter").getWidth(null), images.get("market").getHeight(null), this);
-		g.drawImage(images.get("market"), graphicX(mapInfo.getMarket().getFirst()), graphicY(mapInfo.getMarket().getSecond()), W(GameProperties
-				.getInstance().getObjectWidth("market")), H(GameProperties.getInstance().getObjectHeight("market")), this);
 
 	}
 
