@@ -1,6 +1,5 @@
 package mpa.gui.gameGui.panel;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -20,13 +19,13 @@ public class OpponentPropertiesPanel
 
 	PanelBuilder mainPanelBuilder;
 
-	ArrayList<PanelBuilder> resourcesPanels;
+	HashMap<String, OpponentResourcesPanel> resourcesPanels = new HashMap<>();
 
 	int x = 10;
 
 	int heightPanel = 30;
 
-	private ListenerImplementation playerController;
+	private ListenerImplementation gameController;
 	private int currentPage = 1;
 	int numberOfPlayerForPage;
 	int numberOfPages;
@@ -38,9 +37,9 @@ public class OpponentPropertiesPanel
 	public OpponentPropertiesPanel(ListenerImplementation playerController)
 	{
 
-		this.playerController = playerController;
+		this.gameController = playerController;
 
-		int numberOfPlayer = playerController.getPlayersResourceAmount().size();
+		int numberOfPlayer = gameController.getNumberOfPlayer();
 
 		numberOfPlayerForPage = 100 / (heightPanel);
 		numberOfPages = (numberOfPlayer - 1) / numberOfPlayerForPage;
@@ -103,7 +102,7 @@ public class OpponentPropertiesPanel
 
 		int index = 0;
 
-		HashMap<String, HashMap<String, Integer>> playersResourceAmount = playerController.getPlayersResourceAmount();
+		HashMap<String, HashMap<String, Integer>> playersResourceAmount = gameController.getPlayersResourceAmount();
 		Set<String> playerList = playersResourceAmount.keySet();
 		for (String playerName : playerList)
 		{
@@ -129,6 +128,50 @@ public class OpponentPropertiesPanel
 
 			i++;
 		}
+	}
+
+	private void relocateAllPanel()
+	{
+		int numberOfPlayer = gameController.getNumberOfPlayer();
+		numberOfPlayerForPage = 100 / (heightPanel);
+		numberOfPages = (numberOfPlayer - 1) / numberOfPlayerForPage;
+		numberOfPages++;
+
+		int y = 3;
+
+		int index = 0;
+
+		Set<String> playerList = resourcesPanels.keySet();
+
+		for (String playerName : playerList)
+		{
+			int i = 0;
+			if (index % numberOfPlayerForPage == 0)
+			{
+				y = 3;
+			}
+			if (!playerName.equals(GuiObjectManager.getInstance().getPlayingPlayer()))
+			{
+				resourcesPanels.get(playerName).getPanel().x(Integer.toString(x) + "%");
+				resourcesPanels.get(playerName).getPanel().x(Integer.toString(y) + "%");
+
+				// TODO SISTEMARE LA VISIBILITÀ
+				changeVisibility(i, resourcesPanels.get(playerName));
+
+				y += heightPanel;
+				index++;
+			}
+
+			i++;
+		}
+
+	}
+
+	public void removePlayer(String playerName)
+	{
+		resourcesPanels.get(playerName).getPanel().visible(false);
+		resourcesPanels.remove(playerName);
+		relocateAllPanel();
 	}
 
 	private void changeVisibility(int i, OpponentResourcesPanel opponentResourcesPanel)
@@ -192,7 +235,7 @@ public class OpponentPropertiesPanel
 	public void update()
 	{
 
-		HashMap<String, HashMap<String, Integer>> playersResourceAmount = playerController.getPlayersResourceAmount();
+		HashMap<String, HashMap<String, Integer>> playersResourceAmount = gameController.getPlayersResourceAmount();
 		Set<String> keySet = playersResourceAmount.keySet();
 		for (String playerName : keySet)
 		{

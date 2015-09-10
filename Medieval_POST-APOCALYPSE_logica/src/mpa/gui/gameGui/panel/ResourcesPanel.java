@@ -42,16 +42,16 @@ public class ResourcesPanel
 				alignRight();
 				valignTop();
 				x("50%");
-				y("90%");
-				// image(new ImageBuilder()
-				// {
-				// {
-				// filename("prova sfondo.png");
-				// width("100%");
-				// height("100%");
-				//
-				// }
-				// });
+				y("88%");
+				image(new ImageBuilder()
+				{
+					{
+						filename("sfondo.png");
+						width("100%");
+						height("100%");
+
+					}
+				});
 				visibleToMouse(true);
 
 			}
@@ -79,7 +79,7 @@ public class ResourcesPanel
 			{
 				filename(fileName);
 
-				y("35%");
+				y("37%");
 				width("40%");
 				height("40%");
 

@@ -35,4 +35,6 @@ public abstract class ListenerImplementation
 
 	public abstract HashMap<String, Integer> getPlayerResourcesAmount(String playerName);
 
+	public abstract int getNumberOfPlayer();
+
 }

@@ -298,8 +298,8 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 		rootNode.attachChild(groundNode);
 	}
 
-	public boolean canMove()
+	public boolean canClick()
 	{
-		return niftyHandler.isVisibleSelectionPanel();
+		return !(niftyHandler.isVisibleSelectionPanel() || niftyHandler.isVisibleOpponentPropertiesPanel() || niftyHandler.isVisibleChoosePanel());
 	}
 }

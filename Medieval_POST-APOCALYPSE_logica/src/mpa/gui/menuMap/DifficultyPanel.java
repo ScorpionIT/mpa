@@ -13,11 +13,13 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import mpa.core.ai.DifficultyLevel;
+import mpa.core.util.GameProperties;
 
 public class DifficultyPanel extends JPanel
 {
@@ -28,6 +30,8 @@ public class DifficultyPanel extends JPanel
 	private ButtonGroup group = new ButtonGroup();
 	private Image backgroundImage;
 	private ActionListener actionListenerRadioButton;
+
+	private String textImagePath = GameProperties.getInstance().getPath("TextImagePath");
 
 	public DifficultyPanel(MainMenuGamePanel mainMenuGamePanel)
 	{
@@ -87,21 +91,41 @@ public class DifficultyPanel extends JPanel
 		int xComponent = this.getWidth() * 15 / 100;
 
 		int increment = (this.getHeight() - this.getHeight() * 30 / 100) / (buttonList.size() + 1);
-		JLabel label = new JLabel("Choose Difficulty Level");
-		label.setOpaque(false);
-		label.setBounds(xComponent, yComponent, this.getWidth() - xComponent, increment);
+		Image imageChooseDifficultyLevel = loadTextImage("chooseDifficultyLevel.png", 100);
+
+		JLabel label = new JLabel(new ImageIcon(imageChooseDifficultyLevel));
+		// label.setBounds(xComponent, yComponent, this.getWidth() - xComponent, increment);
+		label.setBounds(xComponent, yComponent - this.getHeight() * 5 / 100, imageChooseDifficultyLevel.getWidth(this),
+				imageChooseDifficultyLevel.getHeight(this));
 
 		this.add(label);
 
 		for (AbstractButton button : buttonList)
 		{
 			yComponent += increment;
+
 			button.addActionListener(actionListenerRadioButton);
 			button.setOpaque(false);
 			button.setBounds(xComponent, yComponent, this.getWidth() - xComponent, increment);
 			this.add(button);
 
 		}
+	}
+
+	private Image loadTextImage(String fileName, int percentuage)
+	{
+		Image imageText = null;
+		try
+		{
+			imageText = ImageIO.read(new File(textImagePath + "/" + fileName));
+			imageText = imageText.getScaledInstance(imageText.getWidth(this) * percentuage / 100, imageText.getHeight(this) * percentuage / 100,
+					Image.SCALE_FAST);
+		} catch (IOException e)
+		{
+			// TODO Blocco catch generato automaticamente
+			e.printStackTrace();
+		}
+		return imageText;
 	}
 
 	@Override

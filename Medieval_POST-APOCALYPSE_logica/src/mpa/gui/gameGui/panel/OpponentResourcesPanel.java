@@ -175,6 +175,16 @@ public class OpponentResourcesPanel
 		return resourcesPanel;
 	}
 
+	public void setX(int x)
+	{
+
+	}
+
+	public void setY(int y)
+	{
+
+	}
+
 	public Element build(Nifty nifty, Screen currentScreen, Element parent)
 	{
 		return resourcesPanel.build(nifty, currentScreen, parent);

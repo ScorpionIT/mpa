@@ -56,9 +56,12 @@ public class GameGuiClickListener implements ActionListener
 		System.out.println("ho cliccato su " + pickedObject);
 		if (!isPressed && pickedObject.equals("GROUND"))
 		{
-			if (gameGui.canMove())
+			if (!gameGui.canClick())
 			{
-				niftyHandler.removeSelectedPanel();
+				if (niftyHandler.isVisibleSelectionPanel())
+				{
+					niftyHandler.removeSelectedPanel();
+				}
 			}
 			else
 			{
@@ -66,13 +69,14 @@ public class GameGuiClickListener implements ActionListener
 				listener.computePath(contactPoint);
 			}
 		}
-		else if (!pickedObject.equals("GROUND"))
+		else if (!pickedObject.equals("GROUND") && !niftyHandler.isVisibleChoosePanel() && !niftyHandler.isVisibleOpponentPropertiesPanel())
 		{
 
 			String[] split = pickedObject.split(":");
 			String pickedObjectOwner = listener.getPickedObjectOwner(split[0], split[1]);
 			String objectProductivity = Integer.toString(listener.getPickedObjectProductivity(split[0], split[1]));
 
+			niftyHandler.removeSelectedPanel();
 			niftyHandler.setSelectedPanel(split[0], split[1], objectProductivity, pickedObjectOwner);
 			niftyHandler.relocateSelectionPanel((int) click.x, gameGui.windowHeight() - (int) click.y);
 		}
@@ -122,12 +126,10 @@ public class GameGuiClickListener implements ActionListener
 		{
 			if (isPressed)
 			{
-				choosePanel = true;
 				niftyHandler.relocateChoosePanel((int) click.x, gameGui.windowHeight() - (int) click.y);
 			}
 			else
 			{
-				choosePanel = false;
 				String selectedItem = niftyHandler.getSelectedItem();
 				listener.changeItem(selectedItem);
 

@@ -31,16 +31,18 @@ public class NiftyHandler
 	private OpponentPropertiesPanel opponentPropertiesPanel;
 	private ChoosePanel choosePanel;
 	private GameGui gameGui;
-	private ListenerImplementation playerController;
+	private ListenerImplementation gameController;
+	private boolean opponentPropertiesPanelIsVisible = false;
+	private boolean chooseObjectPanelIsVisible = false;
 
 	public NiftyHandler(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort,
 			AppStateManager stateManager, ListenerImplementation playerController, GameGui gameGui)
 	{
-		this.playerController = playerController;
+		this.gameController = playerController;
 		this.gameGui = gameGui;
 		NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, guiViewPort, 2048, 2048);
 		nifty = niftyDisplay.getNifty();
-		NiftyController controller = new NiftyController(this);
+		NiftyController controller = new NiftyController(this, playerController);
 
 		initNifty(controller, assetManager);
 
@@ -96,30 +98,22 @@ public class NiftyHandler
 
 		resourcesPanel = new ResourcesPanel();
 
-		opponentPropertiesPanel = new OpponentPropertiesPanel(playerController);
+		opponentPropertiesPanel = new OpponentPropertiesPanel(gameController);
 
 		choosePanel = new ChoosePanel();
 
 		Element findElementByName = nifty.getCurrentScreen().findElementByName("resourcesLayer");
 		findElementByName.add(resourcesPanel.build(nifty, nifty.getCurrentScreen(), findElementByName));
 
-		// findElementByName = nifty.getCurrentScreen().findElementByName("selectedLayer");
-		// findElementByName.add(selectionPanel.build(nifty, nifty.getCurrentScreen(),
-		// findElementByName));
 	}
 
 	public void setSelectedPanel(String objectType, String objectID, String objectProductivity, String pickedObjectOwner)
 	{
-
-		// removeSelectedPanel();
-
 		selectionPanel.setObjectName(objectType);
 		selectionPanel.setProductivityLabel(objectProductivity);
 		selectionPanel.setObjectOwner(pickedObjectOwner);
-
-		// Element findElementByName = nifty.getCurrentScreen().findElementByName("selectedLayer");
-		// findElementByName.add(selectionPanel.build(nifty, nifty.getCurrentScreen(),
-		// findElementByName));
+		selectedObjectID = objectID;
+		selectedObjectType = objectType;
 
 	}
 
@@ -154,6 +148,7 @@ public class NiftyHandler
 		choosePanel.changePosition(x, y);
 		removeChoosePanel();
 		choosePanel.setVisible(true);
+		chooseObjectPanelIsVisible = true;
 		Element findElementByName = nifty.getCurrentScreen().findElementByName("chooseLayer");
 		findElementByName.add(choosePanel.build(nifty, nifty.getCurrentScreen(), findElementByName));
 
@@ -172,7 +167,6 @@ public class NiftyHandler
 			y -= selectionPanel.getHeight();
 		}
 		selectionPanel.changePosition(x, y);
-		removeSelectedPanel();
 
 		selectionPanel.setVisible(true);
 		Element findElementByName = nifty.getCurrentScreen().findElementByName("selectedLayer");
@@ -204,6 +198,7 @@ public class NiftyHandler
 
 		}
 		choosePanel.setVisible(false);
+		chooseObjectPanelIsVisible = false;
 
 	}
 
@@ -224,7 +219,7 @@ public class NiftyHandler
 
 	public void updateResourcePanel()
 	{
-		HashMap<String, Integer> playingPlayerResourcesAmount = playerController.getPlayerResourcesAmount(GuiObjectManager.getInstance()
+		HashMap<String, Integer> playingPlayerResourcesAmount = gameController.getPlayerResourcesAmount(GuiObjectManager.getInstance()
 				.getPlayingPlayer());
 		Set<String> keySet = playingPlayerResourcesAmount.keySet();
 		for (String resourceName : keySet)
@@ -254,16 +249,6 @@ public class NiftyHandler
 		return nifty;
 	}
 
-	public void emptySelectedPanel()
-	{
-		removeSelectedPanel();
-		selectionPanel.emptyPanel();
-
-		Element findElementByName = nifty.getCurrentScreen().findElementByName("selectedLayer");
-		findElementByName.add(selectionPanel.build(nifty, nifty.getCurrentScreen(), findElementByName));
-
-	}
-
 	public void removeOpponentPropertiesPanel()
 	{
 
@@ -272,9 +257,14 @@ public class NiftyHandler
 			nifty.getCurrentScreen().findElementByName("#opponentPropertiesPanelId").markForRemoval();
 			// nifty.getCurrentScreen().findElementByName("#opponentPropertiesPanelId").setVisible(false);
 			nifty.removeElement(nifty.getCurrentScreen(), nifty.getCurrentScreen().findElementByName("#opponentPropertiesPanelId"));
-
+			opponentPropertiesPanelIsVisible = false;
 		}
 
+	}
+
+	public boolean isVisibleOpponentPropertiesPanel()
+	{
+		return opponentPropertiesPanelIsVisible;
 	}
 
 	public void turnToPageOne()
@@ -285,6 +275,8 @@ public class NiftyHandler
 	public void setOpponentPropertiesPanel()
 	{
 		Element findElementByName = nifty.getCurrentScreen().findElementByName("opponentPropertiesLayer");
+
+		opponentPropertiesPanelIsVisible = true;
 
 		// if (nifty.getCurrentScreen().findElementByName("#opponentPropertiesPanelId") != null)
 		// {
@@ -322,6 +314,11 @@ public class NiftyHandler
 	public boolean isVisibleSelectionPanel()
 	{
 		return selectionPanel.isVisible();
+	}
+
+	public boolean isVisibleChoosePanel()
+	{
+		return chooseObjectPanelIsVisible;
 	}
 
 }

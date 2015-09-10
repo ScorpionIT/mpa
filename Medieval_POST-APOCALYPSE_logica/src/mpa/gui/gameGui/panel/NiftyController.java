@@ -1,5 +1,6 @@
 package mpa.gui.gameGui.panel;
 
+import mpa.gui.gameGui.listener.ListenerImplementation;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -8,16 +9,18 @@ public class NiftyController implements ScreenController
 {
 
 	private NiftyHandler niftyHandler;
+	private ListenerImplementation gameController;
 
-	public NiftyController(NiftyHandler niftyHandler)
+	public NiftyController(NiftyHandler niftyHandler, ListenerImplementation gameController)
 	{
 		this.niftyHandler = niftyHandler;
+		this.gameController = gameController;
 
 	}
 
 	public void onClickButtonOccupy()
 	{
-
+		gameController.occupyProperty(niftyHandler.getSelectedObject());
 	}
 
 	public void onClickButtonForward()

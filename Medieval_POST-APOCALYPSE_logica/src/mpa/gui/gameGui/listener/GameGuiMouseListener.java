@@ -27,7 +27,7 @@ public class GameGuiMouseListener implements AnalogListener
 
 		if (mousePosition.x <= 0)
 		{
-			if (!gameGui.canMove())
+			if (gameGui.canClick())
 			{
 				gameGui.setCursorOnTheLeftEdge(true);
 				gameGui.setCursorOnTheRightEdge(false);
@@ -35,7 +35,7 @@ public class GameGuiMouseListener implements AnalogListener
 		}
 		else if (mousePosition.x >= appSettings.getWidth() - 3)
 		{
-			if (!gameGui.canMove())
+			if (gameGui.canClick())
 			{
 
 				gameGui.setCursorOnTheLeftEdge(false);
@@ -50,7 +50,7 @@ public class GameGuiMouseListener implements AnalogListener
 
 		if (mousePosition.y <= 3)
 		{
-			if (!gameGui.canMove())
+			if (gameGui.canClick())
 			{
 				gameGui.setCursorOnTheBottomEdge(true);
 				gameGui.setCursorOnTheTopEdge(false);
@@ -58,7 +58,7 @@ public class GameGuiMouseListener implements AnalogListener
 		}
 		else if (mousePosition.y >= appSettings.getHeight() - 3)
 		{
-			if (!gameGui.canMove())
+			if (gameGui.canClick())
 			{
 				gameGui.setCursorOnTheBottomEdge(false);
 				gameGui.setCursorOnTheTopEdge(true);
