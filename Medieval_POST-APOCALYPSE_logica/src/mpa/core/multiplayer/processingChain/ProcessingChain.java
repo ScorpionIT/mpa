@@ -16,4 +16,9 @@ public class ProcessingChain
 		return reply;
 	}
 
+	protected boolean hasNext()
+	{
+		return next != null;
+	}
+
 }

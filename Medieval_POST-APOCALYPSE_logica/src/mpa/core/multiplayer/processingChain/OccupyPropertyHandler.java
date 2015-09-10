@@ -1,9 +1,9 @@
 package mpa.core.multiplayer.processingChain;
 
-public class ComputePath extends ProcessingChain
+public class OccupyPropertyHandler extends ProcessingChain
 {
 
-	protected ComputePath( ProcessingChain next )
+	public OccupyPropertyHandler( ProcessingChain next )
 	{
 		super( next );
 	}
@@ -11,7 +11,7 @@ public class ComputePath extends ProcessingChain
 	@Override
 	public String[] processRequest( String request )
 	{
-
+		// TODO Auto-generated method stub
 		return super.processRequest( request );
 	}
 }

@@ -1,9 +1,9 @@
 package mpa.core.multiplayer.processingChain;
 
-public class PlayerAction extends ProcessingChain
+public class ComputePathHandler extends ProcessingChain
 {
 
-	protected PlayerAction( ProcessingChain next )
+	protected ComputePathHandler( ProcessingChain next )
 	{
 		super( next );
 	}
@@ -11,6 +11,7 @@ public class PlayerAction extends ProcessingChain
 	@Override
 	public String[] processRequest( String request )
 	{
+
 		return super.processRequest( request );
 	}
 }
