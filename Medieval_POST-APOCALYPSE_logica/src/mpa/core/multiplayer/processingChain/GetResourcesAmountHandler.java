@@ -23,7 +23,7 @@ public class GetResourcesAmountHandler extends ProcessingChain
 			HashMap<String, HashMap<String, Integer>> playersResourceAmount = GameManagerProxy
 					.getInstance().getPlayersResourceAmount();
 
-			String[] resourcesAmount = new String[playersResourceAmount.keySet().size() * 5 + 1];
+			String[] resourcesAmount = new String[playersResourceAmount.keySet().size() * 6];
 
 			int count = 0;
 
@@ -35,6 +35,7 @@ public class GetResourcesAmountHandler extends ProcessingChain
 					resourcesAmount[count++] = type + "="
 							+ String.valueOf( playersResourceAmount.get( player ).get( type ) );
 				}
+				resourcesAmount[count++] = ".";
 			}
 
 			return resourcesAmount;

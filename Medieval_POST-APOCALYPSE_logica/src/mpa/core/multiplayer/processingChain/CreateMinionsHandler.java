@@ -1,5 +1,9 @@
 package mpa.core.multiplayer.processingChain;
 
+import java.util.ArrayList;
+
+import mpa.core.logic.GameManagerProxy;
+
 public class CreateMinionsHandler extends ProcessingChain
 {
 
@@ -11,7 +15,30 @@ public class CreateMinionsHandler extends ProcessingChain
 	@Override
 	public String[] processRequest( String request )
 	{
-		// TODO Auto-generated method stub
-		return super.processRequest( request );
+		String[] strings = request.split( ":" );
+
+		if( strings.length == 5 && strings[0].equals( "blessMinions" ) )
+		{
+			ArrayList<String> minions;
+			if( strings[2].equals( "minions" ) )
+				minions = GameManagerProxy.getInstance().createMinions( strings[1],
+						Integer.parseInt( strings[3] ), strings[4] );
+			else
+				minions = GameManagerProxy.getInstance().createTowerCrushers( strings[1],
+						Integer.parseInt( strings[3] ), strings[4] );
+			String[] reply = new String[minions.size()];
+
+			for( int i = 0; i < minions.size(); i++ )
+				if( i != minions.size() - 1 )
+					reply[i] = minions.get( i ) + ",";
+				else
+					reply[i] = minions.get( i ) + ".";
+
+			return reply;
+		}
+		else if( hasNext() )
+			return next.processRequest( request );
+		else
+			return super.processRequest( request );
 	}
 }

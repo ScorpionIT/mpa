@@ -112,6 +112,15 @@ public class GameManager
 		return minions;
 	}
 
+	public ArrayList<TowerCrusher> createTowerCrushers( Player boss, int quantity, Tower target )
+	{
+		ArrayList<TowerCrusher> towerCrushers = new ArrayList<>();
+		for( int i = 0; i < quantity; i++ )
+			towerCrushers.add( boss.createTowerCrusher( target, towerCrusherIDs.getID() ) );
+
+		return towerCrushers;
+	}
+
 	public void updateCharacterPositions()
 	{
 		readLock.lock();

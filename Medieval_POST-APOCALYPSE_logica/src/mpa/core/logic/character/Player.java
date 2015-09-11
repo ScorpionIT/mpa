@@ -595,4 +595,11 @@ public class Player extends AbstractCharacter
 				headquarter.getGatheringPlace().y, 5 + 2 * level.ordinal(), headquarter, this,
 				target );
 	}
+
+	public TowerCrusher createTowerCrusher( Tower target, String ID )
+	{
+		return new TowerCrusher( ID, headquarter.getGatheringPlace().x,
+				headquarter.getGatheringPlace().y, 5 + 2 * level.ordinal(), headquarter, this,
+				target.getOwner(), target );
+	}
 }

@@ -1,5 +1,6 @@
 package mpa.core.multiplayer.processingChain;
 
+import mpa.core.logic.GameManagerProxy;
 
 public class ChangeItemHandler extends ProcessingChain
 {
@@ -13,11 +14,14 @@ public class ChangeItemHandler extends ProcessingChain
 	public String[] processRequest( String request )
 	{
 		String[] strings = request.split( ":" );
-		if( strings.length == 2 && strings[0].equals( "change item" ) )
+		if( strings.length == 3 && strings[0].equals( "change item" ) )
 		{
-			// GameManagerProxy.getInstance().changeSelectedItem( p, selected );
+			GameManagerProxy.getInstance().changeSelectedItem( strings[1], strings[2] );
+			return new String[0];
 		}
-
-		return super.processRequest( request );
+		else if( hasNext() )
+			return next.processRequest( request );
+		else
+			return super.processRequest( request );
 	}
 }
