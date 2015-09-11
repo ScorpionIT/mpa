@@ -143,11 +143,13 @@ public class PathCalculatorImplementation
 
 		Vector2f point = new Vector2f( -start.x + arrival.x, -start.y + arrival.y );
 
+		float max;
 		if( Math.abs( point.x ) >= Math.abs( point.y ) )
-			vector = new Vector2f( 1, point.y / point.x );
+			max = Math.abs( point.x );
 		else
-			vector = new Vector2f( point.x / point.y, 1 );
+			max = Math.abs( point.y );
 
+		vector = new Vector2f( point.x / max, point.y / max );
 		return vector;
 	}
 

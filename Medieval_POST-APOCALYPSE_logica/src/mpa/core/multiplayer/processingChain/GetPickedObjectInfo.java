@@ -1,6 +1,5 @@
 package mpa.core.multiplayer.processingChain;
 
-
 public class GetPickedObjectInfo extends ProcessingChain
 {
 
