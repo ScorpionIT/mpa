@@ -122,7 +122,7 @@ public class GameGuiClickListener implements ActionListener
 		// }
 		// }
 		// }
-		else if ("ChooseItem".equals(name))
+		else if ("ChooseItem".equals(name) && !niftyHandler.isVisibleOpponentPropertiesPanel() && !niftyHandler.isVisibleSelectionPanel())
 		{
 			if (isPressed)
 			{

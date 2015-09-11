@@ -10,9 +10,14 @@ import mpa.core.util.GameProperties;
 
 import com.jme3.asset.plugins.ZipLocator;
 import com.jme3.bounding.BoundingBox;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Sphere;
+import com.jme3.util.TangentBinormalGenerator;
 //import mpa.gui.gameGui.listener.GameGuiClickListener;
 //import mpa.gui.gameGui.listener.GameGuiKeyActionListener;
 
@@ -92,12 +97,19 @@ public class GuiObjectManager
 		Spatial hqModel = gameGui.getAssetManager().loadModel("baker_house.mesh.xml");
 		hqModel.setLocalTranslation(new Vector3f(hqPosition.x, 0, hqPosition.y));
 		hqModel.rotate(0, 90, 0);
-		hqModel.scale(8f);
-		BoundingBox worldBound = (BoundingBox) hqModel.getWorldBound();
-		System.out.println(" X + " + worldBound.getXExtent() + " Y + " + worldBound.getZExtent());
+
+		hqModel.scale(MyMath.scaleFactor(getModelBounds(hqModel), "headquarter"));
 		headQuarters.put(name, hqModel);
 		gameGui.attachStaticObject(hqModel);
 
+	}
+
+	public Vector3f getModelBounds(Spatial model)
+	{
+		BoundingBox box = (BoundingBox) model.getWorldBound();
+		Vector3f boxSize = new Vector3f();
+		box.getExtent(boxSize);
+		return boxSize;
 	}
 
 	public String getPlayingPlayer()
@@ -139,27 +151,55 @@ public class GuiObjectManager
 			case "WOOD":
 				gameGui.getAssetManager().registerLocator("Assets/Models/Wood.zip", ZipLocator.class);
 				model = gameGui.getAssetManager().loadModel("Tree.mesh.xml");
+				model.scale(MyMath.scaleFactor(getModelBounds(model), "wood"));
 				woods.put(ID, model);
+				break;
 			case "FIELD":
 				gameGui.getAssetManager().registerLocator("Assets/Models/CornField.zip", ZipLocator.class);
 				model = gameGui.getAssetManager().loadModel("CornField.mesh.xml");
+				model.scale(MyMath.scaleFactor(getModelBounds(model), "field"));
 				fields.put(ID, model);
+				break;
 			case "CAVE":
 				gameGui.getAssetManager().registerLocator("Assets/Models/stones.zip", ZipLocator.class);
 				model = gameGui.getAssetManager().loadModel("stones.mesh.xml");
+				model.scale(MyMath.scaleFactor(getModelBounds(model), "cave"));
 				caves.put(ID, model);
+				break;
 			case "MINE":
 				gameGui.getAssetManager().registerLocator("Assets/Models/Wood.zip", ZipLocator.class);
 				model = gameGui.getAssetManager().loadModel("Tree.mesh.xml");
+				model.scale(MyMath.scaleFactor(getModelBounds(model), "mine"));
 				mines.put(ID, model);
-				// TODO
+				break;
+		// TODO
 		}
 
 		model.setLocalTranslation(new Vector3f(position.x, 0, position.y));
+		addSphere(position.x, position.y);
 
 		model.rotate(90, 0, 0);
 		gameGui.attachStaticObject(model);
 
+	}
+
+	private void addSphere(float x, float y)
+	{
+		Sphere sphereMesh = new Sphere(3, 3, 2f);
+		Geometry sphereGeo = new Geometry("Shiny rock", sphereMesh);
+		sphereMesh.setTextureMode(Sphere.TextureMode.Projected); // better quality on spheres
+		TangentBinormalGenerator.generate(sphereMesh); // for lighting effect
+		Material sphereMat = new Material(gameGui.getAssetManager(), "Common/MatDefs/Light/Lighting.j3md");
+		sphereMat.setTexture("DiffuseMap", gameGui.getAssetManager().loadTexture("Textures/Terrain/Pond/Pond.jpg"));
+		sphereMat.setTexture("NormalMap", gameGui.getAssetManager().loadTexture("Textures/Terrain/Pond/Pond_normal.png"));
+		sphereMat.setBoolean("UseMaterialColors", true);
+		sphereMat.setColor("Diffuse", ColorRGBA.White);
+		sphereMat.setColor("Specular", ColorRGBA.White);
+		sphereMat.setFloat("Shininess", 64f); // [0,128]
+		sphereGeo.setMaterial(sphereMat);
+		sphereGeo.setLocalTranslation(x, 0, y); // Move it a bit
+		sphereGeo.rotate(1.6f, 0, 0); // Rotate it a bit
+		gameGui.attachStaticObject(sphereGeo);
 	}
 
 	public void addMinion(String ID)

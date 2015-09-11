@@ -8,6 +8,7 @@ import javax.vecmath.Vector2f;
 import mpa.core.logic.AbstractObject;
 import mpa.core.logic.Pair;
 import mpa.core.logic.World;
+import mpa.core.util.GameProperties;
 
 import com.jme3.math.Vector3f;
 
@@ -216,6 +217,14 @@ public class MyMath
 		vector.x = (float) (vector.x * Math.cos(angle) + vector.z * Math.sin(angle));
 		vector.z = (float) (-vector.x * Math.sin(angle) + vector.z * Math.cos(angle));
 		return vector;
+
+	}
+
+	public static float scaleFactor(Vector3f modelSize, String type)
+	{
+		float x = GameProperties.getInstance().getObjectWidth(type) / modelSize.x;
+		float z = GameProperties.getInstance().getObjectHeight(type) / modelSize.z;
+		return Math.min(x, z);
 
 	}
 }

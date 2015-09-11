@@ -25,7 +25,7 @@ public class GameGuiKeyActionListener implements ActionListener
 			handler.setPause();
 		}
 
-		if ("Tab".equals(name))
+		if ("Tab".equals(name) && !niftyHandler.isVisibleChoosePanel() && !niftyHandler.isVisibleSelectionPanel())
 		{
 			if (keyPressed)
 			{
