@@ -12,6 +12,7 @@ import de.lessvoid.nifty.screen.Screen;
 public class ResourcesPanel
 {
 
+	private PanelBuilder resourcesBackgroundPanel;
 	private PanelBuilder resourcesPanel;
 
 	private HashMap<String, LabelBuilder> resourcesValueLabel = new HashMap<>();
@@ -31,6 +32,32 @@ public class ResourcesPanel
 	// TODO UNIRE CON L'ALTRO PANNELLO DELLE RISORSE
 	private void initResourcePanel()
 	{
+		resourcesBackgroundPanel = new PanelBuilder("resourcesBackground")
+		{
+
+			{
+				childLayoutAbsoluteInside();
+
+				width("100%");
+				height("10%");
+				alignRight();
+				valignTop();
+				x("0%");
+				y("88%");
+				image(new ImageBuilder()
+				{
+					{
+						filename("pannello.jpg");
+						width("100%");
+						height("100%");
+
+					}
+				});
+
+			}
+
+		};
+
 		resourcesPanel = new PanelBuilder("resources")
 		{
 
@@ -38,25 +65,16 @@ public class ResourcesPanel
 				childLayoutAbsoluteInside();
 
 				width("50%");
-				height("10%");
+				height("100%");
 				alignRight();
 				valignTop();
 				x("50%");
-				y("88%");
-				image(new ImageBuilder()
-				{
-					{
-						filename("sfondo.png");
-						width("100%");
-						height("100%");
-
-					}
-				});
-				visibleToMouse(true);
+				y("0%");
 
 			}
 
 		};
+		resourcesBackgroundPanel.panel(resourcesPanel);
 		addPanels();
 
 	}
@@ -144,7 +162,7 @@ public class ResourcesPanel
 
 	public Element build(Nifty nifty, Screen currentScreen, Element parent)
 	{
-		return resourcesPanel.build(nifty, currentScreen, parent);
+		return resourcesBackgroundPanel.build(nifty, currentScreen, parent);
 	}
 
 	public LabelBuilder getResourceLabel(String resourceName)
