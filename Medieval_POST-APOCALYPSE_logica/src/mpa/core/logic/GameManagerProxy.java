@@ -209,7 +209,7 @@ public class GameManagerProxy
 		AbstractPrivateProperty conqueredObject = objects.get( field[0].toLowerCase() ).get(
 				field[1] );
 
-		return gm.occupyProperty( players.get( player ), conqueredObject );
+		return gm.conquer( conqueredObject, players.get( player ) );
 	}
 
 	public String createTower( String p, Vector2f position )

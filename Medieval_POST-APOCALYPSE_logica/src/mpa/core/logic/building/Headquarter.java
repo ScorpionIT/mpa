@@ -17,4 +17,13 @@ public class Headquarter extends House
 	{
 		return collectionPoint;
 	}
+
+	public void provideOwner()
+	{
+		owner.putResources( "wheat", 3 + owner.getPlayerLevel().ordinal() );
+		owner.putResources( "herbs", 1 + owner.getPlayerLevel().ordinal() );
+		owner.putResources( "stone", 3 + owner.getPlayerLevel().ordinal() );
+		owner.putResources( "iron", 2 + owner.getPlayerLevel().ordinal() );
+		owner.putResources( "wood", 4 + owner.getPlayerLevel().ordinal() );
+	}
 }
