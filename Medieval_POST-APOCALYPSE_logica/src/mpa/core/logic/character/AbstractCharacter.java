@@ -10,6 +10,7 @@ import mpa.core.logic.AbstractObject;
 import mpa.core.logic.Inventory;
 import mpa.core.logic.building.Headquarter;
 import mpa.core.maths.MyMath;
+import mpa.core.util.GameProperties;
 
 public abstract class AbstractCharacter extends AbstractObject
 {
@@ -18,7 +19,7 @@ public abstract class AbstractCharacter extends AbstractObject
 	protected ArrayList<Vector2f> path = new ArrayList<>();
 	private Vector2f previousVector;
 	private Vector2f currentVector = new Vector2f(0.0f, 0.0f);
-	private int numberOfIterationsPerVector;
+	private float numberOfIterationsPerVector;
 
 	protected Headquarter headquarter;
 
@@ -34,7 +35,7 @@ public abstract class AbstractCharacter extends AbstractObject
 
 	public AbstractCharacter(String name, float x, float y, int health, Headquarter headquarter)
 	{
-		super(x, y, 30, 30); // TODO
+		super(x, y, GameProperties.getInstance().getObjectWidth("player"), GameProperties.getInstance().getObjectHeight("player")); // TODO
 		this.name = name;
 		this.health = health;
 		this.headquarter = headquarter;
@@ -74,9 +75,9 @@ public abstract class AbstractCharacter extends AbstractObject
 		previousVector = new Vector2f(currentVector);
 		currentVector = new Vector2f((float) (-path.get(0).x + path.get(1).x), (float) (-path.get(0).y + path.get(1).y));
 
-		numberOfIterationsPerVector = (int) (MyMath.distanceFloat(path.get(0).x, path.get(0).y, path.get(1).x, path.get(1).y) / PACE);
-		paceX = currentVector.x / numberOfIterationsPerVector;
-		paceY = currentVector.y / numberOfIterationsPerVector;
+		numberOfIterationsPerVector = (float) (MyMath.distanceFloat(path.get(0).x, path.get(0).y, path.get(1).x, path.get(1).y) / PACE);
+		// paceX = currentVector.x / numberOfIterationsPerVector;
+		// paceY = currentVector.y / numberOfIterationsPerVector;
 
 		float absX = Math.abs(currentVector.x);
 		float absY = Math.abs(currentVector.y);
@@ -116,40 +117,36 @@ public abstract class AbstractCharacter extends AbstractObject
 			if (path == null || path.isEmpty())
 				return false;
 
-			numberOfIterationsPerVector--;
-
 			if (numberOfIterationsPerVector <= 0)
 			{
 				path.remove(0);
 				if (path.size() > 1)
 				{
-					System.out.println();
-					System.out.println("sono nell'if strano strano");
-					System.out.println();
+
 					computeCurrentVector();
+					return true;
 				}
 				else
 				{
-					putThePlayerAtTheArrival();
+					path.remove(0);
 					return false;
 				}
 
-				numberOfIterationsPerVector--;
-				if (numberOfIterationsPerVector <= 0)
-				{
-					putThePlayerAtTheArrival();
-					return false;
-				}
 			}
+			numberOfIterationsPerVector--;
 
-			setX(((float) (x + paceX)));
-			setY((float) (y + paceY));
-
-			if (numberOfIterationsPerVector == 0 && path.size() == 2)
+			if (MyMath.distanceFloat(x, y, path.get(1).x, path.get(1).y) < PACE)
 			{
-				putThePlayerAtTheArrival();
+				Vector2f finalPosition = path.get(1);
+				setX(finalPosition.x);
+				setY(finalPosition.y);
+				numberOfIterationsPerVector = 0;
 			}
-
+			else
+			{
+				setX(((x + PACE * currentVector.x)));
+				setY((y + PACE * currentVector.y));
+			}
 			return true;
 
 		} finally
@@ -157,17 +154,6 @@ public abstract class AbstractCharacter extends AbstractObject
 			writeLock.unlock();
 		}
 
-	}
-
-	private void putThePlayerAtTheArrival()
-	{
-		if (path.size() >= 1 && path.size() <= 2)
-		{
-			Vector2f finalPosition = path.get(path.size() - 1);
-			setX(finalPosition.x);
-			setY(finalPosition.y);
-			path = null;
-		}
 	}
 
 	@Override

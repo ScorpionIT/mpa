@@ -222,8 +222,9 @@ public class MyMath
 
 	public static float scaleFactor(Vector3f modelSize, String type)
 	{
-		float x = GameProperties.getInstance().getObjectWidth(type) / modelSize.x;
-		float z = GameProperties.getInstance().getObjectHeight(type) / modelSize.z;
+		int scale = 10;
+		float x = GameProperties.getInstance().getObjectWidth(type) * scale / 100 / modelSize.x;
+		float z = GameProperties.getInstance().getObjectHeight(type) * scale / 100 / modelSize.z;
 		return Math.min(x, z);
 
 	}

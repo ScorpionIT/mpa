@@ -174,10 +174,16 @@ public class GameProperties
 			String height = properties.getProperty(object + "Height");
 			if (width != null && height != null)
 			{
+
 				objectWidth.put(object, Integer.parseInt(width));
 				objectHeght.put(object, Integer.parseInt(height));
 			}
 		}
+		String width = properties.getProperty("playerWidth");
+		String height = properties.getProperty("playerHeight");
+
+		objectWidth.put("player", Integer.parseInt(width));
+		objectHeght.put("player", Integer.parseInt(height));
 
 	}
 
