@@ -1,5 +1,8 @@
 package mpa.core.ai;
 
+import javax.vecmath.Vector2f;
+
+import mpa.core.logic.GameManager;
 import mpa.core.logic.character.Player;
 
 class ProductionState extends AIState
@@ -14,7 +17,24 @@ class ProductionState extends AIState
 	@Override
 	void action( OpponentAI opponentAI )
 	{
-		Player p = opponentAI.player;
+		Vector2f gatheringPlace = opponentAI.player.getHeadquarter().getGatheringPlace();
+		Player player = opponentAI.player;
+		Vector2f position = player.getPosition();
+
+		if( !isWalking && !position.equals( gatheringPlace ) )
+		{
+			GameManager.getInstance().computePath( opponentAI.player, gatheringPlace.x,
+					gatheringPlace.y );
+			isWalking = true;
+		}
+		else if( isWalking && !position.equals( gatheringPlace ) )
+		{
+			return;
+		}
+		else if( position.equals( gatheringPlace ) )
+		{
+
+		}
 
 	}
 
