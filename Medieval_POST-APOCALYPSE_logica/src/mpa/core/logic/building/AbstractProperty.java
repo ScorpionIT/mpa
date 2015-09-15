@@ -9,11 +9,11 @@ public class AbstractProperty extends AbstractObject
 
 	protected Vector2f gatheringPlace;
 
-	AbstractProperty( float x, float y, float width, float height )
+	AbstractProperty(float x, float y, float width, float height)
 	{
-		super( x, y, width, height );
+		super(x, y, width, height);
 
-		gatheringPlace = new Vector2f( x - width / 2f - 10f, y + height / 2f + 10f );
+		gatheringPlace = new Vector2f(x - getCollisionRay() - 10, y + getCollisionRay() + 10);
 
 	}
 

@@ -29,6 +29,8 @@ public abstract class ListenerImplementation
 
 	public abstract void computePath(Vector2f click);
 
+	public abstract void computePath(Vector2f click, String playerName);
+
 	public abstract String getPickedObjectOwner(String objectType, String objectID);
 
 	public abstract int getPickedObjectProductivity(String objectType, String objectID);

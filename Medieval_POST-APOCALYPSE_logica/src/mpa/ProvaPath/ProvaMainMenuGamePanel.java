@@ -1,4 +1,4 @@
-package mpa.gui.menuMap;
+package mpa.ProvaPath;
 
 import java.awt.Color;
 import java.awt.Frame;
@@ -15,7 +15,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 import mpa.core.ai.DifficultyLevel;
 import mpa.core.logic.GameManager;
@@ -26,10 +25,13 @@ import mpa.core.logic.WorldFromMapInfo;
 import mpa.core.logic.WorldLoader;
 import mpa.core.util.GameProperties;
 import mpa.core.util.MapFromXMLCreator;
+import mpa.gui.menuMap.DifficultyPanel;
+import mpa.gui.menuMap.InputNamePanel;
+import mpa.gui.menuMap.MainMenuGamePanel;
+import mpa.gui.menuMap.MapListPanel;
+import mpa.gui.menuMap.MapPreview;
 
-import com.jme3.system.AppSettings;
-
-public class MainMenuGamePanel extends JPanel
+public class ProvaMainMenuGamePanel extends MainMenuGamePanel
 {
 	/**
 	 * 
@@ -51,12 +53,7 @@ public class MainMenuGamePanel extends JPanel
 	DifficultyLevel difficultyLevelSelected = null;
 	private String textImagePath = GameProperties.getInstance().getPath("TextImagePath");
 
-	public MainMenuGamePanel()
-	{
-		// TODO Stub di costruttore generato automaticamente
-	}
-
-	public MainMenuGamePanel(int x, int y, int width, int height)
+	public ProvaMainMenuGamePanel(int x, int y, int width, int height)
 	{
 
 		this.setSize(width, height);
@@ -101,53 +98,30 @@ public class MainMenuGamePanel extends JPanel
 					JOptionPane.showMessageDialog(new Frame(), "Seleziona la difficoltà", "", JOptionPane.PLAIN_MESSAGE);
 				else
 				{
-					World world = MainMenuGamePanel.this.worldLoader.loadWorld(new WorldFromMapInfo());
-					// GameManager.init(world,
-					// MainMenuGamePanel.this.worldLoader.makePlayers(MainMenuGamePanel.this.playerName,
-					// world,
-					// MainMenuGamePanel.this.selectedHQ));
+					World world = ProvaMainMenuGamePanel.this.worldLoader.loadWorld(new WorldFromMapInfo());
 					GameManager.init(world, difficultyLevelSelected, false);
-					MainMenuGamePanel.this.selectedHQIndex = MainMenuGamePanel.this.worldLoader.makePlayers(MainMenuGamePanel.this.playerName, world,
-							MainMenuGamePanel.this.selectedHQ);
-					// MainMenuPanel.this.removeAll();
-					// GameGui gameGui = new GameGui();
-					// gameGui.setBounds(0, 0, MainMenuPanel.this.screenWidth,
-					// MainMenuPanel.this.screenHeight);
-					// MainMenuPanel.this.add(gameGui);
-					// new GraphicThread( gameGui ).start();
-					// new PositionUpdater().start();
-					// MainMenuPanel.this.updateUI();
-					// mpa.gui.gameGui.GameGui app = new mpa.gui.gameGui.GameGui();
-					// app.start();
-					// Logger.getLogger( "" ).setLevel( Level.OFF );
-					Thread t = new Thread(new Runnable()
-					{
-						@Override
-						public void run()
-						{
-							mpa.gui.gameGui.playingGUI.GameGui app = new mpa.gui.gameGui.playingGUI.GameGui(playerName);
-							AppSettings gameSettings = new AppSettings(false);
-							gameSettings.setResolution(800, 600);
-							// gameSettings.setResolution( java.awt.Toolkit.getDefaultToolkit()
-							// .getScreenSize().width, java.awt.Toolkit.getDefaultToolkit()
-							// .getScreenSize().height );
-							// gameSettings.setFullscreen( true );
-							gameSettings.setVSync(false);
-							gameSettings.setTitle("Stellar Conquest");
-							gameSettings.setUseInput(true);
-							gameSettings.setFrameRate(500);
-							gameSettings.setSamples(0);
-							gameSettings.setRenderer("LWJGL-OpenGL2");
-							app.setSettings(gameSettings);
-							app.setShowSettings(false);
+					ProvaMainMenuGamePanel.this.selectedHQIndex = ProvaMainMenuGamePanel.this.worldLoader.makePlayers(
+							ProvaMainMenuGamePanel.this.playerName, world, ProvaMainMenuGamePanel.this.selectedHQ);
 
-							// disable statistics
-							app.setDisplayFps(false);
-							app.setDisplayStatView(false);
-							app.start();
-						}
-					});
-					t.start();
+					int screenWidth = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
+					int screenHeight = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
+
+					JFrame frame = new JFrame();
+					frame.setLocation(0, 0);
+
+					frame.setSize(1000, 1000);
+					frame.setLocation((screenWidth - 1000) / 2, 0);
+					ProvaPath provaPath = new ProvaPath(playerName);
+					provaPath.setBounds(0, 0, 1000, 1000);
+
+					frame.setContentPane(new Panel());
+					frame.getContentPane().setBackground(Color.BLACK);
+					frame.getContentPane().add(provaPath);
+					frame.getContentPane().setLayout(null);
+					frame.getContentPane().setVisible(true);;
+					frame.setVisible(true);
+					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 				}
 			}
 		});
@@ -244,8 +218,8 @@ public class MainMenuGamePanel extends JPanel
 		frame.setLocation(0, 0);
 
 		frame.setSize(screenWidth, screenHeight);
-		MainMenuGamePanel mainMenuGamePanel = new MainMenuGamePanel(screenWidth * 15 / 100, screenHeight * 10 / 100, screenWidth * 70 / 100,
-				screenHeight * 80 / 100);
+		ProvaMainMenuGamePanel mainMenuGamePanel = new ProvaMainMenuGamePanel(screenWidth * 15 / 100, screenHeight * 10 / 100,
+				screenWidth * 70 / 100, screenHeight * 80 / 100);
 
 		frame.setContentPane(new Panel());
 		frame.getContentPane().setBackground(Color.BLACK);

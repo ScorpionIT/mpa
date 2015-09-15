@@ -25,62 +25,57 @@ public class SinglePlayerController extends ListenerImplementation
 	}
 
 	@Override
-	public String getPickedObject( Vector2f click )
+	public String getPickedObject(Vector2f click)
 	{
-		return GameManagerProxy.getInstance().getPickedObject( click );
+		return GameManagerProxy.getInstance().getPickedObject(click);
 	}
 
 	@Override
-	public String getPickedObjectOwner( String objectType, String objectID )
+	public String getPickedObjectOwner(String objectType, String objectID)
 	{
-		return gManagerProxy.getObjectOwner( objectType, objectID );
+		return gManagerProxy.getObjectOwner(objectType, objectID);
 	}
 
 	@Override
-	public int getPickedObjectProductivity( String objectType, String objectID )
+	public int getPickedObjectProductivity(String objectType, String objectID)
 	{
-		return gManagerProxy.getObjectProductivity( objectType, objectID );
+		return gManagerProxy.getObjectProductivity(objectType, objectID);
 	}
 
 	@Override
-	public void changeItem( String item )
+	public void changeItem(String item)
 	{
-		gManagerProxy.changeSelectedItem( GuiObjectManager.getInstance().getPlayingPlayer(), item );
+		gManagerProxy.changeSelectedItem(GuiObjectManager.getInstance().getPlayingPlayer(), item);
 	}
 
 	@Override
-	public ArrayList<String> playerAction( Vector2f direction )
+	public ArrayList<String> playerAction(Vector2f direction)
 	{
-		return gManagerProxy.playerAction( GuiObjectManager.getInstance().getPlayingPlayer(),
-				new javax.vecmath.Vector2f( direction.x, direction.y ) );
+		return gManagerProxy.playerAction(GuiObjectManager.getInstance().getPlayingPlayer(), new javax.vecmath.Vector2f(direction.x, direction.y));
 	}
 
 	@Override
-	public boolean occupyProperty( String property )
+	public boolean occupyProperty(String property)
 	{
-		return gManagerProxy.occupyProperty( GuiObjectManager.getInstance().getPlayingPlayer(),
-				property );
+		return gManagerProxy.occupyProperty(GuiObjectManager.getInstance().getPlayingPlayer(), property);
 	}
 
 	@Override
-	public String createTower( Vector2f point )
+	public String createTower(Vector2f point)
 	{
-		String tower = gManagerProxy.createTower(
-				GuiObjectManager.getInstance().getPlayingPlayer(), new javax.vecmath.Vector2f(
-						point.x, point.y ) );
+		String tower = gManagerProxy.createTower(GuiObjectManager.getInstance().getPlayingPlayer(), new javax.vecmath.Vector2f(point.x, point.y));
 
-		GuiObjectManager.getInstance().addTower( new javax.vecmath.Vector2f( point.x, point.y ),
-				tower );
+		GuiObjectManager.getInstance().addTower(new javax.vecmath.Vector2f(point.x, point.y), tower);
 		return tower;
 
 	}
 
 	@Override
-	public ArrayList<String> createMinions( String boss, String target, int quantity )
+	public ArrayList<String> createMinions(String boss, String target, int quantity)
 	{
-		ArrayList<String> minions = gManagerProxy.createMinions( boss, quantity, target );
-		for( String m : minions )
-			GuiObjectManager.getInstance().addMinion( m );
+		ArrayList<String> minions = gManagerProxy.createMinions(boss, quantity, target);
+		for (String m : minions)
+			GuiObjectManager.getInstance().addMinion(m);
 
 		return minions;
 	}
@@ -90,26 +85,24 @@ public class SinglePlayerController extends ListenerImplementation
 	{
 		ArrayList<String> deadMinions = gManagerProxy.takeDeadMinions();
 		ArrayList<String> deadPlayers = gManagerProxy.takeDeadPlayers();
-		HashMap<String, javax.vecmath.Vector2f[]> playersPositions = gManagerProxy
-				.getPlayersPositions();
+		HashMap<String, javax.vecmath.Vector2f[]> playersPositions = gManagerProxy.getPlayersPositions();
 
-		HashMap<String, javax.vecmath.Vector2f[]> minionsPositions = gManagerProxy
-				.getMinionsPositions();
+		HashMap<String, javax.vecmath.Vector2f[]> minionsPositions = gManagerProxy.getMinionsPositions();
 
-		for( String m : deadMinions )
-			GuiObjectManager.getInstance().removeMinion( m );
-		for( String p : deadPlayers )
-			GuiObjectManager.getInstance().removePlayer( p );
-		for( String p : playersPositions.keySet() )
+		for (String m : deadMinions)
+			GuiObjectManager.getInstance().removeMinion(m);
+		for (String p : deadPlayers)
+			GuiObjectManager.getInstance().removePlayer(p);
+		for (String p : playersPositions.keySet())
 		{
-			javax.vecmath.Vector2f[] positions = playersPositions.get( p );
-			GuiObjectManager.getInstance().updatePlayerPosition( p, positions[0], positions[1] );
+			javax.vecmath.Vector2f[] positions = playersPositions.get(p);
+			GuiObjectManager.getInstance().updatePlayerPosition(p, positions[0], positions[1]);
 		}
 
-		for( String m : minionsPositions.keySet() )
+		for (String m : minionsPositions.keySet())
 		{
-			javax.vecmath.Vector2f[] positions = minionsPositions.get( m );
-			GuiObjectManager.getInstance().updateMinionPosition( m, positions[0], positions[1] );
+			javax.vecmath.Vector2f[] positions = minionsPositions.get(m);
+			GuiObjectManager.getInstance().updateMinionPosition(m, positions[0], positions[1]);
 		}
 	}
 
@@ -117,51 +110,52 @@ public class SinglePlayerController extends ListenerImplementation
 	public void createStateInformation()
 	{
 		HashMap<String, javax.vecmath.Vector2f[]> initPs = gManagerProxy.getPlayers();
-		for( String p : initPs.keySet() )
+		for (String p : initPs.keySet())
 		{
-			javax.vecmath.Vector2f[] positions = initPs.get( p );
-			System.out.println( "positions= " + positions );
-			System.out.println( GuiObjectManager.getInstance() );
-			GuiObjectManager.getInstance().addPlayer( p, positions[2], positions[0], positions[1] );
+			javax.vecmath.Vector2f[] positions = initPs.get(p);
+			System.out.println("positions= " + positions);
+			System.out.println(GuiObjectManager.getInstance());
+			GuiObjectManager.getInstance().addPlayer(p, positions[2], positions[0], positions[1]);
 		}
 		HashMap<String, javax.vecmath.Vector2f> fields = gManagerProxy.getFields();
 		HashMap<String, javax.vecmath.Vector2f> caves = gManagerProxy.getCaves();
 		HashMap<String, javax.vecmath.Vector2f> woods = gManagerProxy.getWoods();
 		HashMap<String, javax.vecmath.Vector2f> mines = gManagerProxy.getMines();
 
-		for( String s : fields.keySet() )
-			GuiObjectManager.getInstance().addResource( "FIELD", Integer.parseInt( s ),
-					fields.get( s ) );
-		for( String s : caves.keySet() )
-			GuiObjectManager.getInstance().addResource( "CAVE", Integer.parseInt( s ),
-					caves.get( s ) );
-		for( String s : woods.keySet() )
-			GuiObjectManager.getInstance().addResource( "WOOD", Integer.parseInt( s ),
-					woods.get( s ) );
-		for( String s : mines.keySet() )
-			GuiObjectManager.getInstance().addResource( "MINE", Integer.parseInt( s ),
-					mines.get( s ) );
+		for (String s : fields.keySet())
+			GuiObjectManager.getInstance().addResource("FIELD", Integer.parseInt(s), fields.get(s));
+		for (String s : caves.keySet())
+			GuiObjectManager.getInstance().addResource("CAVE", Integer.parseInt(s), caves.get(s));
+		for (String s : woods.keySet())
+			GuiObjectManager.getInstance().addResource("WOOD", Integer.parseInt(s), woods.get(s));
+		for (String s : mines.keySet())
+			GuiObjectManager.getInstance().addResource("MINE", Integer.parseInt(s), mines.get(s));
 
-		GuiObjectManager.getInstance().setWorldDimension( gManagerProxy.worldDimension() );
+		GuiObjectManager.getInstance().setWorldDimension(gManagerProxy.worldDimension());
 	}
 
 	@Override
-	public void computePath( Vector2f click )
+	public void computePath(Vector2f click)
 	{
-		gManagerProxy.computePath( GuiObjectManager.getInstance().getPlayingPlayer(), click.x,
-				click.y );
+		gManagerProxy.computePath(GuiObjectManager.getInstance().getPlayingPlayer(), click.x, click.y);
 	}
 
 	@Override
-	public HashMap<String, Integer> getPlayerResourcesAmount( String playerName )
+	public HashMap<String, Integer> getPlayerResourcesAmount(String playerName)
 	{
-		return gManagerProxy.getPlayerResourcesAmout( playerName );
+		return gManagerProxy.getPlayerResourcesAmout(playerName);
 	}
 
 	@Override
 	public int getNumberOfPlayer()
 	{
 		return gManagerProxy.getNumberOfPlayer();
+	}
+
+	@Override
+	public void computePath(Vector2f click, String playerName)
+	{
+		gManagerProxy.computePath(playerName, click.x, click.y);
 	}
 
 }

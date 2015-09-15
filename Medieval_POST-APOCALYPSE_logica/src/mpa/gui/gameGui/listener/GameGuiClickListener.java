@@ -66,7 +66,7 @@ public class GameGuiClickListener implements ActionListener
 			else
 			{
 				System.out.println("ci entro?");
-				listener.computePath(contactPoint);
+				// listener.computePath(contactPoint);
 			}
 		}
 		else if (!pickedObject.equals("GROUND") && !niftyHandler.isVisibleChoosePanel() && !niftyHandler.isVisibleOpponentPropertiesPanel())
