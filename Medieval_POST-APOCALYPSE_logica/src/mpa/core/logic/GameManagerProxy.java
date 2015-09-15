@@ -104,6 +104,11 @@ public class GameManagerProxy
 		return toReturn;
 	}
 
+	public String getPlayerLevel( String player )
+	{
+		return GameManager.getInstance().getPlayerLevel( players.get( player ) ).toString();
+	}
+
 	public HashMap<String, Vector2f> getWoods()
 	{
 		HashMap<String, Vector2f> toReturn = new HashMap<>();

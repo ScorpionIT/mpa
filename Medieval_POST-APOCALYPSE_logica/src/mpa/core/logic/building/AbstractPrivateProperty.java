@@ -1,5 +1,6 @@
 package mpa.core.logic.building;
 
+import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -9,8 +10,8 @@ import mpa.core.logic.character.Player;
 public abstract class AbstractPrivateProperty extends AbstractProperty
 {
 
-	protected Player owner;
-	private DependentCharacter controller;
+	protected Player owner = null;
+	protected ArrayList<DependentCharacter> controllers = new ArrayList<>();
 
 	private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 	protected Lock readLock = lock.readLock();
@@ -54,16 +55,21 @@ public abstract class AbstractPrivateProperty extends AbstractProperty
 		}
 	}
 
+	public int getNumberOfControllers()
+	{
+		return controllers.size();
+	}
+
 	public void setController( DependentCharacter controller )
 			throws ControllerAlreadyPresentException, DifferentOwnerException
 	{
 		writeLock.lock();
-		if( this.controller != null )
-			throw new ControllerAlreadyPresentException();
-		else if( owner != controller.getBoss() )
-			throw new DifferentOwnerException();
+		// if( this.controllers != null )
+		// throw new ControllerAlreadyPresentException();
+		// else if( owner != controller.getBoss() )
+		// throw new DifferentOwnerException();
 
-		this.controller = controller;
+		this.controllers.add( controller );
 
 		writeLock.unlock();
 	}

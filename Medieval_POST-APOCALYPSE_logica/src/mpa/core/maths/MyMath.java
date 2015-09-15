@@ -242,4 +242,20 @@ public class MyMath
 		return Math.min( x, z );
 
 	}
+
+	public static Vector2f computeDirection( Vector2f point1, Vector2f point2 )
+	{
+		Vector2f direction = new Vector2f( -point1.x + point2.x, -point1.y + point2.y );
+
+		float maxValue;
+
+		if( Math.abs( direction.x ) >= Math.abs( direction.y ) )
+			maxValue = Math.abs( direction.x );
+		else
+			maxValue = Math.abs( direction.y );
+
+		direction.set( direction.x / maxValue, direction.y / maxValue );
+
+		return direction;
+	}
 }

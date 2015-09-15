@@ -183,18 +183,40 @@ public class ConquestState extends AIState
 			GameManager.getInstance().computePath( player, gatheringPlace.x, gatheringPlace.y );
 			walking = true;
 		}
+
+		if( !opponentAI.player.getFreeSubalterns().isEmpty() )
+		{
+			int min = Integer.MAX_VALUE;
+			AbstractPrivateProperty chosen = null;
+			for( AbstractPrivateProperty abstractPrivateProperty : opponentAI.player
+					.getProperties() )
+				if( abstractPrivateProperty.getNumberOfControllers() < min )
+				{
+					chosen = abstractPrivateProperty;
+					min = abstractPrivateProperty.getNumberOfControllers();
+				}
+
+			if( chosen != null )
+				GameManager.getInstance().addWorker( opponentAI.player, chosen );
+		}
 	}
 
 	@Override
 	AIState changeState( OpponentAI opponentAI )
 	{
-		AIState nextState = null;
+		AIState nextState = super.changeState( opponentAI );
+
+		if( nextState != null )
+			return nextState;
+
 		if( walking && buildingToOccupy != null )
 			nextState = this;
-		else if( !opponentAI.knownAllTheWorld )
-			nextState = new ExplorationState();
 		else if( opponentAI.player.canUpgrade() )
 			nextState = new StrengtheningState();
+		else if( opponentAI.shouldBuyPotions() && opponentAI.player.canBuyPotions() )
+			nextState = new ProductionState();
+		else if( !opponentAI.knownAllTheWorld )
+			nextState = new ExplorationState();
 		else
 			nextState = new WaitingState();
 		// else if( opponentAI.player.canBuyPotions() )

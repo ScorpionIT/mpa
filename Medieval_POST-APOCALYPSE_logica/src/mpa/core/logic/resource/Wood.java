@@ -24,8 +24,8 @@ public class Wood extends AbstractResourceProducer
 			if( !super.providePlayer() )
 				return false;
 			if( owner != null )
-				owner.putResources( "WOOD", PROVIDING + EXTRA_PROVIDING
-						* owner.getPlayerLevel().ordinal() );
+				owner.putResources( "WOOD", PROVIDING + getProvidingFactor() * PROVIDING
+						+ EXTRA_PROVIDING * owner.getPlayerLevel().ordinal() + getProvidingFactor() );
 			return true;
 		} finally
 		{

@@ -24,9 +24,9 @@ public class Cave extends AbstractResourceProducer
 				return false;
 			if( owner != null )
 			{
-				owner.putResources( "STONE", PROVIDING + EXTRA_PROVIDING
-						* owner.getPlayerLevel().ordinal() );
-				System.out.println( "ho aggiunto pietra" );
+				owner.putResources( "STONE", PROVIDING + getProvidingFactor() * PROVIDING
+						+ EXTRA_PROVIDING * owner.getPlayerLevel().ordinal() );
+				// System.out.println( "ho aggiunto pietra" );
 			}
 			return true;
 		} finally

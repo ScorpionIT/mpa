@@ -68,25 +68,28 @@ class ExplorationState extends AIState
 	@Override
 	AIState changeState( OpponentAI opponentAI )
 	{
-		AIState nextState = null;
+		AIState nextState = super.changeState( opponentAI );
 
-		if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings()
+		if( nextState != null )
+			return nextState;
+
+		// if( isWalking )
+		// nextState = this;
+		if( opponentAI.player.canUpgrade() )
+			nextState = new StrengtheningState();
+		else if( opponentAI.shouldBuyPotions() && opponentAI.player.canBuyPotions() )
+			nextState = new ProductionState();
+		else if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings()
 				&& opponentAI.player.isThereAnyFreeSulbaltern() )
 			nextState = new ConquestState();
-
-		else if( opponentAI.player.canUpgrade() )
-			nextState = new StrengtheningState();
-		// else if( opponentAI.player.canBuyPotions() )
-		// nextState = new ProductionState();
-		// else if( opponentAI.areThereWeakerPlayers() )
-		// nextState = new CombatState();
-		// else
-		// nextState = new WaitingState();
-
 		else if( !opponentAI.knownAllTheWorld )
 			nextState = this;
 		else
 			nextState = new WaitingState();
+
+		// else if( opponentAI.areThereWeakerPlayers() )
+		// nextState = new CombatState();
+
 		return nextState;
 	}
 }

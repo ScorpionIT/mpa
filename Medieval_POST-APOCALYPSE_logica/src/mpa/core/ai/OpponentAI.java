@@ -23,9 +23,8 @@ public class OpponentAI extends MyThread
 
 	private ArrayList<House> knownHeadQuarters = new ArrayList<>();
 	private ArrayList<AbstractResourceProducer> knownResourceProducers = new ArrayList<>();
-	private Vector2f market = null;
 
-	boolean knownAllTheWorld;
+	boolean knownAllTheWorld = false;
 
 	public OpponentAI( Player player, DifficultyLevel level )
 	{
@@ -66,8 +65,6 @@ public class OpponentAI extends MyThread
 			knownResourceProducers.add( ( AbstractResourceProducer ) building );
 		if( building instanceof House && !knownHeadQuarters.contains( building ) )
 			knownHeadQuarters.add( ( House ) building );
-		// if( building instanceof Market )
-		// market = Market.getInstance().getGatheringPlace();
 	}
 
 	void addBuildings( Vector2f position )
@@ -86,16 +83,6 @@ public class OpponentAI extends MyThread
 	public ArrayList<AbstractResourceProducer> getKnownResourceProducers()
 	{
 		return knownResourceProducers;
-	}
-
-	public Vector2f getMarket()
-	{
-		return market;
-	}
-
-	public boolean knowsTheMarket()
-	{
-		return market != null;
 	}
 
 	private boolean isOpponentPlayerWeaker( Player p )
@@ -156,5 +143,39 @@ public class OpponentAI extends MyThread
 			GameManager.getInstance().changeSelectedItem( player, Item.MP_POTION );
 			GameManager.getInstance().playerAction( player, null );
 		}
+	}
+
+	boolean canIFightWithHim( Player bully )
+	{
+		if( player.getHP() < 5 )
+			return false;
+		if( player.getMP() < 5 )
+			return false;
+		if( player.getPotionAmount( Potions.GRANADE ) == 0 )
+			return false;
+		System.out.println( "ma sto bully ? " + bully );
+		if( player.getPlayerLevel().ordinal() < bully.getPlayerLevel().ordinal() )
+			return false;
+
+		return true;
+	}
+
+	boolean shouldBuyPotions()
+	{
+		for( Potions p : Potions.values() )
+			if( player.getPotionAmount( p ) == 0 )
+				return true;
+
+		return false;
+	}
+
+	public Player getPlayer()
+	{
+		return player;
+	}
+
+	public void gotAttackedBy( Player bully )
+	{
+		aiState.heIsAttackingYou( bully );
 	}
 }

@@ -6,9 +6,10 @@ public enum Level
 {
 	NEWBIE, SER, LORD, WAR_LORD, KING;
 
-	private int goldRequired = 100;
-	private int ironRequired = 150;
 	private int stoneRequired = 150;
+	private int wheatRequired = 200;
+	private int woodRequired = 150;
+	private int herbsRequired = 45;
 	private final int RANGE_PHYSICALL_ATTACK_INCREMENT = 2;
 	private final int COLLISION_RAY_INCREMENT = 2;
 	private final int PHYSICALL_ATTACK_DAMAGE_INCREMENT = 10;
@@ -29,16 +30,18 @@ public enum Level
 
 	private boolean areResourcesEnough( Player player )
 	{
-		if( player.getResourceAmount( "IRON" ) < ( player.getPlayerLevel().ordinal() + 1 )
-				* ironRequired )
+		if( player.getResourceAmount( "wheat" ) < ( player.getPlayerLevel().ordinal() + 1 )
+				* wheatRequired )
 			return false;
-		else if( player.getResourceAmount( "STONE" ) < ( player.getPlayerLevel().ordinal() + 1 )
+		else if( player.getResourceAmount( "stone" ) < ( player.getPlayerLevel().ordinal() + 1 )
 				* stoneRequired )
 			return false;
-		// else if( player.getResourceAmount( Resources. ) < ( player.getPlayerLevel().ordinal() + 1
-		// )
-		// * stoneRequired )
-		// return false;
+		else if( player.getResourceAmount( "herbs" ) < ( player.getPlayerLevel().ordinal() + 1 )
+				* herbsRequired )
+			return false;
+		else if( player.getResourceAmount( "wood" ) < ( player.getPlayerLevel().ordinal() + 1 )
+				* woodRequired )
+			return false;
 		else
 			return true;
 	}
@@ -55,10 +58,16 @@ public enum Level
 	{
 		if( canUpgrade( player ) )
 		{
-			player.putResources( "IRON", -( player.getPlayerLevel().ordinal() + 1 * ironRequired ) );
-			player.putResources( "STONE", -( player.getPlayerLevel().ordinal() + 1 * stoneRequired ) );
-			// player.putResources( Resources.GO, -( player.getPlayerLevel().ordinal() + 1 *
-			// goldRequired ) );
+			// player.putResources( "IRON", -( player.getPlayerLevel().ordinal() + 1 * ironRequired
+			// ) );
+			player.putResources( "stone",
+					-( ( player.getPlayerLevel().ordinal() ) + 1 * stoneRequired ) );
+			player.putResources( "wheat",
+					-( ( player.getPlayerLevel().ordinal() + 1 * wheatRequired ) ) );
+			player.putResources( "herbs",
+					-( ( player.getPlayerLevel().ordinal() + 1 * herbsRequired ) ) );
+			player.putResources( "wood",
+					-( ( player.getPlayerLevel().ordinal() + 1 * woodRequired ) ) );
 			player.setRangeOfPhysicallAttack( player.getRangeOfPhysicallAttack()
 					+ RANGE_PHYSICALL_ATTACK_INCREMENT );
 			player.setDistanceAttackRayOfCollision( player.getDistanceAttackRayOfCollision()
@@ -67,6 +76,14 @@ public enum Level
 					+ PHYSICALL_ATTACK_DAMAGE_INCREMENT );
 			player.setLevel( Level.values()[player.getPlayerLevel().ordinal() + 1] );
 
+			System.out.println();
+			System.out.println();
+			System.out.println( "HO UPPATO DI LIVELLO!" );
+			System.out.println( "HO UPPATO DI LIVELLO!" );
+			System.out.println( "HO UPPATO DI LIVELLO!" );
+			System.out.println( "HO UPPATO DI LIVELLO!" );
+			System.out.println();
+			System.out.println();
 			return true;
 		}
 		return false;

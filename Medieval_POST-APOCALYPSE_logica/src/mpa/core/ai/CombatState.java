@@ -12,7 +12,13 @@ class CombatState extends AIState
 		super();
 	}
 
-	@Override void action( OpponentAI opponentAI )
+	CombatState( Player playerToAttack )
+	{
+		this.playerToAttack = playerToAttack;
+	}
+
+	@Override
+	void action( OpponentAI opponentAI )
 	{
 		if( playerToAttack == null )
 		{
@@ -35,9 +41,13 @@ class CombatState extends AIState
 		}
 	}
 
-	@Override AIState changeState( OpponentAI opponentAI )
+	@Override
+	AIState changeState( OpponentAI opponentAI )
 	{
-		// TODO Auto-generated method stub
+		AIState nextState = super.changeState( opponentAI );
+
+		if( nextState != null )
+			return nextState;
 		return null;
 	}
 

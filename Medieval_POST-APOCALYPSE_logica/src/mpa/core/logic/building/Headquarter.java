@@ -13,11 +13,6 @@ public class Headquarter extends House
 		super( x, y, player );
 	}
 
-	public Vector2f getCollectionPoint()
-	{
-		return collectionPoint;
-	}
-
 	public void provideOwner()
 	{
 		owner.putResources( "wheat", 3 + owner.getPlayerLevel().ordinal() );

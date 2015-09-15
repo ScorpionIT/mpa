@@ -79,8 +79,6 @@ public class DependentCharacter extends AbstractCharacter
 			if( abstractPrivateProperty instanceof AbstractResourceProducer )
 			{
 				( ( AbstractResourceProducer ) abstractPrivateProperty ).setWorking( true );
-
-				System.out.println( "stone " + boss.getResourceAmount( "STONE" ) );
 			}
 
 		return b;

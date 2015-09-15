@@ -210,7 +210,7 @@ public class GuiObjectManager
 		// TODO
 		}
 
-		model.setLocalTranslation( new Vector3f( position.x, 0, position.y ) );
+		model.setLocalTranslation( new Vector3f( position.x, 50, position.y ) );
 		addSphere( position.x, position.y );
 
 		model.rotate( 90, 0, 0 );

@@ -18,7 +18,7 @@ public abstract class AbstractCharacter extends AbstractObject
 
 	protected ArrayList<Vector2f> path = new ArrayList<>();
 	private Vector2f previousVector;
-	private Vector2f currentVector = new Vector2f(0.0f, 0.0f);
+	private Vector2f currentVector = new Vector2f( 0.0f, 0.0f );
 	private float numberOfIterationsPerVector;
 
 	protected Headquarter headquarter;
@@ -33,21 +33,22 @@ public abstract class AbstractCharacter extends AbstractObject
 	protected Lock readLock = lock.readLock();
 	protected Lock writeLock = lock.writeLock();
 
-	public AbstractCharacter(String name, float x, float y, int health, Headquarter headquarter)
+	public AbstractCharacter( String name, float x, float y, int health, Headquarter headquarter )
 	{
-		super(x, y, GameProperties.getInstance().getObjectWidth("player"), GameProperties.getInstance().getObjectHeight("player")); // TODO
+		super( x, y, GameProperties.getInstance().getObjectWidth( "player" ), GameProperties
+				.getInstance().getObjectHeight( "player" ) ); // TODO
 		this.name = name;
 		this.health = health;
 		this.headquarter = headquarter;
-		this.currentVector = new Vector2f(-x + headquarter.getX(), -y + headquarter.getY());
-		float absX = Math.abs(currentVector.x);
-		float absY = Math.abs(currentVector.y);
-		if (absX >= absY)
-			currentVector = new Vector2f(currentVector.x / absX, currentVector.y / absX);
+		this.currentVector = new Vector2f( -x + headquarter.getX(), -y + headquarter.getY() );
+		float absX = Math.abs( currentVector.x );
+		float absY = Math.abs( currentVector.y );
+		if( absX >= absY )
+			currentVector = new Vector2f( currentVector.x / absX, currentVector.y / absX );
 		else
-			currentVector = new Vector2f(currentVector.x / absY, currentVector.y / absY);
+			currentVector = new Vector2f( currentVector.x / absY, currentVector.y / absY );
 
-		previousVector = new Vector2f(0, 1);
+		previousVector = new Vector2f( 0, 1 );
 	}
 
 	public void getWriteLock()
@@ -72,37 +73,39 @@ public abstract class AbstractCharacter extends AbstractObject
 
 	private void computeCurrentVector()
 	{
-		previousVector = new Vector2f(currentVector);
-		currentVector = new Vector2f((float) (-path.get(0).x + path.get(1).x), (float) (-path.get(0).y + path.get(1).y));
+		previousVector = new Vector2f( currentVector );
+		currentVector = new Vector2f( ( float ) ( -path.get( 0 ).x + path.get( 1 ).x ),
+				( float ) ( -path.get( 0 ).y + path.get( 1 ).y ) );
 
-		numberOfIterationsPerVector = (float) (MyMath.distanceFloat(path.get(0).x, path.get(0).y, path.get(1).x, path.get(1).y) / PACE);
+		numberOfIterationsPerVector = ( float ) ( MyMath.distanceFloat( path.get( 0 ).x,
+				path.get( 0 ).y, path.get( 1 ).x, path.get( 1 ).y ) / PACE );
 		// paceX = currentVector.x / numberOfIterationsPerVector;
 		// paceY = currentVector.y / numberOfIterationsPerVector;
 
-		float absX = Math.abs(currentVector.x);
-		float absY = Math.abs(currentVector.y);
-		if (absX >= absY)
-			currentVector = new Vector2f(currentVector.x / absX, currentVector.y / absX);
+		float absX = Math.abs( currentVector.x );
+		float absY = Math.abs( currentVector.y );
+		if( absX >= absY )
+			currentVector = new Vector2f( currentVector.x / absX, currentVector.y / absX );
 		else
-			currentVector = new Vector2f(currentVector.x / absY, currentVector.y / absY);
+			currentVector = new Vector2f( currentVector.x / absY, currentVector.y / absY );
 	}
 
-	public void setPath(ArrayList<Vector2f> path)
+	public void setPath( ArrayList<Vector2f> path )
 	{
 		writeLock.lock();
 
 		this.path = path;
-		if (path.size() > 1)
+		if( path.size() > 1 )
 		{
 			computeCurrentVector();
 		}
-		else if (path.size() == 1)
+		else if( path.size() == 1 )
 		{
-			Vector2f point = new Vector2f(path.get(0).x, path.get(0).y);
+			Vector2f point = new Vector2f( path.get( 0 ).x, path.get( 0 ).y );
 			// currentVector = new Vector2f( point.x - x, point.y - y );
-			currentVector = new Vector2f(-point.x + x, -point.y + y);
+			currentVector = new Vector2f( -point.x + x, -point.y + y );
 
-			numberOfIterationsPerVector = (int) (MyMath.distanceFloat(x, point.x, y, point.y) / PACE);
+			numberOfIterationsPerVector = ( int ) ( MyMath.distanceFloat( x, point.x, y, point.y ) / PACE );
 		}
 		writeLock.unlock();
 	}
@@ -114,13 +117,13 @@ public abstract class AbstractCharacter extends AbstractObject
 		try
 		{
 			writeLock.lock();
-			if (path == null || path.isEmpty())
+			if( path == null || path.isEmpty() )
 				return false;
 
-			if (numberOfIterationsPerVector <= 0)
+			if( numberOfIterationsPerVector <= 0 )
 			{
-				path.remove(0);
-				if (path.size() > 1)
+				path.remove( 0 );
+				if( path.size() > 1 )
 				{
 
 					computeCurrentVector();
@@ -128,24 +131,24 @@ public abstract class AbstractCharacter extends AbstractObject
 				}
 				else
 				{
-					path.remove(0);
+					path.remove( 0 );
 					return false;
 				}
 
 			}
 			numberOfIterationsPerVector--;
 
-			if (MyMath.distanceFloat(x, y, path.get(1).x, path.get(1).y) < PACE)
+			if( MyMath.distanceFloat( x, y, path.get( 1 ).x, path.get( 1 ).y ) < PACE )
 			{
-				Vector2f finalPosition = path.get(1);
-				setX(finalPosition.x);
-				setY(finalPosition.y);
+				Vector2f finalPosition = path.get( 1 );
+				setX( finalPosition.x );
+				setY( finalPosition.y );
 				numberOfIterationsPerVector = 0;
 			}
 			else
 			{
-				setX(((x + PACE * currentVector.x)));
-				setY((y + PACE * currentVector.y));
+				setX( ( ( x + PACE * currentVector.x ) ) );
+				setY( ( y + PACE * currentVector.y ) );
 			}
 			return true;
 
@@ -206,6 +209,14 @@ public abstract class AbstractCharacter extends AbstractObject
 		}
 	}
 
+	public void setDirection( Vector2f direction )
+	{
+		writeLock.lock();
+		path = null;
+		currentVector = direction;
+		writeLock.unlock();
+	}
+
 	public Vector2f getPlayerDirection()
 	{
 		try
@@ -223,20 +234,20 @@ public abstract class AbstractCharacter extends AbstractObject
 		path = null;
 	}
 
-	public void setPlayerDirection(Vector2f focus)
+	public void setPlayerDirection( Vector2f focus )
 	{
-		previousVector = new Vector2f(currentVector);
-		currentVector = new Vector2f((float) (-x + focus.x), (float) (-y + focus.y));
+		previousVector = new Vector2f( currentVector );
+		currentVector = new Vector2f( ( float ) ( -x + focus.x ), ( float ) ( -y + focus.y ) );
 
-		float absX = Math.abs(currentVector.x);
-		float absY = Math.abs(currentVector.y);
-		if (absX >= absY)
-			currentVector = new Vector2f(currentVector.x / absX, currentVector.y / absX);
+		float absX = Math.abs( currentVector.x );
+		float absY = Math.abs( currentVector.y );
+		if( absX >= absY )
+			currentVector = new Vector2f( currentVector.x / absX, currentVector.y / absX );
 		else
-			currentVector = new Vector2f(currentVector.x / absY, currentVector.y / absY);
+			currentVector = new Vector2f( currentVector.x / absY, currentVector.y / absY );
 	}
 
-	public void setName(String name)
+	public void setName( String name )
 	{
 		this.name = name;
 	}

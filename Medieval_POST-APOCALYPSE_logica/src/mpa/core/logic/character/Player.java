@@ -33,6 +33,7 @@ public class Player extends AbstractCharacter
 	private float distanceAttackRayOfCollision = 12;
 	private boolean flashed = false;
 	private ArrayList<Tower> towers = new ArrayList<>();
+	private ArrayList<AbstractPrivateProperty> properties = new ArrayList<>();
 
 	private HashMap<String, Integer> resources = new HashMap<>();
 
@@ -40,7 +41,7 @@ public class Player extends AbstractCharacter
 
 	public Player( String name, float x, float y, int health, Level level, Headquarter headquarter )
 	{
-		super( name, x, y, 5, headquarter );
+		super( name, x, y, 100, headquarter );
 		subalterns = new ArrayList<DependentCharacter>();
 		this.level = level;
 		Vector2f gatheringPlace = headquarter.getGatheringPlace();
@@ -73,16 +74,36 @@ public class Player extends AbstractCharacter
 
 	public DependentCharacter employSubaltern( AbstractPrivateProperty abstractPrivateProperty )
 	{
-		for( DependentCharacter subaltern : subalterns )
+		try
 		{
-			if( subaltern.getAbstractPrivateProperty() == null )
+			writeLock.lock();
+			for( DependentCharacter subaltern : subalterns )
 			{
-				subaltern.setAbstractPrivateProperty( abstractPrivateProperty );
-				employedSubalterns++;
-				return subaltern;
+				if( subaltern.getAbstractPrivateProperty() == null )
+				{
+					subaltern.setAbstractPrivateProperty( abstractPrivateProperty );
+					properties.add( abstractPrivateProperty );
+					employedSubalterns++;
+					return subaltern;
+				}
 			}
+			return null;
+		} finally
+		{
+			writeLock.unlock();
 		}
-		return null;
+	}
+
+	public ArrayList<AbstractPrivateProperty> getProperties()
+	{
+		try
+		{
+			readLock.lock();
+			return properties;
+		} finally
+		{
+			readLock.unlock();
+		}
 	}
 
 	public boolean employSubaltern( DependentCharacter dependentCharacter,
@@ -140,7 +161,7 @@ public class Player extends AbstractCharacter
 		{
 			writeLock.lock();
 			health -= damage;
-			System.out.println( "la sua vita dopo l'attacco è " + health );
+			// System.out.println( "la sua vita dopo l'attacco è " + health );
 			return health <= 0;
 
 		} finally
@@ -213,6 +234,7 @@ public class Player extends AbstractCharacter
 	public void putResources( String type, int providing )
 	{
 		writeLock.lock();
+		type = type.toUpperCase();
 		switch( type )
 		{
 			case "STONE":
@@ -241,6 +263,7 @@ public class Player extends AbstractCharacter
 		try
 		{
 			readLock.lock();
+			type = type.toUpperCase();
 			return resources.get( type );
 		} finally
 		{
@@ -358,7 +381,7 @@ public class Player extends AbstractCharacter
 		try
 		{
 			writeLock.lock();
-			if( x != headquarter.getCollectionPoint().x && y != headquarter.getCollectionPoint().y )
+			if( x != headquarter.getGatheringPlace().x && y != headquarter.getGatheringPlace().y )
 				return false;
 
 			HashMap<String, Integer> price = PotionManager.getInstance().getPrice( potion );

@@ -23,8 +23,14 @@ class WaitingState extends AIState
 	@Override
 	AIState changeState( OpponentAI opponentAI )
 	{
-		AIState nextState = null;
-		if( !opponentAI.knownAllTheWorld )
+		AIState nextState = super.changeState( opponentAI );
+
+		if( nextState != null )
+			return nextState;
+
+		if( opponentAI.player.canUpgrade() )
+			nextState = new StrengtheningState();
+		else if( !opponentAI.knownAllTheWorld )
 			nextState = new ExplorationState();
 		else if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings()
 				&& opponentAI.player.isThereAnyFreeSulbaltern() )
@@ -33,13 +39,6 @@ class WaitingState extends AIState
 			nextState = new ProductionState();
 		else
 			nextState = this;
-
-		// else if( opponentAI.areThereWeakerPlayers() )
-		// nextState = new CombatState();
-		// else if( !opponentAI.knownAllTheWorld )
-		// nextState = new ExplorationState();
-		// else
-		// nextState = new WaitingState();
 
 		return nextState;
 	}

@@ -1,6 +1,7 @@
 package mpa.core.logic;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
@@ -11,6 +12,8 @@ import javax.vecmath.Vector2f;
 import mpa.core.ai.DifficultyLevel;
 import mpa.core.ai.OpponentAI;
 import mpa.core.logic.building.AbstractPrivateProperty;
+import mpa.core.logic.building.ControllerAlreadyPresentException;
+import mpa.core.logic.building.DifferentOwnerException;
 import mpa.core.logic.building.Tower;
 import mpa.core.logic.character.AbstractCharacter;
 import mpa.core.logic.character.DependentCharacter;
@@ -20,13 +23,14 @@ import mpa.core.logic.character.Player.Item;
 import mpa.core.logic.character.TowerCrusher;
 import mpa.core.logic.fights.CombatManager;
 import mpa.core.logic.tool.Potions;
+import mpa.core.maths.MyMath;
 import mpa.core.util.GameProperties;
 
 public class GameManager
 {
 	private World world;
 	private List<Player> players;
-	private List<OpponentAI> AI_players;
+	private HashMap<Player, OpponentAI> AI_players;
 	private List<Tower> towers = new ArrayList<Tower>();
 	private DifficultyLevel difficultyLevel;
 	private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
@@ -77,7 +81,7 @@ public class GameManager
 	{
 		this.world = world;
 		this.players = new ArrayList<Player>();
-		this.AI_players = new ArrayList<>();
+		AI_players = new HashMap<>();
 		this.difficultyLevel = level;
 		minionIDs = new IDPool( 100 );
 		towerCrusherIDs = new IDPool( 100 );
@@ -97,9 +101,9 @@ public class GameManager
 	public void addAIPlayer( Player player )
 	{
 		OpponentAI newAI = new OpponentAI( player, difficultyLevel );
-		AI_players.add( newAI );
+		AI_players.put( player, newAI );
 		addPlayer( player );
-		// newAI.start();
+		newAI.start();
 	}
 
 	public ArrayList<Minion> createMinions( Player boss, int quantity, Player target )
@@ -138,6 +142,25 @@ public class GameManager
 		return world;
 	}
 
+	public boolean addWorker( Player player, AbstractPrivateProperty abstractPrivateProperty )
+	{
+		if( abstractPrivateProperty.getOwner() != player )
+			return false;
+
+		DependentCharacter employee = player.employSubaltern( abstractPrivateProperty );
+		if( employee == null )
+			return false;
+
+		try
+		{
+			abstractPrivateProperty.setController( employee );
+		} catch( ControllerAlreadyPresentException | DifferentOwnerException e )
+		{
+			e.printStackTrace();
+		}
+		return true;
+	}
+
 	public boolean conquer( AbstractPrivateProperty abstractPrivateProperty, Player player )
 	{
 		Vector2f gatheringPlace = abstractPrivateProperty.getGatheringPlace();
@@ -152,6 +175,15 @@ public class GameManager
 		if( employSubaltern != null )
 		{
 			abstractPrivateProperty.setOwner( player );
+			try
+			{
+				abstractPrivateProperty.setController( employSubaltern );
+				computePath( employSubaltern, abstractPrivateProperty.getGatheringPlace().x,
+						abstractPrivateProperty.getGatheringPlace().y );
+			} catch( ControllerAlreadyPresentException | DifferentOwnerException e )
+			{
+				e.printStackTrace();
+			}
 			return true;
 		}
 		return false;
@@ -164,7 +196,7 @@ public class GameManager
 		p.die();
 		if( players.contains( p ) )
 			players.remove( p );
-		if( AI_players.contains( p ) )
+		if( AI_players.keySet().contains( p ) )
 			AI_players.remove( p );
 
 		deadPlayers.add( p );
@@ -229,6 +261,8 @@ public class GameManager
 	{
 		Item selectedItem = p.getSelectedItem();
 		ArrayList<Player> hitPlayers = null;
+		if( target != null )
+			p.setDirection( MyMath.computeDirection( p.getPosition(), target ) );
 
 		switch( selectedItem )
 		{
@@ -246,6 +280,14 @@ public class GameManager
 				hitPlayers.add( p );
 
 		}
+
+		for( Player hitPlayer : hitPlayers )
+		{
+			if( hitPlayer != p && AI_players.keySet().contains( hitPlayer ) )
+				AI_players.get( hitPlayer ).gotAttackedBy( p );
+
+		}
+
 		return hitPlayers;
 	}
 
@@ -294,6 +336,11 @@ public class GameManager
 				if( p.getHP() < 0 )
 					killPlayer( p );
 		}
+	}
+
+	public Level getPlayerLevel( Player player )
+	{
+		return player.getPlayerLevel();
 	}
 
 	public void destroyTower( Tower t )

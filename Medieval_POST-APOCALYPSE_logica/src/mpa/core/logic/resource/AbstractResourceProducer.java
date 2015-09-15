@@ -18,6 +18,11 @@ public abstract class AbstractResourceProducer extends AbstractPrivateProperty
 
 	}
 
+	int getProvidingFactor()
+	{
+		return controllers.size() / 3;
+	}
+
 	public abstract int getProviding();
 
 	public void setWorking( boolean working )
