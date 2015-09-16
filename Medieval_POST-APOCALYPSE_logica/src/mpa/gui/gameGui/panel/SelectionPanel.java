@@ -79,7 +79,6 @@ public class SelectionPanel
 
 					}
 				});
-
 				control(objectName);
 				control(objectOwner);
 				image(occupyButton);

@@ -34,6 +34,7 @@ public class NiftyHandler
 	private ListenerImplementation gameController;
 	private boolean opponentPropertiesPanelIsVisible = false;
 	private boolean chooseObjectPanelIsVisible = false;
+	private SelectionHeadquarterHandler selectionHeadquarterHandler;
 
 	public NiftyHandler(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort,
 			AppStateManager stateManager, ListenerImplementation playerController, GameGui gameGui)
@@ -86,6 +87,13 @@ public class NiftyHandler
 					}
 				});
 
+				layer(new LayerBuilder("selectionHeadquarterLayer")
+				{
+					{
+						childLayoutAbsolute();
+					}
+				});
+
 			}
 		}.build(nifty));
 
@@ -104,6 +112,13 @@ public class NiftyHandler
 
 		Element findElementByName = nifty.getCurrentScreen().findElementByName("resourcesLayer");
 		findElementByName.add(resourcesPanel.build(nifty, nifty.getCurrentScreen(), findElementByName));
+
+		selectionHeadquarterHandler = new SelectionHeadquarterHandler(gameGui.windowWidth(), gameGui.windowHeight(), gameController);
+
+		findElementByName = nifty.getCurrentScreen().findElementByName("selectionHeadquarterLayer");
+		findElementByName.add(selectionHeadquarterHandler.buildListBox(nifty, nifty.getCurrentScreen(), findElementByName));
+
+		selectionHeadquarterHandler.setListBox(nifty.getCurrentScreen());
 
 	}
 
@@ -188,15 +203,20 @@ public class NiftyHandler
 		choosePanel.initSelectedElment();
 	}
 
-	public void removeChoosePanel()
+	private void removeChoosePanel()
 	{
 
 		if (nifty.getCurrentScreen().findElementByName("#choosePanel") != null)
 		{
 			nifty.getCurrentScreen().findElementByName("#choosePanel").markForRemoval();
 			nifty.removeElement(nifty.getCurrentScreen(), nifty.getCurrentScreen().findElementByName("#choosePanel"));
-
 		}
+
+	}
+
+	public void removeChooseItemPanel()
+	{
+		removeChoosePanel();
 		choosePanel.setVisible(false);
 		chooseObjectPanelIsVisible = false;
 
@@ -324,6 +344,8 @@ public class NiftyHandler
 	public void removePayer(String playerName)
 	{
 		opponentPropertiesPanel.removePlayer(playerName);
+		selectionHeadquarterHandler.removePlayer(playerName);
+
 	}
 
 }

@@ -364,5 +364,11 @@ public class GuiObjectManager
 		minions.remove(ID);
 	}
 
+	public void startPlayerAttackAnimation(String playingPlayerName)
+	{
+		animationControllerSpatial.get(players.get(playingPlayerName)).stopAnimation();
+		animationControllerSpatial.get(players.get(playingPlayerName)).startAttackAnimation(1f);
+	}
+
 	// TODO retrieve informations
 }

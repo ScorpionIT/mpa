@@ -85,6 +85,8 @@ public class SinglePlayerController extends ListenerImplementation
 	{
 		ArrayList<String> deadMinions = gManagerProxy.takeDeadMinions();
 		ArrayList<String> deadPlayers = gManagerProxy.takeDeadPlayers();
+		ArrayList<String> attackingPlayers = gManagerProxy.takePlayerAttacks();
+		ArrayList<String> attackingMinions = gManagerProxy.takeMinionAttacks();
 		HashMap<String, javax.vecmath.Vector2f[]> playersPositions = gManagerProxy.getPlayersPositions();
 
 		HashMap<String, javax.vecmath.Vector2f[]> minionsPositions = gManagerProxy.getMinionsPositions();
@@ -103,6 +105,11 @@ public class SinglePlayerController extends ListenerImplementation
 		{
 			javax.vecmath.Vector2f[] positions = minionsPositions.get(m);
 			GuiObjectManager.getInstance().updateMinionPosition(m, positions[0], positions[1]);
+		}
+		for (String playerName : attackingPlayers)
+		{
+			GuiObjectManager.getInstance().startPlayerAttackAnimation(playerName);
+
 		}
 	}
 

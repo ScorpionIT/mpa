@@ -24,6 +24,7 @@ public class SpatialAnimationController implements AnimEventListener
 		control = model.getControl(AnimControl.class);
 		control.addListener(this);
 		channel = control.createChannel();
+		channel.setAnim("stand");
 	}
 
 	@Override
@@ -42,13 +43,13 @@ public class SpatialAnimationController implements AnimEventListener
 		}
 		else if (animName.equals("attack"))
 		{
-			channel.reset(true);
+			channel.setAnim("stand");
 		}
 	}
 
 	public void startWalkAnimation(float animationSpeed)
 	{
-		if (channel.getAnimationName() == null)
+		if (channel.getAnimationName() == null || channel.getAnimationName().equals("stand"))
 		{
 			channel.setAnim("walk", animationSpeed);
 			channel.setLoopMode(LoopMode.Loop);
@@ -59,7 +60,7 @@ public class SpatialAnimationController implements AnimEventListener
 	{
 		if (channel.getAnimationName() != null && channel.getAnimationName().equals("walk"))
 		{
-			channel.reset(true);
+			channel.setAnim("stand");
 		}
 	}
 
@@ -73,6 +74,10 @@ public class SpatialAnimationController implements AnimEventListener
 			else
 				channel.setAnim("attack", animationSpeed);
 
+		}
+		else
+		{
+			channel.setAnim("attack", animationSpeed);
 		}
 		channel.setLoopMode(LoopMode.DontLoop);
 	}
@@ -95,6 +100,15 @@ public class SpatialAnimationController implements AnimEventListener
 		}
 		else
 			return false;
+
+	}
+
+	public void stopAnimation()
+	{
+		if (channel.getAnimationName() != null && !channel.getAnimationName().equals("stand"))
+		{
+			channel.setAnim("stand");
+		}
 
 	}
 }

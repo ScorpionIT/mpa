@@ -1,5 +1,7 @@
 package mpa.gui.gameGui.listener;
 
+import java.util.ArrayList;
+
 import mpa.gui.gameGui.panel.NiftyHandler;
 import mpa.gui.gameGui.playingGUI.GameGui;
 
@@ -14,11 +16,10 @@ public class GameGuiClickListener implements ActionListener
 
 	private ListenerImplementation listener;
 	private GameGui gameGui;
-	private boolean choosePanel = false;
 
-	NiftyHandler niftyHandler;
+	private NiftyHandler niftyHandler;
 
-	public GameGuiClickListener( ListenerImplementation listener, GameGui gameGui )
+	public GameGuiClickListener(ListenerImplementation listener, GameGui gameGui)
 	{
 		this.listener = listener;
 		this.gameGui = gameGui;
@@ -28,148 +29,114 @@ public class GameGuiClickListener implements ActionListener
 	static int c = 1;
 
 	@Override
-	public void onAction( String name, boolean isPressed, float tpf )
+	public void onAction(String name, boolean isPressed, float tpf)
 	{
 
 		// System.out.println( "ci sono entrato  per la " + c++ );
 		Vector2f click = gameGui.getInputManager().getCursorPosition();
 
-		Vector3f cursor = gameGui.getCamera()
-				.getWorldCoordinates( new Vector2f( click.x, click.y ), 0.0f ).clone();
+		Vector3f cursor = gameGui.getCamera().getWorldCoordinates(new Vector2f(click.x, click.y), 0.0f).clone();
 
 		// System.out.println( "la pos di cursor è " + cursor );
 
-		Vector3f dir = gameGui.getCamera()
-				.getWorldCoordinates( new Vector2f( click.x, click.y ), 1.0f )
-				.subtractLocal( cursor ).normalizeLocal();
+		Vector3f dir = gameGui.getCamera().getWorldCoordinates(new Vector2f(click.x, click.y), 1.0f).subtractLocal(cursor).normalizeLocal();
 		// System.out.println( "la dir è " + dir );
 
 		Ray ray = new Ray();
 
-		ray.setOrigin( cursor );
-		ray.setDirection( new Vector3f( dir.x, dir.y, dir.z ) );
-
+		ray.setOrigin(cursor);
+		ray.setDirection(new Vector3f(dir.x, dir.y, dir.z));
 		CollisionResults crs = new CollisionResults();
-		gameGui.getGroundNode().collideWith( ray, crs );
+		gameGui.getGroundNode().collideWith(ray, crs);
+		Vector2f contactPoint;
 
-		Vector2f contactPoint = new Vector2f( crs.getClosestCollision().getContactPoint().x, crs
-				.getClosestCollision().getContactPoint().z );
-
-		String pickedObject = listener.getPickedObject( contactPoint );
-
-		System.out.println( "ho cliccato su " + pickedObject );
-		if( !isPressed && pickedObject.equals( "GROUND" ) )
+		if (!isPressed && name.equals("Click"))
 		{
-			if( !gameGui.canClick() )
+
+			contactPoint = new Vector2f(crs.getClosestCollision().getContactPoint().x, crs.getClosestCollision().getContactPoint().z);
+			String pickedObject = listener.getPickedObject(contactPoint);
+
+			System.out.println("ho cliccato su " + pickedObject);
+			if (!isPressed && pickedObject.equals("GROUND"))
 			{
-				if( niftyHandler.isVisibleSelectionPanel() )
+				if (!gameGui.canClick())
 				{
-					niftyHandler.removeSelectedPanel();
+					if (niftyHandler.isVisibleSelectionPanel())
+					{
+						niftyHandler.removeSelectedPanel();
+					}
+				}
+				else
+				{
+					System.out.println("ci entro?");
+					listener.computePath(contactPoint);
 				}
 			}
-			else
+			else if (!pickedObject.equals("GROUND") && !niftyHandler.isVisibleChoosePanel() && !niftyHandler.isVisibleOpponentPropertiesPanel())
 			{
-				System.out.println( "ci entro?" );
-				listener.computePath( contactPoint );
+
+				String[] split = pickedObject.split(":");
+				String pickedObjectOwner = listener.getPickedObjectOwner(split[0], split[1]);
+				String objectProductivity = Integer.toString(listener.getPickedObjectProductivity(split[0], split[1]));
+
+				niftyHandler.removeSelectedPanel();
+				niftyHandler.setSelectedPanel(split[0], split[1], objectProductivity, pickedObjectOwner);
+				niftyHandler.relocateSelectionPanel((int) click.x, gameGui.windowHeight() - (int) click.y);
 			}
 		}
-		else if( !pickedObject.equals( "GROUND" ) && !niftyHandler.isVisibleChoosePanel()
-				&& !niftyHandler.isVisibleOpponentPropertiesPanel() )
+		if ("Wheel_DOWN".equals(name) && isPressed)
 		{
-
-			String[] split = pickedObject.split( ":" );
-			String pickedObjectOwner = listener.getPickedObjectOwner( split[0], split[1] );
-			String objectProductivity = Integer.toString( listener.getPickedObjectProductivity(
-					split[0], split[1] ) );
-
-			niftyHandler.removeSelectedPanel();
-			niftyHandler.setSelectedPanel( split[0], split[1], objectProductivity,
-					pickedObjectOwner );
-			niftyHandler.relocateSelectionPanel( ( int ) click.x, gameGui.windowHeight()
-					- ( int ) click.y );
-		}
-
-		if( "Wheel_DOWN".equals( name ) )
-		{
-			if( choosePanel )
+			if (niftyHandler.isVisibleChoosePanel())
 			{
-				niftyHandler.changeChoosenElement( false );
+				niftyHandler.changeChoosenElement(false);
 			}
 
 		}
-		else if( "Wheel_UP".equals( name ) )
+		else if ("Wheel_UP".equals(name) && isPressed)
 		{
-			if( choosePanel )
+			if (niftyHandler.isVisibleChoosePanel())
 			{
-				niftyHandler.changeChoosenElement( true );
+				niftyHandler.changeChoosenElement(true);
 			}
 		}
-		//
-		// else if( "Click".equals( name ) && isPressed )
-		// {
-		//
-		// if( crs.getClosestCollision() != null )
-		// {
-		// gameGui.getNiftyHandler().emptySelectedPanel();
-		// Vector2f contactPoint = new Vector2f(
-		// crs.getClosestCollision().getContactPoint().x, crs.getClosestCollision()
-		// .getContactPoint().z );
-		//
-		// if( listener.getPickedObject( click ) == "GROUND" )
-		// {
-		// GameManagerProxy.getInstance().computePath(
-		// GuiObjectManager.getInstance().getPlayingPlayer(), contactPoint.x,
-		// contactPoint.y );
-		// }
-		// else
-		// {
-		// // TODO
-		// gameGui.getNiftyHandler().setSelectedPanel(
-		// GameManager.getInstance().getWorld()
-		// .pickedObject( contactPoint.x, contactPoint.y ) );
-		// }
-		// }
-		// }
-		else if( "ChooseItem".equals( name ) && !niftyHandler.isVisibleOpponentPropertiesPanel()
-				&& !niftyHandler.isVisibleSelectionPanel() )
+
+		else if ("ChooseItem".equals(name))
 		{
-			if( isPressed )
+			if (isPressed)
 			{
-				niftyHandler.relocateChoosePanel( ( int ) click.x, gameGui.windowHeight()
-						- ( int ) click.y );
+				niftyHandler.relocateChoosePanel((int) click.x, gameGui.windowHeight() - (int) click.y);
 			}
-			else
+			else if (!isPressed)
 			{
 				String selectedItem = niftyHandler.getSelectedItem();
-				listener.changeItem( selectedItem );
+				listener.changeItem(selectedItem);
 
-				niftyHandler.removeChoosePanel();
-				niftyHandler.initChoosenElementPanel();
+				niftyHandler.removeChooseItemPanel();
 			}
 		}
 
-		/* else */if( "attack".equals( name ) && isPressed )
+		if ("attack".equals(name) && isPressed)
 		{
 
-			// Player player = gameGui.getPlayingPlayer();
+			// String player = GuiObjectManager.getInstance().getPlayingPlayer();
 
 			// TODO cambiare azione in base all'item selezionato
-			// if( crs.getClosestCollision() != null )
-			// {
-			//
-			// Vector2f contactPoint = new Vector2f(
-			// crs.getClosestCollision().getContactPoint().x, crs.getClosestCollision()
-			// .getContactPoint().z );
-			//
-			// ArrayList<String> hitPlayers = listener.playerAction( contactPoint );
-			//
-			// if( hitPlayers.isEmpty() )
-			// System.out.println( "non ho colpito niente" );
-			// // else
-			// // for( Player pl : p )
-			// // System.out.println( "ho colpito " + pl.getName() );
-			//
-			// }
+			if (crs.getClosestCollision() != null)
+			{
+
+				contactPoint = new Vector2f(crs.getClosestCollision().getContactPoint().x, crs.getClosestCollision().getContactPoint().z);
+				// contactPoint = new Vector2f(crs.getClosestCollision().getContactPoint().x,
+				// crs.getClosestCollision().getContactPoint().z);
+
+				ArrayList<String> hitPlayers = listener.playerAction(contactPoint);
+
+				if (hitPlayers.isEmpty())
+					System.out.println("non ho colpito niente");
+				else
+					for (String pl : hitPlayers)
+						System.out.println("ho colpito " + pl);
+
+			}
 		}
 	}
 }
