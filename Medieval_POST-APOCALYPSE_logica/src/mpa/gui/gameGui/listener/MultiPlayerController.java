@@ -2,6 +2,7 @@ package mpa.gui.gameGui.listener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import com.jme3.math.Vector2f;
 
@@ -144,6 +145,13 @@ public class MultiPlayerController extends ListenerImplementation
 	{
 		// TODO Stub di metodo generato automaticamente
 		return 0;
+	}
+
+	@Override
+	public Set<String> getPlayersName()
+	{
+		// TODO Stub di metodo generato automaticamente
+		return null;
 	}
 
 }

@@ -1,6 +1,9 @@
 package mpa.gui.gameGui.panel;
 
+import java.util.Set;
+
 import mpa.gui.gameGui.listener.ListenerImplementation;
+import mpa.gui.gameGui.playingGUI.GuiObjectManager;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.elements.Element;
@@ -37,13 +40,27 @@ public class SelectionHeadquarterHandler
 	public void setListBox(Screen currentScreen)
 	{
 		listBox = currentScreen.findNiftyControl(selectionHeadquarterPanel.getId(), ListBox.class);
-		addPlayersName();
+		updatePlayersName();
 
 	}
 
-	private void addPlayersName()
+	private void updatePlayersName()
 	{
+		listBox.clear();
+		Set<String> playersName = gameController.getPlayersName();
+		for (String playerName : playersName)
+		{
+			if (!playerName.equals(GuiObjectManager.getInstance().getPlayingPlayer()))
+			{
+				listBox.addItem(playerName);
+			}
+		}
 
+	}
+
+	public void setVisible(boolean visible)
+	{
+		selectionHeadquarterPanel.setVisible(visible);
 	}
 
 }

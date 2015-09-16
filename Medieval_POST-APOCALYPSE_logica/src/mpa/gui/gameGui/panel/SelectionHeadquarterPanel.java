@@ -11,17 +11,17 @@ import de.lessvoid.nifty.screen.Screen;
 public class SelectionHeadquarterPanel
 {
 	private ListBoxBuilder listBoxBuilder;
-	private ListenerImplementation playerController;
+	private ListenerImplementation gameController;
 	private PanelBuilder selectionPanel;
 	private int windowWidth;
 	private int windowHeight;
 	private final String listId = "#listBoxEnemy";
 
-	public SelectionHeadquarterPanel(int windowWidth, int windowHeight, ListenerImplementation playerController)
+	public SelectionHeadquarterPanel(int windowWidth, int windowHeight, ListenerImplementation gameController)
 	{
 		this.windowWidth = windowWidth;
 		this.windowHeight = windowHeight;
-		this.playerController = playerController;
+		this.gameController = gameController;
 
 		listBoxBuilder = new ListBoxBuilder(listId)
 		{
@@ -31,6 +31,8 @@ public class SelectionHeadquarterPanel
 				optionalHorizontalScrollbar();
 				optionalVerticalScrollbar();
 				selectionModeSingle();
+				x("50%");
+				y("50%");
 				width("50%"); // standard nifty width attribute
 				height("50%"); // standard nifty width attribute
 			}
@@ -66,6 +68,7 @@ public class SelectionHeadquarterPanel
 
 	public void addListBox(Screen screen)
 	{
+
 	}
 
 	public Element build(Nifty nifty, Screen currentScreen, Element parent)
@@ -77,6 +80,11 @@ public class SelectionHeadquarterPanel
 	public String getId()
 	{
 		return listId;
+	}
+
+	public void setVisible(boolean visible)
+	{
+		selectionPanel.visible(visible);
 	}
 
 }

@@ -124,11 +124,18 @@ public class NiftyHandler
 
 	public void setSelectedPanel(String objectType, String objectID, String objectProductivity, String pickedObjectOwner)
 	{
-		selectionPanel.setObjectName(objectType);
-		selectionPanel.setProductivityLabel(objectProductivity);
-		selectionPanel.setObjectOwner(pickedObjectOwner);
-		selectedObjectID = objectID;
-		selectedObjectType = objectType;
+		if (objectType.toLowerCase().equals("headquarter"))
+		{
+			selectionHeadquarterHandler.setVisible(true);
+		}
+		else
+		{
+			selectionPanel.setObjectName(objectType);
+			selectionPanel.setProductivityLabel(objectProductivity);
+			selectionPanel.setObjectOwner(pickedObjectOwner);
+			selectedObjectID = objectID;
+			selectedObjectType = objectType;
+		}
 
 	}
 

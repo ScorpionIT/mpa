@@ -2,6 +2,7 @@ package mpa.gui.gameGui.listener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import mpa.core.logic.GameManagerProxy;
 import mpa.gui.gameGui.playingGUI.GuiObjectManager;
@@ -180,7 +181,12 @@ public class SinglePlayerController extends ListenerImplementation
 	@Override
 	public int getPlayerMP(String playerName)
 	{
-		return gManagerProxy.getPLayerMP(playerName);
+		return gManagerProxy.getPlayerMP(playerName);
 	}
 
+	@Override
+	public Set<String> getPlayersName()
+	{
+		return gManagerProxy.getPlayersName();
+	}
 }

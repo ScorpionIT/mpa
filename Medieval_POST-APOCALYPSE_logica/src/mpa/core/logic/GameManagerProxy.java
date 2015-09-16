@@ -3,6 +3,7 @@ package mpa.core.logic;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Set;
 
 import javax.vecmath.Vector2f;
 
@@ -424,9 +425,14 @@ public class GameManagerProxy
 		return players.get(playerName).getHP();
 	}
 
-	public int getPLayerMP(String playerName)
+	public int getPlayerMP(String playerName)
 	{
 		return players.get(playerName).getMP();
+	}
+
+	public Set<String> getPlayersName()
+	{
+		return players.keySet();
 	}
 	// private static GameManagerProxy gameManagerProxy = null;
 	// private GameManager gm;

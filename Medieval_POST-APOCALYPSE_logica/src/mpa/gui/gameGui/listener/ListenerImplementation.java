@@ -2,6 +2,7 @@ package mpa.gui.gameGui.listener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import com.jme3.math.Vector2f;
 
@@ -44,5 +45,7 @@ public abstract class ListenerImplementation
 	public abstract int getPlayerHP(String player);
 
 	public abstract int getPlayerMP(String player);
+
+	public abstract Set<String> getPlayersName();
 
 }

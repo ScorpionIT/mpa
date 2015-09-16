@@ -104,9 +104,9 @@ public class OpponentResourcesPanel
 			{
 				filename(fileName);
 
-				y("45%");
-				width("35%");
-				height("30%");
+				y("40%");
+				width("40%");
+				height("40%");
 
 			}
 		};
