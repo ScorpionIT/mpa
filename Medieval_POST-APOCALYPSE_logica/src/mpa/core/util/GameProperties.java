@@ -18,7 +18,7 @@ public class GameProperties
 	private ArrayList<String> worldObjects = new ArrayList<>();
 	private HashMap<String, HashMap<String, Integer>> prices = new HashMap<>();
 	private HashMap<String, Float> collisionRays = new HashMap<>();
-	private HashMap<String, Integer> rotationAngle = new HashMap<>();
+	private HashMap<String, Float> rotationAngle = new HashMap<>();
 
 	private GameProperties()
 	{
@@ -215,7 +215,7 @@ public class GameProperties
 		Set<Object> keySet = properties.keySet();
 		for (Object object : keySet)
 		{
-			rotationAngle.put((String) object, Integer.parseInt(properties.getProperty((String) object)));
+			rotationAngle.put((String) object, Float.parseFloat(properties.getProperty((String) object)));
 		}
 
 	}
@@ -290,17 +290,18 @@ public class GameProperties
 		return collisionRays.get(type);
 	}
 
-	public int getRotationAngle(String object)
+	public float getRotationAngle(String object)
 	{
 
+		String[] split = object.split("-");
 		for (String modelName : rotationAngle.keySet())
 		{
-			if (object.contains(modelName))
+			if (modelName.equals(split[0]))
 			{
 				return rotationAngle.get(modelName);
 			}
 
 		}
-		return 0;
+		return 0f;
 	}
 }
