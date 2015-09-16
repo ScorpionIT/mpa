@@ -6,6 +6,7 @@ import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.tools.Color;
 
 public class SelectionPanel
 {
@@ -42,6 +43,7 @@ public class SelectionPanel
 		{
 			{
 				x("10%");
+				color(Color.BLACK);
 			}
 
 		};
@@ -50,6 +52,7 @@ public class SelectionPanel
 			{
 				x("10%");
 				y("10%");
+				color(Color.BLACK);
 			}
 		};
 
@@ -58,6 +61,7 @@ public class SelectionPanel
 			{
 				x("10%");
 				y("25%");
+				color(Color.BLACK);
 			}
 		};
 

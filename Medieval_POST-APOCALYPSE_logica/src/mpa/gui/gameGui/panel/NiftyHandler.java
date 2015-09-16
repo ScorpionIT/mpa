@@ -35,6 +35,7 @@ public class NiftyHandler
 	private boolean opponentPropertiesPanelIsVisible = false;
 	private boolean chooseObjectPanelIsVisible = false;
 	private SelectionHeadquarterHandler selectionHeadquarterHandler;
+	private boolean isVisibleHeadquarterPanel = false;
 
 	public NiftyHandler(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort,
 			AppStateManager stateManager, ListenerImplementation playerController, GameGui gameGui)
@@ -115,28 +116,32 @@ public class NiftyHandler
 
 		selectionHeadquarterHandler = new SelectionHeadquarterHandler(gameGui.windowWidth(), gameGui.windowHeight(), gameController);
 
-		findElementByName = nifty.getCurrentScreen().findElementByName("selectionHeadquarterLayer");
-		findElementByName.add(selectionHeadquarterHandler.buildListBox(nifty, nifty.getCurrentScreen(), findElementByName));
-
-		selectionHeadquarterHandler.setListBox(nifty.getCurrentScreen());
-
 	}
 
 	public void setSelectedPanel(String objectType, String objectID, String objectProductivity, String pickedObjectOwner)
 	{
-		if (objectType.toLowerCase().equals("headquarter"))
-		{
-			selectionHeadquarterHandler.setVisible(true);
-		}
-		else
-		{
-			selectionPanel.setObjectName(objectType);
-			selectionPanel.setProductivityLabel(objectProductivity);
-			selectionPanel.setObjectOwner(pickedObjectOwner);
-			selectedObjectID = objectID;
-			selectedObjectType = objectType;
-		}
 
+		selectionPanel.setObjectName(objectType);
+		selectionPanel.setProductivityLabel(objectProductivity);
+		selectionPanel.setObjectOwner(pickedObjectOwner);
+		selectedObjectID = objectID;
+		selectedObjectType = objectType;
+
+	}
+
+	private void addSelectionHeadquarter()
+	{
+		Element findElementByName = nifty.getCurrentScreen().findElementByName("selectionHeadquarterLayer");
+		findElementByName.add(selectionHeadquarterHandler.buildListBox(nifty, nifty.getCurrentScreen(), findElementByName));
+
+		selectionHeadquarterHandler.setListBox(nifty.getCurrentScreen());
+		selectionHeadquarterHandler.setVisible(true);
+		isVisibleHeadquarterPanel = true;
+	}
+
+	public void setHeadquarterPanel()
+	{
+		addSelectionHeadquarter();
 	}
 
 	public void removeSelectedPanel()
@@ -153,6 +158,16 @@ public class NiftyHandler
 
 		}
 
+	}
+
+	public String getMinionsTarget()
+	{
+		return selectionHeadquarterHandler.getMinionsTarget();
+	}
+
+	public int getMinionsQuantity()
+	{
+		return selectionHeadquarterHandler.getMinionsQuantity();
 	}
 
 	public void relocateChoosePanel(int x, int y)
@@ -353,6 +368,22 @@ public class NiftyHandler
 		opponentPropertiesPanel.removePlayer(playerName);
 		selectionHeadquarterHandler.removePlayer(playerName);
 
+	}
+
+	public boolean isVisibleHeadquarterPanel()
+	{
+		return isVisibleHeadquarterPanel;
+	}
+
+	public void removeHeadquarterPanel()
+	{
+		if (nifty.getCurrentScreen().findElementByName("#selectedHeadquarter") != null)
+		{
+			nifty.getCurrentScreen().findElementByName("#selectedHeadquarter").markForRemoval();
+			nifty.removeElement(nifty.getCurrentScreen(), nifty.getCurrentScreen().findElementByName("#selectedHeadquarter"));
+			selectionHeadquarterHandler.setVisible(false);
+			isVisibleHeadquarterPanel = false;
+		}
 	}
 
 }

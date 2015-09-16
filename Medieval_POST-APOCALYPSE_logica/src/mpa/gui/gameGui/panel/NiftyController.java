@@ -1,6 +1,7 @@
 package mpa.gui.gameGui.panel;
 
 import mpa.gui.gameGui.listener.ListenerImplementation;
+import mpa.gui.gameGui.playingGUI.GuiObjectManager;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -15,6 +16,14 @@ public class NiftyController implements ScreenController
 	{
 		this.niftyHandler = niftyHandler;
 		this.gameController = gameController;
+
+	}
+
+	public void onClickCreateMinion()
+	{
+		gameController.createMinions(GuiObjectManager.getInstance().getPlayingPlayer(), niftyHandler.getMinionsTarget(),
+				niftyHandler.getMinionsQuantity());
+		niftyHandler.removeHeadquarterPanel();
 
 	}
 

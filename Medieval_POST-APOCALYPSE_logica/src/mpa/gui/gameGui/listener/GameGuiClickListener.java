@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import mpa.gui.gameGui.panel.NiftyHandler;
 import mpa.gui.gameGui.playingGUI.GameGui;
+import mpa.gui.gameGui.playingGUI.GuiObjectManager;
 
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.controls.ActionListener;
@@ -61,9 +62,14 @@ public class GameGuiClickListener implements ActionListener
 			{
 				if (!gameGui.canClick())
 				{
+					// TODO fix visibility headqaurterPanel
 					if (niftyHandler.isVisibleSelectionPanel())
 					{
 						niftyHandler.removeSelectedPanel();
+					}
+					else if (niftyHandler.isVisibleHeadquarterPanel())
+					{
+						niftyHandler.removeHeadquarterPanel();
 					}
 				}
 				else
@@ -72,6 +78,7 @@ public class GameGuiClickListener implements ActionListener
 					listener.computePath(contactPoint);
 				}
 			}
+
 			else if (!pickedObject.equals("GROUND") && !niftyHandler.isVisibleChoosePanel() && !niftyHandler.isVisibleOpponentPropertiesPanel())
 			{
 
@@ -79,9 +86,18 @@ public class GameGuiClickListener implements ActionListener
 				String pickedObjectOwner = listener.getPickedObjectOwner(split[0], split[1]);
 				String objectProductivity = Integer.toString(listener.getPickedObjectProductivity(split[0], split[1]));
 
-				niftyHandler.removeSelectedPanel();
-				niftyHandler.setSelectedPanel(split[0], split[1], objectProductivity, pickedObjectOwner);
-				niftyHandler.relocateSelectionPanel((int) click.x, gameGui.windowHeight() - (int) click.y);
+				System.out.println(GuiObjectManager.getInstance().getPlayingPlayer());
+				System.out.println(pickedObjectOwner);
+				if (split[0].toLowerCase().equals("headquarter") && pickedObjectOwner.equals(GuiObjectManager.getInstance().getPlayingPlayer()))
+				{
+					niftyHandler.setHeadquarterPanel();
+				}
+				else
+				{
+					niftyHandler.removeSelectedPanel();
+					niftyHandler.setSelectedPanel(split[0], split[1], objectProductivity, pickedObjectOwner);
+					niftyHandler.relocateSelectionPanel((int) click.x, gameGui.windowHeight() - (int) click.y);
+				}
 			}
 		}
 		if ("Wheel_DOWN".equals(name) && isPressed)

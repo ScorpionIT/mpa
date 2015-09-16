@@ -44,13 +44,12 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	boolean cursorOnTheBottomEdge = false;
 	private float cameraHeight = 750;// 120
 	// private float scalingFactor = 2.2f;
-	private float lz = ( float ) Math.sqrt( Math.pow( cameraHeight / Math.sin( 90 ), 2 )
-			- Math.pow( cameraHeight, 2 ) ); // sin(40)
+	private float lz = (float) Math.sqrt(Math.pow(cameraHeight / Math.sin(90), 2) - Math.pow(cameraHeight, 2)); // sin(40)
 
 	private Node groundNode;
-	private Node mobileObjects = new Node( "Mobile Objects" );
-	private Node staticObjects = new Node( "Static Objects" );
-	Node spheres = new Node( "palline" );
+	private Node mobileObjects = new Node("Mobile Objects");
+	private Node staticObjects = new Node("Static Objects");
+	Node spheres = new Node("palline");
 
 	private String playingPlayer;
 	NiftyHandler niftyHandler;
@@ -60,7 +59,7 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 
 	ListenerImplementation listenerImplementation = new SinglePlayerController();
 
-	public GameGui( String playingPlayer )
+	public GameGui(String playingPlayer)
 	{
 		super();
 		this.playingPlayer = playingPlayer;
@@ -77,79 +76,78 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 		initialCameraConfiguration();
 		setLights();
 
-		GuiObjectManager.init( this, playingPlayer );
-		System.out.println( "dopo + " + GuiObjectManager.getInstance() );
-		niftyHandler = new NiftyHandler( assetManager, inputManager, audioRenderer, guiViewPort,
-				stateManager, listenerImplementation, this );
-		setCamera( new Vector3f( 250, cameraHeight, 250 ) );
+		GuiObjectManager.init(this, playingPlayer);
+		System.out.println("dopo + " + GuiObjectManager.getInstance());
+		niftyHandler = new NiftyHandler(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, listenerImplementation, this);
+		setCamera(new Vector3f(250, cameraHeight, 250));
 
 		niftyHandler.updateResourcePanel();
 		listenerImplementation.createStateInformation();
-		rootNode.attachChild( staticObjects );
-		rootNode.attachChild( mobileObjects );
+		rootNode.attachChild(staticObjects);
+		rootNode.attachChild(mobileObjects);
 
-		mouseActionListener = new GameGuiMouseListener( this );
-		clickActionListener = new GameGuiClickListener( listenerImplementation, this );
-		keyActionListener = new GameGuiKeyActionListener( listenerImplementation, niftyHandler );
+		mouseActionListener = new GameGuiMouseListener(this);
+		clickActionListener = new GameGuiClickListener(listenerImplementation, this);
+		keyActionListener = new GameGuiKeyActionListener(listenerImplementation, niftyHandler);
 
-		rootNode.attachChild( spheres );
+		rootNode.attachChild(spheres);
 		setEventTriggers();
 
-		new GraphicUpdater( this ).start();
+		new GraphicUpdater(this).start();
 	}
 
-	void attachPlayer( Spatial model )
+	void attachPlayer(Spatial model)
 	{
-		mobileObjects.attachChild( model );
+		mobileObjects.attachChild(model);
 	}
 
-	void detachPlayer( Spatial model )
+	void detachPlayer(Spatial model)
 	{
-		mobileObjects.detachChild( model );
+		mobileObjects.detachChild(model);
 	}
 
-	void detachStaticObject( Spatial model )
+	void detachStaticObject(Spatial model)
 	{
-		staticObjects.detachChild( model );
+		staticObjects.detachChild(model);
 	}
 
-	void attachStaticObject( Spatial model )
+	void attachStaticObject(Spatial model)
 	{
-		staticObjects.attachChild( model );
+		staticObjects.attachChild(model);
 	}
 
-	protected void makeFloor( float worldDimension )
+	protected void makeFloor(float worldDimension)
 	{
-		Box box = new Box( worldDimension / 2, 0, worldDimension / 2 );
+		Box box = new Box(worldDimension / 2, 0, worldDimension / 2);
 
-		Geometry floor = new Geometry( "the Floor", box );
-		floor.setLocalTranslation( worldDimension / 2, 0, worldDimension / 2 );
+		Geometry floor = new Geometry("the Floor", box);
+		floor.setLocalTranslation(worldDimension / 2, 0, worldDimension / 2);
 
-		assetManager.registerLocator( "Assets/Textures/", FileLocator.class );
-		Material mat1 = new Material( assetManager, "Common/MatDefs/Misc/Unshaded.j3md" );
-		Texture text1 = assetManager.loadTexture( "grass-pattern.png" );
-		floor.getMesh().scaleTextureCoordinates( new Vector2f( 20, 20 ) );
-		text1.setWrap( WrapMode.Repeat );
+		assetManager.registerLocator("Assets/Textures/", FileLocator.class);
+		Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+		Texture text1 = assetManager.loadTexture("grass-pattern.png");
+		floor.getMesh().scaleTextureCoordinates(new Vector2f(20, 20));
+		text1.setWrap(WrapMode.Repeat);
 
-		mat1.setTexture( "ColorMap", text1 );
-		floor.setMaterial( mat1 );
+		mat1.setTexture("ColorMap", text1);
+		floor.setMaterial(mat1);
 
-		groundNode.attachChild( floor );
+		groundNode.attachChild(floor);
 	}
 
 	private void setLights()
 	{
 		DirectionalLight dl = new DirectionalLight();
-		dl.setDirection( new Vector3f( -0.8f, -0.6f, -0.08f ).normalizeLocal() );
+		dl.setDirection(new Vector3f(-0.8f, -0.6f, -0.08f).normalizeLocal());
 		// dl.setColor( new ColorRGBA( 0.9f, 0.9f, 0.9f, 1.0f ) );
-		rootNode.addLight( dl );
+		rootNode.addLight(dl);
 
 		AmbientLight al = new AmbientLight();
 		// al.setColor( new ColorRGBA( 0.7f, 0.9f, 1.5f, 1.0f ) );
-		rootNode.addLight( al );
+		rootNode.addLight(al);
 	}
 
-	public void setCamera( Vector3f newPosition )
+	public void setCamera(Vector3f newPosition)
 	{
 		// if( newPosition.z + lz < 0 )
 		// return;
@@ -160,8 +158,8 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 
 		// if (niftyHandler.isVisibleSelectionPanel())
 		// niftyHandler.removeSelectedPanel();
-		cam.setLocation( newPosition );
-		cam.lookAt( new Vector3f( newPosition.x, 0, newPosition.z + lz ), new Vector3f( 0, 1, 0 ) );
+		cam.setLocation(newPosition);
+		cam.lookAt(new Vector3f(newPosition.x, 0, newPosition.z + lz), new Vector3f(0, 1, 0));
 
 	}
 
@@ -173,8 +171,8 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	private void initialCameraConfiguration()
 	{
 		cam.clearViewportChanged();
-		flyCam.setEnabled( false );
-		inputManager.setCursorVisible( true );
+		flyCam.setEnabled(false);
+		inputManager.setCursorVisible(true);
 	}
 
 	public void takeLock()
@@ -192,13 +190,13 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	private boolean csc = true;
 
 	@Override
-	public void simpleUpdate( float tpf )
+	public void simpleUpdate(float tpf)
 	{
-		if( csc )
+		if (csc)
 			GuiObjectManager.getInstance().setPointToVisit();
 
 		csc = false;
-		if( count == 100 )
+		if (count == 100)
 		{
 			niftyHandler.updateResourcePanel();
 			count = 0;
@@ -207,9 +205,9 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 			count++;
 
 		listenerImplementation.updateInformation();
-		for( Player p : GameManager.getInstance().getPlayers() )
-			if( p.getName().equals( GuiObjectManager.getInstance().getPlayingPlayer() ) )
-				GuiObjectManager.getInstance().setPath( p.getPath() );
+		for (Player p : GameManager.getInstance().getPlayers())
+			if (p.getName().equals(GuiObjectManager.getInstance().getPlayingPlayer()))
+				GuiObjectManager.getInstance().setPath(p.getPath());
 		// super.simpleUpdate( tpf );
 	}
 
@@ -233,35 +231,35 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 		return lock;
 	}
 
-	public void setCursorOnTheBottomEdge( boolean cursorOnTheBottomEdge )
+	public void setCursorOnTheBottomEdge(boolean cursorOnTheBottomEdge)
 	{
 		this.cursorOnTheBottomEdge = cursorOnTheBottomEdge;
 	}
 
-	public void setCursorOnTheLeftEdge( boolean cursorOnTheLeftEdge )
+	public void setCursorOnTheLeftEdge(boolean cursorOnTheLeftEdge)
 	{
 		this.cursorOnTheLeftEdge = cursorOnTheLeftEdge;
 	}
 
-	public void setCursorOnTheRightEdge( boolean cursorOnTheRightEdge )
+	public void setCursorOnTheRightEdge(boolean cursorOnTheRightEdge)
 	{
 		this.cursorOnTheRightEdge = cursorOnTheRightEdge;
 	}
 
-	public void setCursorOnTheTopEdge( boolean cursorOnTheTopEdge )
+	public void setCursorOnTheTopEdge(boolean cursorOnTheTopEdge)
 	{
 		this.cursorOnTheTopEdge = cursorOnTheTopEdge;
 	}
 
 	@Override
-	public void onAnimChange( AnimControl arg0, AnimChannel arg1, String arg2 )
+	public void onAnimChange(AnimControl arg0, AnimChannel arg1, String arg2)
 	{
 		// TODO Stub di metodo generato automaticamente
 
 	}
 
 	@Override
-	public void onAnimCycleDone( AnimControl arg0, AnimChannel arg1, String arg2 )
+	public void onAnimCycleDone(AnimControl arg0, AnimChannel arg1, String arg2)
 	{
 		// TODO Stub di metodo generato automaticamente
 
@@ -269,35 +267,29 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 
 	private void setEventTriggers()
 	{
-		inputManager.addMapping( "Shift_Map_Negative_X", new MouseAxisTrigger( MouseInput.AXIS_X,
-				true ) );
+		inputManager.addMapping("Shift_Map_Negative_X", new MouseAxisTrigger(MouseInput.AXIS_X, true));
 
-		inputManager.addMapping( "Shift_Map_Positive_X", new MouseAxisTrigger( MouseInput.AXIS_X,
-				false ) );
-		inputManager.addMapping( "Shift_Map_Negative_Y", new MouseAxisTrigger( MouseInput.AXIS_Y,
-				true ) );
-		inputManager.addMapping( "Shift_Map_Positive_Y", new MouseAxisTrigger( MouseInput.AXIS_Y,
-				false ) );
-		inputManager.addListener( mouseActionListener, "Shift_Map_Negative_X",
-				"Shift_Map_Positive_X", "Shift_Map_Negative_Y", "Shift_Map_Positive_Y" );
+		inputManager.addMapping("Shift_Map_Positive_X", new MouseAxisTrigger(MouseInput.AXIS_X, false));
+		inputManager.addMapping("Shift_Map_Negative_Y", new MouseAxisTrigger(MouseInput.AXIS_Y, true));
+		inputManager.addMapping("Shift_Map_Positive_Y", new MouseAxisTrigger(MouseInput.AXIS_Y, false));
+		inputManager.addListener(mouseActionListener, "Shift_Map_Negative_X", "Shift_Map_Positive_X", "Shift_Map_Negative_Y", "Shift_Map_Positive_Y");
 
-		inputManager.addMapping( "Wheel_DOWN", new MouseAxisTrigger( MouseInput.AXIS_WHEEL, true ) );
-		inputManager.addMapping( "Wheel_UP", new MouseAxisTrigger( MouseInput.AXIS_WHEEL, false ) );
+		inputManager.addMapping("Wheel_DOWN", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
+		inputManager.addMapping("Wheel_UP", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
 
-		inputManager.addMapping( "Tab", new KeyTrigger( KeyInput.KEY_TAB ) );
-		inputManager.addListener( keyActionListener, "Tab" );
+		inputManager.addMapping("Tab", new KeyTrigger(KeyInput.KEY_TAB));
+		inputManager.addListener(keyActionListener, "Tab");
 
 		// inputManager.addRawInputListener( new MyButtonListener() );
-		inputManager.addMapping( "Click", new MouseButtonTrigger( 0 ) );
-		inputManager.addListener( clickActionListener, "Click" );
+		inputManager.addMapping("Click", new MouseButtonTrigger(0));
+		inputManager.addListener(clickActionListener, "Click");
 
-		inputManager.addMapping( "ChooseItem", new KeyTrigger( KeyInput.KEY_LSHIFT ) );
-		inputManager.addMapping( "attack", new MouseButtonTrigger( 1 ) );
-		inputManager.addListener( clickActionListener, "attack", "Wheel_DOWN", "Wheel_UP",
-				"ChooseItem" );
+		inputManager.addMapping("ChooseItem", new KeyTrigger(KeyInput.KEY_LSHIFT));
+		inputManager.addMapping("attack", new MouseButtonTrigger(1));
+		inputManager.addListener(clickActionListener, "attack", "Wheel_DOWN", "Wheel_UP", "ChooseItem");
 
-		inputManager.addMapping( "pause", new KeyTrigger( KeyInput.KEY_P ) );
-		inputManager.addListener( keyActionListener, "pause" );
+		inputManager.addMapping("pause", new KeyTrigger(KeyInput.KEY_P));
+		inputManager.addListener(keyActionListener, "pause");
 
 	}
 
@@ -311,17 +303,16 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 		return settings.getHeight();
 	}
 
-	public void createWorld( float dimension )
+	public void createWorld(float dimension)
 	{
-		groundNode = new Node( "Ground" );
-		makeFloor( dimension );
-		rootNode.attachChild( groundNode );
+		groundNode = new Node("Ground");
+		makeFloor(dimension);
+		rootNode.attachChild(groundNode);
 	}
 
 	public boolean canClick()
 	{
-		return !( niftyHandler.isVisibleSelectionPanel()
-				|| niftyHandler.isVisibleOpponentPropertiesPanel() || niftyHandler
-					.isVisibleChoosePanel() );
+		return !(niftyHandler.isVisibleSelectionPanel() || niftyHandler.isVisibleOpponentPropertiesPanel() || niftyHandler.isVisibleChoosePanel() || niftyHandler
+				.isVisibleHeadquarterPanel());
 	}
 }
