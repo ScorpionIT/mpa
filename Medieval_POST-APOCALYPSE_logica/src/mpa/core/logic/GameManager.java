@@ -246,6 +246,21 @@ public class GameManager
 		return CombatManager.getInstance().attackPhysically( attacker );
 	}
 
+	ArrayList<Player> takePlayerAttacks()
+	{
+		return CombatManager.getInstance().takePlayerAttacks();
+	}
+
+	ArrayList<Minion> takeMinionAttacks()
+	{
+		return CombatManager.getInstance().takeMinionAttacks();
+	}
+
+	ArrayList<TowerCrusher> takeTowerCrusherAttacks()
+	{
+		return CombatManager.getInstance().takeTowerCrusherAttacks();
+	}
+
 	public ArrayList<Player> attackPhysically( Minion attacker )
 	{
 		System.out.println( "sto per attaccare" );

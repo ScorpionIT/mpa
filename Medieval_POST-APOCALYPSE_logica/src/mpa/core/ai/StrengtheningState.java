@@ -59,15 +59,15 @@ class StrengtheningState extends AIState
 
 		if( opponentAI.player.canUpgrade() || isWalking )
 			nextState = this;
+		else if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings()
+				&& opponentAI.player.isThereAnyFreeSulbaltern() )
+			nextState = new ConquestState();
+		else if( opponentAI.areThereWeakerPlayers() )
+			nextState = new CombatState();
 		else if( opponentAI.shouldBuyPotions() && opponentAI.player.canBuyPotions() )
 			nextState = new ProductionState();
 		else if( !opponentAI.knownAllTheWorld )
 			nextState = new ExplorationState();
-		// else if( opponentAI.areThereWeakerPlayers() )
-		// nextState = new CombatState();
-		else if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings()
-				&& opponentAI.player.isThereAnyFreeSulbaltern() )
-			nextState = new ConquestState();
 		else
 			nextState = new WaitingState();
 

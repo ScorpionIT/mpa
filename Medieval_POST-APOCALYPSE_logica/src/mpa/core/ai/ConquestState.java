@@ -213,6 +213,8 @@ public class ConquestState extends AIState
 			nextState = this;
 		else if( opponentAI.player.canUpgrade() )
 			nextState = new StrengtheningState();
+		else if( opponentAI.areThereWeakerPlayers() )
+			nextState = new CombatState();
 		else if( opponentAI.shouldBuyPotions() && opponentAI.player.canBuyPotions() )
 			nextState = new ProductionState();
 		else if( !opponentAI.knownAllTheWorld )

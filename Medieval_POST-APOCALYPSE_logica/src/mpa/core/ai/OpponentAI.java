@@ -7,6 +7,7 @@ import javax.vecmath.Vector2f;
 import mpa.core.logic.AbstractObject;
 import mpa.core.logic.GameManager;
 import mpa.core.logic.MyThread;
+import mpa.core.logic.building.Headquarter;
 import mpa.core.logic.building.House;
 import mpa.core.logic.character.Player;
 import mpa.core.logic.character.Player.Item;
@@ -38,12 +39,12 @@ public class OpponentAI extends MyThread
 	@Override
 	public void run()
 	{
-		while( true )
+		while( player.getHP() > 0 )
 		{
 			super.run();
 			try
 			{
-				sleep( 1500 );
+				sleep( 500 );
 			} catch( InterruptedException e )
 			{
 				e.printStackTrace();
@@ -53,6 +54,19 @@ public class OpponentAI extends MyThread
 			aiState.action( this );
 			aiState = aiState.changeState( this );
 		}
+
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println( " SONO " + player.getName().toUpperCase() + " E ME LA SONO QUAZATA" );
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
 	}
 
 	private void addBuilding( AbstractObject building )
@@ -72,7 +86,17 @@ public class OpponentAI extends MyThread
 		ArrayList<AbstractObject> newBuildings = worldManager.getBuildings( position );
 
 		for( AbstractObject obj : newBuildings )
+		{
+			if( obj instanceof Headquarter )
+			{
+				if( !knownPlayers.contains( ( ( Headquarter ) obj ).getOwner() )
+						&& ( ( Headquarter ) obj ).getOwner() != player )
+				{
+					knownPlayers.add( ( ( Headquarter ) obj ).getOwner() );
+				}
+			}
 			addBuilding( obj );
+		}
 	}
 
 	public ArrayList<House> getKnownHeadQuarters()
@@ -87,8 +111,9 @@ public class OpponentAI extends MyThread
 
 	private boolean isOpponentPlayerWeaker( Player p )
 	{
-		if( player.getPlayerLevel().equals(
-				DifficultyLevel.values()[DifficultyLevel.values().length - 1] ) )
+		if( p == player )
+			return false;
+		if( player.getPlayerLevel().ordinal() == p.getPlayerLevel().ordinal() )
 		{
 			int opponentPotions = 0;
 			int playerPotions = 0;
@@ -125,7 +150,7 @@ public class OpponentAI extends MyThread
 
 		for( AbstractResourceProducer b : knownResourceProducers )
 		{
-			if( b.isFree() || ( isOpponentPlayerWeaker( b.getOwner() ) ) )
+			if( b.isFree() /* || ( isOpponentPlayerWeaker( b.getOwner() ) ) */)
 				return true;
 		}
 		return false;

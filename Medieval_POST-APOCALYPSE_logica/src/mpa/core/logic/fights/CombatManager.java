@@ -18,6 +18,10 @@ public class CombatManager
 	private final int MP_REQUIRED_FOR_PHYSICALL_ATTACK = 10;
 	private final int MP_REQUIRED_FOR_DISTANCE_ATTACK = 15;
 
+	private ArrayList<Player> playerAttacks = new ArrayList<>();
+	private ArrayList<Minion> minionAttacks = new ArrayList<>();
+	private ArrayList<TowerCrusher> towerCrusherAttacks = new ArrayList<>();
+
 	private CombatManager()
 	{
 	}
@@ -28,6 +32,42 @@ public class CombatManager
 			combatManager = new CombatManager();
 
 		return combatManager;
+	}
+
+	public synchronized ArrayList<Player> takePlayerAttacks()
+	{
+		ArrayList<Player> attackers = new ArrayList<>();
+
+		for( Player p : playerAttacks )
+			attackers.add( p );
+
+		playerAttacks.clear();
+		return attackers;
+
+	}
+
+	public synchronized ArrayList<Minion> takeMinionAttacks()
+	{
+		ArrayList<Minion> attackers = new ArrayList<>();
+
+		for( Minion m : minionAttacks )
+			attackers.add( m );
+
+		minionAttacks.clear();
+		return attackers;
+
+	}
+
+	public synchronized ArrayList<TowerCrusher> takeTowerCrusherAttacks()
+	{
+		ArrayList<TowerCrusher> attackers = new ArrayList<>();
+
+		for( TowerCrusher t : towerCrusherAttacks )
+			attackers.add( t );
+
+		towerCrusherAttacks.clear();
+		return attackers;
+
 	}
 
 	public ArrayList<Player> attackPhysically( Minion attacker )

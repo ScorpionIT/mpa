@@ -20,7 +20,7 @@ abstract class AIState
 	AIState changeState( OpponentAI opponentAI )
 	{
 		if( bully != null )
-			return new DefenseState( opponentAI );
+			return new DefenseState( opponentAI, bully );
 
 		return null;
 	}

@@ -42,7 +42,7 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	boolean cursorOnTheLeftEdge = false;
 	boolean cursorOnTheTopEdge = false;
 	boolean cursorOnTheBottomEdge = false;
-	private float cameraHeight = 400;// 120
+	private float cameraHeight = 750;// 120
 	// private float scalingFactor = 2.2f;
 	private float lz = ( float ) Math.sqrt( Math.pow( cameraHeight / Math.sin( 90 ), 2 )
 			- Math.pow( cameraHeight, 2 ) ); // sin(40)

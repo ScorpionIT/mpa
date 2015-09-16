@@ -325,7 +325,7 @@ public class Player extends AbstractCharacter
 			int counter = 0;
 			for( Potions p : Potions.values() )
 			{
-				if( level.canBuy( p, potions.get( p ) ) )
+				if( !level.canBuy( p, potions.get( p ) ) )
 					counter++;
 				HashMap<String, Integer> price = PotionManager.getInstance().getPrice( p );
 

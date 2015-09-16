@@ -3,6 +3,7 @@ package mpa.core.ai;
 import javax.vecmath.Vector2f;
 
 import mpa.core.logic.GameManager;
+import mpa.core.logic.character.Player;
 import mpa.core.logic.character.Player.Item;
 import mpa.core.logic.tool.Potions;
 
@@ -16,12 +17,14 @@ public class DefenseState extends AIState
 		FIGHT_BACK, RUN;
 	}
 
-	public DefenseState( OpponentAI opponentAI )
+	public DefenseState( OpponentAI opponentAI, Player bully )
 	{
 		if( opponentAI.canIFightWithHim( bully ) )
 			myChoice = Choice.FIGHT_BACK;
 		else
 			myChoice = Choice.RUN;
+
+		this.bully = bully;
 
 	}
 

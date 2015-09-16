@@ -88,8 +88,13 @@ class ProductionState extends AIState
 
 			while( ( toProduce = whatShouldIProduce( player ) ) != null )
 			{
+				System.out.println( "sto producendo " + toProduce.toString() + " e ne ho "
+						+ opponentAI.player.getPotionAmount( toProduce ) );
 				player.buyPotion( toProduce );
 			}
+
+			isWalking = false;
+			imOk = true;
 
 		}
 
@@ -103,17 +108,16 @@ class ProductionState extends AIState
 		if( nextState != null )
 			return nextState;
 
-		if( ( isWalking || opponentAI.shouldBuyPotions() && opponentAI.player.canBuyPotions() )
-				&& !imOk )
+		if( isWalking && !imOk )
 			nextState = this;
 		else if( opponentAI.player.canUpgrade() )
 			nextState = new StrengtheningState();
-		else if( !opponentAI.knownAllTheWorld )
-			nextState = new ExplorationState();
-		// else if( opponentAI.areThereWeakerPlayers() )
-		// nextState = new CombatState();
 		else if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings() )
 			nextState = new ConquestState();
+		else if( opponentAI.areThereWeakerPlayers() )
+			nextState = new CombatState();
+		else if( !opponentAI.knownAllTheWorld )
+			nextState = new ExplorationState();
 		else
 			nextState = new WaitingState();
 

@@ -61,6 +61,7 @@ class ExplorationState extends AIState
 				// }
 
 			}
+
 		}
 		else
 		{
@@ -90,21 +91,19 @@ class ExplorationState extends AIState
 
 		if( isWalking )
 			nextState = this;
-		// if( opponentAI.player.canUpgrade() )
-		// nextState = new StrengtheningState();
-		// else if( opponentAI.shouldBuyPotions() && opponentAI.player.canBuyPotions() )
-		// nextState = new ProductionState();
-		// else if( !opponentAI.knownBuildings.isEmpty() &&
-		// opponentAI.areThereConquerableBuildings()
-		// && opponentAI.player.isThereAnyFreeSulbaltern() )
-		// nextState = new ConquestState();
+		else if( opponentAI.player.canUpgrade() )
+			nextState = new StrengtheningState();
+		else if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings()
+				&& opponentAI.player.isThereAnyFreeSulbaltern() )
+			nextState = new ConquestState();
+		else if( opponentAI.areThereWeakerPlayers() )
+			nextState = new CombatState();
+		else if( opponentAI.shouldBuyPotions() && opponentAI.player.canBuyPotions() )
+			nextState = new ProductionState();
 		else if( !opponentAI.knownAllTheWorld )
 			nextState = this;
 		else
 			nextState = new WaitingState();
-
-		// else if( opponentAI.areThereWeakerPlayers() )
-		// nextState = new CombatState();
 
 		return nextState;
 	}
