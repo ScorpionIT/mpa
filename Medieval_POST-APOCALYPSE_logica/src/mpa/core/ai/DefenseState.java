@@ -19,6 +19,7 @@ public class DefenseState extends AIState
 
 	public DefenseState( OpponentAI opponentAI, Player bully )
 	{
+		opponentAI.player.stopMoving();
 		if( opponentAI.canIFightWithHim( bully ) )
 			myChoice = Choice.FIGHT_BACK;
 		else
@@ -45,6 +46,9 @@ public class DefenseState extends AIState
 			} while( !bully.isFlashed()
 					&& opponentAI.player.getPotionAmount( Potions.FLASH_BANG ) > 0 );
 
+			System.out.println();
+			System.out.println( "AHIA L'HO FLASHATO" );
+			System.out.println();
 			Vector2f gatheringPlace = opponentAI.player.getHeadquarter().getGatheringPlace();
 			GameManager.getInstance().computePath( opponentAI.player, gatheringPlace.x,
 					gatheringPlace.y );

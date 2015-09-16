@@ -21,6 +21,7 @@ import mpa.core.logic.character.Minion;
 import mpa.core.logic.character.Player;
 import mpa.core.logic.character.Player.Item;
 import mpa.core.logic.character.TowerCrusher;
+import mpa.core.logic.fights.AttackRequests;
 import mpa.core.logic.fights.CombatManager;
 import mpa.core.logic.tool.Potions;
 import mpa.core.maths.MyMath;
@@ -45,6 +46,8 @@ public class GameManager
 	private ArrayList<Minion> deadMinions = new ArrayList<>();
 
 	private static GameManager gameManager = null;
+
+	private AttackRequests attackRequests;
 
 	public static GameManager getInstance()
 	{
@@ -85,6 +88,9 @@ public class GameManager
 		this.difficultyLevel = level;
 		minionIDs = new IDPool( 100 );
 		towerCrusherIDs = new IDPool( 100 );
+		attackRequests = new AttackRequests( AI_players );
+		ThreadManager.getInstance().addGameThread( attackRequests );
+
 	}
 
 	public void computePath( AbstractCharacter player, float xGoal, float yGoal )
@@ -218,24 +224,28 @@ public class GameManager
 
 	ArrayList<Player> takeDeadPlayers()
 	{
-		try
-		{
-			return deadPlayers;
-		} finally
-		{
-			deadPlayers.clear();
-		}
+
+		ArrayList<Player> deads = new ArrayList<>();
+
+		for( Player p : deadPlayers )
+			deads.add( p );
+
+		deadPlayers.clear();
+
+		return deads;
+
 	}
 
 	ArrayList<Minion> takeDeadMinions()
 	{
-		try
-		{
-			return deadMinions;
-		} finally
-		{
-			deadMinions.clear();
-		}
+		ArrayList<Minion> deads = new ArrayList<>();
+
+		for( Minion m : deadMinions )
+			deads.add( m );
+
+		deadMinions.clear();
+
+		return deads;
 	}
 
 	// TODO takeDeadTowerCrushers
@@ -274,34 +284,38 @@ public class GameManager
 
 	public ArrayList<Player> playerAction( Player p, Vector2f target )
 	{
-		Item selectedItem = p.getSelectedItem();
+		// Item selectedItem = p.getSelectedItem();
 		ArrayList<Player> hitPlayers = null;
 		if( target != null )
 			p.setDirection( MyMath.computeDirection( p.getPosition(), target ) );
 
-		switch( selectedItem )
-		{
-			case WEAPON:
-				hitPlayers = attackPhysically( p );
-				break;
-			case GRANADE:
-				hitPlayers = distanceAttack( p, p.takePotion( Potions.GRANADE ), target );
-				break;
-			case FLASH_BANG:
-				hitPlayers = distanceAttack( p, p.takePotion( Potions.FLASH_BANG ), target );
-				break;
-			default:
-				hitPlayers = new ArrayList<>();
-				hitPlayers.add( p );
+		// switch( selectedItem )
+		// {
+		// case WEAPON:
+		// hitPlayers = attackPhysically( p );
+		// break;
+		// case GRANADE:
+		// hitPlayers = distanceAttack( p, p.takePotion( Potions.GRANADE ), target );
+		// break;
+		// case FLASH_BANG:
+		// hitPlayers = distanceAttack( p, p.takePotion( Potions.FLASH_BANG ), target );
+		// break;
+		// default:
+		// hitPlayers = new ArrayList<>();
+		// hitPlayers.add( p );
+		//
+		// }
 
-		}
+		if( p.getSelectedItem().equals( Item.WEAPON ) || p.getSelectedItem().equals( Item.GRANADE )
+				|| p.getSelectedItem().equals( Item.FLASH_BANG ) )
+			attackRequests.addRequest( p, target );
 
-		for( Player hitPlayer : hitPlayers )
-		{
-			if( hitPlayer != p && AI_players.keySet().contains( hitPlayer ) )
-				AI_players.get( hitPlayer ).gotAttackedBy( p );
-
-		}
+		// for( Player hitPlayer : hitPlayers )
+		// {
+		// if( hitPlayer != p && AI_players.keySet().contains( hitPlayer ) )
+		// AI_players.get( hitPlayer ).gotAttackedBy( p );
+		//
+		// }
 
 		return hitPlayers;
 	}

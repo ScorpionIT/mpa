@@ -15,10 +15,10 @@ public enum Level
 	private final int COLLISION_RAY_INCREMENT = 2;
 	private final int PHYSICALL_ATTACK_DAMAGE_INCREMENT = 10;
 
-	private final int MAXIMUM_HP_POTION_ALLOWED = 5;
-	private final int MAXIMUM_MP_POTION_ALLOWED = 5;
-	private final int MAXIMUM_GRANADE_ALLOWED = 5;
-	private final int MAXIMUM_FLASH_BANG_ALLOWED = 5;
+	private final int MAXIMUM_HP_POTION_ALLOWED = 1;
+	private final int MAXIMUM_MP_POTION_ALLOWED = 1;
+	private final int MAXIMUM_GRANADE_ALLOWED = 2;
+	private final int MAXIMUM_FLASH_BANG_ALLOWED = 1;
 
 	public boolean hasNext()
 	{
@@ -141,7 +141,7 @@ public enum Level
 				break;
 		}
 
-		if( amount >= maximumAllowed * ordinal() )
+		if( amount >= maximumAllowed + ordinal() )
 			return false;
 		return true;
 	}

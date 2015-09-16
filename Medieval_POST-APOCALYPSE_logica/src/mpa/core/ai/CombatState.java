@@ -5,6 +5,8 @@ import javax.vecmath.Vector2f;
 import mpa.core.logic.GameManager;
 import mpa.core.logic.character.Player;
 import mpa.core.logic.character.Player.Item;
+import mpa.core.logic.fights.CombatManager;
+import mpa.core.logic.tool.Potions;
 import mpa.core.maths.MyMath;
 
 class CombatState extends AIState
@@ -48,9 +50,12 @@ class CombatState extends AIState
 				System.out.println( "sono " + opponentAI.player.getName() + " e sto per attaccare "
 						+ playerToAttack.getName() );
 		}
+
 		if( pointToReach == null )
 		{
 			pointToReach = playerToAttack.getPosition();
+			pointToReach.set( pointToReach.x - opponentAI.player.getRangeOfPhysicallAttack() / 2,
+					pointToReach.y - opponentAI.player.getRangeOfPhysicallAttack() / 2 );
 			GameManager.getInstance().computePath( opponentAI.player, pointToReach.x,
 					pointToReach.y );
 			return;
@@ -61,9 +66,12 @@ class CombatState extends AIState
 			Vector2f currentPosition = playerToAttack.getPosition();
 
 			if( MyMath.distanceFloat( currentPosition.x, currentPosition.y, pointToReach.x,
-					pointToReach.y ) > 20f )
+					pointToReach.y ) > Math.max( opponentAI.player.getRangeOfDistanceAttack(),
+					opponentAI.player.getRangeOfPhysicallAttack() ) * 2 )
 			{
 				pointToReach = playerToAttack.getPosition();
+				pointToReach.set( pointToReach.x - opponentAI.player.getRangeOfPhysicallAttack()
+						/ 2, pointToReach.y - opponentAI.player.getRangeOfPhysicallAttack() / 2 );
 				GameManager.getInstance().computePath( opponentAI.player, pointToReach.x,
 						pointToReach.y );
 				return;
@@ -79,8 +87,6 @@ class CombatState extends AIState
 				opponentAI.player.setSelectedItem( Item.GRANADE );
 				GameManager.getInstance().playerAction( opponentAI.player,
 						opponentAI.player.getCurrentVector() );
-				GameManager.getInstance().computePath( opponentAI.player, pointToReach.x,
-						pointToReach.y );
 			}
 			if( MyMath.distanceFloat( opponentAI.player.getX(), opponentAI.player.getY(),
 					playerToAttack.getX(), playerToAttack.getY() ) <= opponentAI.player
@@ -106,7 +112,12 @@ class CombatState extends AIState
 		if( nextState != null )
 			return nextState;
 
-		if( playerToAttack != null && playerToAttack.getHP() > 0 )
+		if( playerToAttack != null
+				&& playerToAttack.getHP() > 0
+				&& ( opponentAI.player.getMP() >= Math.min( CombatManager.getInstance()
+						.getMP_REQUIRED_FOR_DISTANCE_ATTACK(), CombatManager.getInstance()
+						.getMP_REQUIRED_FOR_PHYSICALL_ATTACK() ) || opponentAI.player
+						.getPotionAmount( Potions.MP ) > 0 ) )
 			nextState = this;
 		else if( opponentAI.player.canUpgrade() )
 			nextState = new StrengtheningState();

@@ -27,9 +27,9 @@ public class Player extends AbstractCharacter
 
 	private Item selectedItem = Item.WEAPON;
 	private int MP;
-	private float rangeOfPhysicallAttack = 12;
+	private float rangeOfPhysicallAttack = 20;
 	private int physicallAttackDamage = 5;
-	private float rangeOfDistanceAttack = 20;
+	private float rangeOfDistanceAttack = 30;
 	private float distanceAttackRayOfCollision = 12;
 	private boolean flashed = false;
 	private ArrayList<Tower> towers = new ArrayList<>();

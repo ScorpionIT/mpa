@@ -138,11 +138,21 @@ public class OpponentAI extends MyThread
 
 	boolean areThereWeakerPlayers()
 	{
-		for( Player p : knownPlayers )
-			if( isOpponentPlayerWeaker( p ) )
-				return true;
+		ArrayList<Player> deads = new ArrayList<>();
+		try
+		{
+			for( Player p : knownPlayers )
+				if( GameManager.getInstance().isPlayerDead( p ) )
+					deads.add( p );
+				else if( isOpponentPlayerWeaker( p ) )
+					return true;
 
-		return false;
+			return false;
+		} finally
+		{
+			for( Player p : deads )
+				knownPlayers.remove( p );
+		}
 	}
 
 	boolean areThereConquerableBuildings()

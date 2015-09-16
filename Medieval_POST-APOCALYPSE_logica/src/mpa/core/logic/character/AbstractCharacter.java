@@ -159,6 +159,14 @@ public abstract class AbstractCharacter extends AbstractObject
 
 	}
 
+	public void setPosition( Vector2f position )
+	{
+		writeLock.lock();
+		x = position.x;
+		y = position.y;
+		writeLock.unlock();
+	}
+
 	@Override
 	public float getX()
 	{
