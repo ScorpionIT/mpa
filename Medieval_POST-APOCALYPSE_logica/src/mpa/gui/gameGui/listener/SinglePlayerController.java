@@ -171,4 +171,16 @@ public class SinglePlayerController extends ListenerImplementation
 		return gManagerProxy.getPlayerLevel(player);
 	}
 
+	@Override
+	public int getPlayerHP(String playerName)
+	{
+		return gManagerProxy.getPLayerHP(playerName);
+	}
+
+	@Override
+	public int getPlayerMP(String playerName)
+	{
+		return gManagerProxy.getPLayerMP(playerName);
+	}
+
 }
