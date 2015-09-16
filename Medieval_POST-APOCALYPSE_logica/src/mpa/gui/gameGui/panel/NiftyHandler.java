@@ -321,4 +321,9 @@ public class NiftyHandler
 		return chooseObjectPanelIsVisible;
 	}
 
+	public void removePayer(String playerName)
+	{
+		opponentPropertiesPanel.removePlayer(playerName);
+	}
+
 }

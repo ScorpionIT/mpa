@@ -40,6 +40,10 @@ public class SpatialAnimationController implements AnimEventListener
 		{
 			guiObjectManager.removePlayer(playerName);
 		}
+		else if (animName.equals("attack"))
+		{
+			channel.reset(true);
+		}
 	}
 
 	public void startWalkAnimation(float animationSpeed)

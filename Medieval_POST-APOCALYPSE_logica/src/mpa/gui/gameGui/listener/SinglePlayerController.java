@@ -92,7 +92,7 @@ public class SinglePlayerController extends ListenerImplementation
 		for (String m : deadMinions)
 			GuiObjectManager.getInstance().removeMinion(m);
 		for (String p : deadPlayers)
-			GuiObjectManager.getInstance().removePlayer(p);
+			GuiObjectManager.getInstance().killPlayer(p);
 		for (String p : playersPositions.keySet())
 		{
 			javax.vecmath.Vector2f[] positions = playersPositions.get(p);
