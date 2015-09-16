@@ -14,8 +14,9 @@ import mpa.core.maths.MyMath;
 public class AIWorldManager
 {
 
-	private ArrayList<Vector2f> openList = new ArrayList<>();
-	private ArrayList<Vector2f> closedList = new ArrayList<>();
+	ArrayList<Vector2f> openList = new ArrayList<>();
+	ArrayList<Vector2f> closedList = new ArrayList<>();
+	ArrayList<Vector2f> allPoints = new ArrayList<>();
 	float ray;
 	private int fragmentsX;
 	private int fragmentsY;
@@ -64,10 +65,10 @@ public class AIWorldManager
 
 	private void computeOpenList()
 	{
-		for( int i = 1; i < fragmentsX; i++ )
-			for( int j = 1; j < fragmentsY; j++ )
+		for( int i = 0; i < fragmentsX; i++ )
+			for( int j = 0; j < fragmentsY; j++ )
 			{
-				Vector2f position = new Vector2f( ray * i, ray * j );
+				Vector2f position = new Vector2f( ray + ray * i, ray + ray * j );
 
 				ArrayList<AbstractObject> collisions = GameManager.getInstance().getWorld()
 						.checkForCollision( position.x, position.y, ray );
@@ -101,7 +102,13 @@ public class AIWorldManager
 				}
 				buildings.put( position, buildingList );
 				openList.add( position );
+				allPoints.add( position );
 			}
+	}
+
+	public ArrayList<Vector2f> getAllPoints()
+	{
+		return allPoints;
 	}
 
 	Vector2f getNextLocation( Player player )

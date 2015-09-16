@@ -66,7 +66,8 @@ class ProductionState extends AIState
 	@Override
 	void action( OpponentAI opponentAI )
 	{
-		System.out.println( "Production state" );
+		if( opponentAI.player.getName().equals( "Paola Maledetta 2" ) )
+			System.out.println( "Production state" );
 		Vector2f gatheringPlace = opponentAI.player.getHeadquarter().getGatheringPlace();
 		Player player = opponentAI.player;
 		Vector2f position = player.getPosition();

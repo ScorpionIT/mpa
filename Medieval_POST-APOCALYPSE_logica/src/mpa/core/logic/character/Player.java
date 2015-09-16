@@ -322,8 +322,11 @@ public class Player extends AbstractCharacter
 		{
 			readLock.lock();
 
+			int counter = 0;
 			for( Potions p : Potions.values() )
 			{
+				if( level.canBuy( p, potions.get( p ) ) )
+					counter++;
 				HashMap<String, Integer> price = PotionManager.getInstance().getPrice( p );
 
 				for( String r : price.keySet() )
@@ -332,6 +335,9 @@ public class Player extends AbstractCharacter
 						return false;
 				}
 			}
+
+			if( counter == Potions.values().length )
+				return false;
 
 			return true;
 
@@ -346,6 +352,9 @@ public class Player extends AbstractCharacter
 		try
 		{
 			readLock.lock();
+
+			if( level.canBuy( potion, potions.get( potion ) ) )
+				return false;
 
 			HashMap<String, Integer> price = PotionManager.getInstance().getPrice( potion );
 
@@ -382,6 +391,9 @@ public class Player extends AbstractCharacter
 		{
 			writeLock.lock();
 			if( x != headquarter.getGatheringPlace().x && y != headquarter.getGatheringPlace().y )
+				return false;
+
+			if( level.canBuy( potion, potions.get( potion ) ) )
 				return false;
 
 			HashMap<String, Integer> price = PotionManager.getInstance().getPrice( potion );

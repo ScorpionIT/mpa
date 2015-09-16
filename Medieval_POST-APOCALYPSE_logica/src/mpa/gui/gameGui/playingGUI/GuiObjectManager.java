@@ -5,6 +5,9 @@ import java.util.HashMap;
 
 import javax.vecmath.Vector2f;
 
+import mpa.core.logic.AbstractObject;
+import mpa.core.logic.GameManager;
+import mpa.core.logic.building.AbstractProperty;
 import mpa.core.maths.MyMath;
 import mpa.core.util.GameProperties;
 
@@ -34,6 +37,7 @@ public class GuiObjectManager
 	private HashMap<String, Spatial> towerCrushers = new HashMap<>();
 	private HashMap<String, Spatial> towers = new HashMap<>();
 	private HashMap<String, Spatial> hitPlayers = new HashMap<>();
+	private ArrayList<Vector2f> pointToVisit = new ArrayList<>();
 
 	private HashMap<Spatial, SpatialAnimationController> animationControllerSpatial = new HashMap<>();
 	private ArrayList<Vector2f> path = null;
@@ -41,13 +45,13 @@ public class GuiObjectManager
 	private float worldDimension;
 
 	private GameGui gameGui;
-	private Vector3f upVector = new Vector3f(0, 1, 0);
+	private Vector3f upVector = new Vector3f( 0, 1, 0 );
 	private String playingPlayer;
 
-	private GuiObjectManager(GameGui gameGui, String playingPlayer, boolean multiplayer)
+	private GuiObjectManager( GameGui gameGui, String playingPlayer, boolean multiplayer )
 	{
 		this.gameGui = gameGui;
-		if (!multiplayer)
+		if( !multiplayer )
 		{
 
 			// clickActionListener = new GameGuiClickListener( listenerImplementation, gameGui );
@@ -57,17 +61,17 @@ public class GuiObjectManager
 		this.playingPlayer = playingPlayer;
 	}
 
-	public void setPath(ArrayList<Vector2f> path)
+	public void setPath( ArrayList<Vector2f> path )
 	{
-		if (this.path == null || this.path.isEmpty())
+		if( this.path == null || this.path.isEmpty() )
 		{
 			this.path = path;
 
-			gameGui.spheres.detachAllChildren();
+			// gameGui.spheres.detachAllChildren();
 
-			if (path != null)
-				for (Vector2f position : path)
-					addSphere(position.x, position.y);
+			if( path != null )
+				for( Vector2f position : path )
+					addSphere( position.x, position.y );
 		}
 	}
 
@@ -76,9 +80,9 @@ public class GuiObjectManager
 		return path;
 	}
 
-	static void init(GameGui gm, String playingPlayer)
+	static void init( GameGui gm, String playingPlayer )
 	{
-		_guiGuiObjectManager = new GuiObjectManager(gm, playingPlayer, false);
+		_guiGuiObjectManager = new GuiObjectManager( gm, playingPlayer, false );
 	}
 
 	public static GuiObjectManager getInstance()
@@ -91,49 +95,93 @@ public class GuiObjectManager
 		return worldDimension;
 	}
 
-	public void setWorldDimension(float worldDimension)
+	public void setWorldDimension( float worldDimension )
 	{
 		this.worldDimension = worldDimension;
-		gameGui.createWorld(worldDimension);
+		gameGui.createWorld( worldDimension );
 	}
 
-	public void addPlayer(String name, Vector2f hqPosition, Vector2f gatheringPlace, Vector2f direction)
+	public void setPointToVisit()
 	{
-		gameGui.getAssetManager().registerLocator("./Assets/Models/Monster1.zip", ZipLocator.class);
-		Spatial playerModel = gameGui.getAssetManager().loadModel("Monster1.mesh.xml");
-		playerModel.scale(MyMath.scaleFactor(getModelBounds(playerModel), "player"));
-		playerModel.setLocalTranslation(new Vector3f(gatheringPlace.x, 10, gatheringPlace.y));
+		float ray = 100f;
+		int fragmentsX = ( int ) ( GameManager.getInstance().getWorld().getWidth() / ray );
+		int fragmentsY = ( int ) ( GameManager.getInstance().getWorld().getHeight() / ray );
 
-		animationControllerSpatial.put(playerModel, new SpatialAnimationController(playerModel, this, name));
+		for( int i = 0; i < fragmentsX; i++ )
+			for( int j = 0; j < fragmentsY; j++ )
+			{
+				Vector2f position = new Vector2f( ray + ray * i, ray + ray * j );
 
-		Vector3f vector = new Vector3f(-gatheringPlace.x, 0, gatheringPlace.y);
-		vector = MyMath.rotateY(vector, GameProperties.getInstance().getRotationAngle(playerModel.getName()));
+				ArrayList<AbstractObject> collisions = GameManager.getInstance().getWorld()
+						.checkForCollision( position.x, position.y, ray );
+				if( collisions.isEmpty() )
+				{
+
+				}
+				else
+				{
+					position = ( ( AbstractProperty ) collisions.get( 0 ) ).getGatheringPlace();
+
+				}
+				pointToVisit.add( position );
+			}
+		System.out.println();
+		System.out.println();
+		System.out.println( "CE NE SONO " + pointToVisit.size() );
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		gameGui.spheres.detachAllChildren();
+
+		for( Vector2f p : pointToVisit )
+		{
+			System.out.println( "provo a disegnare la sfera " + p.toString() );
+			this.addSphere( p.x, p.y );
+		}
+	}
+
+	public void addPlayer( String name, Vector2f hqPosition, Vector2f gatheringPlace,
+			Vector2f direction )
+	{
+		gameGui.getAssetManager()
+				.registerLocator( "./Assets/Models/Monster1.zip", ZipLocator.class );
+		Spatial playerModel = gameGui.getAssetManager().loadModel( "Monster1.mesh.xml" );
+		playerModel.scale( MyMath.scaleFactor( getModelBounds( playerModel ), "player" ) );
+		playerModel.setLocalTranslation( new Vector3f( gatheringPlace.x, 10, gatheringPlace.y ) );
+
+		animationControllerSpatial.put( playerModel, new SpatialAnimationController( playerModel,
+				this, name ) );
+
+		Vector3f vector = new Vector3f( -gatheringPlace.x, 0, gatheringPlace.y );
+		vector = MyMath.rotateY( vector,
+				GameProperties.getInstance().getRotationAngle( playerModel.getName() ) );
 
 		Quaternion quad = new Quaternion();
-		quad.lookAt(vector, upVector);
-		playerModel.setLocalRotation(quad);
+		quad.lookAt( vector, upVector );
+		playerModel.setLocalRotation( quad );
 
-		players.put(name, playerModel);
-		gameGui.attachPlayer(playerModel);
+		players.put( name, playerModel );
+		gameGui.attachPlayer( playerModel );
 
-		gameGui.getAssetManager().registerLocator("Assets/Models/baker_house.zip", ZipLocator.class);
-		Spatial hqModel = gameGui.getAssetManager().loadModel("baker_house.mesh.xml");
-		hqModel.setLocalTranslation(new Vector3f(hqPosition.x, 0, hqPosition.y));
-		hqModel.rotate(0, 90, 0);
+		gameGui.getAssetManager().registerLocator( "Assets/Models/baker_house.zip",
+				ZipLocator.class );
+		Spatial hqModel = gameGui.getAssetManager().loadModel( "baker_house.mesh.xml" );
+		hqModel.setLocalTranslation( new Vector3f( hqPosition.x, 0, hqPosition.y ) );
+		hqModel.rotate( 0, 90, 0 );
 
-		hqModel.scale(MyMath.scaleFactor(getModelBounds(hqModel), "headquarter"));
-		headQuarters.put(name, hqModel);
-		gameGui.attachStaticObject(hqModel);
+		hqModel.scale( MyMath.scaleFactor( getModelBounds( hqModel ), "headquarter" ) );
+		headQuarters.put( name, hqModel );
+		gameGui.attachStaticObject( hqModel );
 
-		System.out.println("casa dopo dello scale = " + getModelBounds(hqModel));
+		System.out.println( "casa dopo dello scale = " + getModelBounds( hqModel ) );
 
 	}
 
-	public Vector3f getModelBounds(Spatial model)
+	public Vector3f getModelBounds( Spatial model )
 	{
-		BoundingBox box = (BoundingBox) model.getWorldBound();
+		BoundingBox box = ( BoundingBox ) model.getWorldBound();
 		Vector3f boxSize = new Vector3f();
-		box.getExtent(boxSize);
+		box.getExtent( boxSize );
 		return boxSize;
 	}
 
@@ -142,16 +190,16 @@ public class GuiObjectManager
 		return playingPlayer;
 	}
 
-	public void setHitPlayers(ArrayList<String> hitPl)
+	public void setHitPlayers( ArrayList<String> hitPl )
 	{
 		hitPlayers.clear();
-		for (String s : hitPl)
-			if (players.containsKey(s))
-				hitPlayers.put(s, players.get(s));
-			else if (minions.containsKey(s))
-				hitPlayers.put(s, minions.get(s));
-			else if (towerCrushers.containsKey(s))
-				hitPlayers.put(s, towerCrushers.get(s));
+		for( String s : hitPl )
+			if( players.containsKey( s ) )
+				hitPlayers.put( s, players.get( s ) );
+			else if( minions.containsKey( s ) )
+				hitPlayers.put( s, minions.get( s ) );
+			else if( towerCrushers.containsKey( s ) )
+				hitPlayers.put( s, towerCrushers.get( s ) );
 	}
 
 	public ArrayList<Spatial> getHitCharacters()
@@ -159,8 +207,8 @@ public class GuiObjectManager
 		try
 		{
 			ArrayList<Spatial> hit = new ArrayList<>();
-			for (String s : hitPlayers.keySet())
-				hit.add(hitPlayers.get(s));
+			for( String s : hitPlayers.keySet() )
+				hit.add( hitPlayers.get( s ) );
 			return hit;
 		} finally
 		{
@@ -168,69 +216,76 @@ public class GuiObjectManager
 		}
 	}
 
-	public void addResource(String type, int ID, Vector2f position)
+	public void addResource( String type, int ID, Vector2f position )
 	{
 		Spatial model = null;
-		switch (type)
+		switch( type )
 		{
 			case "WOOD":
-				gameGui.getAssetManager().registerLocator("Assets/Models/Wood.zip", ZipLocator.class);
-				model = gameGui.getAssetManager().loadModel("Tree.mesh.xml");
-				model.scale(MyMath.scaleFactor(getModelBounds(model), "wood"));
-				woods.put(ID, model);
+				gameGui.getAssetManager().registerLocator( "Assets/Models/Wood.zip",
+						ZipLocator.class );
+				model = gameGui.getAssetManager().loadModel( "Tree.mesh.xml" );
+				model.scale( MyMath.scaleFactor( getModelBounds( model ), "wood" ) );
+				woods.put( ID, model );
 				break;
 			case "FIELD":
-				gameGui.getAssetManager().registerLocator("Assets/Models/CornField.zip", ZipLocator.class);
-				model = gameGui.getAssetManager().loadModel("CornField.mesh.xml");
-				model.scale(MyMath.scaleFactor(getModelBounds(model), "field"));
-				fields.put(ID, model);
+				gameGui.getAssetManager().registerLocator( "Assets/Models/CornField.zip",
+						ZipLocator.class );
+				model = gameGui.getAssetManager().loadModel( "CornField.mesh.xml" );
+				model.scale( MyMath.scaleFactor( getModelBounds( model ), "field" ) );
+				fields.put( ID, model );
 				break;
 			case "CAVE":
-				gameGui.getAssetManager().registerLocator("Assets/Models/stones.zip", ZipLocator.class);
-				model = gameGui.getAssetManager().loadModel("stones.mesh.xml");
-				System.out.println("prima dello scale + " + getModelBounds(model));
-				model.setLocalScale(MyMath.scaleFactor(getModelBounds(model), "cave"));
+				gameGui.getAssetManager().registerLocator( "Assets/Models/stones.zip",
+						ZipLocator.class );
+				model = gameGui.getAssetManager().loadModel( "stones.mesh.xml" );
+				System.out.println( "prima dello scale + " + getModelBounds( model ) );
+				model.setLocalScale( MyMath.scaleFactor( getModelBounds( model ), "cave" ) );
 				// model.scale( MyMath.scaleFactor( getModelBounds( model ), "cave" ) );
-				System.out.println("dopo dello scale + " + getModelBounds(model));
-				caves.put(ID, model);
+				System.out.println( "dopo dello scale + " + getModelBounds( model ) );
+				caves.put( ID, model );
 				break;
 			case "MINE":
-				gameGui.getAssetManager().registerLocator("Assets/Models/Wood.zip", ZipLocator.class);
-				model = gameGui.getAssetManager().loadModel("Tree.mesh.xml");
-				model.scale(MyMath.scaleFactor(getModelBounds(model), "mine"));
-				mines.put(ID, model);
+				gameGui.getAssetManager().registerLocator( "Assets/Models/Wood.zip",
+						ZipLocator.class );
+				model = gameGui.getAssetManager().loadModel( "Tree.mesh.xml" );
+				model.scale( MyMath.scaleFactor( getModelBounds( model ), "mine" ) );
+				mines.put( ID, model );
 				break;
 		// TODO
 		}
 
-		model.setLocalTranslation(new Vector3f(position.x, 50, position.y));
-		addSphere(position.x, position.y);
+		model.setLocalTranslation( new Vector3f( position.x, 50, position.y ) );
+		addSphere( position.x, position.y );
 
-		model.rotate(90, 0, 0);
-		gameGui.attachStaticObject(model);
+		model.rotate( 90, 0, 0 );
+		gameGui.attachStaticObject( model );
 
 	}
 
-	private void addSphere(float x, float y)
+	private void addSphere( float x, float y )
 	{
-		Sphere sphereMesh = new Sphere(10, 10, 9f);
-		Geometry sphereGeo = new Geometry("Shiny rock", sphereMesh);
-		sphereMesh.setTextureMode(Sphere.TextureMode.Projected); // better quality on spheres
-		TangentBinormalGenerator.generate(sphereMesh); // for lighting effect
-		Material sphereMat = new Material(gameGui.getAssetManager(), "Common/MatDefs/Light/Lighting.j3md");
-		sphereMat.setTexture("DiffuseMap", gameGui.getAssetManager().loadTexture("Textures/Terrain/Pond/Pond.jpg"));
-		sphereMat.setTexture("NormalMap", gameGui.getAssetManager().loadTexture("Textures/Terrain/Pond/Pond_normal.png"));
-		sphereMat.setBoolean("UseMaterialColors", true);
-		sphereMat.setColor("Diffuse", ColorRGBA.White);
-		sphereMat.setColor("Specular", ColorRGBA.White);
-		sphereMat.setFloat("Shininess", 64f); // [0,128]
-		sphereGeo.setMaterial(sphereMat);
-		sphereGeo.setLocalTranslation(x, 0, y); // Move it a bit
-		sphereGeo.rotate(1.6f, 0, 0); // Rotate it a bit
-		gameGui.spheres.attachChild(sphereGeo);
+		Sphere sphereMesh = new Sphere( 10, 10, 9f );
+		Geometry sphereGeo = new Geometry( "Shiny rock", sphereMesh );
+		sphereMesh.setTextureMode( Sphere.TextureMode.Projected ); // better quality on spheres
+		TangentBinormalGenerator.generate( sphereMesh ); // for lighting effect
+		Material sphereMat = new Material( gameGui.getAssetManager(),
+				"Common/MatDefs/Light/Lighting.j3md" );
+		sphereMat.setTexture( "DiffuseMap",
+				gameGui.getAssetManager().loadTexture( "Textures/Terrain/Pond/Pond.jpg" ) );
+		sphereMat.setTexture( "NormalMap",
+				gameGui.getAssetManager().loadTexture( "Textures/Terrain/Pond/Pond_normal.png" ) );
+		sphereMat.setBoolean( "UseMaterialColors", true );
+		sphereMat.setColor( "Diffuse", ColorRGBA.White );
+		sphereMat.setColor( "Specular", ColorRGBA.White );
+		sphereMat.setFloat( "Shininess", 64f ); // [0,128]
+		sphereGeo.setMaterial( sphereMat );
+		sphereGeo.setLocalTranslation( x, 15, y ); // Move it a bit
+		sphereGeo.rotate( 1.6f, 0, 0 ); // Rotate it a bit
+		gameGui.spheres.attachChild( sphereGeo );
 	}
 
-	public void addMinion(String ID)
+	public void addMinion( String ID )
 	{
 		// for( int i = 0; i < quantity; i++ )
 		{
@@ -241,85 +296,88 @@ public class GuiObjectManager
 		}
 	}
 
-	public void addTowerCrusher(String ID)
+	public void addTowerCrusher( String ID )
 	{
 
 	}
 
-	public void addTower(Vector2f position, String ID)
+	public void addTower( Vector2f position, String ID )
 	{
-		gameGui.getAssetManager().registerLocator("Assets/Models/tower.zip", ZipLocator.class);
-		Spatial tower = gameGui.getAssetManager().loadModel("tower.mesh.xml");
-		tower.setLocalTranslation(position.x, 0, position.y);
-		towers.put(ID, tower);
+		gameGui.getAssetManager().registerLocator( "Assets/Models/tower.zip", ZipLocator.class );
+		Spatial tower = gameGui.getAssetManager().loadModel( "tower.mesh.xml" );
+		tower.setLocalTranslation( position.x, 0, position.y );
+		towers.put( ID, tower );
 	}
 
-	public void updatePlayerPosition(String name, Vector2f position, Vector2f direction, boolean isMoving)
+	public void updatePlayerPosition( String name, Vector2f position, Vector2f direction,
+			boolean isMoving )
 	{
 
-		Spatial player = players.get(name);
+		Spatial player = players.get( name );
 
-		if (isMoving)
+		if( isMoving )
 		{
-			animationControllerSpatial.get(player).startWalkAnimation(1f);
+			animationControllerSpatial.get( player ).startWalkAnimation( 1f );
 		}
 		else
-			animationControllerSpatial.get(player).stopWalkAnimation();
+			animationControllerSpatial.get( player ).stopWalkAnimation();
 
-		Vector3f vector = new Vector3f(-direction.x, 0, -direction.y);
+		Vector3f vector = new Vector3f( -direction.x, 0, -direction.y );
 
-		vector = MyMath.rotateY(vector, GameProperties.getInstance().getRotationAngle(player.getName()));
+		vector = MyMath.rotateY( vector,
+				GameProperties.getInstance().getRotationAngle( player.getName() ) );
 		Quaternion quad = new Quaternion();
-		quad.lookAt(vector, upVector);
+		quad.lookAt( vector, upVector );
 
-		player.setLocalRotation(quad);
-		player.setLocalTranslation(position.x, 10, position.y);
+		player.setLocalRotation( quad );
+		player.setLocalTranslation( position.x, 10, position.y );
 	}
 
-	public void updateMinionPosition(String ID, Vector2f position, Vector2f direction)
+	public void updateMinionPosition( String ID, Vector2f position, Vector2f direction )
 	{
-		Spatial minion = minions.get(ID);
-		minion.setLocalTranslation(position.x, 0, position.y);
+		Spatial minion = minions.get( ID );
+		minion.setLocalTranslation( position.x, 0, position.y );
 		Quaternion quad = new Quaternion();
-		quad.lookAt(new Vector3f(-direction.x, 0, -direction.y), upVector);
-		minion.setLocalRotation(quad);
+		quad.lookAt( new Vector3f( -direction.x, 0, -direction.y ), upVector );
+		minion.setLocalRotation( quad );
 	}
 
-	public void updateTowerCrusherPosition(String ID, Vector2f position, Vector2f direction)
+	public void updateTowerCrusherPosition( String ID, Vector2f position, Vector2f direction )
 	{
-		Spatial crusher = towerCrushers.get(ID);
-		crusher.setLocalTranslation(position.x, 0, position.y);
+		Spatial crusher = towerCrushers.get( ID );
+		crusher.setLocalTranslation( position.x, 0, position.y );
 		Quaternion quad = new Quaternion();
-		quad.lookAt(new Vector3f(-direction.x, 0, -direction.y), upVector);
-		crusher.setLocalRotation(quad);
+		quad.lookAt( new Vector3f( -direction.x, 0, -direction.y ), upVector );
+		crusher.setLocalRotation( quad );
 	}
 
-	public void removeTower(String ID)
+	public void removeTower( String ID )
 	{
-		gameGui.detachStaticObject(towers.remove(ID));
+		gameGui.detachStaticObject( towers.remove( ID ) );
 	}
 
-	public void killPlayer(String name)
+	public void killPlayer( String name )
 	{
-		SpatialAnimationController spatialAnimationController = animationControllerSpatial.get(players.get(name));
-		if (!spatialAnimationController.startDeathAnimation())
+		SpatialAnimationController spatialAnimationController = animationControllerSpatial
+				.get( players.get( name ) );
+		if( !spatialAnimationController.startDeathAnimation() )
 		{
-			removePlayer(name);
+			removePlayer( name );
 		}
 	}
 
-	public void removePlayer(String name)
+	public void removePlayer( String name )
 	{
-		gameGui.detachPlayer(players.remove(name));
-		animationControllerSpatial.remove(players.get(name));
-		players.remove(name);
+		gameGui.detachPlayer( players.remove( name ) );
+		animationControllerSpatial.remove( players.get( name ) );
+		players.remove( name );
 	}
 
-	public void removeMinion(String ID)
+	public void removeMinion( String ID )
 	{
 		// lancia animazione
-		gameGui.detachPlayer(minions.get(ID));
-		minions.remove(ID);
+		gameGui.detachPlayer( minions.get( ID ) );
+		minions.remove( ID );
 	}
 
 	// TODO retrieve informations

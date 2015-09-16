@@ -1,6 +1,7 @@
 package mpa.core.logic;
 
 import mpa.core.logic.character.Player;
+import mpa.core.logic.tool.Potions;
 
 public enum Level
 {
@@ -14,9 +15,14 @@ public enum Level
 	private final int COLLISION_RAY_INCREMENT = 2;
 	private final int PHYSICALL_ATTACK_DAMAGE_INCREMENT = 10;
 
+	private final int MAXIMUM_HP_POTION_ALLOWED = 5;
+	private final int MAXIMUM_MP_POTION_ALLOWED = 5;
+	private final int MAXIMUM_GRANADE_ALLOWED = 5;
+	private final int MAXIMUM_FLASH_BANG_ALLOWED = 5;
+
 	public boolean hasNext()
 	{
-		if( this.ordinal() < Level.values().length )
+		if( this.ordinal() < Level.values().length - 1 )
 			return true;
 		return false;
 	}
@@ -115,4 +121,28 @@ public enum Level
 		return 0;
 	}
 
+	public boolean canBuy( Potions potion, int amount )
+	{
+		int maximumAllowed = 0;
+
+		switch( potion )
+		{
+			case HP:
+				maximumAllowed = MAXIMUM_FLASH_BANG_ALLOWED;
+				break;
+			case MP:
+				maximumAllowed = MAXIMUM_MP_POTION_ALLOWED;
+				break;
+			case GRANADE:
+				maximumAllowed = MAXIMUM_GRANADE_ALLOWED;
+				break;
+			case FLASH_BANG:
+				maximumAllowed = MAXIMUM_FLASH_BANG_ALLOWED;
+				break;
+		}
+
+		if( amount >= maximumAllowed * ordinal() )
+			return false;
+		return true;
+	}
 }

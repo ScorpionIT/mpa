@@ -17,27 +17,30 @@ class StrengtheningState extends AIState
 	@Override
 	void action( OpponentAI opponentAI )
 	{
-		System.out.println( "Strengthening State" );
+
+		if( opponentAI.player.getName().equals( "Paola Maledetta 2" ) )
+			System.out.println( "Strengthening State" );
 		Player p = opponentAI.player;
 
-		if( isWalking )
-			return;
 		Vector2f collectionPoint = p.getHeadquarter().getGatheringPlace();
-		if( ( p.getPath() == null || p.getPath().isEmpty() )
-				&& collectionPoint.equals( p.getPosition() ) )
+		if( /*
+			 * ( p.getPath() == null || p.getPath().isEmpty() ) &&
+			 */collectionPoint.equals( p.getPosition() ) )
 		{
 			if( p.canUpgrade() )
+			{
 				p.upgradeLevel();
 
-			System.out.println();
-			System.out.println();
-			System.out.println( "ho uppato di livello" );
-			System.out.println();
-			System.out.println();
-
+				System.out.println();
+				System.out.println();
+				System.out.println( "ho uppato di livello" );
+				System.out.println();
+				System.out.println();
+			}
 			isWalking = false;
 		}
-
+		else if( isWalking )
+			return;
 		else if( p.canUpgrade() )
 		{
 			GameManager.getInstance().computePath( p, collectionPoint.x, collectionPoint.y );

@@ -19,31 +19,46 @@ class ExplorationState extends AIState
 	@Override
 	void action( OpponentAI opponentAI )
 	{
-		System.out.println( "Exploration State" );
+		if( opponentAI.player.getName().equals( "Paola Maledetta 2" ) )
+		{
+			System.out.println( "Exploration State" );
+			System.out.println( "da visitare ho ancora " + opponentAI.worldManager.openList.size() );
+			System.out.println( "mentre ne ho visitati "
+					+ opponentAI.worldManager.closedList.size() );
+			if( pointToReach != null )
+				System.out.println( "sto cercandoo di andare in  " + pointToReach.toString() );
+		}
 		Player p = opponentAI.player;
 		float playerX = p.getX();
 		float playerY = p.getY();
 
 		if( pointToReach != null )
 		{
-			if( isWalking && ( ( int ) pointToReach.x ) == ( ( int ) playerX )
-					&& ( ( int ) pointToReach.y ) == ( ( int ) playerY ) )
+			// if( isWalking && ( ( int ) pointToReach.x ) == ( ( int ) playerX )
+			// && ( ( int ) pointToReach.y ) == ( ( int ) playerY ) )
+			if( isWalking && pointToReach.equals( p.getPosition() ) )
 			{
 				opponentAI.addBuildings( pointToReach );
 
-				pointToReach = opponentAI.worldManager.getNextLocation( opponentAI.player );
-
-				if( pointToReach != null )
-				{
-					GameManager.getInstance().computePath( opponentAI.player, pointToReach.x,
-							pointToReach.y );
-					isWalking = true;
-				}
-				else
-				{
-					opponentAI.knownAllTheWorld = true;
-					isWalking = false;
-				}
+				// pointToReach = opponentAI.worldManager.getNextLocation( opponentAI.player );
+				// if( opponentAI.player.getName().equals( "Paola Maledetta 2" ) )
+				// {
+				// System.out.println( "ho un nuovo punto da raggiungere "
+				// + pointToReach.toString() );
+				// }
+				pointToReach = null;
+				isWalking = false;
+				// if( pointToReach != null )
+				// {
+				// GameManager.getInstance().computePath( opponentAI.player, pointToReach.x,
+				// pointToReach.y );
+				// isWalking = true;
+				// }
+				// else
+				// {
+				// opponentAI.knownAllTheWorld = true;
+				// isWalking = false;
+				// }
 
 			}
 		}
@@ -73,15 +88,16 @@ class ExplorationState extends AIState
 		if( nextState != null )
 			return nextState;
 
-		// if( isWalking )
-		// nextState = this;
-		if( opponentAI.player.canUpgrade() )
-			nextState = new StrengtheningState();
-		else if( opponentAI.shouldBuyPotions() && opponentAI.player.canBuyPotions() )
-			nextState = new ProductionState();
-		else if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings()
-				&& opponentAI.player.isThereAnyFreeSulbaltern() )
-			nextState = new ConquestState();
+		if( isWalking )
+			nextState = this;
+		// if( opponentAI.player.canUpgrade() )
+		// nextState = new StrengtheningState();
+		// else if( opponentAI.shouldBuyPotions() && opponentAI.player.canBuyPotions() )
+		// nextState = new ProductionState();
+		// else if( !opponentAI.knownBuildings.isEmpty() &&
+		// opponentAI.areThereConquerableBuildings()
+		// && opponentAI.player.isThereAnyFreeSulbaltern() )
+		// nextState = new ConquestState();
 		else if( !opponentAI.knownAllTheWorld )
 			nextState = this;
 		else
