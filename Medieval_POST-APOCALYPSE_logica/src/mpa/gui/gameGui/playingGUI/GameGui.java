@@ -96,12 +96,12 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 		new GraphicUpdater(this).start();
 	}
 
-	void attachPlayer(Spatial model)
+	void attachMobileObject(Spatial model)
 	{
 		mobileObjects.attachChild(model);
 	}
 
-	void detachPlayer(Spatial model)
+	void detachMobileObject(Spatial model)
 	{
 		mobileObjects.detachChild(model);
 	}

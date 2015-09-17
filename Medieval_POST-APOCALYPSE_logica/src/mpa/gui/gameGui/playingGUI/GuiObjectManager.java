@@ -156,7 +156,7 @@ public class GuiObjectManager
 		playerModel.setLocalRotation(quad);
 
 		players.put(name, playerModel);
-		gameGui.attachPlayer(playerModel);
+		gameGui.attachMobileObject(playerModel);
 
 		gameGui.getAssetManager().registerLocator("Assets/Models/baker_house.zip", ZipLocator.class);
 		Spatial hqModel = gameGui.getAssetManager().loadModel("baker_house.mesh.xml");
@@ -279,6 +279,7 @@ public class GuiObjectManager
 		Spatial minionModel = gameGui.getAssetManager().loadModel("Monster1.mesh.xml");
 		minionModel.scale(MyMath.scaleFactor(getModelBounds(minionModel), "minion"));
 		minions.put(ID, minionModel);
+		gameGui.attachMobileObject(minionModel);
 		animationControllerSpatial.put(minionModel, new SpatialAnimationController(minionModel, this, ID, "minion"));
 
 	}
@@ -289,6 +290,7 @@ public class GuiObjectManager
 		Spatial towerCrusherModel = gameGui.getAssetManager().loadModel("Troll.mesh.xml");
 		towerCrusherModel.scale(MyMath.scaleFactor(getModelBounds(towerCrusherModel), "towerCrusher"));
 		towerCrushers.put(ID, towerCrusherModel);
+		gameGui.attachMobileObject(towerCrusherModel);
 		animationControllerSpatial.put(towerCrusherModel, new SpatialAnimationController(towerCrusherModel, this, ID, "towerCrusher"));
 
 	}
@@ -412,7 +414,7 @@ public class GuiObjectManager
 
 	public void removePlayer(String name)
 	{
-		gameGui.detachPlayer(players.get(name));
+		gameGui.detachMobileObject(players.get(name));
 		animationControllerSpatial.remove(players.get(name));
 		players.remove(name);
 		gameGui.getNiftyHandler().removePayer(name);
@@ -420,7 +422,7 @@ public class GuiObjectManager
 
 	public void removeMinion(String ID)
 	{
-		gameGui.detachPlayer(minions.get(ID));
+		gameGui.detachMobileObject(minions.get(ID));
 		animationControllerSpatial.remove(minions.get(ID));
 		minions.remove(ID);
 	}
