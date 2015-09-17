@@ -75,8 +75,8 @@ public class SinglePlayerController extends ListenerImplementation
 	public ArrayList<String> createMinions(String boss, String target, int quantity)
 	{
 		ArrayList<String> minions = gManagerProxy.createMinions(boss, quantity, target);
-		for (String m : minions)
-			GuiObjectManager.getInstance().addMinion(m);
+		for (String ID : minions)
+			GuiObjectManager.getInstance().addMinion(ID);
 
 		return minions;
 	}
@@ -105,11 +105,16 @@ public class SinglePlayerController extends ListenerImplementation
 		for (String m : minionsPositions.keySet())
 		{
 			javax.vecmath.Vector2f[] positions = minionsPositions.get(m);
-			GuiObjectManager.getInstance().updateMinionPosition(m, positions[0], positions[1]);
+			GuiObjectManager.getInstance().updateMinionPosition(m, positions[0], positions[1], gManagerProxy.isMovingMinion(m));
 		}
 		for (String playerName : attackingPlayers)
 		{
 			GuiObjectManager.getInstance().startPlayerAttackAnimation(playerName);
+
+		}
+		for (String idMinion : attackingMinions)
+		{
+			GuiObjectManager.getInstance().startMInionAttackAnimation(idMinion);
 
 		}
 	}

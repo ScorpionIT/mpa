@@ -146,7 +146,7 @@ public class GuiObjectManager
 		playerModel.scale(MyMath.scaleFactor(getModelBounds(playerModel), "player"));
 		playerModel.setLocalTranslation(new Vector3f(gatheringPlace.x, 10, gatheringPlace.y));
 
-		animationControllerSpatial.put(playerModel, new SpatialAnimationController(playerModel, this, name));
+		animationControllerSpatial.put(playerModel, new SpatialAnimationController(playerModel, this, name, "player"));
 
 		Vector3f vector = new Vector3f(-gatheringPlace.x, 0, gatheringPlace.y);
 		vector = MyMath.rotateY(vector, GameProperties.getInstance().getRotationAngle(playerModel.getName()));
@@ -274,17 +274,22 @@ public class GuiObjectManager
 
 	public void addMinion(String ID)
 	{
-		// for( int i = 0; i < quantity; i++ )
-		{
-			// register locator
-			// Spatial model = gameGui.getAssetManager().loadModel( arg0 );
-			// model.setLocalTranslation( new Vector3f( position.x, 0, position.y ) );
-			// minions.put( ID, model );
-		}
+
+		gameGui.getAssetManager().registerLocator("./Assets/Models/Monster1.zip", ZipLocator.class);
+		Spatial minionModel = gameGui.getAssetManager().loadModel("Monster1.mesh.xml");
+		minionModel.scale(MyMath.scaleFactor(getModelBounds(minionModel), "minion"));
+		minions.put(ID, minionModel);
+		animationControllerSpatial.put(minionModel, new SpatialAnimationController(minionModel, this, ID, "minion"));
+
 	}
 
 	public void addTowerCrusher(String ID)
 	{
+		gameGui.getAssetManager().registerLocator("./Assets/Models/Troll.zip", ZipLocator.class);
+		Spatial towerCrusherModel = gameGui.getAssetManager().loadModel("Troll.mesh.xml");
+		towerCrusherModel.scale(MyMath.scaleFactor(getModelBounds(towerCrusherModel), "towerCrusher"));
+		towerCrushers.put(ID, towerCrusherModel);
+		animationControllerSpatial.put(towerCrusherModel, new SpatialAnimationController(towerCrusherModel, this, ID, "towerCrusher"));
 
 	}
 
@@ -318,25 +323,53 @@ public class GuiObjectManager
 		player.setLocalTranslation(position.x, 10, position.y);
 	}
 
-	public void updateMinionPosition(String ID, Vector2f position, Vector2f direction)
+	public void updateMinionPosition(String ID, Vector2f position, Vector2f direction, boolean isMoving)
 	{
 		Spatial minion = minions.get(ID);
 		if (minion != null)
 		{
-			minion.setLocalTranslation(position.x, 0, position.y);
+			if (isMoving)
+			{
+				animationControllerSpatial.get(minion).startWalkAnimation(1f);
+			}
+			else
+				animationControllerSpatial.get(minion).stopWalkAnimation();
+
+			Vector3f vector = new Vector3f(-direction.x, 0, -direction.y);
+			vector = MyMath.rotateY(vector, GameProperties.getInstance().getRotationAngle(minion.getName()));
 			Quaternion quad = new Quaternion();
-			quad.lookAt(new Vector3f(-direction.x, 0, -direction.y), upVector);
+			quad.lookAt(vector, upVector);
 			minion.setLocalRotation(quad);
+			minion.setLocalTranslation(position.x, 10, position.y);
 		}
 	}
 
 	public void updateTowerCrusherPosition(String ID, Vector2f position, Vector2f direction)
 	{
-		Spatial crusher = towerCrushers.get(ID);
-		crusher.setLocalTranslation(position.x, 0, position.y);
-		Quaternion quad = new Quaternion();
-		quad.lookAt(new Vector3f(-direction.x, 0, -direction.y), upVector);
-		crusher.setLocalRotation(quad);
+
+		Spatial towerCrusher = towerCrushers.get(ID);
+		if (towerCrusher != null)
+		{
+			// if (isMoving)
+			// {
+			// animationControllerSpatial.get(minion).startWalkAnimation(1f);
+			// }
+			// else
+			// animationControllerSpatial.get(minion).stopWalkAnimation();
+
+			Vector3f vector = new Vector3f(-direction.x, 0, -direction.y);
+			vector = MyMath.rotateY(vector, GameProperties.getInstance().getRotationAngle(towerCrusher.getName()));
+			Quaternion quad = new Quaternion();
+			quad.lookAt(vector, upVector);
+			towerCrusher.setLocalRotation(quad);
+			towerCrusher.setLocalTranslation(position.x, 10, position.y);
+
+		}
+		// Spatial crusher = towerCrushers.get(ID);
+		// crusher.setLocalTranslation(position.x, 0, position.y);
+		// Quaternion quad = new Quaternion();
+		// quad.lookAt(new Vector3f(-direction.x, 0, -direction.y), upVector);
+		// crusher.setLocalRotation(quad);
 	}
 
 	public void removeTower(String ID)
@@ -344,20 +377,39 @@ public class GuiObjectManager
 		gameGui.detachStaticObject(towers.remove(ID));
 	}
 
+	public void killMinion(String ID)
+	{
+		if (minions.get(ID) != null)
+		{
+			SpatialAnimationController spatialAnimationController = animationControllerSpatial.get(minions.get(ID));
+			if (spatialAnimationController != null)
+			{
+				if (!spatialAnimationController.startDeathAnimation())
+				{
+					removeMinion(ID);
+				}
+			}
+		}
+	}
+
 	public void killPlayer(String name)
 	{
-		SpatialAnimationController spatialAnimationController = animationControllerSpatial.get(players.get(name));
-		if (spatialAnimationController != null)
+		if (players.get(name) != null)
 		{
-			if (!spatialAnimationController.startDeathAnimation())
-			{}
-			removePlayer(name);
+			SpatialAnimationController spatialAnimationController = animationControllerSpatial.get(players.get(name));
+			if (spatialAnimationController != null)
+			{
+				if (!spatialAnimationController.startDeathAnimation())
+				{
+					removePlayer(name);
+				}
+			}
 		}
+
 	}
 
 	public void removePlayer(String name)
 	{
-		System.out.println("STO RIMUOVENDO " + name);
 		gameGui.detachPlayer(players.get(name));
 		animationControllerSpatial.remove(players.get(name));
 		players.remove(name);
@@ -365,8 +417,8 @@ public class GuiObjectManager
 
 	public void removeMinion(String ID)
 	{
-		// lancia animazione
 		gameGui.detachPlayer(minions.get(ID));
+		animationControllerSpatial.remove(minions.get(ID));
 		minions.remove(ID);
 	}
 
@@ -374,6 +426,12 @@ public class GuiObjectManager
 	{
 		animationControllerSpatial.get(players.get(playingPlayerName)).stopAnimation();
 		animationControllerSpatial.get(players.get(playingPlayerName)).startAttackAnimation(1f);
+	}
+
+	public void startMInionAttackAnimation(String ID)
+	{
+		animationControllerSpatial.get(minions.get(ID)).stopAnimation();
+		animationControllerSpatial.get(minions.get(ID)).startAttackAnimation(1f);
 	}
 
 	// TODO retrieve informations

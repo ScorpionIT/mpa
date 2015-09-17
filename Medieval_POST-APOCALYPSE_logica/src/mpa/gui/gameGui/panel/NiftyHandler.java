@@ -132,7 +132,7 @@ public class NiftyHandler
 	private void addSelectionHeadquarter()
 	{
 		Element findElementByName = nifty.getCurrentScreen().findElementByName("selectionHeadquarterLayer");
-		findElementByName.add(selectionHeadquarterHandler.buildListBox(nifty, nifty.getCurrentScreen(), findElementByName));
+		findElementByName.add(selectionHeadquarterHandler.buildSelectionHeadquarterPanel(nifty, nifty.getCurrentScreen(), findElementByName));
 
 		selectionHeadquarterHandler.setListBox(nifty.getCurrentScreen());
 		selectionHeadquarterHandler.setVisible(true);
@@ -268,6 +268,9 @@ public class NiftyHandler
 		{
 			setResourceValue(resourceName, playingPlayerResourcesAmount.get(resourceName));
 		}
+		resourcesPanel.updateInformationPanel(nifty, gameController.getPlayerHP(GuiObjectManager.getInstance().getPlayingPlayer()),
+				gameController.getPlayerMP(GuiObjectManager.getInstance().getPlayingPlayer()),
+				gameController.getPlayerLevel(GuiObjectManager.getInstance().getPlayingPlayer()));
 
 	}
 

@@ -20,6 +20,8 @@ public class GameProperties
 	private HashMap<String, Float> collisionRays = new HashMap<>();
 	private HashMap<String, Float> rotationAngle = new HashMap<>();
 
+	private String[] characterType = { "player", "minion", "towerCrusher" };
+
 	private GameProperties()
 	{
 		loadBuildings();
@@ -179,12 +181,19 @@ public class GameProperties
 				objectHeght.put(object, Integer.parseInt(height));
 			}
 		}
-		String width = properties.getProperty("playerWidth");
-		String height = properties.getProperty("playerHeight");
 
-		objectWidth.put("player", Integer.parseInt(width));
-		objectHeght.put("player", Integer.parseInt(height));
+		for (String character : characterType)
+		{
 
+			String width = properties.getProperty(character + "Width");
+			String height = properties.getProperty(character + "Height");
+			if (width != null && height != null)
+			{
+
+				objectWidth.put(character, Integer.parseInt(width));
+				objectHeght.put(character, Integer.parseInt(height));
+			}
+		}
 	}
 
 	private void loadRotationAngle()

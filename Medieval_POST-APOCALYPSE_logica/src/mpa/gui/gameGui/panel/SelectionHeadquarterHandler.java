@@ -35,7 +35,7 @@ public class SelectionHeadquarterHandler
 
 	}
 
-	public Element buildListBox(Nifty nifty, Screen currentScreen, Element parent)
+	public Element buildSelectionHeadquarterPanel(Nifty nifty, Screen currentScreen, Element parent)
 	{
 		return selectionHeadquarterPanel.build(nifty, currentScreen, parent);
 	}

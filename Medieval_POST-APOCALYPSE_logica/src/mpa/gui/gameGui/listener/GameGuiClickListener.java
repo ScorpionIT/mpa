@@ -54,6 +54,7 @@ public class GameGuiClickListener implements ActionListener
 		if (!isPressed && name.equals("Click"))
 		{
 
+			// TODO controllare che crs non sia null se il click è fuori dal mondo
 			contactPoint = new Vector2f(crs.getClosestCollision().getContactPoint().x, crs.getClosestCollision().getContactPoint().z);
 			String pickedObject = listener.getPickedObject(contactPoint);
 
@@ -77,6 +78,7 @@ public class GameGuiClickListener implements ActionListener
 					System.out.println("ci entro?");
 					listener.computePath(contactPoint);
 				}
+
 			}
 
 			else if (!pickedObject.equals("GROUND") && !niftyHandler.isVisibleChoosePanel() && !niftyHandler.isVisibleOpponentPropertiesPanel())

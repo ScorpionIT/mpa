@@ -2,6 +2,7 @@ package mpa.gui.gameGui.panel;
 
 import java.util.HashMap;
 
+import mpa.gui.gameGui.playingGUI.GuiObjectManager;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
@@ -21,11 +22,59 @@ public class ResourcesPanel
 	private int widthPanel;
 	private int xPanel = 0;
 
+	private PanelBuilder informationPanel;
+
+	private LabelBuilder labelHPAndMP;
+	private LabelBuilder labelLevel;
+
 	public ResourcesPanel()
 	{
 		widthPanel = 100 / resources.length;
+
+		labelHPAndMP = new LabelBuilder(GuiObjectManager.getInstance().getPlayingPlayer() + " HP_MP")
+		{
+			{
+				width("100%");
+				height("40%");
+				x("20%");
+				y("60%");
+
+			}
+		};
+		labelLevel = new LabelBuilder(GuiObjectManager.getInstance().getPlayingPlayer() + " Level")
+		{
+			{
+				width("100%");
+				height("40%");
+				x("20%");
+				y("10%");
+
+			}
+		};
+		initInformationPanel();
 		initResources();
 		initResourcePanel();
+
+	}
+
+	private void initInformationPanel()
+	{
+		informationPanel = new PanelBuilder("#informationPanel")
+		{
+
+			{
+				childLayoutAbsoluteInside();
+
+				width("20%");
+				height("50%");
+				alignLeft();
+				valignTop();
+				control(labelHPAndMP);
+				control(labelLevel);
+
+			}
+
+		};
 
 	}
 
@@ -53,6 +102,7 @@ public class ResourcesPanel
 
 					}
 				});
+				panel(informationPanel);
 
 			}
 
@@ -76,6 +126,18 @@ public class ResourcesPanel
 		};
 		resourcesBackgroundPanel.panel(resourcesPanel);
 		addPanels();
+
+	}
+
+	public void setPlayerHPAndMP(int HP, int MP)
+	{
+		labelHPAndMP.text("HP: " + HP + " " + "MP: " + MP);
+
+	}
+
+	public void setPlayerLevel(final String level)
+	{
+		labelLevel.text("Level: " + level);
 
 	}
 
@@ -163,6 +225,30 @@ public class ResourcesPanel
 	public Element build(Nifty nifty, Screen currentScreen, Element parent)
 	{
 		return resourcesBackgroundPanel.build(nifty, currentScreen, parent);
+	}
+
+	public void updateInformationPanel(Nifty nifty, int HP, int MP, String level)
+	{
+
+		labelHPAndMP.text("HP: " + HP + " " + "MP: " + MP);
+		labelLevel.text("Level: " + level);
+
+		if (nifty.getCurrentScreen().findElementByName("#informationPanel") != null)
+		{
+
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println("sono qui");
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			nifty.getCurrentScreen().findElementByName("#informationPanel").markForRemoval();
+			nifty.removeElement(nifty.getCurrentScreen(), nifty.getCurrentScreen().findElementByName("#informationPanel"));
+			Element findElementByName = nifty.getCurrentScreen().findElementByName("resourcesBackground");
+			findElementByName.add(informationPanel.build(nifty, nifty.getCurrentScreen(), findElementByName));
+		}
 	}
 
 	public LabelBuilder getResourceLabel(String resourceName)

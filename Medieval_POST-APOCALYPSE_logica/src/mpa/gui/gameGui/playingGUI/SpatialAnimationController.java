@@ -13,14 +13,16 @@ public class SpatialAnimationController implements AnimEventListener
 	Spatial model;
 	private AnimChannel channel;
 	private AnimControl control;
-	private String playerName;
+	private String name;
 	private GuiObjectManager guiObjectManager;
+	private String type;
 
-	public SpatialAnimationController(Spatial model, GuiObjectManager guiObjectManager, String playerName)
+	public SpatialAnimationController(Spatial model, GuiObjectManager guiObjectManager, String name, String type)
 	{
 		this.model = model;
 		this.guiObjectManager = guiObjectManager;
-		this.playerName = playerName;
+		this.name = name;
+		this.type = type;
 		control = model.getControl(AnimControl.class);
 		control.addListener(this);
 		channel = control.createChannel();
@@ -39,7 +41,10 @@ public class SpatialAnimationController implements AnimEventListener
 	{
 		if (animName.equals("death"))
 		{
-			guiObjectManager.removePlayer(playerName);
+			if (type.equals("player"))
+				guiObjectManager.removePlayer(name);
+			else if (type.equals("minion"))
+				guiObjectManager.removeMinion(name);
 		}
 		else if (animName.equals("attack"))
 		{
