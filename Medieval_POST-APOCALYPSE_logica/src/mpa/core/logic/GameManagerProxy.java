@@ -214,13 +214,29 @@ public class GameManagerProxy
 		return gm.conquer(conqueredObject, players.get(player));
 	}
 
-	public String createTower(String p, Vector2f position)
+	public Vector2f getTowerAvaiblePosition(String property)
+	{
+		String[] field = property.split(":");
+
+		ArrayList<Vector2f> gatheringPlaces = objects.get(field[0].toLowerCase()).get(field[1]).getAvaibleGatheringPlaces();
+		if (gatheringPlaces != null && !gatheringPlaces.isEmpty())
+		{
+			return gatheringPlaces.get(0);
+		}
+		else
+			return null;
+	}
+
+	public String createTower(String playerName, Vector2f position, String property)
 	{
 
-		Tower tower = gm.createTower(players.get(p), position);
+		Tower tower = gm.createTower(players.get(playerName), position);
+		String[] field = property.split(":");
 
 		if (tower != null)
 		{
+			AbstractPrivateProperty propertyObject = objects.get(field[0].toLowerCase()).get(field[1]);
+			propertyObject.addTower(tower, position);
 			objects.get("tower").put(tower.getID(), tower);
 			return tower.getID();
 		}

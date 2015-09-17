@@ -42,6 +42,7 @@ public class GameManager
 
 	private IDPool minionIDs;
 	private IDPool towerCrusherIDs;
+	private IDPool towerIDs;
 
 	private ArrayList<Player> deadPlayers = new ArrayList<>();
 	private ArrayList<Minion> deadMinions = new ArrayList<>();
@@ -65,73 +66,81 @@ public class GameManager
 		readLock.unlock();
 	}
 
-	public static void init( World world, DifficultyLevel level, boolean multiplayer )
+	public static void init(World world, DifficultyLevel level, boolean multiplayer)
 	{
-		if( gameManager == null )
+		if (gameManager == null)
 		{
-			gameManager = new GameManager( world, level );
-			ThreadManager.getInstance().addGameThread( new PositionUpdater() );
-			ThreadManager.getInstance().addGameThread( new ResourceUpdater() );
+			gameManager = new GameManager(world, level);
+			ThreadManager.getInstance().addGameThread(new PositionUpdater());
+			ThreadManager.getInstance().addGameThread(new ResourceUpdater());
 			ThreadManager.getInstance().startGameThreads();
 
-			if( multiplayer )
+			if (multiplayer)
 				;
 			else
 				;
 		}
 	}
 
-	private GameManager( World world, DifficultyLevel level )
+	private GameManager(World world, DifficultyLevel level)
 	{
 		this.world = world;
 		this.players = new ArrayList<Player>();
 		AI_players = new HashMap<>();
 		this.difficultyLevel = level;
-		minionIDs = new IDPool( 100 );
-		towerCrusherIDs = new IDPool( 100 );
-		attackRequests = new AttackRequests( AI_players );
-		ThreadManager.getInstance().addGameThread( attackRequests );
+		minionIDs = new IDPool(100);
+		towerCrusherIDs = new IDPool(100);
+		towerIDs = new IDPool(100);
+		attackRequests = new AttackRequests(AI_players);
+		ThreadManager.getInstance().addGameThread(attackRequests);
 
 	}
 
-	public void computePath( AbstractCharacter player, float xGoal, float yGoal )
+	public void computePath(AbstractCharacter player, float xGoal, float yGoal)
 	{
-		PathCalculatorThread pathCalculatorThread = new PathCalculatorThread( player, xGoal, yGoal );
+		PathCalculatorThread pathCalculatorThread = new PathCalculatorThread(player, xGoal, yGoal);
 		pathCalculatorThread.start();
 	}
 
-	public void addPlayer( Player player )
+	public void addPlayer(Player player)
 	{
-		players.add( player );
+		players.add(player);
 	}
 
-	public void addAIPlayer( Player player )
+	public void addAIPlayer(Player player)
 	{
-		OpponentAI newAI = new OpponentAI( player, difficultyLevel );
-		AI_players.put( player, newAI );
-		addPlayer( player );
+		OpponentAI newAI = new OpponentAI(player, difficultyLevel);
+		AI_players.put(player, newAI);
+		addPlayer(player);
 		newAI.start();
 	}
 
-	public ArrayList<Minion> createMinions( Player boss, int quantity, Player target )
+	public ArrayList<Minion> createMinions(Player boss, int quantity, Player target)
 	{
 		ArrayList<Minion> minions = new ArrayList<>();
 
-		for( int i = 0; i < quantity; i++ )
+		ArrayList<Vector2f> computeRandomPointsCircumference = MyMath.computeRandomPointsCircumference(boss.getHeadquarter().getPosition(),
+				MyMath.distanceFloat(boss.getHeadquarter().getPosition(), boss.getHeadquarter().getGatheringPlace()), quantity);
+		for (Vector2f vector2f : computeRandomPointsCircumference)
 		{
-			Minion createdMinion = boss.createMinion( target, minionIDs.getID() );
-			minions.add( createdMinion );
-			minionsAlive.add( createdMinion );
+			System.out.println(vector2f);
+		}
+
+		for (int i = 0; i < quantity; i++)
+		{
+			Minion createdMinion = boss.createMinion(target, minionIDs.getID(), computeRandomPointsCircumference.get(i));
+			minions.add(createdMinion);
+			minionsAlive.add(createdMinion);
 		}
 
 		return minions;
 	}
 
-	public ArrayList<TowerCrusher> createTowerCrushers( Player boss, int quantity, Tower target )
+	public ArrayList<TowerCrusher> createTowerCrushers(Player boss, int quantity, Tower target)
 	{
 		ArrayList<TowerCrusher> towerCrushers = new ArrayList<>();
-		for( int i = 0; i < quantity; i++ )
-			towerCrushers.add( boss.createTowerCrusher( target, towerCrusherIDs.getID() ) );
+		for (int i = 0; i < quantity; i++)
+			towerCrushers.add(boss.createTowerCrusher(target, towerCrusherIDs.getID()));
 
 		return towerCrushers;
 	}
@@ -139,43 +148,17 @@ public class GameManager
 	public void updateCharacterPositions()
 	{
 		readLock.lock();
-		for( Player player : players )
+		for (Player player : players)
 		{
 			player.movePlayer();
-			for( DependentCharacter dC : player.getSubalterns() )
+			for (DependentCharacter dC : player.getSubalterns())
 				dC.movePlayer();
 		}
-		for( Minion minion : minionsAlive )
+		for (Minion minion : minionsAlive)
 		{
 			minion.movePlayer();
 		}
 		readLock.unlock();
-	}
-
-	public ArrayList<Player> getPlayersAround( Player player, float ray )
-	{
-		try
-		{
-			readLock.lock();
-			Vector2f playerPosition = player.getPosition();
-			ArrayList<Player> playersAround = new ArrayList<>();
-			for( Player p : players )
-			{
-				if( p == player )
-					continue;
-
-				Vector2f p_position = p.getPosition();
-
-				if( MyMath.distanceFloat( playerPosition.x, playerPosition.y, p_position.x,
-						p_position.y ) <= ray )
-					playersAround.add( p );
-			}
-
-			return playersAround;
-		} finally
-		{
-			readLock.unlock();
-		}
 	}
 
 	public World getWorld()
@@ -183,45 +166,43 @@ public class GameManager
 		return world;
 	}
 
-	public boolean addWorker( Player player, AbstractPrivateProperty abstractPrivateProperty )
+	public boolean addWorker(Player player, AbstractPrivateProperty abstractPrivateProperty)
 	{
-		if( abstractPrivateProperty.getOwner() != player )
+		if (abstractPrivateProperty.getOwner() != player)
 			return false;
 
-		DependentCharacter employee = player.employSubaltern( abstractPrivateProperty );
-		if( employee == null )
+		DependentCharacter employee = player.employSubaltern(abstractPrivateProperty);
+		if (employee == null)
 			return false;
 
 		try
 		{
-			abstractPrivateProperty.setController( employee );
-		} catch( ControllerAlreadyPresentException | DifferentOwnerException e )
+			abstractPrivateProperty.setController(employee);
+		} catch (ControllerAlreadyPresentException | DifferentOwnerException e)
 		{
 			e.printStackTrace();
 		}
 		return true;
 	}
 
-	public boolean conquer( AbstractPrivateProperty abstractPrivateProperty, Player player )
+	public boolean conquer(AbstractPrivateProperty abstractPrivateProperty, Player player)
 	{
 		Vector2f gatheringPlace = abstractPrivateProperty.getGatheringPlace();
-		if( ( ( int ) gatheringPlace.x ) != ( ( int ) player.x )
-				|| ( ( int ) gatheringPlace.y ) != ( ( int ) player.y ) )
+		if (((int) gatheringPlace.x) != ((int) player.x) || ((int) gatheringPlace.y) != ((int) player.y))
 		{
-			computePath( player, gatheringPlace.x, gatheringPlace.y );
+			computePath(player, gatheringPlace.x, gatheringPlace.y);
 			return false;
 		}
 
-		DependentCharacter employSubaltern = player.employSubaltern( abstractPrivateProperty );
-		if( employSubaltern != null )
+		DependentCharacter employSubaltern = player.employSubaltern(abstractPrivateProperty);
+		if (employSubaltern != null)
 		{
-			abstractPrivateProperty.setOwner( player );
+			abstractPrivateProperty.setOwner(player);
 			try
 			{
-				abstractPrivateProperty.setController( employSubaltern );
-				computePath( employSubaltern, abstractPrivateProperty.getGatheringPlace().x,
-						abstractPrivateProperty.getGatheringPlace().y );
-			} catch( ControllerAlreadyPresentException | DifferentOwnerException e )
+				abstractPrivateProperty.setController(employSubaltern);
+				computePath(employSubaltern, abstractPrivateProperty.getGatheringPlace().x, abstractPrivateProperty.getGatheringPlace().y);
+			} catch (ControllerAlreadyPresentException | DifferentOwnerException e)
 			{
 				e.printStackTrace();
 			}
@@ -231,23 +212,23 @@ public class GameManager
 
 	}
 
-	public void killPlayer( Player p )
+	public void killPlayer(Player p)
 	{
 		writeLock.lock();
 		p.die();
-		if( players.contains( p ) )
-			players.remove( p );
-		if( AI_players.keySet().contains( p ) )
-			AI_players.remove( p );
+		if (players.contains(p))
+			players.remove(p);
+		if (AI_players.keySet().contains(p))
+			AI_players.remove(p);
 
-		deadPlayers.add( p );
+		deadPlayers.add(p);
 		writeLock.unlock();
 	}
 
-	public void killMinion( Minion m )
+	public void killMinion(Minion m)
 	{
-		deadMinions.add( m );
-		minionsAlive.remove( m );
+		deadMinions.add(m);
+		minionsAlive.remove(m);
 	}
 
 	// TODO killTowerCrusher
@@ -262,8 +243,8 @@ public class GameManager
 
 		ArrayList<Player> deads = new ArrayList<>();
 
-		for( Player p : deadPlayers )
-			deads.add( p );
+		for (Player p : deadPlayers)
+			deads.add(p);
 
 		deadPlayers.clear();
 
@@ -275,20 +256,45 @@ public class GameManager
 	{
 		ArrayList<Minion> deads = new ArrayList<>();
 
-		for( Minion m : deadMinions )
-			deads.add( m );
+		for (Minion m : deadMinions)
+			deads.add(m);
 
 		deadMinions.clear();
 
 		return deads;
 	}
 
+	public ArrayList<Player> getPlayersAround(Player player, float ray)
+	{
+		try
+		{
+			readLock.lock();
+			Vector2f playerPosition = player.getPosition();
+			ArrayList<Player> playersAround = new ArrayList<>();
+			for (Player p : players)
+			{
+				if (p == player)
+					continue;
+
+				Vector2f p_position = p.getPosition();
+
+				if (MyMath.distanceFloat(playerPosition.x, playerPosition.y, p_position.x, p_position.y) <= ray)
+					playersAround.add(p);
+			}
+
+			return playersAround;
+		} finally
+		{
+			readLock.unlock();
+		}
+	}
+
 	// TODO takeDeadTowerCrushers
 
-	ArrayList<Player> attackPhysically( Player attacker )
+	ArrayList<Player> attackPhysically(Player attacker)
 	{
-		System.out.println( "sto per attaccare" );
-		return CombatManager.getInstance().attackPhysically( attacker );
+		System.out.println("sto per attaccare");
+		return CombatManager.getInstance().attackPhysically(attacker);
 	}
 
 	ArrayList<Player> takePlayerAttacks()
@@ -306,23 +312,23 @@ public class GameManager
 		return CombatManager.getInstance().takeTowerCrusherAttacks();
 	}
 
-	public ArrayList<Player> attackPhysically( Minion attacker )
+	public ArrayList<Player> attackPhysically(Minion attacker)
 	{
-		System.out.println( "sto per attaccare" );
-		return CombatManager.getInstance().attackPhysically( attacker );
+		System.out.println("sto per attaccare");
+		return CombatManager.getInstance().attackPhysically(attacker);
 	}
 
-	private ArrayList<Player> distanceAttack( Player attacker, Potions potion, Vector2f target )
+	private ArrayList<Player> distanceAttack(Player attacker, Potions potion, Vector2f target)
 	{
-		return CombatManager.getInstance().distanceAttack( attacker, potion, target );
+		return CombatManager.getInstance().distanceAttack(attacker, potion, target);
 	}
 
-	public ArrayList<Player> playerAction( Player p, Vector2f target )
+	public ArrayList<Player> playerAction(Player p, Vector2f target)
 	{
 		// Item selectedItem = p.getSelectedItem();
 		ArrayList<Player> hitPlayers = null;
-		if( target != null )
-			p.setDirection( MyMath.computeDirection( p.getPosition(), target ) );
+		if (target != null)
+			p.setDirection(MyMath.computeDirection(p.getPosition(), target));
 
 		// switch( selectedItem )
 		// {
@@ -341,9 +347,8 @@ public class GameManager
 		//
 		// }
 
-		if( p.getSelectedItem().equals( Item.WEAPON ) || p.getSelectedItem().equals( Item.GRANADE )
-				|| p.getSelectedItem().equals( Item.FLASH_BANG ) )
-			attackRequests.addRequest( p, target );
+		if (p.getSelectedItem().equals(Item.WEAPON) || p.getSelectedItem().equals(Item.GRANADE) || p.getSelectedItem().equals(Item.FLASH_BANG))
+			attackRequests.addRequest(p, target);
 
 		// for( Player hitPlayer : hitPlayers )
 		// {
@@ -355,33 +360,33 @@ public class GameManager
 		return hitPlayers;
 	}
 
-	public boolean occupyProperty( Player player, AbstractPrivateProperty property )
+	public boolean occupyProperty(Player player, AbstractPrivateProperty property)
 	{
-		if( !property.isFree() || !player.isThereAnyFreeSulbaltern() )
+		if (!property.isFree() || !player.isThereAnyFreeSulbaltern())
 			return false;
 
-		property.setOwner( player );
-		player.employSubaltern( property );
+		property.setOwner(player);
+		player.employSubaltern(property);
 		return true;
 	}
 
-	public Tower createTower( Player p, Vector2f position )
+	public Tower createTower(Player p, Vector2f position)
 	{
 		try
 		{
 			p.getWriteLock();
-			if( !p.hasEnoughResources( GameProperties.getInstance().getPrices( "tower" ) ) )
+			if (!p.hasEnoughResources(GameProperties.getInstance().getPrices("tower")))
 				return null;
 
-			Tower tower = new Tower( position.x, position.y, GameProperties.getInstance()
-					.getObjectWidth( "tower" ), GameProperties.getInstance().getObjectHeight(
-					"tower" ), p );
-			if( !world.addTower( tower ) )
+			Tower tower = new Tower(position.x, position.y, GameProperties.getInstance().getObjectWidth("tower"), GameProperties.getInstance()
+					.getObjectHeight("tower"), p);
+			tower.setID(towerIDs.getID());
+			if (!world.addTower(tower))
 				return null;
 
-			p.takeResources( GameProperties.getInstance().getPrices( "tower" ) );
-			p.addTower( tower );
-			towers.add( tower );
+			p.takeResources(GameProperties.getInstance().getPrices("tower"));
+			p.addTower(tower);
+			towers.add(tower);
 
 			return tower;
 		} finally
@@ -392,40 +397,40 @@ public class GameManager
 
 	void checkForTowerDamages()
 	{
-		for( Tower t : towers )
+		for (Tower t : towers)
 		{
 			ArrayList<Player> hitPlayers = t.attack();
 
-			for( Player p : hitPlayers )
-				if( p.getHP() < 0 )
-					killPlayer( p );
+			for (Player p : hitPlayers)
+				if (p.getHP() < 0)
+					killPlayer(p);
 		}
 	}
 
-	public Level getPlayerLevel( Player player )
+	public Level getPlayerLevel(Player player)
 	{
 		return player.getPlayerLevel();
 	}
 
-	public void destroyTower( Tower t )
+	public void destroyTower(Tower t)
 	{
-		world.destroyObject( t );
-		t.getOwner().removeTower( t );
+		world.destroyObject(t);
+		t.getOwner().removeTower(t);
 	}
 
 	public void setPause()
 	{
-		ThreadManager.getInstance().pause( !ThreadManager.getInstance().getPauseState() );
+		ThreadManager.getInstance().pause(!ThreadManager.getInstance().getPauseState());
 	}
 
-	public void startFlashTimer( Player p )
+	public void startFlashTimer(Player p)
 	{
-		ThreadManager.getInstance().startFlashBangThread( p );
+		ThreadManager.getInstance().startFlashBangThread(p);
 	}
 
-	public void changeSelectedItem( Player p, Item selected )
+	public void changeSelectedItem(Player p, Item selected)
 	{
-		p.setSelectedItem( selected );
+		p.setSelectedItem(selected);
 	}
 
 	public boolean getPauseState()
@@ -443,18 +448,18 @@ public class GameManager
 		return s;
 	}
 
-	public void attackPhysically( TowerCrusher towerCrusher )
+	public void attackPhysically(TowerCrusher towerCrusher)
 	{
-		CombatManager.getInstance().attackOnTower( towerCrusher );
+		CombatManager.getInstance().attackOnTower(towerCrusher);
 	}
 
-	public boolean isPlayerDead( Player target )
+	public boolean isPlayerDead(Player target)
 	{
-		return !players.contains( target );
+		return !players.contains(target);
 	}
 
-	public boolean isTowerDestroyed( Tower t )
+	public boolean isTowerDestroyed(Tower t)
 	{
-		return !towers.contains( t );
+		return !towers.contains(t);
 	}
 }

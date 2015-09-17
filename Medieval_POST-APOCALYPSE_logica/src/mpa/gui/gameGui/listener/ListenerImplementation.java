@@ -20,7 +20,7 @@ public abstract class ListenerImplementation
 
 	public abstract boolean occupyProperty(String property);
 
-	public abstract String createTower(Vector2f point);
+	public abstract String createTower(String property);
 
 	public abstract ArrayList<String> createMinions(String boss, String target, int quantity);
 

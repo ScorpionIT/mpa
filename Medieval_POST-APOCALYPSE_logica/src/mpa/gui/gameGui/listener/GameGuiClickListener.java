@@ -80,8 +80,12 @@ public class GameGuiClickListener implements ActionListener
 
 			}
 
+			else if (!isPressed && !pickedObject.equals("GROUND") && niftyHandler.isVisibleSelectionPanel())
+			{
+				niftyHandler.removeSelectedPanel();
+			}
 			else if (!pickedObject.equals("GROUND") && !niftyHandler.isVisibleChoosePanel() && !niftyHandler.isVisibleOpponentPropertiesPanel()
-					&& !niftyHandler.isVisibleHeadquarterPanel())
+					&& !niftyHandler.isVisibleHeadquarterPanel() && !niftyHandler.isVisibleSelectionPanel())
 			{
 
 				String[] split = pickedObject.split(":");

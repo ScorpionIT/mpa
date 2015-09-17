@@ -21,8 +21,13 @@ public class NiftyController implements ScreenController
 
 	public void onClickCreateMinion()
 	{
-		gameController.createMinions(GuiObjectManager.getInstance().getPlayingPlayer(), niftyHandler.getMinionsTarget(),
-				niftyHandler.getMinionsQuantity());
+		String minionsQuantity = niftyHandler.getMinionsQuantity();
+		if (minionsQuantity.matches("\\d+"))
+		{
+
+			gameController.createMinions(GuiObjectManager.getInstance().getPlayingPlayer(), niftyHandler.getMinionsTarget(),
+					Integer.parseInt(minionsQuantity));
+		}
 		niftyHandler.removeHeadquarterPanel();
 		niftyHandler.setCreateButtonClicked(true);
 
@@ -30,7 +35,17 @@ public class NiftyController implements ScreenController
 
 	public void onClickButtonOccupy()
 	{
+
 		gameController.occupyProperty(niftyHandler.getSelectedObject());
+		niftyHandler.removeSelectedPanel();
+		niftyHandler.setButtonOccupyClicked(true);
+	}
+
+	public void onClickButtonCreateTowerButton()
+	{
+		gameController.createTower(niftyHandler.getSelectedObject());
+		niftyHandler.removeSelectedPanel();
+		niftyHandler.setButtonOccupyClicked(true);
 	}
 
 	public void onClickButtonForward()

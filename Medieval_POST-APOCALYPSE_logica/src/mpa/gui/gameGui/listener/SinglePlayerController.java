@@ -62,12 +62,21 @@ public class SinglePlayerController extends ListenerImplementation
 	}
 
 	@Override
-	public String createTower(Vector2f point)
+	public String createTower(String property)
 	{
-		String tower = gManagerProxy.createTower(GuiObjectManager.getInstance().getPlayingPlayer(), new javax.vecmath.Vector2f(point.x, point.y));
 
-		GuiObjectManager.getInstance().addTower(new javax.vecmath.Vector2f(point.x, point.y), tower);
-		return tower;
+		javax.vecmath.Vector2f towerAvaiblePosition = gManagerProxy.getTowerAvaiblePosition(property);
+		if (towerAvaiblePosition != null)
+		{
+			String tower = gManagerProxy.createTower(GuiObjectManager.getInstance().getPlayingPlayer(), towerAvaiblePosition, property);
+
+			if (!tower.equals(""))
+			{
+				GuiObjectManager.getInstance().addTower(new javax.vecmath.Vector2f(towerAvaiblePosition.x, towerAvaiblePosition.y), tower);
+				return tower;
+			}
+		}
+		return null;
 
 	}
 

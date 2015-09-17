@@ -36,6 +36,7 @@ public class NiftyHandler
 	private boolean chooseObjectPanelIsVisible = false;
 	private SelectionHeadquarterHandler selectionHeadquarterHandler;
 	private boolean isVisibleHeadquarterPanel = false;
+	private boolean isVisibleSelectionPanel = false;
 
 	public NiftyHandler(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort,
 			AppStateManager stateManager, ListenerImplementation playerController, GameGui gameGui)
@@ -148,6 +149,7 @@ public class NiftyHandler
 			selectedObjectType = null;
 
 		}
+		isVisibleSelectionPanel = false;
 
 	}
 
@@ -156,7 +158,7 @@ public class NiftyHandler
 		return selectionHeadquarterHandler.getMinionsTarget();
 	}
 
-	public int getMinionsQuantity()
+	public String getMinionsQuantity()
 	{
 		return selectionHeadquarterHandler.getMinionsQuantity();
 	}
@@ -197,6 +199,7 @@ public class NiftyHandler
 		selectionPanel.changePosition(x, y);
 
 		selectionPanel.setVisible(true);
+		isVisibleSelectionPanel = true;
 		Element findElementByName = nifty.getCurrentScreen().findElementByName("selectedLayer");
 		findElementByName.add(selectionPanel.build(nifty, nifty.getCurrentScreen(), findElementByName));
 	}
@@ -349,7 +352,7 @@ public class NiftyHandler
 
 	public boolean isVisibleSelectionPanel()
 	{
-		return selectionPanel.isVisible();
+		return isVisibleSelectionPanel;
 	}
 
 	public boolean isVisibleChoosePanel()
@@ -382,6 +385,12 @@ public class NiftyHandler
 	public void setCreateButtonClicked(boolean clicked)
 	{
 		isVisibleHeadquarterPanel = true;
+	}
+
+	public void setButtonOccupyClicked(boolean clicked)
+	{
+		isVisibleSelectionPanel = true;
+
 	}
 
 }

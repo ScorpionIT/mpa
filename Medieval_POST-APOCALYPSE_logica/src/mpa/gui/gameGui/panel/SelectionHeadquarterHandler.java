@@ -68,9 +68,9 @@ public class SelectionHeadquarterHandler
 
 	}
 
-	public int getMinionsQuantity()
+	public String getMinionsQuantity()
 	{
-		return Integer.parseInt(textFieldMinionsNumber.getText());
+		return textFieldMinionsNumber.getText();
 	}
 
 	public String getMinionsTarget()

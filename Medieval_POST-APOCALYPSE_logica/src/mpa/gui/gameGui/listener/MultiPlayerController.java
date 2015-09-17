@@ -57,7 +57,7 @@ public class MultiPlayerController extends ListenerImplementation
 	}
 
 	@Override
-	public String createTower(Vector2f point)
+	public String createTower(String property)
 	{
 		// TODO Auto-generated method stub
 		return null;

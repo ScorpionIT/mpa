@@ -2,6 +2,8 @@ package mpa.core.logic.building;
 
 import java.util.ArrayList;
 
+import javax.vecmath.Vector2f;
+
 import mpa.core.logic.GameManager;
 import mpa.core.logic.character.Player;
 import mpa.core.maths.MyMath;
@@ -13,9 +15,9 @@ public class Tower extends AbstractPrivateProperty
 	private int life = 50;
 	private float range = 20f;
 
-	public Tower( float x, float y, float width, float height, Player owner )
+	public Tower(float x, float y, float width, float height, Player owner)
 	{
-		super( x, y, width, height, owner );
+		super(x, y, width, height, owner);
 	}
 
 	public int getDamage()
@@ -39,10 +41,10 @@ public class Tower extends AbstractPrivateProperty
 
 			GameManager.getInstance().takeLock();
 
-			for( Player p : GameManager.getInstance().getPlayers() )
+			for (Player p : GameManager.getInstance().getPlayers())
 			{
-				if( p != owner && MyMath.distanceFloat( x, y, p.getX(), p.getY() ) <= 0 )
-					hitPlayers.add( p );
+				if (p != owner && MyMath.distanceFloat(x, y, p.getX(), p.getY()) <= 0)
+					hitPlayers.add(p);
 			}
 
 			return hitPlayers;
@@ -52,14 +54,14 @@ public class Tower extends AbstractPrivateProperty
 		}
 	}
 
-	public boolean inflictDamage( int damage )
+	public boolean inflictDamage(int damage)
 	{
 		try
 		{
 			writeLock.lock();
 			life -= damage - 2 * owner.getPlayerLevel().ordinal();
 
-			if( life <= 0 )
+			if (life <= 0)
 				return true;
 
 			return false;
@@ -67,5 +69,11 @@ public class Tower extends AbstractPrivateProperty
 		{
 			writeLock.unlock();
 		}
+	}
+
+	@Override
+	public ArrayList<Vector2f> getAvaibleGatheringPlaces()
+	{
+		return null;
 	}
 }

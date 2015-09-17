@@ -10,7 +10,7 @@ import de.lessvoid.nifty.tools.Color;
 
 public class SelectionPanel
 {
-	private LabelBuilder objectName;
+	private LabelBuilder objectNameLabel;
 	private PanelBuilder selectionPanel;
 	private LabelBuilder objectOwner;
 	private boolean isVisibleSelectionPanel = false;
@@ -18,6 +18,8 @@ public class SelectionPanel
 	private LabelBuilder productivityLabel;
 	private int panelWidth;
 	private int panelHeight;
+	private ImageBuilder createTowerButton;
+	private String objectName;
 
 	public SelectionPanel(int windowWidth, int windowHeight)
 	{
@@ -39,6 +41,22 @@ public class SelectionPanel
 
 		};
 
+		createTowerButton = new ImageBuilder()
+		{
+			{
+				filename("createTower.png");
+				width("35%");
+				height("35%");
+
+				x("23%");
+				y("50%");
+				visible(false);
+				interactOnClick("onClickButtonCreateTowerButton()");
+
+			}
+
+		};
+
 		productivityLabel = new LabelBuilder("#productivityLabel")
 		{
 			{
@@ -47,7 +65,7 @@ public class SelectionPanel
 			}
 
 		};
-		objectName = new LabelBuilder("#objectName")
+		objectNameLabel = new LabelBuilder("#objectName")
 		{
 			{
 				x("10%");
@@ -83,10 +101,11 @@ public class SelectionPanel
 
 					}
 				});
-				control(objectName);
+				control(objectNameLabel);
 				control(objectOwner);
 				image(occupyButton);
 				control(productivityLabel);
+				image(createTowerButton);
 
 			}
 		};
@@ -96,7 +115,7 @@ public class SelectionPanel
 	public void emptyPanel()
 	{
 		occupyButton.visible(false);
-		objectName.visible(false);
+		objectNameLabel.visible(false);
 		objectOwner.visible(false);
 		productivityLabel.visible(false);
 
@@ -104,8 +123,9 @@ public class SelectionPanel
 
 	public void setObjectName(String objectName)
 	{
-		this.objectName.text(objectName);
-		this.objectName.visible(true);
+		this.objectName = objectName;
+		this.objectNameLabel.text(objectName);
+		this.objectNameLabel.visible(true);
 	}
 
 	public void setObjectOwner(String playerName)
@@ -123,6 +143,10 @@ public class SelectionPanel
 			objectOwner.visible(true);
 
 			occupyButton.visible(false);
+			if (!objectName.toLowerCase().equals("headquarter"))
+			{
+				createTowerButton.visible(true);
+			}
 		}
 
 	}
