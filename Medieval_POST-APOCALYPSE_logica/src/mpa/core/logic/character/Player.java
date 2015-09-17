@@ -161,6 +161,7 @@ public class Player extends AbstractCharacter
 		{
 			writeLock.lock();
 			health -= damage;
+			System.out.println( "NON MI SONO IMPINTATO QUA" );
 			// System.out.println( "la sua vita dopo l'attacco è " + health );
 			return health <= 0;
 

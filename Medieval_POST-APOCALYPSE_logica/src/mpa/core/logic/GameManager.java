@@ -38,6 +38,7 @@ public class GameManager
 	private ReadLock readLock = lock.readLock();
 	private WriteLock writeLock = lock.writeLock();
 	private ArrayList<Minion> minionsAlive = new ArrayList<>();
+	private ArrayList<TowerCrusher> towerCrushers = new ArrayList<>();
 
 	private IDPool minionIDs;
 	private IDPool towerCrusherIDs;
@@ -140,6 +141,8 @@ public class GameManager
 			for( DependentCharacter dC : player.getSubalterns() )
 				dC.movePlayer();
 		}
+		for( Minion minion : minionsAlive )
+			minion.movePlayer();
 		readLock.unlock();
 	}
 
