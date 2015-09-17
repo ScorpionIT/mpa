@@ -44,7 +44,7 @@ public class AttackRequests extends MyThread
 			ArrayList<Player> hitPlayers = new ArrayList<>();
 			if( !attackList.isEmpty() )
 			{
-				AbstractCharacter attacker = attackList.get( 0 );
+				AbstractCharacter attacker = attackList.remove( 0 );
 				Vector2f target = targets.get( 0 );
 				if( attacker instanceof Minion )
 					CombatManager.getInstance().attackPhysically( ( Minion ) attacker );

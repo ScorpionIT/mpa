@@ -19,7 +19,7 @@ public class OpponentPropertiesPanel
 
 	PanelBuilder mainPanelBuilder;
 
-	HashMap<String, OpponentResourcesPanel> resourcesPanels = new HashMap<>();
+	// HashMap<String, OpponentResourcesPanel> resourcesPanels = new HashMap<>();
 
 	int x = 10;
 
@@ -35,29 +35,29 @@ public class OpponentPropertiesPanel
 
 	private LinkedHashMap<String, OpponentResourcesPanel> playersResources = new LinkedHashMap<>();
 
-	public OpponentPropertiesPanel(ListenerImplementation playerController)
+	public OpponentPropertiesPanel( ListenerImplementation playerController )
 	{
 
 		this.gameController = playerController;
 
 		int numberOfPlayer = gameController.getNumberOfPlayer();
 
-		numberOfPlayerForPage = 100 / (heightPanel);
-		numberOfPages = (numberOfPlayer - 1) / numberOfPlayerForPage;
+		numberOfPlayerForPage = 100 / ( heightPanel );
+		numberOfPages = ( numberOfPlayer - 1 ) / numberOfPlayerForPage;
 		numberOfPages++;
 		// System.out.println( "NUMERO DI PAGINE " + numberOfPages + " E NUMERO DI PLAYER E' "
 		// + ( numberOfPlayer - 1 ) );
 
 		initButtons();
 
-		mainPanelBuilder = new PanelBuilder("#opponentPropertiesPanelId")
+		mainPanelBuilder = new PanelBuilder( "#opponentPropertiesPanelId" )
 		{
 			{
-				image(getImageBuilder("selectedPanel.png"));
+				image( getImageBuilder( "selectedPanel.png" ) );
 
 				childLayoutAbsoluteInside();
-				control(buttonForwardBuilder);
-				control(buttonBackBuilder);
+				control( buttonForwardBuilder );
+				control( buttonBackBuilder );
 
 			}
 		};
@@ -69,10 +69,10 @@ public class OpponentPropertiesPanel
 		// TODO alzare il bottone
 		// mainPanelBuilder.set("horizontal", "false");
 		// mainPanelBuilder.set("autoScroll", "bottom");
-		mainPanelBuilder.set("width", "60%");
-		mainPanelBuilder.set("height", "60%");
-		mainPanelBuilder.set("x", "20%");
-		mainPanelBuilder.set("y", "20%");
+		mainPanelBuilder.set( "width", "60%" );
+		mainPanelBuilder.set( "height", "60%" );
+		mainPanelBuilder.set( "x", "20%" );
+		mainPanelBuilder.set( "y", "20%" );
 
 		inizializePanels();
 
@@ -83,17 +83,17 @@ public class OpponentPropertiesPanel
 
 	private void initButtons()
 	{
-		buttonForwardBuilder = getButtonBuilder("avanti", 55, 95, 10, 5);
+		buttonForwardBuilder = getButtonBuilder( "avanti", 55, 95, 10, 5 );
 
-		buttonForwardBuilder.interactOnClick("onClickButtonForward()");
+		buttonForwardBuilder.interactOnClick( "onClickButtonForward()" );
 
-		buttonBackBuilder = getButtonBuilder("indietro", 40, 95, 10, 5);
-		buttonBackBuilder.interactOnClick("onClickButtonBack()");
+		buttonBackBuilder = getButtonBuilder( "indietro", 40, 95, 10, 5 );
+		buttonBackBuilder.interactOnClick( "onClickButtonBack()" );
 
-		buttonBackBuilder.visible(false);
-		if (numberOfPages == 1)
+		buttonBackBuilder.visible( false );
+		if( numberOfPages == 1 )
 		{
-			buttonForwardBuilder.visible(false);
+			buttonForwardBuilder.visible( false );
 		}
 	}
 
@@ -104,29 +104,32 @@ public class OpponentPropertiesPanel
 
 		int index = 0;
 
-		HashMap<String, HashMap<String, Integer>> playersResourceAmount = gameController.getPlayersResourceAmount();
+		HashMap<String, HashMap<String, Integer>> playersResourceAmount = gameController
+				.getPlayersResourceAmount();
 		Set<String> playerList = playersResourceAmount.keySet();
-		for (String playerName : playerList)
+		for( String playerName : playerList )
 		{
 			int i = 0;
-			if (index % numberOfPlayerForPage == 0)
+			if( index % numberOfPlayerForPage == 0 )
 			{
 				y = startY;
 			}
-			if (!playerName.equals(GuiObjectManager.getInstance().getPlayingPlayer()))
+			if( !playerName.equals( GuiObjectManager.getInstance().getPlayingPlayer() ) )
 			{
-				HashMap<String, Integer> resources = playersResourceAmount.get(playerName);
+				HashMap<String, Integer> resources = playersResourceAmount.get( playerName );
 
-				OpponentResourcesPanel opponentResourcesPanel = new OpponentResourcesPanel(resources, x, y, 80, heightPanel, playerName);
+				OpponentResourcesPanel opponentResourcesPanel = new OpponentResourcesPanel(
+						resources, x, y, 80, heightPanel, playerName );
 
-				opponentResourcesPanel.setPlayerLevel(gameController.getPlayerLevel(playerName));
-				opponentResourcesPanel.setPlayerHPAndMP(gameController.getPlayerHP(playerName), gameController.getPlayerMP(playerName));
+				opponentResourcesPanel.setPlayerLevel( gameController.getPlayerLevel( playerName ) );
+				opponentResourcesPanel.setPlayerHPAndMP( gameController.getPlayerHP( playerName ),
+						gameController.getPlayerMP( playerName ) );
 
-				playersResources.put(playerName, opponentResourcesPanel);
+				playersResources.put( playerName, opponentResourcesPanel );
 
 				// TODO SISTEMARE LA VISIBILITÀ
-				changeVisibility(i, opponentResourcesPanel);
-				mainPanelBuilder.panel(opponentResourcesPanel.getPanel());
+				changeVisibility( i, opponentResourcesPanel );
+				mainPanelBuilder.panel( opponentResourcesPanel.getPanel() );
 
 				y += heightPanel;
 				index++;
@@ -139,30 +142,30 @@ public class OpponentPropertiesPanel
 	private void relocateAllPanel()
 	{
 		int numberOfPlayer = gameController.getNumberOfPlayer();
-		numberOfPlayerForPage = 100 / (heightPanel);
-		numberOfPages = (numberOfPlayer - 1) / numberOfPlayerForPage;
+		numberOfPlayerForPage = 100 / ( heightPanel );
+		numberOfPages = ( numberOfPlayer - 1 ) / numberOfPlayerForPage;
 		numberOfPages++;
 
 		int y = startY;
 
 		int index = 0;
 
-		Set<String> playerList = resourcesPanels.keySet();
+		Set<String> playerList = playersResources.keySet();
 
-		for (String playerName : playerList)
+		for( String playerName : playerList )
 		{
 			int i = 0;
-			if (index % numberOfPlayerForPage == 0)
+			if( index % numberOfPlayerForPage == 0 )
 			{
 				y = startY;
 			}
-			if (!playerName.equals(GuiObjectManager.getInstance().getPlayingPlayer()))
+			if( !playerName.equals( GuiObjectManager.getInstance().getPlayingPlayer() ) )
 			{
-				resourcesPanels.get(playerName).getPanel().x(Integer.toString(x) + "%");
-				resourcesPanels.get(playerName).getPanel().x(Integer.toString(y) + "%");
+				playersResources.get( playerName ).getPanel().x( Integer.toString( x ) + "%" );
+				playersResources.get( playerName ).getPanel().x( Integer.toString( y ) + "%" );
 
 				// TODO SISTEMARE LA VISIBILITÀ
-				changeVisibility(i, resourcesPanels.get(playerName));
+				changeVisibility( i, playersResources.get( playerName ) );
 
 				y += heightPanel;
 				index++;
@@ -173,41 +176,44 @@ public class OpponentPropertiesPanel
 
 	}
 
-	public void removePlayer(String playerName)
+	public void removePlayer( String playerName )
 	{
-		resourcesPanels.get(playerName).getPanel().visible(false);
-		resourcesPanels.remove(playerName);
+		if( playersResources.get( playerName ) == null )
+			System.out.println( "|||||||||||||| SONO NULL E NON DOVREI ESSERLO" );
+		playersResources.get( playerName ).getPanel().visible( false );
+		playersResources.remove( playerName );
 		relocateAllPanel();
 	}
 
-	private void changeVisibility(int i, OpponentResourcesPanel opponentResourcesPanel)
+	private void changeVisibility( int i, OpponentResourcesPanel opponentResourcesPanel )
 	{
-		if (i >= currentPage * numberOfPlayerForPage || i < (currentPage - 1) * numberOfPlayerForPage)
-			opponentResourcesPanel.getPanel().visible(false);
+		if( i >= currentPage * numberOfPlayerForPage
+				|| i < ( currentPage - 1 ) * numberOfPlayerForPage )
+			opponentResourcesPanel.getPanel().visible( false );
 		else
-			opponentResourcesPanel.getPanel().visible(true);
+			opponentResourcesPanel.getPanel().visible( true );
 	}
 
-	public void changePage(boolean back)
+	public void changePage( boolean back )
 	{
-		if (!back)
+		if( !back )
 		{
 			currentPage++;
 
 			int i = 0;
-			for (Map.Entry<String, OpponentResourcesPanel> entry : playersResources.entrySet())
+			for( Map.Entry<String, OpponentResourcesPanel> entry : playersResources.entrySet() )
 			{
-				changeVisibility(i, entry.getValue());
+				changeVisibility( i, entry.getValue() );
 				i++;
 
 			}
-			if (currentPage > 1)
+			if( currentPage > 1 )
 			{
-				buttonBackBuilder.visible(true);
+				buttonBackBuilder.visible( true );
 			}
-			if (currentPage >= numberOfPages)
+			if( currentPage >= numberOfPages )
 			{
-				buttonForwardBuilder.visible(false);
+				buttonForwardBuilder.visible( false );
 			}
 		}
 		else
@@ -215,71 +221,77 @@ public class OpponentPropertiesPanel
 			currentPage--;
 
 			int i = 0;
-			for (Map.Entry<String, OpponentResourcesPanel> entry : playersResources.entrySet())
+			for( Map.Entry<String, OpponentResourcesPanel> entry : playersResources.entrySet() )
 			{
-				changeVisibility(i, entry.getValue());
+				changeVisibility( i, entry.getValue() );
 				i++;
 
 			}
-			if (currentPage <= 1)
+			if( currentPage <= 1 )
 			{
-				buttonBackBuilder.visible(false);
+				buttonBackBuilder.visible( false );
 			}
-			if (currentPage < numberOfPages)
+			if( currentPage < numberOfPages )
 			{
-				buttonForwardBuilder.visible(true);
+				buttonForwardBuilder.visible( true );
 			}
 		}
 	}
 
-	public Element build(Nifty nifty, Screen currentScreen, Element parent)
+	public Element build( Nifty nifty, Screen currentScreen, Element parent )
 	{
-		Element element = mainPanelBuilder.build(nifty, currentScreen, parent);
+		Element element = mainPanelBuilder.build( nifty, currentScreen, parent );
 		return element;
 	}
 
 	public void update()
 	{
 
-		HashMap<String, HashMap<String, Integer>> playersResourceAmount = gameController.getPlayersResourceAmount();
+		HashMap<String, HashMap<String, Integer>> playersResourceAmount = gameController
+				.getPlayersResourceAmount();
 		Set<String> keySet = playersResourceAmount.keySet();
-		for (String playerName : keySet)
+		for( String playerName : keySet )
 		{
 			// System.out.println( playerName );
-			if (!playerName.equals(GuiObjectManager.getInstance().getPlayingPlayer()))
+			if( !playerName.equals( GuiObjectManager.getInstance().getPlayingPlayer() )
+					&& playersResources.get( playerName ) != null )
 			{
-				HashMap<String, Integer> resources = playersResourceAmount.get(playerName);
-				playersResources.get(playerName).updateResources(resources);
-				playersResources.get(playerName).setPlayerLevel(gameController.getPlayerLevel(playerName));
+				HashMap<String, Integer> resources = playersResourceAmount.get( playerName );
+				playersResources.get( playerName ).updateResources( resources );
+				playersResources.get( playerName ).setPlayerLevel(
+						gameController.getPlayerLevel( playerName ) );
 
-				playersResources.get(playerName).setPlayerHPAndMP(gameController.getPlayerHP(playerName), gameController.getPlayerMP(playerName));
+				playersResources.get( playerName ).setPlayerHPAndMP(
+						gameController.getPlayerHP( playerName ),
+						gameController.getPlayerMP( playerName ) );
 			}
 		}
 
 	}
 
-	private ImageBuilder getImageBuilder(final String fileName)
+	private ImageBuilder getImageBuilder( final String fileName )
 	{
 		return new ImageBuilder()
 		{
 			{
-				filename(fileName);
-				width("100%");
-				height("100%");
+				filename( fileName );
+				width( "100%" );
+				height( "100%" );
 
 			}
 		};
 	}
 
-	private ButtonBuilder getButtonBuilder(final String text, final int x, final int y, final int width, final int height)
+	private ButtonBuilder getButtonBuilder( final String text, final int x, final int y,
+			final int width, final int height )
 	{
-		return new ButtonBuilder("#" + text + "Button", text)
+		return new ButtonBuilder( "#" + text + "Button", text )
 		{
 			{
-				width(Integer.toString(width) + "%");
-				height(Integer.toString(height) + "%");
-				x(Integer.toString(x) + "%");
-				y(Integer.toString(y) + "%");
+				width( Integer.toString( width ) + "%" );
+				height( Integer.toString( height ) + "%" );
+				x( Integer.toString( x ) + "%" );
+				y( Integer.toString( y ) + "%" );
 
 			}
 		};
@@ -289,16 +301,16 @@ public class OpponentPropertiesPanel
 	{
 		currentPage = 1;
 		int i = 0;
-		for (Map.Entry<String, OpponentResourcesPanel> entry : playersResources.entrySet())
+		for( Map.Entry<String, OpponentResourcesPanel> entry : playersResources.entrySet() )
 		{
-			changeVisibility(i, entry.getValue());
+			changeVisibility( i, entry.getValue() );
 			i++;
 		}
-		buttonBackBuilder.visible(false);
-		buttonForwardBuilder.visible(true);
-		if (numberOfPages == 1)
+		buttonBackBuilder.visible( false );
+		buttonForwardBuilder.visible( true );
+		if( numberOfPages == 1 )
 		{
-			buttonForwardBuilder.visible(false);
+			buttonForwardBuilder.visible( false );
 		}
 
 	}
