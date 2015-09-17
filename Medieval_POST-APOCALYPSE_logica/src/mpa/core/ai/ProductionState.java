@@ -27,11 +27,13 @@ class ProductionState extends AIState
 
 		int index = 0;
 		int min = Integer.MAX_VALUE;
+		// System.out.print( "possiedo al momento " );
 		for( int i = 0; i < potions.length; i++ )
 		{
 			if( potions[i] == 0 )
 			{
 				index = i;
+				min = 0;
 				break;
 			}
 			else if( potions[i] < min )
@@ -41,22 +43,23 @@ class ProductionState extends AIState
 			}
 		}
 
-		if( min >= 5 )
-		{
-			imOk = true;
-			return null;
-		}
-
 		switch( index )
 		{
 			case 0:
-				return Potions.HP;
+				if( p.getPlayerLevel().canBuy( Potions.HP, p.getPotionAmount( Potions.HP ) + 1 ) )
+					return Potions.HP;
 			case 1:
-				return Potions.MP;
+				if( p.getPlayerLevel().canBuy( Potions.MP, p.getPotionAmount( Potions.MP ) + 1 ) )
+					return Potions.MP;
 			case 2:
-				return Potions.GRANADE;
+				if( p.getPlayerLevel().canBuy( Potions.GRANADE,
+						p.getPotionAmount( Potions.GRANADE ) + 1 ) )
+					return Potions.GRANADE;
 			case 3:
-				return Potions.FLASH_BANG;
+				if( p.getPlayerLevel().canBuy( Potions.FLASH_BANG,
+						p.getPotionAmount( Potions.FLASH_BANG ) + 1 ) )
+					return Potions.FLASH_BANG;
+
 			default:
 				imOk = true;
 				return null;
@@ -88,9 +91,8 @@ class ProductionState extends AIState
 
 			while( ( toProduce = whatShouldIProduce( player ) ) != null )
 			{
-				System.out.println( "sto producendo " + toProduce.toString() + " e ne ho "
-						+ opponentAI.player.getPotionAmount( toProduce ) );
-				player.buyPotion( toProduce );
+				if( !player.buyPotion( toProduce ) )
+					break;
 			}
 
 			isWalking = false;
@@ -112,14 +114,19 @@ class ProductionState extends AIState
 			nextState = this;
 		else if( opponentAI.player.canUpgrade() )
 			nextState = new StrengtheningState();
-		else if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings() )
+		else if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings()
+				&& opponentAI.canGoToThisState( ConquestState.class ) )
 			nextState = new ConquestState();
 		else if( opponentAI.areThereWeakerPlayers() )
 			nextState = new CombatState();
-		else if( !opponentAI.knownAllTheWorld )
+		else if( !opponentAI.knownAllTheWorld
+				&& opponentAI.canGoToThisState( ExplorationState.class ) )
 			nextState = new ExplorationState();
 		else
+		{
 			nextState = new WaitingState();
+			opponentAI.resetStateCounters();
+		}
 
 		return nextState;
 	}

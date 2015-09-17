@@ -1,5 +1,7 @@
 package mpa.core.ai;
 
+import java.util.ArrayList;
+
 import javax.vecmath.Vector2f;
 
 import mpa.core.logic.GameManager;
@@ -26,11 +28,17 @@ class ExplorationState extends AIState
 			System.out.println( "mentre ne ho visitati "
 					+ opponentAI.worldManager.closedList.size() );
 			if( pointToReach != null )
+			{
 				System.out.println( "sto cercandoo di andare in  " + pointToReach.toString() );
+				if( pointToReach.x == 500 && pointToReach.y == 300 )
+				{
+					ArrayList<Vector2f> path = opponentAI.player.getPath();
+					if( path != null )
+						System.out.println( "e la size del path è " + path.size() );
+				}
+			}
 		}
 		Player p = opponentAI.player;
-		float playerX = p.getX();
-		float playerY = p.getY();
 
 		if( pointToReach != null )
 		{
@@ -61,6 +69,16 @@ class ExplorationState extends AIState
 				// }
 
 			}
+			else if( isWalking && pointToReach != null && !pointToReach.equals( p.getPosition() )
+					&& ( p.getPath() == null || p.getPath().isEmpty() ) )
+			{
+				System.out.println( "sono " + opponentAI.player.getName()
+						+ " e sto facendo bruttissimo" );
+				pointToReach = opponentAI.worldManager.giveMeAnotherLocation( pointToReach,
+						opponentAI.player );
+				GameManager.getInstance().computePath( opponentAI.player, pointToReach.x,
+						pointToReach.y );
+			}
 
 		}
 		else
@@ -69,9 +87,15 @@ class ExplorationState extends AIState
 			if( pointToReach != null )
 			{
 				isWalking = true;
-
 				GameManager.getInstance().computePath( opponentAI.player, pointToReach.x,
 						pointToReach.y );
+				if( pointToReach.x == 500 && pointToReach.y == 300 )
+				{
+					System.out.println( "sto calcolando il path per quel punto" );
+					ArrayList<Vector2f> path = opponentAI.player.getPath();
+					if( path != null )
+						System.out.println( "e la size del path è " + path.size() );
+				}
 			}
 			else
 			{
@@ -79,6 +103,7 @@ class ExplorationState extends AIState
 			}
 
 		}
+
 	}
 
 	@Override
@@ -94,16 +119,21 @@ class ExplorationState extends AIState
 		else if( opponentAI.player.canUpgrade() )
 			nextState = new StrengtheningState();
 		else if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings()
-				&& opponentAI.player.isThereAnyFreeSulbaltern() )
+				&& opponentAI.player.isThereAnyFreeSulbaltern()
+				&& opponentAI.canGoToThisState( ConquestState.class ) )
 			nextState = new ConquestState();
 		else if( opponentAI.areThereWeakerPlayers() )
 			nextState = new CombatState();
-		else if( opponentAI.shouldBuyPotions() && opponentAI.player.canBuyPotions() )
+		else if( opponentAI.shouldBuyPotions() && opponentAI.player.canBuyPotions()
+				&& opponentAI.canGoToThisState( ProductionState.class ) )
 			nextState = new ProductionState();
 		else if( !opponentAI.knownAllTheWorld )
 			nextState = this;
 		else
+		{
 			nextState = new WaitingState();
+			opponentAI.resetStateCounters();
+		}
 
 		return nextState;
 	}

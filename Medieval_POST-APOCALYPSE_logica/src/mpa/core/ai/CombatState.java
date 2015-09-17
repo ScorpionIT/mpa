@@ -157,17 +157,22 @@ class CombatState extends AIState
 			nextState = this;
 		else if( opponentAI.player.canUpgrade() )
 			nextState = new StrengtheningState();
-		else if( opponentAI.shouldBuyPotions() && opponentAI.player.canBuyPotions() )
+		else if( opponentAI.shouldBuyPotions() && opponentAI.player.canBuyPotions()
+				&& opponentAI.canGoToThisState( ProductionState.class ) )
 			nextState = new ProductionState();
 		else if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings()
-				&& opponentAI.player.isThereAnyFreeSulbaltern() )
+				&& opponentAI.player.isThereAnyFreeSulbaltern()
+				&& opponentAI.canGoToThisState( ConquestState.class ) )
 			nextState = new ConquestState();
-		else if( !opponentAI.knownAllTheWorld )
+		else if( !opponentAI.knownAllTheWorld
+				&& opponentAI.canGoToThisState( ExplorationState.class ) )
 			nextState = new ExplorationState();
 		else
+		{
 			nextState = new WaitingState();
+			opponentAI.resetStateCounters();
+		}
 
 		return nextState;
 	}
-
 }

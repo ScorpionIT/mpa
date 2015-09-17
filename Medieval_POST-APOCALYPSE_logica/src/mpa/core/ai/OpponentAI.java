@@ -1,6 +1,7 @@
 package mpa.core.ai;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.vecmath.Vector2f;
 
@@ -22,6 +23,8 @@ public class OpponentAI extends MyThread
 	ArrayList<Player> knownPlayers = new ArrayList<>();
 	ArrayList<AbstractObject> knownBuildings = new ArrayList<>();
 
+	private HashMap<String, Integer> states = new HashMap<>();
+	private final int MAXIMUM_TIMES_PER_STATE = 5;
 	private ArrayList<House> knownHeadQuarters = new ArrayList<>();
 	private ArrayList<AbstractResourceProducer> knownResourceProducers = new ArrayList<>();
 
@@ -34,6 +37,11 @@ public class OpponentAI extends MyThread
 			knownAllTheWorld = true;
 		else
 			worldManager = new AIWorldManager( level );
+
+		states.put( ExplorationState.class.getCanonicalName(), 0 );
+		states.put( ProductionState.class.getCanonicalName(), 0 );
+		states.put( ConquestState.class.getCanonicalName(), 0 );
+		// states.put( WaitingState.class.getCanonicalName(), 0 );
 	}
 
 	@Override
@@ -79,6 +87,26 @@ public class OpponentAI extends MyThread
 			knownResourceProducers.add( ( AbstractResourceProducer ) building );
 		if( building instanceof House && !knownHeadQuarters.contains( building ) )
 			knownHeadQuarters.add( ( House ) building );
+	}
+
+	boolean canGoToThisState( Class<?> state )
+	{
+		if( !states.keySet().contains( state.getCanonicalName() ) )
+			return true;
+
+		if( states.get( state.getCanonicalName() ) >= MAXIMUM_TIMES_PER_STATE )
+			return false;
+		else
+		{
+			states.put( state.getCanonicalName(), states.get( state.getCanonicalName() ) + 1 );
+			return true;
+		}
+	}
+
+	void resetStateCounters()
+	{
+		for( String s : states.keySet() )
+			states.put( s, 0 );
 	}
 
 	void addBuildings( Vector2f position )

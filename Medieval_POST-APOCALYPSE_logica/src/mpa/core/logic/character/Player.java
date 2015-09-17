@@ -62,8 +62,8 @@ public class Player extends AbstractCharacter
 
 		potions.put( Potions.HP, 0 );
 		potions.put( Potions.MP, 0 );
-		potions.put( Potions.GRANADE, 10 );
-		potions.put( Potions.FLASH_BANG, 10 );
+		potions.put( Potions.GRANADE, 0 );
+		potions.put( Potions.FLASH_BANG, 0 );
 
 	}
 
@@ -161,7 +161,6 @@ public class Player extends AbstractCharacter
 		{
 			writeLock.lock();
 			health -= damage;
-			System.out.println( "NON MI SONO IMPINTATO QUA" );
 			// System.out.println( "la sua vita dopo l'attacco è " + health );
 			return health <= 0;
 
@@ -394,7 +393,7 @@ public class Player extends AbstractCharacter
 			if( x != headquarter.getGatheringPlace().x && y != headquarter.getGatheringPlace().y )
 				return false;
 
-			if( level.canBuy( potion, potions.get( potion ) ) )
+			if( !level.canBuy( potion, potions.get( potion ) ) )
 				return false;
 
 			HashMap<String, Integer> price = PotionManager.getInstance().getPrice( potion );
@@ -409,6 +408,7 @@ public class Player extends AbstractCharacter
 				resources.put( r, resources.get( r ) - price.get( r ) );
 			}
 
+			potions.put( potion, potions.get( potion ) + 1 );
 			return true;
 
 		} finally

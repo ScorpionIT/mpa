@@ -111,6 +111,36 @@ public class AIWorldManager
 		return allPoints;
 	}
 
+	Vector2f giveMeAnotherLocation( Vector2f oldLocation, Player player )
+	{
+		Vector2f playerPosition = new Vector2f( player.getX(), player.getY() );
+		float minDistance = Float.MAX_VALUE;
+		Vector2f nextLocation = null;
+
+		for( Vector2f node : openList )
+		{
+			float newDistance = MyMath.distanceFloat( playerPosition.x, playerPosition.y, node.x,
+					node.y );
+			if( !closedList.contains( node ) && newDistance < minDistance )
+			{
+				minDistance = newDistance;
+				nextLocation = node;
+			}
+
+		}
+
+		if( nextLocation != null )
+		{
+			openList.remove( nextLocation );
+			closedList.add( nextLocation );
+		}
+
+		closedList.remove( oldLocation );
+		openList.add( oldLocation );
+
+		return nextLocation;
+	}
+
 	Vector2f getNextLocation( Player player )
 	{
 		Vector2f playerPosition = new Vector2f( player.getX(), player.getY() );

@@ -37,7 +37,7 @@ public class ConquestState extends AIState
 			if( ( ( int ) player.getX() ) == ( ( int ) gathPlace.x )
 					&& ( ( int ) player.getY() ) == ( ( int ) gathPlace.y ) )
 			{
-				System.out.println( "sono dentro l'if cazzuto " );
+				// System.out.println( "sono dentro l'if cazzuto " );
 				GameManager.getInstance().occupyProperty( player, buildingToOccupy );
 				walking = false;
 				buildingToOccupy = null;
@@ -183,21 +183,33 @@ public class ConquestState extends AIState
 			GameManager.getInstance().computePath( player, gatheringPlace.x, gatheringPlace.y );
 			walking = true;
 		}
-
-		if( !opponentAI.player.getFreeSubalterns().isEmpty() )
+		else if( !opponentAI.player.getFreeSubalterns().isEmpty() )
 		{
 			int min = Integer.MAX_VALUE;
 			AbstractPrivateProperty chosen = null;
 			for( AbstractPrivateProperty abstractPrivateProperty : opponentAI.player
 					.getProperties() )
+			{
+				if( opponentAI.player.getName().equals( "Paola Maledetta 2" ) )
+				{
+					System.out.println( "il numero di edifici conquistati è "
+							+ opponentAI.player.getProperties().size() );
+					System.out.println( "il mio chosen per il momento è " + chosen );
+				}
 				if( abstractPrivateProperty.getNumberOfControllers() < min )
 				{
 					chosen = abstractPrivateProperty;
 					min = abstractPrivateProperty.getNumberOfControllers();
 				}
-
+			}
 			if( chosen != null )
+			{
+				if( opponentAI.player.getName().equals( "Paola Maledetta 2" ) )
+				{
+					System.out.println( "alla fine ho scelto " + chosen );
+				}
 				GameManager.getInstance().addWorker( opponentAI.player, chosen );
+			}
 		}
 	}
 
@@ -215,12 +227,17 @@ public class ConquestState extends AIState
 			nextState = new StrengtheningState();
 		else if( opponentAI.areThereWeakerPlayers() )
 			nextState = new CombatState();
-		else if( opponentAI.shouldBuyPotions() && opponentAI.player.canBuyPotions() )
+		else if( opponentAI.shouldBuyPotions() && opponentAI.player.canBuyPotions()
+				&& opponentAI.canGoToThisState( ProductionState.class ) )
 			nextState = new ProductionState();
-		else if( !opponentAI.knownAllTheWorld )
+		else if( !opponentAI.knownAllTheWorld
+				&& opponentAI.canGoToThisState( ExplorationState.class ) )
 			nextState = new ExplorationState();
 		else
+		{
+			opponentAI.resetStateCounters();
 			nextState = new WaitingState();
+		}
 		// else if( opponentAI.player.canBuyPotions() )
 		// nextState = new ProductionState();
 
