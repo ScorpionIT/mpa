@@ -109,10 +109,13 @@ public class OpponentAI extends MyThread
 		return knownResourceProducers;
 	}
 
-	private boolean isOpponentPlayerWeaker( Player p )
+	boolean isOpponentPlayerWeaker( Player p )
 	{
 		if( p == player )
 			return false;
+		if( p.getPlayerLevel().ordinal() < player.getPlayerLevel().ordinal() )
+			return true;
+
 		if( player.getPlayerLevel().ordinal() == p.getPlayerLevel().ordinal() )
 		{
 			int opponentPotions = 0;
@@ -129,9 +132,6 @@ public class OpponentAI extends MyThread
 			else
 				return false;
 		}
-
-		else if( p.getPlayerLevel().ordinal() < player.getPlayerLevel().ordinal() )
-			return true;
 
 		return false;
 	}
@@ -178,6 +178,7 @@ public class OpponentAI extends MyThread
 			GameManager.getInstance().changeSelectedItem( player, Item.MP_POTION );
 			GameManager.getInstance().playerAction( player, null );
 		}
+
 	}
 
 	boolean canIFightWithHim( Player bully )

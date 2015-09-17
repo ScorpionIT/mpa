@@ -13,6 +13,7 @@ class CombatState extends AIState
 {
 	private Player playerToAttack;
 	private Vector2f pointToReach = null;
+	int a = 0;
 
 	CombatState()
 	{
@@ -24,9 +25,29 @@ class CombatState extends AIState
 		this.playerToAttack = playerToAttack;
 	}
 
+	private void computePath( Player me, Player him, boolean physicall )
+	{
+		Vector2f vector = new Vector2f( -me.getX() + him.getX(), -me.getY() + him.getY() );
+		Vector2f parallelVector = MyMath.computeDirection( me.getPosition(), him.getPosition() );
+		float modulus = MyMath.distanceFloat( me.getX(), me.getY(), him.getX(), him.getY() );
+		float actualDistance;
+
+		if( physicall )
+			actualDistance = modulus - me.getRangeOfPhysicallAttack() - 3;
+		else
+			actualDistance = modulus - me.getRangeOfDistanceAttack() - 3;
+
+		pointToReach = new Vector2f( me.getX() + parallelVector.x * actualDistance, me.getY()
+				+ parallelVector.y * actualDistance );
+
+		GameManager.getInstance().computePath( me, pointToReach.x, pointToReach.y );
+
+	}
+
 	@Override
 	void action( OpponentAI opponentAI )
 	{
+		System.out.println( "sono nel COMBAT STATE" );
 		if( playerToAttack == null )
 		{
 			float distance = Float.MAX_VALUE;
@@ -51,13 +72,18 @@ class CombatState extends AIState
 						+ playerToAttack.getName() );
 		}
 
+		System.out.println( "ci sto entrando per la " + a++ + " volta" );
 		if( pointToReach == null )
 		{
-			pointToReach = playerToAttack.getPosition();
-			pointToReach.set( pointToReach.x - opponentAI.player.getRangeOfPhysicallAttack() / 2,
-					pointToReach.y - opponentAI.player.getRangeOfPhysicallAttack() / 2 );
-			GameManager.getInstance().computePath( opponentAI.player, pointToReach.x,
-					pointToReach.y );
+			// pointToReach = playerToAttack.getPosition();
+			// pointToReach.set( pointToReach.x - opponentAI.player.getRangeOfPhysicallAttack() / 2,
+			// pointToReach.y - opponentAI.player.getRangeOfPhysicallAttack() / 2 );
+			// GameManager.getInstance().computePath( opponentAI.player, pointToReach.x,
+			// pointToReach.y );
+			System.out.println();
+			System.out.println( "COMBAT STATE : HO CALCOLATO IL PATH 1" );
+			System.out.println();
+			computePath( opponentAI.player, playerToAttack, true );
 			return;
 
 		}
@@ -67,13 +93,17 @@ class CombatState extends AIState
 
 			if( MyMath.distanceFloat( currentPosition.x, currentPosition.y, pointToReach.x,
 					pointToReach.y ) > Math.max( opponentAI.player.getRangeOfDistanceAttack(),
-					opponentAI.player.getRangeOfPhysicallAttack() ) * 2 )
+					opponentAI.player.getRangeOfPhysicallAttack() ) * 1.5 )
 			{
-				pointToReach = playerToAttack.getPosition();
-				pointToReach.set( pointToReach.x - opponentAI.player.getRangeOfPhysicallAttack()
-						/ 2, pointToReach.y - opponentAI.player.getRangeOfPhysicallAttack() / 2 );
-				GameManager.getInstance().computePath( opponentAI.player, pointToReach.x,
-						pointToReach.y );
+				// pointToReach = playerToAttack.getPosition();
+				// pointToReach.set( pointToReach.x - opponentAI.player.getRangeOfPhysicallAttack()
+				// / 2, pointToReach.y - opponentAI.player.getRangeOfPhysicallAttack() / 2 );
+				// GameManager.getInstance().computePath( opponentAI.player, pointToReach.x,
+				// pointToReach.y );
+				System.out.println();
+				System.out.println( "COMBAT STATE : HO CALCOLATO IL PATH 2" );
+				System.out.println();
+				computePath( opponentAI.player, playerToAttack, true );
 				return;
 
 			}
@@ -82,22 +112,28 @@ class CombatState extends AIState
 					.getRangeOfDistanceAttack() )
 			{
 				opponentAI.player.stopMoving();
-				opponentAI.player.setDirection( MyMath.computeDirection(
-						opponentAI.player.getPosition(), playerToAttack.getPosition() ) );
+				// opponentAI.player.setDirection( MyMath.computeDirection(
+				// opponentAI.player.getPosition(), playerToAttack.getPosition() ) );
 				opponentAI.player.setSelectedItem( Item.GRANADE );
+				System.out.println();
+				System.out.println( "COMBAT STATE : HO ATTACCATO CON BOMBA" );
+				System.out.println();
 				GameManager.getInstance().playerAction( opponentAI.player,
-						opponentAI.player.getCurrentVector() );
+						playerToAttack.getPosition() );
 			}
 			if( MyMath.distanceFloat( opponentAI.player.getX(), opponentAI.player.getY(),
 					playerToAttack.getX(), playerToAttack.getY() ) <= opponentAI.player
 					.getRangeOfPhysicallAttack() )
 			{
 				opponentAI.player.stopMoving();
-				opponentAI.player.setDirection( MyMath.computeDirection(
-						opponentAI.player.getPosition(), playerToAttack.getPosition() ) );
+				// opponentAI.player.setDirection( MyMath.computeDirection(
+				// opponentAI.player.getPosition(), playerToAttack.getPosition() ) );
 				opponentAI.player.setSelectedItem( Item.WEAPON );
+				System.out.println();
+				System.out.println( "COMBAT STATE : HO ATTACCATO FISICAMENTE" );
+				System.out.println();
 				GameManager.getInstance().playerAction( opponentAI.player,
-						opponentAI.player.getCurrentVector() );
+						playerToAttack.getPosition() );
 			}
 
 		}
