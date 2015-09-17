@@ -24,6 +24,7 @@ public class NiftyController implements ScreenController
 		gameController.createMinions(GuiObjectManager.getInstance().getPlayingPlayer(), niftyHandler.getMinionsTarget(),
 				niftyHandler.getMinionsQuantity());
 		niftyHandler.removeHeadquarterPanel();
+		niftyHandler.setCreateButtonClicked(true);
 
 	}
 

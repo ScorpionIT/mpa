@@ -47,11 +47,9 @@ public class SelectionHeadquarterHandler
 
 	public void setListBox(Screen currentScreen)
 	{
-		if (listBox == null && textFieldMinionsNumber == null)
-		{
-			listBox = currentScreen.findNiftyControl(selectionHeadquarterPanel.getListBoxId(), ListBox.class);
-			textFieldMinionsNumber = currentScreen.findNiftyControl(selectionHeadquarterPanel.getTextFieldId(), TextField.class);
-		}
+
+		listBox = currentScreen.findNiftyControl(selectionHeadquarterPanel.getListBoxId(), ListBox.class);
+		textFieldMinionsNumber = currentScreen.findNiftyControl(selectionHeadquarterPanel.getTextFieldId(), TextField.class);
 		updatePlayersName();
 
 	}
@@ -84,6 +82,14 @@ public class SelectionHeadquarterHandler
 	public void setVisible(boolean visible)
 	{
 		selectionHeadquarterPanel.setVisible(visible);
+	}
+
+	public void addSelectionHeadquarter(Nifty nifty)
+	{
+		Element findElementByName = nifty.getCurrentScreen().findElementByName("selectionHeadquarterLayer");
+		findElementByName.add(selectionHeadquarterPanel.build(nifty, nifty.getCurrentScreen(), findElementByName));
+
+		setListBox(nifty.getCurrentScreen());
 	}
 
 }

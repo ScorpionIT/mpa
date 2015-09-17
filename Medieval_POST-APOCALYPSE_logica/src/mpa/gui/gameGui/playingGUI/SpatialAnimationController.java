@@ -56,7 +56,8 @@ public class SpatialAnimationController implements AnimEventListener
 	{
 		if (channel.getAnimationName() == null || channel.getAnimationName().equals("stand"))
 		{
-			channel.setAnim("walk", animationSpeed);
+			channel.setAnim("walk");
+			channel.setSpeed(animationSpeed);
 			channel.setLoopMode(LoopMode.Loop);
 		}
 	}
@@ -75,15 +76,16 @@ public class SpatialAnimationController implements AnimEventListener
 		{
 			int rand = new Random().nextInt(2);
 			if (rand == 0)
-				channel.setAnim("attack1", animationSpeed);
+				channel.setAnim("attack1");
 			else
-				channel.setAnim("attack", animationSpeed);
+				channel.setAnim("attack");
 
 		}
 		else
 		{
-			channel.setAnim("attack", animationSpeed);
+			channel.setAnim("attack");
 		}
+		channel.setSpeed(animationSpeed);
 		channel.setLoopMode(LoopMode.DontLoop);
 	}
 

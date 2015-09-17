@@ -129,19 +129,10 @@ public class NiftyHandler
 
 	}
 
-	private void addSelectionHeadquarter()
-	{
-		Element findElementByName = nifty.getCurrentScreen().findElementByName("selectionHeadquarterLayer");
-		findElementByName.add(selectionHeadquarterHandler.buildSelectionHeadquarterPanel(nifty, nifty.getCurrentScreen(), findElementByName));
-
-		selectionHeadquarterHandler.setListBox(nifty.getCurrentScreen());
-		selectionHeadquarterHandler.setVisible(true);
-		isVisibleHeadquarterPanel = true;
-	}
-
 	public void setHeadquarterPanel()
 	{
-		addSelectionHeadquarter();
+		selectionHeadquarterHandler.addSelectionHeadquarter(nifty);
+		isVisibleHeadquarterPanel = true;
 	}
 
 	public void removeSelectedPanel()
@@ -384,9 +375,13 @@ public class NiftyHandler
 		{
 			nifty.getCurrentScreen().findElementByName("#selectedHeadquarter").markForRemoval();
 			nifty.removeElement(nifty.getCurrentScreen(), nifty.getCurrentScreen().findElementByName("#selectedHeadquarter"));
-			selectionHeadquarterHandler.setVisible(false);
-			isVisibleHeadquarterPanel = false;
 		}
+		isVisibleHeadquarterPanel = false;
+	}
+
+	public void setCreateButtonClicked(boolean clicked)
+	{
+		isVisibleHeadquarterPanel = true;
 	}
 
 }

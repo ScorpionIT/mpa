@@ -63,7 +63,6 @@ public class GameGuiClickListener implements ActionListener
 			{
 				if (!gameGui.canClick())
 				{
-					// TODO fix visibility headqaurterPanel
 					if (niftyHandler.isVisibleSelectionPanel())
 					{
 						niftyHandler.removeSelectedPanel();
@@ -81,7 +80,8 @@ public class GameGuiClickListener implements ActionListener
 
 			}
 
-			else if (!pickedObject.equals("GROUND") && !niftyHandler.isVisibleChoosePanel() && !niftyHandler.isVisibleOpponentPropertiesPanel())
+			else if (!pickedObject.equals("GROUND") && !niftyHandler.isVisibleChoosePanel() && !niftyHandler.isVisibleOpponentPropertiesPanel()
+					&& !niftyHandler.isVisibleHeadquarterPanel())
 			{
 
 				String[] split = pickedObject.split(":");
@@ -90,7 +90,8 @@ public class GameGuiClickListener implements ActionListener
 
 				System.out.println(GuiObjectManager.getInstance().getPlayingPlayer());
 				System.out.println(pickedObjectOwner);
-				if (split[0].toLowerCase().equals("headquarter") && pickedObjectOwner.equals(GuiObjectManager.getInstance().getPlayingPlayer()))
+				if (split[0].toLowerCase().equals("headquarter") && pickedObjectOwner.equals(GuiObjectManager.getInstance().getPlayingPlayer())
+						&& !niftyHandler.isVisibleHeadquarterPanel())
 				{
 					niftyHandler.setHeadquarterPanel();
 				}

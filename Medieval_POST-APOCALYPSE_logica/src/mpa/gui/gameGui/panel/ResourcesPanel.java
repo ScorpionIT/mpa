@@ -88,7 +88,7 @@ public class ResourcesPanel
 				childLayoutAbsoluteInside();
 
 				width("100%");
-				height("10%");
+				height("12%");
 				alignRight();
 				valignTop();
 				x("0%");
@@ -236,14 +236,6 @@ public class ResourcesPanel
 		if (nifty.getCurrentScreen().findElementByName("#informationPanel") != null)
 		{
 
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			System.out.println("sono qui");
-			System.out.println();
-			System.out.println();
-			System.out.println();
 			nifty.getCurrentScreen().findElementByName("#informationPanel").markForRemoval();
 			nifty.removeElement(nifty.getCurrentScreen(), nifty.getCurrentScreen().findElementByName("#informationPanel"));
 			Element findElementByName = nifty.getCurrentScreen().findElementByName("resourcesBackground");
