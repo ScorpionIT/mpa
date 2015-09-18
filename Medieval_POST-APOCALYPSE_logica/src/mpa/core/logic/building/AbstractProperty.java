@@ -103,4 +103,17 @@ public class AbstractProperty extends AbstractObject
 		towers.put(position, null);
 
 	}
+
+	public void removeTower(Tower tower)
+	{
+		for (Vector2f towerPosition : towers.keySet())
+		{
+			if (towers.get(towerPosition) != null && towers.get(towerPosition).equals(tower))
+			{
+				towers.put(towerPosition, null);
+				return;
+
+			}
+		}
+	}
 }

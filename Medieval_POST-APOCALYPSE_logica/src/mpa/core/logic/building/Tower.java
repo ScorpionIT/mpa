@@ -14,10 +14,12 @@ public class Tower extends AbstractPrivateProperty
 	private int damage = 5;
 	private int life = 50;
 	private float range = 20f;
+	private AbstractPrivateProperty property = null;
 
-	public Tower(float x, float y, float width, float height, Player owner)
+	public Tower(float x, float y, float width, float height, Player owner, AbstractPrivateProperty abstractPrivateProperty)
 	{
 		super(x, y, width, height, owner);
+		this.property = abstractPrivateProperty;
 	}
 
 	public int getDamage()
@@ -75,5 +77,10 @@ public class Tower extends AbstractPrivateProperty
 	public ArrayList<Vector2f> getAvaibleGatheringPlaces()
 	{
 		return null;
+	}
+
+	public AbstractProperty getProperty()
+	{
+		return property;
 	}
 }

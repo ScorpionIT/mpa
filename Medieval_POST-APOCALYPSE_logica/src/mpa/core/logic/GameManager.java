@@ -12,6 +12,7 @@ import javax.vecmath.Vector2f;
 import mpa.core.ai.DifficultyLevel;
 import mpa.core.ai.OpponentAI;
 import mpa.core.logic.building.AbstractPrivateProperty;
+import mpa.core.logic.building.AbstractProperty;
 import mpa.core.logic.building.ControllerAlreadyPresentException;
 import mpa.core.logic.building.DifferentOwnerException;
 import mpa.core.logic.building.Tower;
@@ -136,11 +137,10 @@ public class GameManager
 		return minions;
 	}
 
-	public ArrayList<TowerCrusher> createTowerCrushers(Player boss, int quantity, Tower target)
+	public ArrayList<TowerCrusher> createTowerCrushers(Player boss, Tower target)
 	{
 		ArrayList<TowerCrusher> towerCrushers = new ArrayList<>();
-		for (int i = 0; i < quantity; i++)
-			towerCrushers.add(boss.createTowerCrusher(target, towerCrusherIDs.getID()));
+		towerCrushers.add(boss.createTowerCrusher(target, towerCrusherIDs.getID()));
 
 		return towerCrushers;
 	}
@@ -370,7 +370,7 @@ public class GameManager
 		return true;
 	}
 
-	public Tower createTower(Player p, Vector2f position)
+	public Tower createTower(Player p, Vector2f position, AbstractPrivateProperty abstractPrivateProperty)
 	{
 		try
 		{
@@ -379,7 +379,7 @@ public class GameManager
 				return null;
 
 			Tower tower = new Tower(position.x, position.y, GameProperties.getInstance().getObjectWidth("tower"), GameProperties.getInstance()
-					.getObjectHeight("tower"), p);
+					.getObjectHeight("tower"), p, abstractPrivateProperty);
 			tower.setID(towerIDs.getID());
 			if (!world.addTower(tower))
 				return null;
@@ -412,10 +412,12 @@ public class GameManager
 		return player.getPlayerLevel();
 	}
 
-	public void destroyTower(Tower t)
+	public void destroyTower(Tower tower)
 	{
-		world.destroyObject(t);
-		t.getOwner().removeTower(t);
+		world.destroyObject(tower);
+		tower.getOwner().removeTower(tower);
+		AbstractProperty property = tower.getProperty();
+		property.removeTower(tower);
 	}
 
 	public void setPause()

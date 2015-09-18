@@ -155,9 +155,9 @@ public class GameManagerProxy
 		return minionNames;
 	}
 
-	public ArrayList<String> createTowerCrushers(String boss, int quantity, String target)
+	public ArrayList<String> createTowerCrushers(String boss, String target)
 	{
-		ArrayList<TowerCrusher> createdTowerCrushers = GameManager.getInstance().createTowerCrushers(players.get(boss), quantity,
+		ArrayList<TowerCrusher> createdTowerCrushers = GameManager.getInstance().createTowerCrushers(players.get(boss),
 				(Tower) objects.get("tower").get(target));
 
 		ArrayList<String> towerCrusherNames = new ArrayList<>();
@@ -230,12 +230,12 @@ public class GameManagerProxy
 	public String createTower(String playerName, Vector2f position, String property)
 	{
 
-		Tower tower = gm.createTower(players.get(playerName), position);
 		String[] field = property.split(":");
+		AbstractPrivateProperty propertyObject = objects.get(field[0].toLowerCase()).get(field[1]);
+		Tower tower = gm.createTower(players.get(playerName), position, propertyObject);
 
 		if (tower != null)
 		{
-			AbstractPrivateProperty propertyObject = objects.get(field[0].toLowerCase()).get(field[1]);
 			propertyObject.addTower(tower, position);
 			objects.get("tower").put(tower.getID(), tower);
 			return tower.getID();
