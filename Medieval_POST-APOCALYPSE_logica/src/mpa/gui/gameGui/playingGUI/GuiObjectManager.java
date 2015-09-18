@@ -75,9 +75,9 @@ public class GuiObjectManager
 
 			// gameGui.spheres.detachAllChildren();
 
-			if (path != null)
-				for (Vector2f position : path)
-					addSphere(position.x, position.y);
+			// if (path != null)
+			// for (Vector2f position : path)
+			// addSphere(position.x, position.y);
 		}
 	}
 
@@ -185,8 +185,12 @@ public class GuiObjectManager
 		Color color = new Color(new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat(), 0.8f);
 		Circle2D circle2D = createCircle(color, GameProperties.getInstance().getObjectWidth("player") * 2);
 		gameGui.attachCircle(circle2D);
+
 		playersCirlces.put(playerName, circle2D);
 		playersColors.put(playerName, color);
+
+		if (playerName.equals(playingPlayer))
+			gameGui.getNiftyHandler().updateResourcePanel();
 
 	}
 
@@ -477,6 +481,11 @@ public class GuiObjectManager
 	{
 		animationControllerSpatial.get(minions.get(ID)).stopAnimation();
 		animationControllerSpatial.get(minions.get(ID)).startAttackAnimation(1f);
+	}
+
+	public Color getPlayngPlayerColor()
+	{
+		return playersColors.get(playingPlayer);
 	}
 
 	// TODO retrieve informations

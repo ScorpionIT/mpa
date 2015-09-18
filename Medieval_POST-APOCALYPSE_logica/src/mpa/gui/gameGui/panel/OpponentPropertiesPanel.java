@@ -119,7 +119,7 @@ public class OpponentPropertiesPanel
 			{
 				y = startY;
 			}
-			if (!playerName.equals(GuiObjectManager.getInstance().getPlayingPlayer()))
+			if (!playerName.equals(GuiObjectManager.getInstance().getPlayingPlayer()) && playersColors.get(playerName) != null)
 			{
 				HashMap<String, Integer> resources = playersResourceAmount.get(playerName);
 

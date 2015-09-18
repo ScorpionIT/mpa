@@ -161,7 +161,7 @@ public class OpponentResourcesPanel
 				height(Integer.toString(height) + "%");
 				x(Integer.toString(x) + "%");
 				y(Integer.toString(y) + "%");
-				backgroundColor(new Color(1f, 1f, 1f, 0.8f));
+				backgroundColor(new de.lessvoid.nifty.tools.Color(1f, 1f, 1f, 0.8f));
 				color(playerColor);
 
 			}
@@ -179,7 +179,7 @@ public class OpponentResourcesPanel
 				height(Integer.toString(height) + "%");
 				x(Integer.toString(x) + "%");
 				y(Integer.toString(y) + "%");
-				backgroundColor(new Color(1f, 1f, 1f, 0.8f));
+				backgroundColor(new de.lessvoid.nifty.tools.Color(1f, 1f, 1f, 0.8f));
 				color(playerColor);
 
 			}

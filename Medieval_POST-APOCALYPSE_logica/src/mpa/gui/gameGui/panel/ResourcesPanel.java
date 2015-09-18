@@ -1,5 +1,6 @@
 package mpa.gui.gameGui.panel;
 
+import java.awt.Color;
 import java.util.HashMap;
 
 import mpa.gui.gameGui.playingGUI.GuiObjectManager;
@@ -26,6 +27,7 @@ public class ResourcesPanel
 
 	private LabelBuilder labelHPAndMP;
 	private LabelBuilder labelLevel;
+	de.lessvoid.nifty.tools.Color color = null;
 
 	public ResourcesPanel()
 	{
@@ -38,6 +40,7 @@ public class ResourcesPanel
 				height("40%");
 				x("20%");
 				y("60%");
+				backgroundColor(new de.lessvoid.nifty.tools.Color(1f, 1f, 1f, 0.8f));
 
 			}
 		};
@@ -48,6 +51,7 @@ public class ResourcesPanel
 				height("40%");
 				x("20%");
 				y("10%");
+				backgroundColor(new de.lessvoid.nifty.tools.Color(1f, 1f, 1f, 0.8f));
 
 			}
 		};
@@ -229,6 +233,15 @@ public class ResourcesPanel
 
 	public void updateInformationPanel(Nifty nifty, int HP, int MP, String level)
 	{
+		Color playngPlayerColor = GuiObjectManager.getInstance().getPlayngPlayerColor();
+
+		if (color == null && playngPlayerColor != null)
+		{
+			color = new de.lessvoid.nifty.tools.Color((float) playngPlayerColor.getRed() / 255, (float) playngPlayerColor.getGreen() / 255,
+					(float) playngPlayerColor.getBlue() / 255, 1);
+			labelHPAndMP.color(color);
+			labelLevel.color(color);
+		}
 
 		labelHPAndMP.text("HP: " + HP + " " + "MP: " + MP);
 		labelLevel.text("Level: " + level);
