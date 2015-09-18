@@ -100,6 +100,12 @@ public class NiftyHandler
 
 		nifty.gotoScreen("main");
 
+		initPanels(assetManager);
+
+	}
+
+	private void initPanels(AssetManager assetManager)
+	{
 		assetManager.registerLocator("./Assets/BackgroundImages", FileLocator.class);
 		selectionPanel = new SelectionPanel(gameGui.windowWidth(), gameGui.windowHeight());
 
@@ -115,7 +121,6 @@ public class NiftyHandler
 		findElementByName.add(resourcesPanel.build(nifty, nifty.getCurrentScreen(), findElementByName));
 
 		selectionHeadquarterHandler = new SelectionHeadquarterHandler(gameGui.windowWidth(), gameGui.windowHeight(), gameController);
-
 	}
 
 	public void setSelectedPanel(String objectType, String objectID, String objectProductivity, String pickedObjectOwner)
@@ -256,33 +261,17 @@ public class NiftyHandler
 	{
 		HashMap<String, Integer> playingPlayerResourcesAmount = gameController.getPlayerResourcesAmount(GuiObjectManager.getInstance()
 				.getPlayingPlayer());
+		if (playingPlayerResourcesAmount == null)
+			return;
 		Set<String> keySet = playingPlayerResourcesAmount.keySet();
 		for (String resourceName : keySet)
 		{
-			resourcesPanel.getResourceLabel(nifty, resourceName, playingPlayerResourcesAmount.get(resourceName));
+			resourcesPanel.updateResourceLabel(nifty, resourceName, playingPlayerResourcesAmount.get(resourceName));
 		}
 		resourcesPanel.updateInformationPanel(nifty, gameController.getPlayerHP(GuiObjectManager.getInstance().getPlayingPlayer()),
 				gameController.getPlayerMP(GuiObjectManager.getInstance().getPlayingPlayer()),
 				gameController.getPlayerLevel(GuiObjectManager.getInstance().getPlayingPlayer()));
 
-	}
-
-	private void setResourceValue(String resourceName, int value)
-	{
-
-		// LabelBuilder labelBuilder = resourcesPanel.getResourceLabel(resourceName.toString());
-		// labelBuilder.text(Integer.toString(value));
-		// if (nifty.getCurrentScreen().findElementByName("Avaible" + resourceName.toString()) !=
-		// null)
-		// {
-		// nifty.getCurrentScreen().findElementByName("Avaible" + resourceName).markForRemoval();
-		// nifty.removeElement(nifty.getCurrentScreen(),
-		// nifty.getCurrentScreen().findElementByName("Avaible" + resourceName));
-		// }
-		// Element findElementByName = nifty.getCurrentScreen().findElementByName(resourceName +
-		// "Panel");
-		// findElementByName.add(labelBuilder.build(nifty, nifty.getCurrentScreen(),
-		// findElementByName));
 	}
 
 	public Nifty getNifty()
@@ -362,10 +351,13 @@ public class NiftyHandler
 		return chooseObjectPanelIsVisible;
 	}
 
-	public void removePayer(String playerName)
+	public void removePlayer(String playerName)
 	{
-		opponentPropertiesPanel.removePlayer(playerName);
-		selectionHeadquarterHandler.removePlayer(playerName);
+		if (!playerName.equals(GuiObjectManager.getInstance().getPlayingPlayer()))
+		{
+			opponentPropertiesPanel.removePlayer(playerName);
+			selectionHeadquarterHandler.removePlayer(playerName);
+		}
 
 	}
 

@@ -51,7 +51,7 @@ public class GameGuiClickListener implements ActionListener
 		gameGui.getGroundNode().collideWith(ray, crs);
 		Vector2f contactPoint;
 
-		if (!isPressed && name.equals("Click"))
+		if (!isPressed && name.equals("Click") && crs.getClosestCollision() != null)
 		{
 
 			// TODO controllare che crs non sia null se il click è fuori dal mondo

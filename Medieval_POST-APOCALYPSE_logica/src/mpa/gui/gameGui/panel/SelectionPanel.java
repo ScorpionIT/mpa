@@ -155,15 +155,20 @@ public class SelectionPanel
 			productivityLabel.y("33%");
 			this.occupyButton.visible(true);
 			objectOwner.visible(false);
+			createTowerButton.visible(false);
+			attackTowerButton.visible(false);
 		}
 		else
 		{
 			productivityLabel.y("37%");
 			this.objectOwner.text("Owner: " + playerName);
+			createTowerButton.visible(false);
+			attackTowerButton.visible(false);
 
 			if (!playerName.equals(GuiObjectManager.getInstance().getPlayingPlayer()) && (objectName.toLowerCase().equals("tower")))
+			{
 				attackTowerButton.visible(true);
-
+			}
 			objectOwner.visible(true);
 
 			occupyButton.visible(false);

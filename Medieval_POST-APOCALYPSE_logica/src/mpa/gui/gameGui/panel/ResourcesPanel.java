@@ -233,12 +233,12 @@ public class ResourcesPanel
 
 	public void updateInformationPanel(Nifty nifty, int HP, int MP, String level)
 	{
-		Color playngPlayerColor = GuiObjectManager.getInstance().getPlayngPlayerColor();
+		Color playingPlayerColor = GuiObjectManager.getInstance().getPlayingPlayerColor();
 
-		if (color == null && playngPlayerColor != null)
+		if (color == null && playingPlayerColor != null)
 		{
-			color = new de.lessvoid.nifty.tools.Color((float) playngPlayerColor.getRed() / 255, (float) playngPlayerColor.getGreen() / 255,
-					(float) playngPlayerColor.getBlue() / 255, 1);
+			color = new de.lessvoid.nifty.tools.Color((float) playingPlayerColor.getRed() / 255, (float) playingPlayerColor.getGreen() / 255,
+					(float) playingPlayerColor.getBlue() / 255, 1);
 			labelHPAndMP.color(color);
 			labelLevel.color(color);
 		}
@@ -255,7 +255,7 @@ public class ResourcesPanel
 		}
 	}
 
-	public void getResourceLabel(Nifty nifty, String resourceName, int value)
+	public void updateResourceLabel(Nifty nifty, String resourceName, int value)
 	{
 
 		LabelBuilder labelBuilder = resourcesValueLabel.get(resourceName);

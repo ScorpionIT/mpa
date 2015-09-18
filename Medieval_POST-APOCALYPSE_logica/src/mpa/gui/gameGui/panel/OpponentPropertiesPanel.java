@@ -18,21 +18,21 @@ import de.lessvoid.nifty.screen.Screen;
 public class OpponentPropertiesPanel
 {
 
-	PanelBuilder mainPanelBuilder;
+	private PanelBuilder mainPanelBuilder;
 
 	// HashMap<String, OpponentResourcesPanel> resourcesPanels = new HashMap<>();
 
-	int x = 10;
+	private int x = 10;
 
-	int heightPanel = 30;
-	int startY = 7;
+	private int heightPanel = 30;
+	private int startY = 7;
 
 	private ListenerImplementation gameController;
 	private int currentPage = 1;
 	int numberOfPlayerForPage;
 	int numberOfPages;
-	ButtonBuilder buttonForwardBuilder = null;
-	ButtonBuilder buttonBackBuilder = null;
+	private ButtonBuilder buttonForwardBuilder = null;
+	private ButtonBuilder buttonBackBuilder = null;
 	private boolean inizialized = false;
 
 	private LinkedHashMap<String, OpponentResourcesPanel> playersResources = new LinkedHashMap<>();

@@ -3,7 +3,6 @@ package mpa.gui.gameGui.panel;
 import java.util.HashMap;
 import java.util.Set;
 
-import mpa.core.logic.resource.Resources;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
@@ -221,24 +220,9 @@ public class OpponentResourcesPanel
 		return resourcesPanel;
 	}
 
-	public void setX(int x)
-	{
-
-	}
-
-	public void setY(int y)
-	{
-
-	}
-
 	public Element build(Nifty nifty, Screen currentScreen, Element parent)
 	{
 		return resourcesPanel.build(nifty, currentScreen, parent);
-	}
-
-	public LabelBuilder getResourceLabel(Resources resourceName)
-	{
-		return resourcesValueLabel.get(resourceName);
 	}
 
 }

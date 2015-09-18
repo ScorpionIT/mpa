@@ -102,7 +102,7 @@ public class SinglePlayerController extends ListenerImplementation
 		HashMap<String, javax.vecmath.Vector2f[]> minionsPositions = gManagerProxy.getMinionsPositions();
 
 		for (String m : deadMinions)
-			GuiObjectManager.getInstance().removeMinion(m);
+			GuiObjectManager.getInstance().killMinion(m);
 		for (String p : deadPlayers)
 			GuiObjectManager.getInstance().killPlayer(p);
 		for (String p : playersPositions.keySet())
