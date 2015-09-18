@@ -138,11 +138,11 @@ public class GuiObjectManager
 		System.out.println();
 		gameGui.spheres.detachAllChildren();
 
-		for (Vector2f p : pointToVisit)
-		{
-			System.out.println("provo a disegnare la sfera " + p.toString());
-			this.addSphere(p.x, p.y);
-		}
+		// for (Vector2f p : pointToVisit)
+		// {
+		// System.out.println("provo a disegnare la sfera " + p.toString());
+		// this.addSphere(p.x, p.y);
+		// }
 	}
 
 	public void addPlayer(String name, Vector2f hqPosition, Vector2f gatheringPlace, Vector2f direction)

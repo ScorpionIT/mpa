@@ -108,6 +108,7 @@ public class OpponentPropertiesPanel
 		int index = 0;
 
 		HashMap<String, HashMap<String, Integer>> playersResourceAmount = gameController.getPlayersResourceAmount();
+
 		HashMap<String, Color> playersColors = GuiObjectManager.getInstance().getPlayersColors();
 
 		Set<String> playerList = playersResourceAmount.keySet();
