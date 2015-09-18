@@ -1,7 +1,7 @@
 package mpa.core.ai;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import javax.vecmath.Vector2f;
 
@@ -22,7 +22,7 @@ public class DefenseState extends AIState
 		FIGHT_BACK, RUN;
 	}
 
-	public DefenseState( OpponentAI opponentAI, ArrayList<Enemy> bullies )
+	public DefenseState( OpponentAI opponentAI, List<Enemy> bullies )
 	{
 		opponentAI.player.stopMoving();
 		Collections.sort( bullies );

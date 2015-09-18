@@ -1,6 +1,7 @@
 package mpa.gui.gameGui.listener;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,7 +17,7 @@ public abstract class ListenerImplementation
 
 	public abstract void changeItem( String item );
 
-	public abstract ArrayList<String> playerAction( Vector2f direction );
+	public abstract List<String> playerAction( Vector2f direction );
 
 	public abstract boolean occupyProperty( String property );
 

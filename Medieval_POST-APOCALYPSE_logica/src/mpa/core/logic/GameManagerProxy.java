@@ -3,6 +3,7 @@ package mpa.core.logic;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -196,9 +197,9 @@ public class GameManagerProxy
 	// return hitPlayersNames;
 	// }
 
-	public ArrayList<String> playerAction( String p, Vector2f target )
+	public List<String> playerAction( String p, Vector2f target )
 	{
-		ArrayList<Player> hitPlayers = gm.playerAction( players.get( p ), target );
+		List<Player> hitPlayers = gm.playerAction( players.get( p ), target );
 
 		ArrayList<String> hitPlayersNames = new ArrayList<>();
 
@@ -224,7 +225,7 @@ public class GameManagerProxy
 	{
 		String[] field = property.split( ":" );
 
-		ArrayList<Vector2f> gatheringPlaces = objects.get( field[0].toLowerCase() ).get( field[1] )
+		List<Vector2f> gatheringPlaces = objects.get( field[0].toLowerCase() ).get( field[1] )
 				.getAvaibleGatheringPlaces();
 		if( gatheringPlaces != null && !gatheringPlaces.isEmpty() )
 		{
@@ -318,7 +319,7 @@ public class GameManagerProxy
 
 	public ArrayList<String> takeDeadPlayers()
 	{
-		ArrayList<Player> deadPlayers = gm.takeDeadPlayers();
+		List<Player> deadPlayers = gm.takeDeadPlayers();
 		ArrayList<String> names = new ArrayList<>();
 
 		for( Player p : deadPlayers )
@@ -330,10 +331,10 @@ public class GameManagerProxy
 		return names;
 	}
 
-	public ArrayList<String> takeDeadMinions()
+	public List<String> takeDeadMinions()
 	{
-		ArrayList<Minion> deadMinions = gm.takeDeadMinions();
-		ArrayList<String> names = new ArrayList<>();
+		List<Minion> deadMinions = gm.takeDeadMinions();
+		List<String> names = new ArrayList<>();
 
 		for( Minion m : deadMinions )
 			names.add( m.getName() );

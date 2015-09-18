@@ -1,6 +1,7 @@
 package mpa.core.logic.building;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -11,7 +12,7 @@ public abstract class AbstractPrivateProperty extends AbstractProperty
 {
 
 	protected Player owner = null;
-	protected ArrayList<DependentCharacter> controllers = new ArrayList<>();
+	protected List<DependentCharacter> controllers = new ArrayList<>();
 
 	private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 	protected Lock readLock = lock.readLock();

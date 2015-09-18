@@ -2,6 +2,7 @@ package mpa.gui.gameGui.listener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -51,7 +52,7 @@ public class SinglePlayerController extends ListenerImplementation
 	}
 
 	@Override
-	public ArrayList<String> playerAction( Vector2f direction )
+	public List<String> playerAction( Vector2f direction )
 	{
 		return gManagerProxy.playerAction( GuiObjectManager.getInstance().getPlayingPlayer(),
 				new javax.vecmath.Vector2f( direction.x, direction.y ) );
@@ -101,14 +102,14 @@ public class SinglePlayerController extends ListenerImplementation
 	@Override
 	public void updateInformation()
 	{
-		ArrayList<String> deadMinions = gManagerProxy.takeDeadMinions();
-		ArrayList<String> deadPlayers = gManagerProxy.takeDeadPlayers();
-		ArrayList<String> attackingPlayers = gManagerProxy.takePlayerAttacks();
-		ArrayList<String> attackingMinions = gManagerProxy.takeMinionAttacks();
-		HashMap<String, javax.vecmath.Vector2f[]> playersPositions = gManagerProxy
+		List<String> deadMinions = gManagerProxy.takeDeadMinions();
+		List<String> deadPlayers = gManagerProxy.takeDeadPlayers();
+		List<String> attackingPlayers = gManagerProxy.takePlayerAttacks();
+		List<String> attackingMinions = gManagerProxy.takeMinionAttacks();
+		Map<String, javax.vecmath.Vector2f[]> playersPositions = gManagerProxy
 				.getPlayersPositions();
 
-		HashMap<String, javax.vecmath.Vector2f[]> minionsPositions = gManagerProxy
+		Map<String, javax.vecmath.Vector2f[]> minionsPositions = gManagerProxy
 				.getMinionsPositions();
 
 		for( String m : deadMinions )

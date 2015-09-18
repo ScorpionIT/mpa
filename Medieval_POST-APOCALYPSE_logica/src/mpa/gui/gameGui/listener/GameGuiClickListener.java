@@ -1,6 +1,6 @@
 package mpa.gui.gameGui.listener;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import mpa.gui.gameGui.panel.NiftyHandler;
 import mpa.gui.gameGui.playingGUI.GameGui;
@@ -20,7 +20,7 @@ public class GameGuiClickListener implements ActionListener
 
 	private NiftyHandler niftyHandler;
 
-	public GameGuiClickListener(ListenerImplementation listener, GameGui gameGui)
+	public GameGuiClickListener( ListenerImplementation listener, GameGui gameGui )
 	{
 		this.listener = listener;
 		this.gameGui = gameGui;
@@ -30,134 +30,147 @@ public class GameGuiClickListener implements ActionListener
 	static int c = 1;
 
 	@Override
-	public void onAction(String name, boolean isPressed, float tpf)
+	public void onAction( String name, boolean isPressed, float tpf )
 	{
 
 		// System.out.println( "ci sono entrato  per la " + c++ );
 		Vector2f click = gameGui.getInputManager().getCursorPosition();
 
-		Vector3f cursor = gameGui.getCamera().getWorldCoordinates(new Vector2f(click.x, click.y), 0.0f).clone();
+		Vector3f cursor = gameGui.getCamera()
+				.getWorldCoordinates( new Vector2f( click.x, click.y ), 0.0f ).clone();
 
 		// System.out.println( "la pos di cursor è " + cursor );
 
-		Vector3f dir = gameGui.getCamera().getWorldCoordinates(new Vector2f(click.x, click.y), 1.0f).subtractLocal(cursor).normalizeLocal();
+		Vector3f dir = gameGui.getCamera()
+				.getWorldCoordinates( new Vector2f( click.x, click.y ), 1.0f )
+				.subtractLocal( cursor ).normalizeLocal();
 		// System.out.println( "la dir è " + dir );
 
 		Ray ray = new Ray();
 
-		ray.setOrigin(cursor);
-		ray.setDirection(new Vector3f(dir.x, dir.y, dir.z));
+		ray.setOrigin( cursor );
+		ray.setDirection( new Vector3f( dir.x, dir.y, dir.z ) );
 		CollisionResults crs = new CollisionResults();
-		gameGui.getGroundNode().collideWith(ray, crs);
+		gameGui.getGroundNode().collideWith( ray, crs );
 		Vector2f contactPoint;
 
-		if (!isPressed && name.equals("Click") && crs.getClosestCollision() != null)
+		if( !isPressed && name.equals( "Click" ) && crs.getClosestCollision() != null )
 		{
 
 			// TODO controllare che crs non sia null se il click è fuori dal mondo
-			contactPoint = new Vector2f(crs.getClosestCollision().getContactPoint().x, crs.getClosestCollision().getContactPoint().z);
-			String pickedObject = listener.getPickedObject(contactPoint);
+			contactPoint = new Vector2f( crs.getClosestCollision().getContactPoint().x, crs
+					.getClosestCollision().getContactPoint().z );
+			String pickedObject = listener.getPickedObject( contactPoint );
 
-			System.out.println("ho cliccato su " + pickedObject);
-			if (!isPressed && pickedObject.equals("GROUND"))
+			System.out.println( "ho cliccato su " + pickedObject );
+			if( !isPressed && pickedObject.equals( "GROUND" ) )
 			{
-				if (!gameGui.canClick())
+				if( !gameGui.canClick() )
 				{
-					if (niftyHandler.isVisibleSelectionPanel())
+					if( niftyHandler.isVisibleSelectionPanel() )
 					{
 						niftyHandler.removeSelectedPanel();
 					}
-					else if (niftyHandler.isVisibleHeadquarterPanel())
+					else if( niftyHandler.isVisibleHeadquarterPanel() )
 					{
 						niftyHandler.removeHeadquarterPanel();
 					}
 				}
 				else
 				{
-					System.out.println("ci entro?");
-					listener.computePath(contactPoint);
+					System.out.println( "ci entro?" );
+					listener.computePath( contactPoint );
 				}
 
 			}
 
-			else if (!isPressed && !pickedObject.equals("GROUND") && niftyHandler.isVisibleSelectionPanel())
+			else if( !isPressed && !pickedObject.equals( "GROUND" )
+					&& niftyHandler.isVisibleSelectionPanel() )
 			{
 				niftyHandler.removeSelectedPanel();
 			}
-			else if (!pickedObject.equals("GROUND") && !niftyHandler.isVisibleChoosePanel() && !niftyHandler.isVisibleOpponentPropertiesPanel()
-					&& !niftyHandler.isVisibleHeadquarterPanel() && !niftyHandler.isVisibleSelectionPanel())
+			else if( !pickedObject.equals( "GROUND" ) && !niftyHandler.isVisibleChoosePanel()
+					&& !niftyHandler.isVisibleOpponentPropertiesPanel()
+					&& !niftyHandler.isVisibleHeadquarterPanel()
+					&& !niftyHandler.isVisibleSelectionPanel() )
 			{
 
-				String[] split = pickedObject.split(":");
-				String pickedObjectOwner = listener.getPickedObjectOwner(split[0], split[1]);
-				String objectProductivity = Integer.toString(listener.getPickedObjectProductivity(split[0], split[1]));
+				String[] split = pickedObject.split( ":" );
+				String pickedObjectOwner = listener.getPickedObjectOwner( split[0], split[1] );
+				String objectProductivity = Integer.toString( listener.getPickedObjectProductivity(
+						split[0], split[1] ) );
 
-				System.out.println(GuiObjectManager.getInstance().getPlayingPlayer());
-				System.out.println(pickedObjectOwner);
-				if (split[0].toLowerCase().equals("headquarter") && pickedObjectOwner.equals(GuiObjectManager.getInstance().getPlayingPlayer())
-						&& !niftyHandler.isVisibleHeadquarterPanel())
+				System.out.println( GuiObjectManager.getInstance().getPlayingPlayer() );
+				System.out.println( pickedObjectOwner );
+				if( split[0].toLowerCase().equals( "headquarter" )
+						&& pickedObjectOwner.equals( GuiObjectManager.getInstance()
+								.getPlayingPlayer() ) && !niftyHandler.isVisibleHeadquarterPanel() )
 				{
 					niftyHandler.setHeadquarterPanel();
 				}
 				else
 				{
 					niftyHandler.removeSelectedPanel();
-					niftyHandler.setSelectedPanel(split[0], split[1], objectProductivity, pickedObjectOwner);
-					niftyHandler.relocateSelectionPanel((int) click.x, gameGui.windowHeight() - (int) click.y);
+					niftyHandler.setSelectedPanel( split[0], split[1], objectProductivity,
+							pickedObjectOwner );
+					niftyHandler.relocateSelectionPanel( ( int ) click.x, gameGui.windowHeight()
+							- ( int ) click.y );
 				}
 			}
 		}
-		if ("Wheel_DOWN".equals(name) && isPressed)
+		if( "Wheel_DOWN".equals( name ) && isPressed )
 		{
-			if (niftyHandler.isVisibleChoosePanel())
+			if( niftyHandler.isVisibleChoosePanel() )
 			{
-				niftyHandler.changeChoosenElement(false);
+				niftyHandler.changeChoosenElement( false );
 			}
 
 		}
-		else if ("Wheel_UP".equals(name) && isPressed)
+		else if( "Wheel_UP".equals( name ) && isPressed )
 		{
-			if (niftyHandler.isVisibleChoosePanel())
+			if( niftyHandler.isVisibleChoosePanel() )
 			{
-				niftyHandler.changeChoosenElement(true);
+				niftyHandler.changeChoosenElement( true );
 			}
 		}
 
-		else if ("ChooseItem".equals(name))
+		else if( "ChooseItem".equals( name ) )
 		{
-			if (isPressed)
+			if( isPressed )
 			{
-				niftyHandler.relocateChoosePanel((int) click.x, gameGui.windowHeight() - (int) click.y);
+				niftyHandler.relocateChoosePanel( ( int ) click.x, gameGui.windowHeight()
+						- ( int ) click.y );
 			}
-			else if (!isPressed)
+			else if( !isPressed )
 			{
 				String selectedItem = niftyHandler.getSelectedItem();
-				listener.changeItem(selectedItem);
+				listener.changeItem( selectedItem );
 
 				niftyHandler.removeChooseItemPanel();
 			}
 		}
 
-		if ("attack".equals(name) && isPressed)
+		if( "attack".equals( name ) && isPressed )
 		{
 
 			// String player = GuiObjectManager.getInstance().getPlayingPlayer();
 
 			// TODO cambiare azione in base all'item selezionato
-			if (crs.getClosestCollision() != null)
+			if( crs.getClosestCollision() != null )
 			{
 
-				contactPoint = new Vector2f(crs.getClosestCollision().getContactPoint().x, crs.getClosestCollision().getContactPoint().z);
+				contactPoint = new Vector2f( crs.getClosestCollision().getContactPoint().x, crs
+						.getClosestCollision().getContactPoint().z );
 				// contactPoint = new Vector2f(crs.getClosestCollision().getContactPoint().x,
 				// crs.getClosestCollision().getContactPoint().z);
 
-				ArrayList<String> hitPlayers = listener.playerAction(contactPoint);
+				List<String> hitPlayers = listener.playerAction( contactPoint );
 
-				if (hitPlayers.isEmpty())
-					System.out.println("non ho colpito niente");
+				if( hitPlayers.isEmpty() )
+					System.out.println( "non ho colpito niente" );
 				else
-					for (String pl : hitPlayers)
-						System.out.println("ho colpito " + pl);
+					for( String pl : hitPlayers )
+						System.out.println( "ho colpito " + pl );
 
 			}
 		}

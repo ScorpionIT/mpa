@@ -103,4 +103,10 @@ class ThreadManager
 		return pause;
 	}
 
+	public void destroyAllThreads( GameManager gameManager )
+	{
+		// TODO Auto-generated method stub
+
+	}
+
 }

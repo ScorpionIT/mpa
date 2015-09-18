@@ -1,6 +1,7 @@
 package mpa.core.ai;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import mpa.core.logic.GameManager;
 import mpa.core.logic.character.AbstractCharacter;
@@ -10,7 +11,7 @@ import mpa.core.logic.character.Player;
 abstract class AIState
 {
 	protected AbstractCharacter bully = null;
-	protected ArrayList<Enemy> bullies = new ArrayList<>();
+	protected List<Enemy> bullies = new ArrayList<>();
 
 	protected AIState()
 	{

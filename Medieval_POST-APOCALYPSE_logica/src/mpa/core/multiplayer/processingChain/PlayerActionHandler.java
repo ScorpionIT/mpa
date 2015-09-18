@@ -1,6 +1,6 @@
 package mpa.core.multiplayer.processingChain;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.vecmath.Vector2f;
 
@@ -22,7 +22,7 @@ public class PlayerActionHandler extends ProcessingChain
 		{
 			String[] direction = strings[2].split( "," );
 
-			ArrayList<String> hitPlayers = GameManagerProxy.getInstance()
+			List<String> hitPlayers = GameManagerProxy.getInstance()
 					.playerAction(
 							strings[0],
 							new Vector2f( Integer.parseInt( direction[0] ), Integer
