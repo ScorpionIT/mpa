@@ -224,7 +224,9 @@ public class GameManager
 		if( players.contains( p ) )
 			players.remove( p );
 		if( AI_players.keySet().contains( p ) )
+		{
 			AI_players.remove( p );
+		}
 
 		deadPlayers.add( p );
 		writeLock.unlock();
@@ -232,6 +234,7 @@ public class GameManager
 
 	public void killMinion( Minion m )
 	{
+		m.stopMoving();
 		deadMinions.add( m );
 		minionsAlive.remove( m );
 	}
@@ -334,46 +337,19 @@ public class GameManager
 		attackRequests.addRequest( attacker, attacker.getCurrentVector() );
 	}
 
-	private ArrayList<AbstractCharacter> distanceAttack( Player attacker, Potions potion,
-			Vector2f target )
-	{
-		return CombatManager.getInstance().distanceAttack( attacker, potion, target );
-	}
-
 	public ArrayList<Player> playerAction( Player p, Vector2f target )
 	{
-		// Item selectedItem = p.getSelectedItem();
 		ArrayList<Player> hitPlayers = null;
 		if( target != null )
 			p.setDirection( MyMath.computeDirection( p.getPosition(), target ) );
 
-		// switch( selectedItem )
-		// {
-		// case WEAPON:
-		// hitPlayers = attackPhysically( p );
-		// break;
-		// case GRANADE:
-		// hitPlayers = distanceAttack( p, p.takePotion( Potions.GRANADE ), target );
-		// break;
-		// case FLASH_BANG:
-		// hitPlayers = distanceAttack( p, p.takePotion( Potions.FLASH_BANG ), target );
-		// break;
-		// default:
-		// hitPlayers = new ArrayList<>();
-		// hitPlayers.add( p );
-		//
-		// }
-
 		if( p.getSelectedItem().equals( Item.WEAPON ) || p.getSelectedItem().equals( Item.GRANADE )
 				|| p.getSelectedItem().equals( Item.FLASH_BANG ) )
 			attackRequests.addRequest( p, target );
-
-		// for( Player hitPlayer : hitPlayers )
-		// {
-		// if( hitPlayer != p && AI_players.keySet().contains( hitPlayer ) )
-		// AI_players.get( hitPlayer ).gotAttackedBy( p );
-		//
-		// }
+		else if( p.getSelectedItem().equals( Item.HP_POTION ) )
+			p.restoreHealth( Potions.HP );
+		else
+			p.restoreHealth( Potions.MP );
 
 		return hitPlayers;
 	}

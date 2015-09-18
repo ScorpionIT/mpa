@@ -31,11 +31,11 @@ class StrengtheningState extends AIState
 			{
 				p.upgradeLevel();
 
-				System.out.println();
-				System.out.println();
-				System.out.println( "ho uppato di livello" );
-				System.out.println();
-				System.out.println();
+				// System.out.println();
+				// System.out.println();
+				// System.out.println( "ho uppato di livello" );
+				// System.out.println();
+				// System.out.println();
 			}
 			isWalking = false;
 		}

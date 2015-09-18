@@ -23,18 +23,19 @@ class ExplorationState extends AIState
 	{
 		if( opponentAI.player.getName().equals( "Paola Maledetta 2" ) )
 		{
-			System.out.println( "Exploration State" );
-			System.out.println( "da visitare ho ancora " + opponentAI.worldManager.openList.size() );
-			System.out.println( "mentre ne ho visitati "
-					+ opponentAI.worldManager.closedList.size() );
+			// System.out.println( "Exploration State" );
+			// System.out.println( "da visitare ho ancora " +
+			// opponentAI.worldManager.openList.size() );
+			// System.out.println( "mentre ne ho visitati "
+			// + opponentAI.worldManager.closedList.size() );
 			if( pointToReach != null )
 			{
-				System.out.println( "sto cercandoo di andare in  " + pointToReach.toString() );
+				// System.out.println( "sto cercandoo di andare in  " + pointToReach.toString() );
 				if( pointToReach.x == 500 && pointToReach.y == 300 )
 				{
 					ArrayList<Vector2f> path = opponentAI.player.getPath();
-					if( path != null )
-						System.out.println( "e la size del path è " + path.size() );
+					// if( path != null )
+					// System.out.println( "e la size del path è " + path.size() );
 				}
 			}
 		}
@@ -72,8 +73,8 @@ class ExplorationState extends AIState
 			else if( isWalking && pointToReach != null && !pointToReach.equals( p.getPosition() )
 					&& ( p.getPath() == null || p.getPath().isEmpty() ) )
 			{
-				System.out.println( "sono " + opponentAI.player.getName()
-						+ " e sto facendo bruttissimo" );
+				// System.out.println( "sono " + opponentAI.player.getName()
+				// + " e sto facendo bruttissimo" );
 				pointToReach = opponentAI.worldManager.giveMeAnotherLocation( pointToReach,
 						opponentAI.player );
 				GameManager.getInstance().computePath( opponentAI.player, pointToReach.x,
@@ -91,10 +92,10 @@ class ExplorationState extends AIState
 						pointToReach.y );
 				if( pointToReach.x == 500 && pointToReach.y == 300 )
 				{
-					System.out.println( "sto calcolando il path per quel punto" );
+					// System.out.println( "sto calcolando il path per quel punto" );
 					ArrayList<Vector2f> path = opponentAI.player.getPath();
-					if( path != null )
-						System.out.println( "e la size del path è " + path.size() );
+					// if( path != null )
+					// System.out.println( "e la size del path è " + path.size() );
 				}
 			}
 			else

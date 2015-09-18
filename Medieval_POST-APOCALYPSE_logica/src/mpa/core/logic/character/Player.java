@@ -610,11 +610,9 @@ public class Player extends AbstractCharacter
 		}
 
 		if( potion.equals( Potions.HP ) )
-			;
-		// add HPs
+			health += Potions.getHPRestoring( level );
 		else
-			// add MPs
-			;
+			MP += Potions.getMPRestoring( level );
 
 		return true;
 

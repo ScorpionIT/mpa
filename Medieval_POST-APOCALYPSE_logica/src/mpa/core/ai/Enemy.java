@@ -34,7 +34,7 @@ public class Enemy implements Comparable<Enemy>
 		float meToPlayer = MyMath.distanceFloat( mySelf.getPosition(), opponent.getPosition() );
 		float himToPlayer = MyMath.distanceFloat( him.getPosition(), opponent.getPosition() );
 
-		if( meToPlayer <= himToPlayer )
+		if( meToPlayer < himToPlayer )
 			return -1;
 		else if( meToPlayer > himToPlayer )
 			return 1;

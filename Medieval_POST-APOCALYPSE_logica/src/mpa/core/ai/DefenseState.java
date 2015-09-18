@@ -55,10 +55,6 @@ public class DefenseState extends AIState
 				GameManager.getInstance().playerAction( opponentAI.player, bully.getPosition() );
 			} while( !( ( Player ) bully ).isFlashed()
 					&& opponentAI.player.getPotionAmount( Potions.FLASH_BANG ) > 0 );
-
-			System.out.println();
-			System.out.println( "AHIA L'HO FLASHATO" );
-			System.out.println();
 			Vector2f gatheringPlace = opponentAI.player.getHeadquarter().getGatheringPlace();
 			GameManager.getInstance().computePath( opponentAI.player, gatheringPlace.x,
 					gatheringPlace.y );

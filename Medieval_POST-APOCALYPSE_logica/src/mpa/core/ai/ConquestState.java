@@ -29,8 +29,8 @@ public class ConquestState extends AIState
 	void action( OpponentAI opponentAI )
 	{
 		Player player = opponentAI.player;
-		if( opponentAI.player.getName().equals( "Paola Maledetta 2" ) )
-			System.out.println( "Conquest State" );
+		// if( opponentAI.player.getName().equals( "Paola Maledetta 2" ) )
+		// System.out.println( "Conquest State" );
 		if( buildingToOccupy != null && walking )
 		{
 			Vector2f gathPlace = buildingToOccupy.getGatheringPlace();
@@ -192,9 +192,9 @@ public class ConquestState extends AIState
 			{
 				if( opponentAI.player.getName().equals( "Paola Maledetta 2" ) )
 				{
-					System.out.println( "il numero di edifici conquistati è "
-							+ opponentAI.player.getProperties().size() );
-					System.out.println( "il mio chosen per il momento è " + chosen );
+					// System.out.println( "il numero di edifici conquistati è "
+					// + opponentAI.player.getProperties().size() );
+					// System.out.println( "il mio chosen per il momento è " + chosen );
 				}
 				if( abstractPrivateProperty.getNumberOfControllers() < min )
 				{
@@ -206,7 +206,7 @@ public class ConquestState extends AIState
 			{
 				if( opponentAI.player.getName().equals( "Paola Maledetta 2" ) )
 				{
-					System.out.println( "alla fine ho scelto " + chosen );
+					// System.out.println( "alla fine ho scelto " + chosen );
 				}
 				GameManager.getInstance().addWorker( opponentAI.player, chosen );
 			}

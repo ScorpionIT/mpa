@@ -156,7 +156,7 @@ public class OpponentAI extends MyThread
 				playerPotions += p.getPotionAmount( potion );
 			}
 
-			if( opponentPotions < playerPotions )
+			if( opponentPotions <= playerPotions )
 				return true;
 			else
 				return false;

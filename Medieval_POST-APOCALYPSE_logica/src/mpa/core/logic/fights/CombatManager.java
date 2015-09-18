@@ -109,6 +109,7 @@ public class CombatManager
 				}
 				else
 				{
+					p.stopMoving();
 					if( p.inflictDamage( attacker.getDamage() ) && p instanceof Player )
 					{
 						System.out.println( "è morto?" );
@@ -116,7 +117,6 @@ public class CombatManager
 					}
 					else
 					{
-						p.stopMoving();
 						moveHitPlayer( p, attacker.getCurrentVector(), attacker.getDamage() );
 						hitPlayers.add( p );
 					}
@@ -233,8 +233,8 @@ public class CombatManager
 
 	private void moveHitPlayer( AbstractCharacter hit, Vector2f direction, int strength )
 	{
-		Vector2f newPosition = new Vector2f( hit.getX() + direction.x * strength / 5, hit.getY()
-				+ direction.y * strength / 5 );
+		Vector2f newPosition = new Vector2f( hit.getX() + direction.x * strength / 4, hit.getY()
+				+ direction.y * strength / 4 );
 		hit.setPosition( newPosition );
 	}
 
@@ -272,6 +272,8 @@ public class CombatManager
 			GameManager.getInstance().takeLock();
 
 			attacker.getWriteLock();
+
+			playerAttacks.add( attacker );
 
 			if( attacker.getMP() < MP_REQUIRED_FOR_DISTANCE_ATTACK
 					|| attacker.getPotionAmount( Potions.GRANADE ) == 0 )
@@ -324,6 +326,7 @@ public class CombatManager
 					else
 					{
 						int damage = ( int ) ( ( Potions.granadeDamage() * distance ) / collisionRay );
+						p.stopMoving();
 						if( p.inflictDamage( Potions.granadeDamage() - damage ) )
 						{
 							System.out.println( "è morto?" );
