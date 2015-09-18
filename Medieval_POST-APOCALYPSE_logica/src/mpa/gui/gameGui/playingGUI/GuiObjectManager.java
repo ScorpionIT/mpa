@@ -450,7 +450,7 @@ public class GuiObjectManager
 		gameGui.detachMobileObject(players.get(name));
 		animationControllerSpatial.remove(players.get(name));
 		players.remove(name);
-		playersCirlces.remove(name);
+		gameGui.detachCircle(playersCirlces.remove(name));
 		playersColors.remove(name);
 		gameGui.getNiftyHandler().removePayer(name);
 	}
