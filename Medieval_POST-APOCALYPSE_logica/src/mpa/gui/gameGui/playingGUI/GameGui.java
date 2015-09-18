@@ -42,13 +42,14 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	boolean cursorOnTheLeftEdge = false;
 	boolean cursorOnTheTopEdge = false;
 	boolean cursorOnTheBottomEdge = false;
-	private float cameraHeight = 750;// 120
+	private float cameraHeight = 200;// 120
 	// private float scalingFactor = 2.2f;
 	private float lz = (float) Math.sqrt(Math.pow(cameraHeight / Math.sin(90), 2) - Math.pow(cameraHeight, 2)); // sin(40)
 
 	private Node groundNode;
 	private Node mobileObjects = new Node("Mobile Objects");
 	private Node staticObjects = new Node("Static Objects");
+	private Node circlesUnderPlayers = new Node("Players' Circles");
 	Node spheres = new Node("palline");
 
 	private String playingPlayer;
@@ -85,6 +86,7 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 		listenerImplementation.createStateInformation();
 		rootNode.attachChild(staticObjects);
 		rootNode.attachChild(mobileObjects);
+		mobileObjects.attachChild(circlesUnderPlayers);
 
 		mouseActionListener = new GameGuiMouseListener(this);
 		clickActionListener = new GameGuiClickListener(listenerImplementation, this);
@@ -114,6 +116,16 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	void attachStaticObject(Spatial model)
 	{
 		staticObjects.attachChild(model);
+	}
+
+	void attachCircle(Spatial cirlce)
+	{
+		circlesUnderPlayers.attachChild(cirlce);
+	}
+
+	void detachCircle(Spatial cirlce)
+	{
+		circlesUnderPlayers.detachChild(cirlce);
 	}
 
 	protected void makeFloor(float worldDimension)

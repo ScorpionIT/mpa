@@ -19,6 +19,7 @@ public class SelectionPanel
 	private int panelWidth;
 	private int panelHeight;
 	private ImageBuilder createTowerButton;
+	private ImageBuilder attackTowerButton;
 	private String objectName;
 
 	public SelectionPanel(int windowWidth, int windowHeight)
@@ -52,6 +53,22 @@ public class SelectionPanel
 				y("50%");
 				visible(false);
 				interactOnClick("onClickButtonCreateTowerButton()");
+
+			}
+
+		};
+
+		attackTowerButton = new ImageBuilder()
+		{
+			{
+				filename("createTower.png");
+				width("35%");
+				height("35%");
+
+				x("23%");
+				y("50%");
+				visible(false);
+				interactOnClick("onClickButtonAttackTowerButton()");
 
 			}
 
@@ -106,6 +123,7 @@ public class SelectionPanel
 				image(occupyButton);
 				control(productivityLabel);
 				image(createTowerButton);
+				image(attackTowerButton);
 
 			}
 		};
@@ -126,6 +144,7 @@ public class SelectionPanel
 		this.objectName = objectName;
 		this.objectNameLabel.text(objectName);
 		this.objectNameLabel.visible(true);
+
 	}
 
 	public void setObjectOwner(String playerName)
@@ -140,6 +159,10 @@ public class SelectionPanel
 		{
 			productivityLabel.y("37%");
 			this.objectOwner.text("Owner: " + playerName);
+
+			if (/* playerName.equals(GuiObjectManager.getInstance().getPlayingPlayer()) && */(objectName.toLowerCase().equals("tower")))
+				attackTowerButton.visible(true);
+
 			objectOwner.visible(true);
 
 			occupyButton.visible(false);

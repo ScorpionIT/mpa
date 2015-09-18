@@ -203,4 +203,13 @@ public class SinglePlayerController extends ListenerImplementation
 	{
 		return gManagerProxy.getPlayersName();
 	}
+
+	@Override
+	public String createTowerCrusher(String boss, String target)
+	{
+		ArrayList<String> towerCrusher = gManagerProxy.createTowerCrushers(boss, target);
+		GuiObjectManager.getInstance().addTowerCrusher(towerCrusher.get(0));
+
+		return towerCrusher.get(0);
+	}
 }

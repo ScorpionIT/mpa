@@ -1,7 +1,9 @@
 package mpa.gui.gameGui.playingGUI;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import javax.vecmath.Vector2f;
 
@@ -19,10 +21,10 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.shape.Sphere;
-import com.jme3.util.TangentBinormalGenerator;
 //import mpa.gui.gameGui.listener.GameGuiClickListener;
 //import mpa.gui.gameGui.listener.GameGuiKeyActionListener;
+import com.jme3.scene.shape.Sphere;
+import com.jme3.util.TangentBinormalGenerator;
 
 public class GuiObjectManager
 {
@@ -38,6 +40,10 @@ public class GuiObjectManager
 	private HashMap<String, Spatial> towers = new HashMap<>();
 	private HashMap<String, Spatial> hitPlayers = new HashMap<>();
 	private ArrayList<Vector2f> pointToVisit = new ArrayList<>();
+
+	private HashMap<String, Circle2D> playersCirlces = new HashMap<>();
+
+	private HashMap<String, Color> playersColors = new HashMap<>();
 
 	private HashMap<Spatial, SpatialAnimationController> animationControllerSpatial = new HashMap<>();
 	private ArrayList<Vector2f> path = null;
@@ -144,7 +150,10 @@ public class GuiObjectManager
 		gameGui.getAssetManager().registerLocator("./Assets/Models/Skeleton.zip", ZipLocator.class);
 		Spatial playerModel = gameGui.getAssetManager().loadModel("Skeleton.mesh.xml");
 		playerModel.scale(MyMath.scaleFactor(getModelBounds(playerModel), "player"));
-		playerModel.setLocalTranslation(new Vector3f(gatheringPlace.x, 10, gatheringPlace.y));
+
+		Vector3f playerPosition = new Vector3f(gatheringPlace.x, 10, gatheringPlace.y);
+		playerModel.setLocalTranslation(playerPosition);
+		addPlayerCircle(playerPosition, name);
 
 		animationControllerSpatial.put(playerModel, new SpatialAnimationController(playerModel, this, name, "player"));
 
@@ -168,6 +177,16 @@ public class GuiObjectManager
 		gameGui.attachStaticObject(hqModel);
 
 		System.out.println("casa dopo dello scale = " + getModelBounds(hqModel));
+
+	}
+
+	private void addPlayerCircle(Vector3f position, String playerName)
+	{
+		Color color = new Color(new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat(), 0.8f);
+		Circle2D circle2D = createCircle(color, GameProperties.getInstance().getObjectWidth("player") * 2);
+		gameGui.attachCircle(circle2D);
+		playersCirlces.put(playerName, circle2D);
+		playersColors.put(playerName, color);
 
 	}
 
@@ -220,19 +239,20 @@ public class GuiObjectManager
 				model = gameGui.getAssetManager().loadModel("Tree.mesh.xml");
 				model.scale(MyMath.scaleFactor(getModelBounds(model), "wood"));
 				woods.put(ID, model);
+				model.rotate(90, 0, 0);
 				break;
 			case "FIELD":
 				gameGui.getAssetManager().registerLocator("Assets/Models/CornField.zip", ZipLocator.class);
 				model = gameGui.getAssetManager().loadModel("CornField.mesh.xml");
 				model.scale(MyMath.scaleFactor(getModelBounds(model), "field"));
 				fields.put(ID, model);
+				model.rotate(90, 0, 0);
 				break;
 			case "CAVE":
 				gameGui.getAssetManager().registerLocator("Assets/Models/stones.zip", ZipLocator.class);
 				model = gameGui.getAssetManager().loadModel("stones.mesh.xml");
 				System.out.println("prima dello scale + " + getModelBounds(model));
-				model.setLocalScale(MyMath.scaleFactor(getModelBounds(model), "cave"));
-				// model.scale( MyMath.scaleFactor( getModelBounds( model ), "cave" ) );
+				model.scale(MyMath.scaleFactor(getModelBounds(model), "cave"));
 				System.out.println("dopo dello scale + " + getModelBounds(model));
 				caves.put(ID, model);
 				break;
@@ -241,20 +261,27 @@ public class GuiObjectManager
 				model = gameGui.getAssetManager().loadModel("Tree.mesh.xml");
 				model.scale(MyMath.scaleFactor(getModelBounds(model), "mine"));
 				mines.put(ID, model);
+				model.rotate(90, 0, 0);
 				break;
 		// TODO
 		}
 
-		model.setLocalTranslation(new Vector3f(position.x, 10, position.y));
+		model.setLocalTranslation(new Vector3f(position.x, 0, position.y));
 		addSphere(position.x, position.y);
 
-		model.rotate(90, 0, 0);
 		gameGui.attachStaticObject(model);
 
 	}
 
+	private Circle2D createCircle(Color color, float radius)
+	{
+		Circle2D circle2D = new Circle2D(gameGui.getAssetManager(), radius, 0, 360, color, 360);
+		return circle2D;
+	}
+
 	private void addSphere(float x, float y)
 	{
+
 		Sphere sphereMesh = new Sphere(10, 10, 9f);
 		Geometry sphereGeo = new Geometry("Shiny rock", sphereMesh);
 		sphereMesh.setTextureMode(Sphere.TextureMode.Projected); // better quality on spheres
@@ -326,7 +353,10 @@ public class GuiObjectManager
 			quad.lookAt(vector, upVector);
 
 			player.setLocalRotation(quad);
-			player.setLocalTranslation(position.x, 10, position.y);
+			player.setLocalTranslation(position.x, 15, position.y);
+
+			Circle2D circle2d = playersCirlces.get(name);
+			circle2d.setLocalTranslation(position.x - circle2d.getRadius() / 2, 1, position.y + circle2d.getRadius() / 2);
 		}
 	}
 
@@ -420,7 +450,14 @@ public class GuiObjectManager
 		gameGui.detachMobileObject(players.get(name));
 		animationControllerSpatial.remove(players.get(name));
 		players.remove(name);
+		playersCirlces.remove(name);
+		playersColors.remove(name);
 		gameGui.getNiftyHandler().removePayer(name);
+	}
+
+	public HashMap<String, Color> getPlayersColors()
+	{
+		return playersColors;
 	}
 
 	public void removeMinion(String ID)

@@ -28,8 +28,9 @@ public class OpponentResourcesPanel
 	private HashMap<String, LabelBuilder> resourcesValueLabel = new HashMap<>();
 	private LabelBuilder labelNameBuilder;
 	private LabelBuilder labelHPAndMP;
+	private Color playerColor;
 
-	public OpponentResourcesPanel(HashMap<String, Integer> resources, int x, int y, int width, int height, String playerName)
+	public OpponentResourcesPanel(HashMap<String, Integer> resources, int x, int y, int width, int height, String playerName, Color color)
 	{
 		this.resources = resources;
 		this.x = x;
@@ -38,6 +39,7 @@ public class OpponentResourcesPanel
 		this.height = height;
 		this.playerName = playerName;
 		// this.playerName = this.playerName.replaceAll( "\\s+", "" );
+		playerColor = color;
 
 		widthPanel = 100 / resources.size();
 		initResources();
@@ -158,7 +160,7 @@ public class OpponentResourcesPanel
 				height(Integer.toString(height) + "%");
 				x(Integer.toString(x) + "%");
 				y(Integer.toString(y) + "%");
-				color(Color.BLACK);
+				color(playerColor);
 
 			}
 		};

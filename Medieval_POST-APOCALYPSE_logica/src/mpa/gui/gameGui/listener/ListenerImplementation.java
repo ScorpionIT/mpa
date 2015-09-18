@@ -24,6 +24,8 @@ public abstract class ListenerImplementation
 
 	public abstract ArrayList<String> createMinions(String boss, String target, int quantity);
 
+	public abstract String createTowerCrusher(String boss, String target);
+
 	public abstract void updateInformation();
 
 	public abstract void createStateInformation();

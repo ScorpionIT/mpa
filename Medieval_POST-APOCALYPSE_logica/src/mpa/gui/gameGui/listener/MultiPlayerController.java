@@ -154,4 +154,11 @@ public class MultiPlayerController extends ListenerImplementation
 		return null;
 	}
 
+	@Override
+	public String createTowerCrusher(String boss, String target)
+	{
+		// TODO Stub di metodo generato automaticamente
+		return null;
+	}
+
 }

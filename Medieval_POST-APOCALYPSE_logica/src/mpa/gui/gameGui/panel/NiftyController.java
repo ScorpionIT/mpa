@@ -33,6 +33,11 @@ public class NiftyController implements ScreenController
 
 	}
 
+	public void onClickButtonAttackTowerButton()
+	{
+		gameController.createTowerCrusher(GuiObjectManager.getInstance().getPlayingPlayer(), niftyHandler.getSelectedObjectID());
+	}
+
 	public void onClickButtonOccupy()
 	{
 

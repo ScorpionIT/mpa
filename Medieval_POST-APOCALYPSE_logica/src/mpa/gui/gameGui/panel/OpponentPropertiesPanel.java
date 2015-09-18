@@ -1,5 +1,6 @@
 package mpa.gui.gameGui.panel;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -32,6 +33,7 @@ public class OpponentPropertiesPanel
 	int numberOfPages;
 	ButtonBuilder buttonForwardBuilder = null;
 	ButtonBuilder buttonBackBuilder = null;
+	private boolean inizialized = false;
 
 	private LinkedHashMap<String, OpponentResourcesPanel> playersResources = new LinkedHashMap<>();
 
@@ -74,8 +76,6 @@ public class OpponentPropertiesPanel
 		mainPanelBuilder.set("x", "20%");
 		mainPanelBuilder.set("y", "20%");
 
-		inizializePanels();
-
 		// TODO NON CREA TUTTI I PANNELLI
 		// System.out.println( "NUMERO DI PANNELLI " + playersResources.size() );
 
@@ -99,12 +99,17 @@ public class OpponentPropertiesPanel
 
 	private void inizializePanels()
 	{
-
+		if (inizialized)
+			return;
+		else
+			inizialized = true;
 		int y = startY;
 
 		int index = 0;
 
 		HashMap<String, HashMap<String, Integer>> playersResourceAmount = gameController.getPlayersResourceAmount();
+		HashMap<String, Color> playersColors = GuiObjectManager.getInstance().getPlayersColors();
+
 		Set<String> playerList = playersResourceAmount.keySet();
 		for (String playerName : playerList)
 		{
@@ -117,7 +122,10 @@ public class OpponentPropertiesPanel
 			{
 				HashMap<String, Integer> resources = playersResourceAmount.get(playerName);
 
-				OpponentResourcesPanel opponentResourcesPanel = new OpponentResourcesPanel(resources, x, y, 80, heightPanel, playerName);
+				de.lessvoid.nifty.tools.Color color = new de.lessvoid.nifty.tools.Color((float) playersColors.get(playerName).getRed() / 255,
+						(float) playersColors.get(playerName).getGreen() / 255, (float) playersColors.get(playerName).getBlue() / 255, 1);
+
+				OpponentResourcesPanel opponentResourcesPanel = new OpponentResourcesPanel(resources, x, y, 80, heightPanel, playerName, color);
 
 				opponentResourcesPanel.setPlayerLevel(gameController.getPlayerLevel(playerName));
 				opponentResourcesPanel.setPlayerHPAndMP(gameController.getPlayerHP(playerName), gameController.getPlayerMP(playerName));
@@ -240,6 +248,7 @@ public class OpponentPropertiesPanel
 
 	public void update()
 	{
+		inizializePanels();
 
 		HashMap<String, HashMap<String, Integer>> playersResourceAmount = gameController.getPlayersResourceAmount();
 		Set<String> keySet = playersResourceAmount.keySet();
@@ -248,7 +257,9 @@ public class OpponentPropertiesPanel
 			// System.out.println( playerName );
 			if (!playerName.equals(GuiObjectManager.getInstance().getPlayingPlayer()) && playersResources.get(playerName) != null)
 			{
+
 				HashMap<String, Integer> resources = playersResourceAmount.get(playerName);
+
 				playersResources.get(playerName).updateResources(resources);
 				playersResources.get(playerName).setPlayerLevel(gameController.getPlayerLevel(playerName));
 
