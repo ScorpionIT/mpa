@@ -1,6 +1,7 @@
 package mpa.gui.gameGui.panel;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import de.lessvoid.nifty.Nifty;
@@ -21,7 +22,7 @@ public class OpponentResourcesPanel
 	private int width;
 	private int y;
 	private int x;
-	private HashMap<String, Integer> resources;
+	private Map<String, Integer> resources;
 	private int widthPanel;
 	private String playerName;
 	private HashMap<String, LabelBuilder> resourcesValueLabel = new HashMap<>();
@@ -29,7 +30,8 @@ public class OpponentResourcesPanel
 	private LabelBuilder labelHPAndMP;
 	private Color playerColor;
 
-	public OpponentResourcesPanel(HashMap<String, Integer> resources, int x, int y, int width, int height, String playerName, Color color)
+	public OpponentResourcesPanel( Map<String, Integer> resources, int x, int y, int width,
+			int height, String playerName, Color color )
 	{
 		this.resources = resources;
 		this.x = x;
@@ -49,23 +51,23 @@ public class OpponentResourcesPanel
 	private void initResourcePanel()
 	{
 
-		labelNameBuilder = getLabelCenterBuilder(playerName, x + 20, 0, 15);
+		labelNameBuilder = getLabelCenterBuilder( playerName, x + 20, 0, 15 );
 
-		labelHPAndMP = getLabelCenterBuilder(playerName + "HP_MP", x + 20, 15, 15);
+		labelHPAndMP = getLabelCenterBuilder( playerName + "HP_MP", x + 20, 15, 15 );
 
-		resourcesPanel = new PanelBuilder("#resources" + playerName)
+		resourcesPanel = new PanelBuilder( "#resources" + playerName )
 		{
 
 			{
 				childLayoutAbsoluteInside();
 
-				width(Integer.toString(width) + "%");
-				height(Integer.toString(height) + "%");
-				x(Integer.toString(x) + "%");
-				y(Integer.toString(y) + "%");
-				control(labelNameBuilder);
-				control(labelHPAndMP);
-				visibleToMouse(true);
+				width( Integer.toString( width ) + "%" );
+				height( Integer.toString( height ) + "%" );
+				x( Integer.toString( x ) + "%" );
+				y( Integer.toString( y ) + "%" );
+				control( labelNameBuilder );
+				control( labelHPAndMP );
+				visibleToMouse( true );
 
 			}
 
@@ -80,106 +82,109 @@ public class OpponentResourcesPanel
 		xPanel = 0;
 
 		Set<String> keySet = resources.keySet();
-		for (final String resource : keySet)
+		for( final String resource : keySet )
 		{
-			resourcesPanel.panel(getPanelBuilder(resource.toString(), resource.toString() + ".png"));
+			resourcesPanel.panel( getPanelBuilder( resource.toString(), resource.toString()
+					+ ".png" ) );
 			xPanel += widthPanel;
 		}
 	}
 
-	public void setPlayerLevel(final String level)
+	public void setPlayerLevel( final String level )
 	{
-		labelNameBuilder.text(playerName + " (" + level + ")");
+		labelNameBuilder.text( playerName + " (" + level + ")" );
 
 	}
 
-	public void setPlayerHPAndMP(int HP, int MP)
+	public void setPlayerHPAndMP( int HP, int MP )
 	{
-		labelHPAndMP.text("HP: " + HP + " " + "MP: " + MP);
+		labelHPAndMP.text( "HP: " + HP + " " + "MP: " + MP );
 
 	}
 
-	private ImageBuilder getImageBuilder(final String fileName)
+	private ImageBuilder getImageBuilder( final String fileName )
 	{
 		return new ImageBuilder()
 		{
 			{
-				filename(fileName);
+				filename( fileName );
 
-				y("40%");
-				width("40%");
-				height("40%");
+				y( "40%" );
+				width( "40%" );
+				height( "40%" );
 
 			}
 		};
 	}
 
-	private PanelBuilder getPanelBuilder(final String resourceName, final String fileName)
+	private PanelBuilder getPanelBuilder( final String resourceName, final String fileName )
 	{
 
-		return new PanelBuilder("#" + resourceName + "Panel" + playerName)
+		return new PanelBuilder( "#" + resourceName + "Panel" + playerName )
 		{
 			{
 				childLayoutCenter();
 
 				valignTop();
-				x(Integer.toString(xPanel) + "%");
-				y("38%");
+				x( Integer.toString( xPanel ) + "%" );
+				y( "38%" );
 
-				width(Integer.toString(widthPanel) + "%");
-				height("72%");
+				width( Integer.toString( widthPanel ) + "%" );
+				height( "72%" );
 
-				control(getLabelBuilder(resourceName));
-				image(getImageBuilder(fileName));
+				control( getLabelBuilder( resourceName ) );
+				image( getImageBuilder( fileName ) );
 
-				control(resourcesValueLabel.get(resourceName));
+				control( resourcesValueLabel.get( resourceName ) );
 			}
 		};
 	}
 
-	private LabelBuilder getLabelBuilder(final String text)
+	private LabelBuilder getLabelBuilder( final String text )
 	{
-		return new LabelBuilder("#" + text + "Label " + playerName)
+		return new LabelBuilder( "#" + text + "Label " + playerName )
 		{
 			{
-				text(text);
+				text( text );
 				valignTop();
 
 			}
 		};
 	}
 
-	private LabelBuilder getLabelBuilder(final String text, final int x, final int y, final int width, final int height)
+	private LabelBuilder getLabelBuilder( final String text, final int x, final int y,
+			final int width, final int height )
 	{
 
-		return new LabelBuilder("# " + "Label" + playerName)
+		return new LabelBuilder( "# " + "Label" + playerName )
 		{
 			{
 				childLayoutAbsoluteInside();
-				width(Integer.toString(width) + "%");
-				height(Integer.toString(height) + "%");
-				x(Integer.toString(x) + "%");
-				y(Integer.toString(y) + "%");
-				backgroundColor(new de.lessvoid.nifty.tools.Color(1f, 1f, 1f, 0.8f));
-				color(playerColor);
+				width( Integer.toString( width ) + "%" );
+				height( Integer.toString( height ) + "%" );
+				x( Integer.toString( x ) + "%" );
+				y( Integer.toString( y ) + "%" );
+				backgroundColor( new de.lessvoid.nifty.tools.Color( 1f, 1f, 1f, 0.8f ) );
+				color( playerColor );
 
 			}
 		};
 	}
 
-	private LabelBuilder getLabelCenterBuilder(final String text, final int x, final int y, final int height)
+	private LabelBuilder getLabelCenterBuilder( final String text, final int x, final int y,
+			final int height )
 	{
 
-		return new LabelBuilder("# " + "Label" + playerName)
+		return new LabelBuilder( "# " + "Label" + playerName )
 		{
 			{
 				childLayoutAbsoluteInside();
 				alignCenter();
-				height(Integer.toString(height) + "%");
-				x(Integer.toString(x) + "%");
-				y(Integer.toString(y) + "%");
-				backgroundColor(new de.lessvoid.nifty.tools.Color(1f, 1f, 1f, 0.8f));
-				color(playerColor);
+				height( Integer.toString( height ) + "%" );
+				x( Integer.toString( x ) + "%" );
+				y( Integer.toString( y ) + "%" );
+				backgroundColor( new de.lessvoid.nifty.tools.Color( 1f, 1f, 1f, 0.8f ) );
+				color( playerColor );
 
 			}
 		};
@@ -189,29 +194,31 @@ public class OpponentResourcesPanel
 	{
 
 		Set<String> keySet = resources.keySet();
-		for (final String resource : keySet)
+		for( final String resource : keySet )
 		{
-			resourcesValueLabel.put(resource.toString(), new LabelBuilder("#Avaible " + resource.toString() + " Label " + playerName)
-			{
-				{
-					valignBottom();
-					text(Integer.toString(resources.get(resource)));
-					// color(Color.BLACK);
+			resourcesValueLabel.put( resource.toString(),
+					new LabelBuilder( "#Avaible " + resource.toString() + " Label " + playerName )
+					{
+						{
+							valignBottom();
+							text( Integer.toString( resources.get( resource ) ) );
+							// color(Color.BLACK);
 
-				}
-			});
+						}
+					} );
 		}
 
 	}
 
-	public void updateResources(HashMap<String, Integer> resources)
+	public void updateResources( Map<String, Integer> resources )
 	{
 		this.resources = resources;
 
 		Set<String> keySet = this.resources.keySet();
-		for (String resource : keySet)
+		for( String resource : keySet )
 		{
-			resourcesValueLabel.get(resource.toString()).text(Integer.toString(resources.get(resource)));
+			resourcesValueLabel.get( resource.toString() ).text(
+					Integer.toString( resources.get( resource ) ) );
 		}
 	}
 
@@ -220,9 +227,9 @@ public class OpponentResourcesPanel
 		return resourcesPanel;
 	}
 
-	public Element build(Nifty nifty, Screen currentScreen, Element parent)
+	public Element build( Nifty nifty, Screen currentScreen, Element parent )
 	{
-		return resourcesPanel.build(nifty, currentScreen, parent);
+		return resourcesPanel.build( nifty, currentScreen, parent );
 	}
 
 }

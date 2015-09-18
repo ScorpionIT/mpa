@@ -235,7 +235,9 @@ public class CombatManager
 	{
 		Vector2f newPosition = new Vector2f( hit.getX() + direction.x * strength / 4, hit.getY()
 				+ direction.y * strength / 4 );
-		hit.setPosition( newPosition );
+		if( GameManager.getInstance().getWorld()
+				.checkForCollision( newPosition.x, newPosition.y, hit.getCollisionRay() ).isEmpty() )
+			hit.setPosition( newPosition );
 	}
 
 	public ArrayList<Tower> attackOnTower( TowerCrusher tC )

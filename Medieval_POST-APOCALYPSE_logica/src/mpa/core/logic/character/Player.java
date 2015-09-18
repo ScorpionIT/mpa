@@ -2,6 +2,8 @@ package mpa.core.logic.character;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.vecmath.Vector2f;
 
@@ -32,12 +34,12 @@ public class Player extends AbstractCharacter
 	private float rangeOfDistanceAttack = 30;
 	private float distanceAttackRayOfCollision = 12;
 	private boolean flashed = false;
-	private ArrayList<Tower> towers = new ArrayList<>();
-	private ArrayList<AbstractPrivateProperty> properties = new ArrayList<>();
+	private List<Tower> towers = new ArrayList<>();
+	private List<AbstractPrivateProperty> properties = new ArrayList<>();
 
-	private HashMap<String, Integer> resources = new HashMap<>();
+	private Map<String, Integer> resources = new HashMap<>();
 
-	private HashMap<Potions, Integer> potions = new HashMap<>();
+	private Map<Potions, Integer> potions = new HashMap<>();
 
 	public Player( String name, float x, float y, int health, Level level, Headquarter headquarter )
 	{
@@ -94,7 +96,7 @@ public class Player extends AbstractCharacter
 		}
 	}
 
-	public ArrayList<AbstractPrivateProperty> getProperties()
+	public List<AbstractPrivateProperty> getProperties()
 	{
 		try
 		{
@@ -552,7 +554,7 @@ public class Player extends AbstractCharacter
 		writeLock.unlock();
 	}
 
-	public HashMap<String, Integer> getResources()
+	public Map<String, Integer> getResources()
 	{
 		try
 		{
@@ -614,11 +616,15 @@ public class Player extends AbstractCharacter
 		else
 			MP += Potions.getMPRestoring( level );
 
+		if( health > 100 )
+			health = 100;
+		if( MP > 100 )
+			MP = 100;
 		return true;
 
 	}
 
-	public ArrayList<Tower> getTowers()
+	public List<Tower> getTowers()
 	{
 		try
 		{

@@ -1,6 +1,6 @@
 package mpa.core.multiplayer.processingChain;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import mpa.core.logic.GameManagerProxy;
 
@@ -20,7 +20,7 @@ public class GetResourcesAmountHandler extends ProcessingChain
 
 		if( strings.length == 1 && strings[0].equals( "getResourcesAmount" ) )
 		{
-			HashMap<String, HashMap<String, Integer>> playersResourceAmount = GameManagerProxy
+			Map<String, Map<String, Integer>> playersResourceAmount = GameManagerProxy
 					.getInstance().getPlayersResourceAmount();
 
 			String[] resourcesAmount = new String[playersResourceAmount.keySet().size() * 6];

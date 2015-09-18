@@ -1,6 +1,6 @@
 package mpa.core.logic.character;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import mpa.core.logic.GameManager;
 import mpa.core.logic.building.Headquarter;
@@ -39,7 +39,7 @@ public class TowerCrusher extends AbstractCharacter
 						enemy = p;
 						break;
 					}
-			ArrayList<Tower> towers = enemy.getTowers();
+			List<Tower> towers = enemy.getTowers();
 
 			float minDistance = Float.MAX_VALUE;
 

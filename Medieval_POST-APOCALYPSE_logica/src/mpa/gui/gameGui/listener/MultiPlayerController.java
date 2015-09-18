@@ -2,6 +2,7 @@ package mpa.gui.gameGui.listener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import com.jme3.math.Vector2f;
@@ -22,49 +23,49 @@ public class MultiPlayerController extends ListenerImplementation
 	}
 
 	@Override
-	public HashMap<String, HashMap<String, Integer>> getPlayersResourceAmount()
+	public Map<String, Map<String, Integer>> getPlayersResourceAmount()
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String getPickedObject(Vector2f click)
+	public String getPickedObject( Vector2f click )
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void changeItem(String item)
+	public void changeItem( String item )
 	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public ArrayList<String> playerAction(Vector2f direction)
+	public ArrayList<String> playerAction( Vector2f direction )
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean occupyProperty(String property)
+	public boolean occupyProperty( String property )
 	{
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public String createTower(String property)
+	public String createTower( String property )
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ArrayList<String> createMinions(String boss, String target, int quantity)
+	public ArrayList<String> createMinions( String boss, String target, int quantity )
 	{
 		// TODO Auto-generated method stub
 		return null;
@@ -85,28 +86,28 @@ public class MultiPlayerController extends ListenerImplementation
 	}
 
 	@Override
-	public void computePath(Vector2f click)
+	public void computePath( Vector2f click )
 	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public String getPickedObjectOwner(String objectType, String objectID)
+	public String getPickedObjectOwner( String objectType, String objectID )
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public int getPickedObjectProductivity(String objectType, String objectID)
+	public int getPickedObjectProductivity( String objectType, String objectID )
 	{
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public HashMap<String, Integer> getPlayerResourcesAmount(String playerName)
+	public HashMap<String, Integer> getPlayerResourcesAmount( String playerName )
 	{
 		// TODO Auto-generated method stub
 		return null;
@@ -120,28 +121,28 @@ public class MultiPlayerController extends ListenerImplementation
 	}
 
 	@Override
-	public void computePath(Vector2f click, String playerName)
+	public void computePath( Vector2f click, String playerName )
 	{
 		// TODO Stub di metodo generato automaticamente
 
 	}
 
 	@Override
-	public String getPlayerLevel(String player)
+	public String getPlayerLevel( String player )
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public int getPlayerHP(String player)
+	public int getPlayerHP( String player )
 	{
 		// TODO Stub di metodo generato automaticamente
 		return 0;
 	}
 
 	@Override
-	public int getPlayerMP(String player)
+	public int getPlayerMP( String player )
 	{
 		// TODO Stub di metodo generato automaticamente
 		return 0;
@@ -155,7 +156,7 @@ public class MultiPlayerController extends ListenerImplementation
 	}
 
 	@Override
-	public String createTowerCrusher(String boss, String target)
+	public String createTowerCrusher( String boss, String target )
 	{
 		// TODO Stub di metodo generato automaticamente
 		return null;
