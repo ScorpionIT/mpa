@@ -14,6 +14,7 @@ public class TowerCrusher extends AbstractCharacter
 	private Player boss;
 	private Player enemy;
 	private Tower target;
+	private int health = 10;
 
 	public TowerCrusher( String name, float x, float y, int health, Headquarter headquarter,
 			Player boss, Player enemy, Tower target )
@@ -58,6 +59,12 @@ public class TowerCrusher extends AbstractCharacter
 			GameManager.getInstance().attackPhysically( this );
 
 		return super.movePlayer();
+	}
+
+	@Override
+	public boolean amIAlive()
+	{
+		return health > 0;
 	}
 
 	public Tower getTarget()

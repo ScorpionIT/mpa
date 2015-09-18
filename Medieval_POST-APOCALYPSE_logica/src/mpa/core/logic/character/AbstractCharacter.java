@@ -282,4 +282,14 @@ public abstract class AbstractCharacter extends AbstractObject
 	{
 		return name;
 	}
+
+	public boolean amIAlive()
+	{
+		return true;
+	}
+
+	public boolean inflictDamage( int physicallAttackDamage )
+	{
+		return false;
+	}
 }

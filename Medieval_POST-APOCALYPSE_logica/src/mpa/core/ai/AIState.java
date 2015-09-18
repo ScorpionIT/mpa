@@ -1,19 +1,24 @@
 package mpa.core.ai;
 
+import java.util.ArrayList;
+
 import mpa.core.logic.GameManager;
+import mpa.core.logic.character.AbstractCharacter;
 import mpa.core.logic.character.Player;
 
 abstract class AIState
 {
-	protected Player bully = null;
+	protected AbstractCharacter bully = null;
+	protected ArrayList<Enemy> bullies = new ArrayList<>();
 
 	protected AIState()
 	{
 	}
 
-	void heIsAttackingYou( Player p )
+	void heIsAttackingYou( AbstractCharacter p, Player mySelf )
 	{
-		bully = p;
+		// bully = p;
+		bullies.add( 0, new Enemy( p, mySelf ) );
 	}
 
 	abstract void action( OpponentAI opponentAI );
@@ -39,8 +44,8 @@ abstract class AIState
 			return this;
 		if( shouldIFight )
 			return new CombatState( prey );
-		if( bully != null )
-			return new DefenseState( opponentAI, bully );
+		if( bullies != null && !bullies.isEmpty() )
+			return new DefenseState( opponentAI, bullies );
 
 		return null;
 	}

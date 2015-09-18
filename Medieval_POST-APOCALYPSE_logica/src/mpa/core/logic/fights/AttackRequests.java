@@ -41,13 +41,13 @@ public class AttackRequests extends MyThread
 		{
 			lock.lock();
 			super.run();
-			ArrayList<Player> hitPlayers = new ArrayList<>();
+			ArrayList<AbstractCharacter> hitPlayers = new ArrayList<>();
 			if( !attackList.isEmpty() )
 			{
 				AbstractCharacter attacker = attackList.remove( 0 );
 				Vector2f target = targets.get( 0 );
 				if( attacker instanceof Minion )
-					CombatManager.getInstance().attackPhysically( ( Minion ) attacker );
+					hitPlayers = CombatManager.getInstance().attackPhysically( ( Minion ) attacker );
 				else if( attacker instanceof Player )
 				{
 					Player player = ( Player ) attacker;
@@ -60,12 +60,19 @@ public class AttackRequests extends MyThread
 						hitPlayers = CombatManager.getInstance().distanceAttack( player,
 								player.takePotion( Potions.FLASH_BANG ), target );
 
-					for( Player hitPlayer : hitPlayers )
-					{
-						if( hitPlayer != player && AI_players.keySet().contains( hitPlayer ) )
-							AI_players.get( hitPlayer ).gotAttackedBy( player );
+				}
+				for( AbstractCharacter hitPlayer : hitPlayers )
+				{
+					System.out.println();
+					System.out.println();
+					System.out.println();
+					System.out.println( "mi ha rsistuito cosa ?!?!? " + hitPlayers.size() );
+					System.out.println();
+					System.out.println();
+					System.out.println();
+					if( hitPlayer != attacker && AI_players.keySet().contains( hitPlayer ) )
+						AI_players.get( hitPlayer ).gotAttackedBy( attacker );
 
-					}
 				}
 
 			}

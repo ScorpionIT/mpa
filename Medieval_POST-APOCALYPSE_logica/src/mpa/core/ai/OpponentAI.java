@@ -10,6 +10,7 @@ import mpa.core.logic.GameManager;
 import mpa.core.logic.MyThread;
 import mpa.core.logic.building.Headquarter;
 import mpa.core.logic.building.House;
+import mpa.core.logic.character.AbstractCharacter;
 import mpa.core.logic.character.Player;
 import mpa.core.logic.character.Player.Item;
 import mpa.core.logic.resource.AbstractResourceProducer;
@@ -238,8 +239,8 @@ public class OpponentAI extends MyThread
 		return player;
 	}
 
-	public void gotAttackedBy( Player bully )
+	public void gotAttackedBy( AbstractCharacter bully )
 	{
-		aiState.heIsAttackingYou( bully );
+		aiState.heIsAttackingYou( bully, player );
 	}
 }

@@ -13,6 +13,7 @@ public class Minion extends AbstractCharacter
 	private int attackStrength = 5;
 	private float rangeOfPhysicallAttack = 7;
 	private Vector2f targetPosition;
+	private int health = 20;
 
 	public Minion( String name, float x, float y, int health, Headquarter headquarter, Player boss,
 			Player target )
@@ -42,7 +43,7 @@ public class Minion extends AbstractCharacter
 				}
 		}
 
-		if( MyMath.distanceFloat( x, y, target.getX(), target.getY() ) < rangeOfPhysicallAttack )
+		if( MyMath.distanceFloat( x, y, target.getX(), target.getY() ) <= rangeOfPhysicallAttack )
 			GameManager.getInstance().attackPhysically( this );
 
 		if( MyMath.distanceFloat( targetPosition.x, targetPosition.y, target.getX(), target.getY() ) > 15f )
@@ -52,6 +53,13 @@ public class Minion extends AbstractCharacter
 		}
 
 		return super.movePlayer();
+	}
+
+	@Override
+	public boolean amIAlive()
+	{
+
+		return health > 0;
 	}
 
 	public float getRangeOfPhysicallAttack()
@@ -70,5 +78,21 @@ public class Minion extends AbstractCharacter
 	public int getDamage()
 	{
 		return attackStrength + boss.getPlayerLevel().ordinal();
+	}
+
+	@Override
+	public boolean inflictDamage( int damage )
+	{
+		try
+		{
+			writeLock.lock();
+			health -= damage;
+			return health <= 0;
+
+		} finally
+		{
+
+			writeLock.unlock();
+		}
 	}
 }

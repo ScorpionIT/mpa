@@ -71,7 +71,7 @@ public class CombatManager
 
 	}
 
-	public ArrayList<Player> attackPhysically( Minion attacker )
+	public synchronized ArrayList<AbstractCharacter> attackPhysically( Minion attacker )
 	{
 		ArrayList<Player> deadPlayers = new ArrayList<>();
 		try
@@ -82,34 +82,34 @@ public class CombatManager
 			minionAttacks.add( attacker );
 			attacker.stopMoving();
 
-			ArrayList<Player> hitPlayers = new ArrayList<>();
+			ArrayList<AbstractCharacter> hitPlayers = new ArrayList<>();
 
 			Vector2f direction = attacker.getPlayerDirection();
 
 			for( Player p : GameManager.getInstance().getPlayers() )
 			{
-				if( attacker.getName().compareTo( p.getName() ) <= 0 )
-				{
-					p.getWriteLock();
-				}
-
 				float distanceFloat = MyMath.distanceFloat( attacker.getX() + direction.x
 						* attacker.getRangeOfPhysicallAttack(), attacker.getY() + direction.y
 						* attacker.getRangeOfPhysicallAttack(), p.getX(), p.getY() );
 
 				System.out.println( "la distanza è " + distanceFloat );
+				p.getWriteLock();
 
 				float distanceFloat2 = MyMath.distanceFloat( attacker.getX(), attacker.getY(),
 						p.getX(), p.getY() );
 
 				System.out.println( "distano " + distanceFloat2 );
-				if( MyMath.distanceFloat(
+				if( !( MyMath.distanceFloat(
 						attacker.getX() + direction.x * attacker.getRangeOfPhysicallAttack(),
 						attacker.getY() + direction.y * attacker.getRangeOfPhysicallAttack(),
-						p.getX(), p.getY() ) <= 1
-						|| distanceFloat2 <= attacker.getRangeOfPhysicallAttack() )
+						p.getX(), p.getY() ) <= 1 || distanceFloat2 <= attacker
+						.getRangeOfPhysicallAttack() ) )
 				{
-					if( p.inflictDamage( attacker.getDamage() ) )
+					p.leaveWriteLock();
+				}
+				else
+				{
+					if( p.inflictDamage( attacker.getDamage() ) && p instanceof Player )
 					{
 						System.out.println( "è morto?" );
 						deadPlayers.add( p );
@@ -120,10 +120,9 @@ public class CombatManager
 						moveHitPlayer( p, attacker.getCurrentVector(), attacker.getDamage() );
 						hitPlayers.add( p );
 					}
+					p.leaveWriteLock();
 				}
 
-				// attacker.leaveWriteLock();
-				p.leaveWriteLock();
 			}
 
 			return hitPlayers;
@@ -137,17 +136,19 @@ public class CombatManager
 		}
 	}
 
-	public synchronized ArrayList<Player> attackPhysically( Player attacker )
+	public synchronized ArrayList<AbstractCharacter> attackPhysically( Player attacker )
 	{
 
 		ArrayList<Player> deadPlayers = new ArrayList<>();
+		ArrayList<Minion> deadMinions = new ArrayList<>();
+		ArrayList<TowerCrusher> deadTowerCrushers = new ArrayList<>();
 		try
 		{
 			GameManager.getInstance().takeLock();
 
 			attacker.getWriteLock();
 
-			ArrayList<Player> hitPlayers = new ArrayList<>();
+			ArrayList<AbstractCharacter> hitPlayers = new ArrayList<>();
 			if( attacker.getMP() < MP_REQUIRED_FOR_PHYSICALL_ATTACK )
 				return hitPlayers;
 			else
@@ -158,7 +159,15 @@ public class CombatManager
 
 			Vector2f direction = attacker.getPlayerDirection();
 
+			ArrayList<AbstractCharacter> allCharacters = new ArrayList<>();
 			for( Player p : GameManager.getInstance().getPlayers() )
+				allCharacters.add( p );
+			for( Minion m : GameManager.getInstance().getMinionsAlive() )
+				allCharacters.add( m );
+			for( TowerCrusher tC : GameManager.getInstance().getTowerCrushers() )
+				allCharacters.add( tC );
+
+			for( AbstractCharacter p : allCharacters )
 			{
 				if( p == attacker )
 					continue;
@@ -191,7 +200,12 @@ public class CombatManager
 					if( p.inflictDamage( attacker.getPhysicallAttackDamage() ) )
 					{
 						System.out.println( "è morto?" );
-						deadPlayers.add( p );
+						if( p instanceof Player )
+							deadPlayers.add( ( ( Player ) p ) );
+						else if( p instanceof Minion )
+							deadMinions.add( ( ( Minion ) p ) );
+						else if( p instanceof TowerCrusher )
+							deadTowerCrushers.add( ( ( TowerCrusher ) p ) );
 					}
 					else
 					{
@@ -211,14 +225,16 @@ public class CombatManager
 			GameManager.getInstance().leaveLock();
 			for( Player dead : deadPlayers )
 				GameManager.getInstance().killPlayer( dead );
+			for( Minion m : deadMinions )
+				GameManager.getInstance().killMinion( m );
 			attacker.leaveWriteLock();
 		}
 	}
 
 	private void moveHitPlayer( AbstractCharacter hit, Vector2f direction, int strength )
 	{
-		Vector2f newPosition = new Vector2f( hit.getX() + direction.x * strength, hit.getY()
-				+ direction.y * strength );
+		Vector2f newPosition = new Vector2f( hit.getX() + direction.x * strength / 5, hit.getY()
+				+ direction.y * strength / 5 );
 		hit.setPosition( newPosition );
 	}
 
@@ -243,15 +259,27 @@ public class CombatManager
 
 	}
 
-	private ArrayList<Player> granadeAttack( Player attacker, Vector2f target, boolean isFlashBang )
+	private synchronized ArrayList<AbstractCharacter> granadeAttack( Player attacker,
+			Vector2f target, boolean isFlashBang )
 	{
-		ArrayList<Player> hitPlayers = new ArrayList<>();
+		ArrayList<AbstractCharacter> hitPlayers = new ArrayList<>();
 		ArrayList<Player> deadPlayers = new ArrayList<>();
+		ArrayList<Minion> deadMinions = new ArrayList<>();
+		ArrayList<TowerCrusher> deadTowerCrushers = new ArrayList<>();
 
 		try
 		{
 			GameManager.getInstance().takeLock();
 
+			attacker.getWriteLock();
+
+			if( attacker.getMP() < MP_REQUIRED_FOR_DISTANCE_ATTACK
+					|| attacker.getPotionAmount( Potions.GRANADE ) == 0 )
+				return hitPlayers;
+			else
+				attacker.setMP( attacker.getMP() - MP_REQUIRED_FOR_DISTANCE_ATTACK );
+
+			attacker.stopMoving();
 			float distanceToTarget = MyMath.distanceFloat( attacker.getX(), attacker.getY(),
 					target.x, target.y );
 
@@ -262,48 +290,35 @@ public class CombatManager
 						+ attacker.getPlayerDirection().y * attacker.getRangeOfDistanceAttack() );
 			}
 
-			attacker.getWriteLock();
-			attacker.stopMoving();
-
-			if( attacker.getMP() < MP_REQUIRED_FOR_DISTANCE_ATTACK
-					|| attacker.getPotionAmount( Potions.GRANADE ) == 0 )
-			{
-				// throw exception
-
-				return hitPlayers;
-			}
-			else
-				attacker.setMP( attacker.getMP() - MP_REQUIRED_FOR_DISTANCE_ATTACK );
-
-			Vector2f direction = attacker.getPlayerDirection();
-
+			ArrayList<AbstractCharacter> allCharacters = new ArrayList<>();
 			for( Player p : GameManager.getInstance().getPlayers() )
+				allCharacters.add( p );
+			for( Minion m : GameManager.getInstance().getMinionsAlive() )
+				allCharacters.add( m );
+			for( TowerCrusher tC : GameManager.getInstance().getTowerCrushers() )
+				allCharacters.add( tC );
+
+			for( AbstractCharacter p : allCharacters )
 			{
 				if( p == attacker )
 					continue;
 
-				if( attacker.getName().compareTo( p.getName() ) <= 0 )
-				{
-					// attacker.getWriteLock();
-					p.getWriteLock();
-				}
-				else
-				{
-					p.getWriteLock();
-					// attacker.getWriteLock();
-				}
-
+				p.getWriteLock();
 				float distance = MyMath.distanceFloat( target.x, target.y, p.getX(), p.getY() );
 
 				float collisionRay = attacker.getDistanceAttackRayOfCollision();
 
-				if( distance <= collisionRay )
+				if( distance > collisionRay )
+				{
+					p.leaveWriteLock();
+				}
+				else
 				{
 
-					if( isFlashBang )
+					if( isFlashBang && p instanceof Player )
 					{
-						p.setFlashed( true );
-						GameManager.getInstance().startFlashTimer( p );
+						( ( Player ) p ).setFlashed( true );
+						GameManager.getInstance().startFlashTimer( ( ( Player ) p ) );
 						hitPlayers.add( p );
 					}
 					else
@@ -312,15 +327,18 @@ public class CombatManager
 						if( p.inflictDamage( Potions.granadeDamage() - damage ) )
 						{
 							System.out.println( "è morto?" );
-							deadPlayers.add( p );
+							if( p instanceof Player )
+								deadPlayers.add( ( ( Player ) p ) );
+							else if( p instanceof Minion )
+								deadMinions.add( ( ( Minion ) p ) );
+							else if( p instanceof TowerCrusher )
+								deadTowerCrushers.add( ( ( TowerCrusher ) p ) );
 						}
 						else
 							hitPlayers.add( p );
 					}
+					p.leaveWriteLock();
 				}
-
-				// attacker.leaveWriteLock();
-				p.leaveWriteLock();
 
 			}
 
@@ -330,12 +348,15 @@ public class CombatManager
 			GameManager.getInstance().leaveLock();
 			for( Player dead : deadPlayers )
 				GameManager.getInstance().killPlayer( dead );
+			for( Minion m : deadMinions )
+				GameManager.getInstance().killMinion( m );
 			attacker.leaveWriteLock();
 		}
 
 	}
 
-	public ArrayList<Player> distanceAttack( Player attacker, Potions potion, Vector2f target )
+	public ArrayList<AbstractCharacter> distanceAttack( Player attacker, Potions potion,
+			Vector2f target )
 	{
 
 		switch( potion )
@@ -346,7 +367,7 @@ public class CombatManager
 				return granadeAttack( attacker, target, true );
 
 			default:
-				ArrayList<Player> players = new ArrayList<Player>();
+				ArrayList<AbstractCharacter> players = new ArrayList<>();
 				players.add( attacker );
 				return players;
 		}

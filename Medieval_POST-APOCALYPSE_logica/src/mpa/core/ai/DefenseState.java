@@ -1,10 +1,15 @@
 package mpa.core.ai;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import javax.vecmath.Vector2f;
 
 import mpa.core.logic.GameManager;
+import mpa.core.logic.character.Minion;
 import mpa.core.logic.character.Player;
 import mpa.core.logic.character.Player.Item;
+import mpa.core.logic.character.TowerCrusher;
 import mpa.core.logic.tool.Potions;
 
 public class DefenseState extends AIState
@@ -17,15 +22,20 @@ public class DefenseState extends AIState
 		FIGHT_BACK, RUN;
 	}
 
-	public DefenseState( OpponentAI opponentAI, Player bully )
+	public DefenseState( OpponentAI opponentAI, ArrayList<Enemy> bullies )
 	{
 		opponentAI.player.stopMoving();
-		if( opponentAI.canIFightWithHim( bully ) )
+		Collections.sort( bullies );
+
+		bully = bullies.remove( 0 ).getEnemy();
+
+		if( !bullies.isEmpty()
+				&& ( bully instanceof Minion
+						|| ( bully instanceof Player && opponentAI
+								.canIFightWithHim( ( ( Player ) bully ) ) ) || bully instanceof TowerCrusher ) )
 			myChoice = Choice.FIGHT_BACK;
 		else
 			myChoice = Choice.RUN;
-
-		this.bully = bully;
 
 	}
 
@@ -37,13 +47,13 @@ public class DefenseState extends AIState
 
 		int flashBangAmount = opponentAI.player.getPotionAmount( Potions.FLASH_BANG );
 
-		if( flashBangAmount > 0 )
+		if( flashBangAmount > 0 && bully instanceof Player )
 		{
 			do
 			{
 				GameManager.getInstance().changeSelectedItem( opponentAI.player, Item.FLASH_BANG );
 				GameManager.getInstance().playerAction( opponentAI.player, bully.getPosition() );
-			} while( !bully.isFlashed()
+			} while( !( ( Player ) bully ).isFlashed()
 					&& opponentAI.player.getPotionAmount( Potions.FLASH_BANG ) > 0 );
 
 			System.out.println();

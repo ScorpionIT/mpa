@@ -39,30 +39,31 @@ public class Player extends AbstractCharacter
 
 	private HashMap<Potions, Integer> potions = new HashMap<>();
 
-	public Player(String name, float x, float y, int health, Level level, Headquarter headquarter)
+	public Player( String name, float x, float y, int health, Level level, Headquarter headquarter )
 	{
-		super(name, x, y, 100, headquarter);
+		super( name, x, y, 100, headquarter );
 		subalterns = new ArrayList<DependentCharacter>();
 		this.level = level;
 		Vector2f gatheringPlace = headquarter.getGatheringPlace();
-		for (int i = 0; i < level.getNumberOfSubalterns(level); i++)
+		for( int i = 0; i < level.getNumberOfSubalterns( level ); i++ )
 		{
-			subalterns.add(new DependentCharacter("ERia", gatheringPlace.x, gatheringPlace.y, 100, level, this, headquarter));
+			subalterns.add( new DependentCharacter( "ERia", gatheringPlace.x, gatheringPlace.y,
+					100, level, this, headquarter ) );
 
 		}
 
 		MP = 100;
 
-		resources.put("WHEAT", 0);
-		resources.put("IRON", 0);
-		resources.put("WOOD", 0);
-		resources.put("STONE", 0);
-		resources.put("HERBS", 0);
+		resources.put( "WHEAT", 0 );
+		resources.put( "IRON", 0 );
+		resources.put( "WOOD", 0 );
+		resources.put( "STONE", 0 );
+		resources.put( "HERBS", 0 );
 
-		potions.put(Potions.HP, 0);
-		potions.put(Potions.MP, 0);
-		potions.put(Potions.GRANADE, 0);
-		potions.put(Potions.FLASH_BANG, 0);
+		potions.put( Potions.HP, 0 );
+		potions.put( Potions.MP, 0 );
+		potions.put( Potions.GRANADE, 0 );
+		potions.put( Potions.FLASH_BANG, 0 );
 
 	}
 
@@ -71,17 +72,17 @@ public class Player extends AbstractCharacter
 		return headquarter;
 	}
 
-	public DependentCharacter employSubaltern(AbstractPrivateProperty abstractPrivateProperty)
+	public DependentCharacter employSubaltern( AbstractPrivateProperty abstractPrivateProperty )
 	{
 		try
 		{
 			writeLock.lock();
-			for (DependentCharacter subaltern : subalterns)
+			for( DependentCharacter subaltern : subalterns )
 			{
-				if (subaltern.getAbstractPrivateProperty() == null)
+				if( subaltern.getAbstractPrivateProperty() == null )
 				{
-					subaltern.setAbstractPrivateProperty(abstractPrivateProperty);
-					properties.add(abstractPrivateProperty);
+					subaltern.setAbstractPrivateProperty( abstractPrivateProperty );
+					properties.add( abstractPrivateProperty );
 					employedSubalterns++;
 					return subaltern;
 				}
@@ -105,11 +106,12 @@ public class Player extends AbstractCharacter
 		}
 	}
 
-	public boolean employSubaltern(DependentCharacter dependentCharacter, AbstractPrivateProperty abstractPrivateProperty)
+	public boolean employSubaltern( DependentCharacter dependentCharacter,
+			AbstractPrivateProperty abstractPrivateProperty )
 	{
-		if (subalterns.contains(dependentCharacter))
+		if( subalterns.contains( dependentCharacter ) )
 		{
-			dependentCharacter.setAbstractPrivateProperty(abstractPrivateProperty);
+			dependentCharacter.setAbstractPrivateProperty( abstractPrivateProperty );
 			return true;
 		}
 		else
@@ -120,7 +122,7 @@ public class Player extends AbstractCharacter
 	public void die()
 	{
 		writeLock.lock();
-		for (DependentCharacter subaltern : subalterns)
+		for( DependentCharacter subaltern : subalterns )
 			subaltern.leaveProperty();
 
 		towers.clear();
@@ -130,22 +132,28 @@ public class Player extends AbstractCharacter
 	public ArrayList<DependentCharacter> getFreeSubalterns()
 	{
 		ArrayList<DependentCharacter> freeSubalterns = new ArrayList<>();
-		for (DependentCharacter subaltern : subalterns)
+		for( DependentCharacter subaltern : subalterns )
 		{
-			if (subaltern.getAbstractPrivateProperty() == null)
+			if( subaltern.getAbstractPrivateProperty() == null )
 			{
-				freeSubalterns.add(subaltern);
+				freeSubalterns.add( subaltern );
 			}
 
 		}
 		return freeSubalterns;
 	}
 
-	public DependentCharacter getSubaltern(AbstractPrivateProperty abstractPrivateProperty)
+	@Override
+	public boolean amIAlive()
 	{
-		for (DependentCharacter subaltern : subalterns)
+		return health > 0;
+	}
+
+	public DependentCharacter getSubaltern( AbstractPrivateProperty abstractPrivateProperty )
+	{
+		for( DependentCharacter subaltern : subalterns )
 		{
-			if (abstractPrivateProperty == subaltern.getAbstractPrivateProperty())
+			if( abstractPrivateProperty == subaltern.getAbstractPrivateProperty() )
 				return subaltern;
 
 		}
@@ -153,7 +161,7 @@ public class Player extends AbstractCharacter
 
 	}
 
-	public boolean inflictDamage(int damage)
+	public boolean inflictDamage( int damage )
 	{
 		try
 		{
@@ -170,41 +178,41 @@ public class Player extends AbstractCharacter
 
 	}
 
-	public boolean hasEnoughResources(HashMap<String, Integer> required)
+	public boolean hasEnoughResources( HashMap<String, Integer> required )
 	{
-		for (String request : required.keySet())
+		for( String request : required.keySet() )
 		{
-			if (resources.get(request) < required.get(request))
+			if( resources.get( request ) < required.get( request ) )
 				return false;
 		}
 
 		return true;
 	}
 
-	public void addTower(Tower t)
+	public void addTower( Tower t )
 	{
 		writeLock.lock();
-		towers.add(t);
+		towers.add( t );
 		writeLock.unlock();
 	}
 
-	public void removeTower(Tower t)
+	public void removeTower( Tower t )
 	{
 		writeLock.lock();
-		towers.remove(t);
+		towers.remove( t );
 		writeLock.unlock();
 	}
 
-	public void takeResources(HashMap<String, Integer> toTake)
+	public void takeResources( HashMap<String, Integer> toTake )
 	{
-		for (String s : toTake.keySet())
-			resources.put(s, resources.get(s) - toTake.get(s));
+		for( String s : toTake.keySet() )
+			resources.put( s, resources.get( s ) - toTake.get( s ) );
 
 	}
 
-	public boolean freeSubaltern(DependentCharacter dependentCharacter)
+	public boolean freeSubaltern( DependentCharacter dependentCharacter )
 	{
-		if (subalterns.contains(dependentCharacter))
+		if( subalterns.contains( dependentCharacter ) )
 		{
 			dependentCharacter.leaveProperty();
 			employedSubalterns--;
@@ -219,7 +227,7 @@ public class Player extends AbstractCharacter
 		return this.level;
 	}
 
-	public void setLevel(Level level)
+	public void setLevel( Level level )
 	{
 		this.level = level;
 	}
@@ -229,26 +237,26 @@ public class Player extends AbstractCharacter
 		return subalterns;
 	}
 
-	public void putResources(String type, int providing)
+	public void putResources( String type, int providing )
 	{
 		writeLock.lock();
 		type = type.toUpperCase();
-		switch (type)
+		switch( type )
 		{
 			case "STONE":
-				resources.put("STONE", resources.get("STONE") + providing);
+				resources.put( "STONE", resources.get( "STONE" ) + providing );
 				break;
 			case "IRON":
-				resources.put("IRON", resources.get("STONE") + providing);
+				resources.put( "IRON", resources.get( "STONE" ) + providing );
 				break;
 			case "WHEAT":
-				resources.put("WHEAT", resources.get("STONE") + providing);
+				resources.put( "WHEAT", resources.get( "STONE" ) + providing );
 				break;
 			case "WOOD":
-				resources.put("WOOD", resources.get("STONE") + providing);
+				resources.put( "WOOD", resources.get( "STONE" ) + providing );
 				break;
 			case "HERBS":
-				resources.put("HERBS", resources.get("STONE") + providing);
+				resources.put( "HERBS", resources.get( "STONE" ) + providing );
 				break;
 			default:
 		}
@@ -256,13 +264,13 @@ public class Player extends AbstractCharacter
 		writeLock.unlock();
 	}
 
-	public int getResourceAmount(String type)
+	public int getResourceAmount( String type )
 	{
 		try
 		{
 			readLock.lock();
 			type = type.toUpperCase();
-			return resources.get(type);
+			return resources.get( type );
 		} finally
 		{
 			readLock.unlock();
@@ -275,9 +283,9 @@ public class Player extends AbstractCharacter
 		{
 			writeLock.lock();
 
-			if (level.canUpgrade(this))
+			if( level.canUpgrade( this ) )
 			{
-				level.upgradeLevel(this);
+				level.upgradeLevel( this );
 				return true;
 			}
 			else
@@ -295,7 +303,7 @@ public class Player extends AbstractCharacter
 		try
 		{
 			readLock.lock();
-			return level.canUpgrade(this);
+			return level.canUpgrade( this );
 		} finally
 		{
 			readLock.unlock();
@@ -321,20 +329,20 @@ public class Player extends AbstractCharacter
 			readLock.lock();
 
 			int counter = 0;
-			for (Potions p : Potions.values())
+			for( Potions p : Potions.values() )
 			{
-				if (!level.canBuy(p, potions.get(p)))
+				if( !level.canBuy( p, potions.get( p ) ) )
 					counter++;
-				HashMap<String, Integer> price = PotionManager.getInstance().getPrice(p);
+				HashMap<String, Integer> price = PotionManager.getInstance().getPrice( p );
 
-				for (String r : price.keySet())
+				for( String r : price.keySet() )
 				{
-					if (resources.get(r) < price.get(r))
+					if( resources.get( r ) < price.get( r ) )
 						return false;
 				}
 			}
 
-			if (counter == Potions.values().length)
+			if( counter == Potions.values().length )
 				return false;
 
 			return true;
@@ -345,20 +353,20 @@ public class Player extends AbstractCharacter
 		}
 	}
 
-	public boolean canBuyPotion(Potions potion)
+	public boolean canBuyPotion( Potions potion )
 	{
 		try
 		{
 			readLock.lock();
 
-			if (level.canBuy(potion, potions.get(potion)))
+			if( level.canBuy( potion, potions.get( potion ) ) )
 				return false;
 
-			HashMap<String, Integer> price = PotionManager.getInstance().getPrice(potion);
+			HashMap<String, Integer> price = PotionManager.getInstance().getPrice( potion );
 
-			for (String r : price.keySet())
+			for( String r : price.keySet() )
 			{
-				if (resources.get(r) < price.get(r))
+				if( resources.get( r ) < price.get( r ) )
 					return false;
 			}
 
@@ -370,43 +378,43 @@ public class Player extends AbstractCharacter
 		}
 	}
 
-	public int getPotionAmount(Potions p)
+	public int getPotionAmount( Potions p )
 	{
 		try
 		{
 			readLock.lock();
 
-			return potions.get(p);
+			return potions.get( p );
 		} finally
 		{
 			readLock.unlock();
 		}
 	}
 
-	public boolean buyPotion(Potions potion)
+	public boolean buyPotion( Potions potion )
 	{
 		try
 		{
 			writeLock.lock();
-			if (x != headquarter.getGatheringPlace().x && y != headquarter.getGatheringPlace().y)
+			if( x != headquarter.getGatheringPlace().x && y != headquarter.getGatheringPlace().y )
 				return false;
 
-			if (!level.canBuy(potion, potions.get(potion)))
+			if( !level.canBuy( potion, potions.get( potion ) ) )
 				return false;
 
-			HashMap<String, Integer> price = PotionManager.getInstance().getPrice(potion);
+			HashMap<String, Integer> price = PotionManager.getInstance().getPrice( potion );
 
-			for (String r : price.keySet())
+			for( String r : price.keySet() )
 			{
-				if (price.get(r) > resources.get(r))
+				if( price.get( r ) > resources.get( r ) )
 					return false;
 			}
-			for (String r : price.keySet())
+			for( String r : price.keySet() )
 			{
-				resources.put(r, resources.get(r) - price.get(r));
+				resources.put( r, resources.get( r ) - price.get( r ) );
 			}
 
-			potions.put(potion, potions.get(potion) + 1);
+			potions.put( potion, potions.get( potion ) + 1 );
 			return true;
 
 		} finally
@@ -428,9 +436,9 @@ public class Player extends AbstractCharacter
 		}
 	}
 
-	public void setMP(int mp)
+	public void setMP( int mp )
 	{
-		System.out.println("c'avevo " + MP + " me ne rimangono " + mp);
+		System.out.println( "c'avevo " + MP + " me ne rimangono " + mp );
 		MP = mp;
 	}
 
@@ -459,7 +467,7 @@ public class Player extends AbstractCharacter
 		}
 	}
 
-	public void setRangeOfPhysicallAttack(float rangeOfPhysicallAttack)
+	public void setRangeOfPhysicallAttack( float rangeOfPhysicallAttack )
 	{
 		writeLock.lock();
 		this.rangeOfPhysicallAttack = rangeOfPhysicallAttack;
@@ -479,7 +487,7 @@ public class Player extends AbstractCharacter
 		}
 	}
 
-	public void setRangeOfDistanceAttack(int rangeOfDistanceAttack)
+	public void setRangeOfDistanceAttack( int rangeOfDistanceAttack )
 	{
 		writeLock.lock();
 		this.rangeOfDistanceAttack = rangeOfDistanceAttack;
@@ -499,7 +507,7 @@ public class Player extends AbstractCharacter
 		}
 	}
 
-	public void setDistanceAttackRayOfCollision(float distanceAttackRayOfCollision)
+	public void setDistanceAttackRayOfCollision( float distanceAttackRayOfCollision )
 	{
 		writeLock.lock();
 		this.distanceAttackRayOfCollision = distanceAttackRayOfCollision;
@@ -518,7 +526,7 @@ public class Player extends AbstractCharacter
 		}
 	}
 
-	public void setSelectedItem(Item it)
+	public void setSelectedItem( Item it )
 	{
 		writeLock.lock();
 		selectedItem = it;
@@ -537,7 +545,7 @@ public class Player extends AbstractCharacter
 		}
 	}
 
-	public void setPhysicallAttackDamage(int physicallAttackDamage)
+	public void setPhysicallAttackDamage( int physicallAttackDamage )
 	{
 		writeLock.lock();
 		this.physicallAttackDamage = physicallAttackDamage;
@@ -556,12 +564,12 @@ public class Player extends AbstractCharacter
 		}
 	}
 
-	public Potions takePotion(Potions potion)
+	public Potions takePotion( Potions potion )
 	{
 		try
 		{
 			writeLock.lock();
-			potions.put(potion, potions.get(potion) - 1);
+			potions.put( potion, potions.get( potion ) - 1 );
 			return potion;
 		} finally
 		{
@@ -581,7 +589,7 @@ public class Player extends AbstractCharacter
 		}
 	}
 
-	public void setFlashed(boolean flash)
+	public void setFlashed( boolean flash )
 	{
 		// writeLock.lock();
 
@@ -589,18 +597,19 @@ public class Player extends AbstractCharacter
 		// writeLock.unlock();
 	}
 
-	public boolean restoreHealth(Potions potion)
+	public boolean restoreHealth( Potions potion )
 	{
-		if (!(potion.equals(Potions.HP) || potion.equals(Potions.MP)))
+		if( !( potion.equals( Potions.HP ) || potion.equals( Potions.MP ) ) )
 			return false;
 
-		if ((potion.equals(Potions.HP) && health == 100) || (potion.equals(Potions.MP) && MP == 100))
+		if( ( potion.equals( Potions.HP ) && health == 100 )
+				|| ( potion.equals( Potions.MP ) && MP == 100 ) )
 		{
-			potions.put(potion, potions.get(potion) + 1);
+			potions.put( potion, potions.get( potion ) + 1 );
 			return false;
 		}
 
-		if (potion.equals(Potions.HP))
+		if( potion.equals( Potions.HP ) )
 			;
 		// add HPs
 		else
@@ -623,14 +632,16 @@ public class Player extends AbstractCharacter
 		}
 	}
 
-	public Minion createMinion(Player target, String ID, Vector2f position)
+	public Minion createMinion( Player target, String ID, Vector2f position )
 	{
-		return new Minion(ID, position.x, position.y, 5 + 2 * level.ordinal(), headquarter, this, target);
+		return new Minion( ID, position.x, position.y, 5 + 2 * level.ordinal(), headquarter, this,
+				target );
 	}
 
-	public TowerCrusher createTowerCrusher(Tower target, String ID)
+	public TowerCrusher createTowerCrusher( Tower target, String ID )
 	{
-		return new TowerCrusher(ID, headquarter.getGatheringPlace().x, headquarter.getGatheringPlace().y, 5 + 2 * level.ordinal(), headquarter, this,
-				target.getOwner(), target);
+		return new TowerCrusher( ID, headquarter.getGatheringPlace().x,
+				headquarter.getGatheringPlace().y, 5 + 2 * level.ordinal(), headquarter, this,
+				target.getOwner(), target );
 	}
 }
