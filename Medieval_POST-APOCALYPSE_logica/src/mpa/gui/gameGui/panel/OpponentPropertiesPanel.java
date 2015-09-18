@@ -25,7 +25,7 @@ public class OpponentPropertiesPanel
 	int x = 10;
 
 	int heightPanel = 30;
-	int startY = 5;
+	int startY = 7;
 
 	private ListenerImplementation gameController;
 	private int currentPage = 1;
@@ -183,9 +183,12 @@ public class OpponentPropertiesPanel
 
 	public void removePlayer(String playerName)
 	{
-		playersResources.get(playerName).getPanel().visible(false);
-		playersResources.remove(playerName);
-		relocateAllPanel();
+		if (playersResources.get(playerName) != null)
+		{
+			playersResources.get(playerName).getPanel().visible(false);
+			playersResources.remove(playerName);
+			relocateAllPanel();
+		}
 	}
 
 	private void changeVisibility(int i, OpponentResourcesPanel opponentResourcesPanel)

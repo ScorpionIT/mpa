@@ -50,9 +50,10 @@ public class OpponentResourcesPanel
 	private void initResourcePanel()
 	{
 
-		labelNameBuilder = getLabelBuilder(playerName, x, 0, 100, 10);
+		labelNameBuilder = getLabelCenterBuilder(playerName, x + 20, 0, 15);
 
-		labelHPAndMP = getLabelBuilder(playerName + "HP_MP", x, 15, 100, 10);
+		labelHPAndMP = getLabelCenterBuilder(playerName + "HP_MP", x + 20, 15, 15);
+
 		resourcesPanel = new PanelBuilder("#resources" + playerName)
 		{
 
@@ -124,10 +125,10 @@ public class OpponentResourcesPanel
 
 				valignTop();
 				x(Integer.toString(xPanel) + "%");
-				y("35%");
+				y("38%");
 
 				width(Integer.toString(widthPanel) + "%");
-				height("75%");
+				height("72%");
 
 				control(getLabelBuilder(resourceName));
 				image(getImageBuilder(fileName));
@@ -160,6 +161,25 @@ public class OpponentResourcesPanel
 				height(Integer.toString(height) + "%");
 				x(Integer.toString(x) + "%");
 				y(Integer.toString(y) + "%");
+				backgroundColor(new Color(1f, 1f, 1f, 0.8f));
+				color(playerColor);
+
+			}
+		};
+	}
+
+	private LabelBuilder getLabelCenterBuilder(final String text, final int x, final int y, final int height)
+	{
+
+		return new LabelBuilder("# " + "Label" + playerName)
+		{
+			{
+				childLayoutAbsoluteInside();
+				alignCenter();
+				height(Integer.toString(height) + "%");
+				x(Integer.toString(x) + "%");
+				y(Integer.toString(y) + "%");
+				backgroundColor(new Color(1f, 1f, 1f, 0.8f));
 				color(playerColor);
 
 			}
