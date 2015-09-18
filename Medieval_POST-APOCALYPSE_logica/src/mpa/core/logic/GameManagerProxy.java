@@ -315,7 +315,7 @@ public class GameManagerProxy
 
 		for (Player p : deadPlayers)
 		{
-			players.remove(p);
+			players.remove(p.getName());
 			names.add(p.getName());
 		}
 
@@ -412,7 +412,8 @@ public class GameManagerProxy
 
 		for (Player player : listPlayers)
 		{
-			playersResourceAmount.put(player.getName(), player.getResources());
+			if (!gm.takeDeadPlayers().contains(player.getName()))
+				playersResourceAmount.put(player.getName(), player.getResources());
 		}
 		return playersResourceAmount;
 	}

@@ -18,7 +18,6 @@ import com.jme3.renderer.ViewPort;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
-import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.elements.Element;
 
 public class NiftyHandler
@@ -253,14 +252,14 @@ public class NiftyHandler
 		return selectedObjectID;
 	}
 
-	public void updateResourcePanel()
+	public synchronized void updateResourcePanel()
 	{
 		HashMap<String, Integer> playingPlayerResourcesAmount = gameController.getPlayerResourcesAmount(GuiObjectManager.getInstance()
 				.getPlayingPlayer());
 		Set<String> keySet = playingPlayerResourcesAmount.keySet();
 		for (String resourceName : keySet)
 		{
-			setResourceValue(resourceName, playingPlayerResourcesAmount.get(resourceName));
+			resourcesPanel.getResourceLabel(nifty, resourceName, playingPlayerResourcesAmount.get(resourceName));
 		}
 		resourcesPanel.updateInformationPanel(nifty, gameController.getPlayerHP(GuiObjectManager.getInstance().getPlayingPlayer()),
 				gameController.getPlayerMP(GuiObjectManager.getInstance().getPlayingPlayer()),
@@ -271,16 +270,19 @@ public class NiftyHandler
 	private void setResourceValue(String resourceName, int value)
 	{
 
-		LabelBuilder labelBuilder = resourcesPanel.getResourceLabel(resourceName.toString());
-		labelBuilder.text(Integer.toString(value));
-		if (nifty.getCurrentScreen().findElementByName("Avaible" + resourceName.toString()) != null)
-		{
-
-			nifty.getCurrentScreen().findElementByName("Avaible" + resourceName).markForRemoval();
-			nifty.removeElement(nifty.getCurrentScreen(), nifty.getCurrentScreen().findElementByName("Avaible" + resourceName));
-			Element findElementByName = nifty.getCurrentScreen().findElementByName(resourceName + "Panel");
-			findElementByName.add(labelBuilder.build(nifty, nifty.getCurrentScreen(), findElementByName));
-		}
+		// LabelBuilder labelBuilder = resourcesPanel.getResourceLabel(resourceName.toString());
+		// labelBuilder.text(Integer.toString(value));
+		// if (nifty.getCurrentScreen().findElementByName("Avaible" + resourceName.toString()) !=
+		// null)
+		// {
+		// nifty.getCurrentScreen().findElementByName("Avaible" + resourceName).markForRemoval();
+		// nifty.removeElement(nifty.getCurrentScreen(),
+		// nifty.getCurrentScreen().findElementByName("Avaible" + resourceName));
+		// }
+		// Element findElementByName = nifty.getCurrentScreen().findElementByName(resourceName +
+		// "Panel");
+		// findElementByName.add(labelBuilder.build(nifty, nifty.getCurrentScreen(),
+		// findElementByName));
 	}
 
 	public Nifty getNifty()

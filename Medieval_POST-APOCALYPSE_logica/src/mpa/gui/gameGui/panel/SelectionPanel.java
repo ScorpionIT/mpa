@@ -1,5 +1,6 @@
 package mpa.gui.gameGui.panel;
 
+import mpa.gui.gameGui.playingGUI.GuiObjectManager;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
@@ -160,13 +161,13 @@ public class SelectionPanel
 			productivityLabel.y("37%");
 			this.objectOwner.text("Owner: " + playerName);
 
-			if (/* playerName.equals(GuiObjectManager.getInstance().getPlayingPlayer()) && */(objectName.toLowerCase().equals("tower")))
+			if (!playerName.equals(GuiObjectManager.getInstance().getPlayingPlayer()) && (objectName.toLowerCase().equals("tower")))
 				attackTowerButton.visible(true);
 
 			objectOwner.visible(true);
 
 			occupyButton.visible(false);
-			if (!objectName.toLowerCase().equals("headquarter"))
+			if (!objectName.toLowerCase().equals("tower") && playerName.equals(GuiObjectManager.getInstance().getPlayingPlayer()))
 			{
 				createTowerButton.visible(true);
 			}

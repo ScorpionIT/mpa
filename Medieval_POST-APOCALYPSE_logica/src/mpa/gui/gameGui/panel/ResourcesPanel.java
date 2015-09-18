@@ -248,7 +248,6 @@ public class ResourcesPanel
 
 		if (nifty.getCurrentScreen().findElementByName("#informationPanel") != null)
 		{
-
 			nifty.getCurrentScreen().findElementByName("#informationPanel").markForRemoval();
 			nifty.removeElement(nifty.getCurrentScreen(), nifty.getCurrentScreen().findElementByName("#informationPanel"));
 			Element findElementByName = nifty.getCurrentScreen().findElementByName("resourcesBackground");
@@ -256,8 +255,24 @@ public class ResourcesPanel
 		}
 	}
 
-	public LabelBuilder getResourceLabel(String resourceName)
+	public void getResourceLabel(Nifty nifty, String resourceName, int value)
 	{
-		return resourcesValueLabel.get(resourceName);
+
+		LabelBuilder labelBuilder = resourcesValueLabel.get(resourceName);
+		labelBuilder.text(Integer.toString(value));
+
+		removeResourcesLabel(resourceName, nifty);
+
+		Element findElementByName = nifty.getCurrentScreen().findElementByName(resourceName + "Panel");
+		findElementByName.add(labelBuilder.build(nifty, nifty.getCurrentScreen(), findElementByName));
+	}
+
+	private synchronized void removeResourcesLabel(String resourceName, Nifty nifty)
+	{
+		if (nifty.getCurrentScreen().findElementByName("Avaible" + resourceName) != null)
+		{
+			nifty.getCurrentScreen().findElementByName("Avaible" + resourceName).markForRemoval();
+			nifty.removeElement(nifty.getCurrentScreen(), nifty.getCurrentScreen().findElementByName("Avaible" + resourceName));
+		}
 	}
 }
