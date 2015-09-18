@@ -38,6 +38,24 @@ public class NiftyController implements ScreenController
 		gameController.createTowerCrusher(GuiObjectManager.getInstance().getPlayingPlayer(), niftyHandler.getSelectedObjectID());
 	}
 
+	public void onClickBuyHPPotion()
+	{
+
+		gameController.buyHPPotion(GuiObjectManager.getInstance().getPlayingPlayer());
+	}
+
+	public void onClickBuyMPPotion()
+	{
+		gameController.buyMPPotion(GuiObjectManager.getInstance().getPlayingPlayer());
+
+	}
+
+	public void onClickBuyGranade()
+	{
+		gameController.buyGranade(GuiObjectManager.getInstance().getPlayingPlayer());
+
+	}
+
 	public void onClickButtonOccupy()
 	{
 

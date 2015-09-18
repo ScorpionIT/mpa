@@ -2,6 +2,7 @@ package mpa.gui.gameGui.panel;
 
 import java.awt.Color;
 import java.util.HashMap;
+import java.util.Map;
 
 import mpa.gui.gameGui.playingGUI.GuiObjectManager;
 import de.lessvoid.nifty.Nifty;
@@ -17,7 +18,7 @@ public class ResourcesPanel
 	private PanelBuilder resourcesBackgroundPanel;
 	private PanelBuilder resourcesPanel;
 
-	private HashMap<String, LabelBuilder> resourcesValueLabel = new HashMap<>();
+	private Map<String, LabelBuilder> resourcesValueLabel = new HashMap<>();
 
 	private String[] resources = { "WOOD", "WHEAT", "IRON", "STONE", "HERBS" };
 	private int widthPanel;
@@ -27,59 +28,187 @@ public class ResourcesPanel
 
 	private LabelBuilder labelHPAndMP;
 	private LabelBuilder labelLevel;
+	private ImageBuilder buyHPPotion;
+
 	de.lessvoid.nifty.tools.Color color = null;
+	private ImageBuilder buyMPPotion;
+	private PanelBuilder buttonsPotionsPanel;
+	private ImageBuilder buyGranade;
+	private LabelBuilder labelHPPotion;
+	private LabelBuilder labelMPPotion;
+	private LabelBuilder labelGranade;
 
 	public ResourcesPanel()
 	{
 		widthPanel = 100 / resources.length;
 
-		labelHPAndMP = new LabelBuilder(GuiObjectManager.getInstance().getPlayingPlayer() + " HP_MP")
-		{
-			{
-				width("100%");
-				height("40%");
-				x("20%");
-				y("60%");
-				backgroundColor(new de.lessvoid.nifty.tools.Color(1f, 1f, 1f, 0.8f));
-
-			}
-		};
-		labelLevel = new LabelBuilder(GuiObjectManager.getInstance().getPlayingPlayer() + " Level")
-		{
-			{
-				width("100%");
-				height("40%");
-				x("20%");
-				y("10%");
-				backgroundColor(new de.lessvoid.nifty.tools.Color(1f, 1f, 1f, 0.8f));
-
-			}
-		};
 		initInformationPanel();
+		initButtonsPotionsPanel();
+
 		initResources();
 		initResourcePanel();
 
 	}
 
+	private void initLabels()
+	{
+		labelLevel = new LabelBuilder(GuiObjectManager.getInstance().getPlayingPlayer() + " Level")
+		{
+			{
+				width("40%");
+				height("15%");
+				alignCenter();
+				x("30%");
+				y("5%");
+				backgroundColor(new de.lessvoid.nifty.tools.Color(1f, 1f, 1f, 0.8f));
+
+			}
+		};
+		labelHPAndMP = new LabelBuilder(GuiObjectManager.getInstance().getPlayingPlayer() + " HP_MP")
+		{
+			{
+				width("40%");
+				height("15%");
+				alignCenter();
+				x("30%");
+				y("25%");
+				backgroundColor(new de.lessvoid.nifty.tools.Color(1f, 1f, 1f, 0.8f));
+
+			}
+		};
+
+		labelHPPotion = new LabelBuilder(GuiObjectManager.getInstance().getPlayingPlayer() + " HPPotion")
+		{
+			{
+				width("40%");
+				height("15%");
+				alignCenter();
+				x("30%");
+				y("45%");
+				backgroundColor(new de.lessvoid.nifty.tools.Color(1f, 1f, 1f, 0.8f));
+
+			}
+		};
+
+		labelMPPotion = new LabelBuilder(GuiObjectManager.getInstance().getPlayingPlayer() + " MPPotion")
+		{
+			{
+				width("40%");
+				height("15%");
+				alignCenter();
+				x("30%");
+				y("65%");
+				backgroundColor(new de.lessvoid.nifty.tools.Color(1f, 1f, 1f, 0.8f));
+
+			}
+		};
+
+		labelGranade = new LabelBuilder(GuiObjectManager.getInstance().getPlayingPlayer() + " Granade")
+		{
+			{
+				width("40%");
+				height("15%");
+				x("30%");
+				y("85%");
+				backgroundColor(new de.lessvoid.nifty.tools.Color(1f, 1f, 1f, 0.8f));
+
+			}
+		};
+	}
+
 	private void initInformationPanel()
 	{
+		initLabels();
 		informationPanel = new PanelBuilder("#informationPanel")
+		{
+
+			{
+				childLayoutAbsoluteInside();
+				width("20%");
+				height("100%");
+				alignLeft();
+				valignTop();
+				control(labelHPAndMP);
+				control(labelLevel);
+				control(labelHPPotion);
+				control(labelMPPotion);
+				control(labelGranade);
+
+			}
+
+		};
+
+	}
+
+	private void initButtonsPotionsPanel()
+	{
+		initImageBuyPotions();
+		buttonsPotionsPanel = new PanelBuilder("#buttonsPotionsPanel")
 		{
 
 			{
 				childLayoutAbsoluteInside();
 
 				width("20%");
-				height("50%");
-				alignLeft();
-				valignTop();
-				control(labelHPAndMP);
-				control(labelLevel);
+				height("100%");
+				x("25%");
+				y("15%");
+				image(buyHPPotion);
+				image(buyMPPotion);
+				image(buyGranade);
 
 			}
 
 		};
 
+	}
+
+	private void initImageBuyPotions()
+	{
+		buyHPPotion = new ImageBuilder()
+		{
+			{
+				filename("buyHPPotion.png");
+				width("50%");
+				height("30%");
+
+				x("0%");
+				y("10%");
+				interactOnClick("onClickBuyHPPotion()");
+
+			}
+
+		};
+
+		buyMPPotion = new ImageBuilder()
+		{
+			{
+				filename("buyMPPotion.png");
+				width("50%");
+				height("30%");
+
+				x("0%");
+				y("40%");
+				interactOnClick("onClickBuyMPPotion()");
+
+			}
+
+		};
+
+		buyGranade = new ImageBuilder()
+		{
+			{
+				filename("buyGranade.png");
+				width("50%");
+				height("30%");
+
+				x("0%");
+				y("75%");
+				interactOnClick("onClickBuyGranade()");
+
+			}
+
+		};
 	}
 
 	// TODO UNIRE CON L'ALTRO PANNELLO DELLE RISORSE
@@ -107,6 +236,7 @@ public class ResourcesPanel
 					}
 				});
 				panel(informationPanel);
+				panel(buttonsPotionsPanel);
 
 			}
 
@@ -130,18 +260,6 @@ public class ResourcesPanel
 		};
 		resourcesBackgroundPanel.panel(resourcesPanel);
 		addPanels();
-
-	}
-
-	public void setPlayerHPAndMP(int HP, int MP)
-	{
-		labelHPAndMP.text("HP: " + HP + " " + "MP: " + MP);
-
-	}
-
-	public void setPlayerLevel(final String level)
-	{
-		labelLevel.text("Level: " + level);
 
 	}
 
@@ -231,7 +349,7 @@ public class ResourcesPanel
 		return resourcesBackgroundPanel.build(nifty, currentScreen, parent);
 	}
 
-	public void updateInformationPanel(Nifty nifty, int HP, int MP, String level)
+	public void updateInformationPanel(Nifty nifty, int HP, int MP, String level, int numberOfHPPotions, int numberOfMPPotions, int numberOfGranades)
 	{
 		Color playingPlayerColor = GuiObjectManager.getInstance().getPlayingPlayerColor();
 
@@ -241,10 +359,16 @@ public class ResourcesPanel
 					(float) playingPlayerColor.getBlue() / 255, 1);
 			labelHPAndMP.color(color);
 			labelLevel.color(color);
+			labelHPPotion.color(color);
+			labelMPPotion.color(color);
+			labelGranade.color(color);
 		}
 
 		labelHPAndMP.text("HP: " + HP + " " + "MP: " + MP);
 		labelLevel.text("Level: " + level);
+		labelMPPotion.text("MP Potions :" + numberOfMPPotions);
+		labelHPPotion.text("HP Potions :" + numberOfHPPotions);
+		labelGranade.text("MP Potions :" + numberOfGranades);
 
 		if (nifty.getCurrentScreen().findElementByName("#informationPanel") != null)
 		{

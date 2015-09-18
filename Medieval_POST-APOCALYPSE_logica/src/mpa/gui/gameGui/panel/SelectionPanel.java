@@ -47,10 +47,10 @@ public class SelectionPanel
 		{
 			{
 				filename("createTower.png");
-				width("35%");
-				height("35%");
+				width("50%");
+				height("20%");
 
-				x("23%");
+				x("18%");
 				y("50%");
 				visible(false);
 				interactOnClick("onClickButtonCreateTowerButton()");
@@ -62,11 +62,11 @@ public class SelectionPanel
 		attackTowerButton = new ImageBuilder()
 		{
 			{
-				filename("createTower.png");
-				width("35%");
-				height("35%");
+				filename("attackTower.png");
+				width("50%");
+				height("20%");
 
-				x("23%");
+				x("18%");
 				y("50%");
 				visible(false);
 				interactOnClick("onClickButtonAttackTowerButton()");
