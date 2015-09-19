@@ -222,6 +222,8 @@ public class ConquestState extends AIState
 
 		if( walking && buildingToOccupy != null )
 			nextState = this;
+		else if( opponentAI.shouldICreateTowers() && opponentAI.canIcreateTowers() )
+			nextState = new FortificationState();
 		else if( opponentAI.player.canUpgrade() )
 			nextState = new StrengtheningState();
 		else if( opponentAI.areThereWeakerPlayers() )

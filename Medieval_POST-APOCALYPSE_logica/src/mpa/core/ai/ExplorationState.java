@@ -123,6 +123,8 @@ class ExplorationState extends AIState
 				&& opponentAI.player.isThereAnyFreeSulbaltern()
 				&& opponentAI.canGoToThisState( ConquestState.class ) )
 			nextState = new ConquestState();
+		else if( opponentAI.shouldICreateTowers() && opponentAI.canIcreateTowers() )
+			nextState = new FortificationState();
 		else if( opponentAI.areThereWeakerPlayers() )
 			nextState = new CombatState();
 		else if( opponentAI.shouldBuyPotions() && opponentAI.player.canBuyPotions()

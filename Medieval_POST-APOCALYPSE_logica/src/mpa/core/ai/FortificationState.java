@@ -19,16 +19,9 @@ public class FortificationState extends AIState
 	@Override
 	void action( OpponentAI opponentAI )
 	{
-		if( gatheringPlace.equals( opponentAI.player.getPosition() ) )
-		{
-			GameManager.getInstance().createTower( opponentAI.player,
-					building.getAGatheringPlace(), building );
-			isWalking = false;
-			gatheringPlace = null;
-			building = null;
-			return;
-		}
-		else if( !isWalking )
+		System.out.println( "sono " + opponentAI.player.getName()
+				+ " e sto facendo bruttissimo nel fortification state" );
+		if( gatheringPlace == null || !isWalking )
 		{
 			if( opponentAI.player.getHeadquarter().getNumberOfTowers() == 0 )
 			{
@@ -61,6 +54,15 @@ public class FortificationState extends AIState
 				}
 			}
 		}
+		else if( gatheringPlace.equals( opponentAI.player.getPosition() ) )
+		{
+			GameManager.getInstance().createTower( opponentAI.player,
+					building.getAGatheringPlace(), building );
+			System.out.println( "ho creato una torretta" );
+			isWalking = false;
+			gatheringPlace = null;
+			building = null;
+		}
 	}
 
 	@Override
@@ -71,7 +73,7 @@ public class FortificationState extends AIState
 		if( nextState != null )
 			return nextState;
 
-		if( ( opponentAI.shouldICreateTowers() && opponentAI.canIcreateTowers() ) || isWalking )
+		if( isWalking )
 			nextState = this;
 		else if( opponentAI.player.canUpgrade() )
 			nextState = new StrengtheningState();

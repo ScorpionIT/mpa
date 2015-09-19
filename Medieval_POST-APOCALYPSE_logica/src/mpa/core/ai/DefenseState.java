@@ -90,6 +90,8 @@ public class DefenseState extends AIState
 		else if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings()
 				&& opponentAI.canGoToThisState( ConquestState.class ) )
 			nextState = new ConquestState();
+		else if( opponentAI.shouldICreateTowers() && opponentAI.canIcreateTowers() )
+			nextState = new FortificationState();
 		else
 		{
 			opponentAI.resetStateCounters();

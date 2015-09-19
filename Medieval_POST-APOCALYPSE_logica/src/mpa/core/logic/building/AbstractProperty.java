@@ -11,6 +11,7 @@ import javax.vecmath.Vector2f;
 
 import mpa.core.logic.AbstractObject;
 import mpa.core.logic.GameManager;
+import mpa.core.maths.MyMath;
 import mpa.core.util.GameProperties;
 
 public class AbstractProperty extends AbstractObject
@@ -63,6 +64,14 @@ public class AbstractProperty extends AbstractObject
 		gatheringPlaces.add( new Vector2f( x - getCollisionRay() - collisionRayTower / 2, y
 				+ getCollisionRay() + collisionRayTower / 2 ) );
 
+		for( Vector2f gPlaces : gatheringPlaces )
+			if( MyMath.distanceFloat( gPlaces, getGatheringPlace() ) < GameProperties.getInstance()
+					.getCollisionRay( "tower" ) )
+			{
+				gatheringPlaces.remove( gPlaces );
+				break;
+			}
+
 		Iterator<Vector2f> gatheringPlaceIterator = gatheringPlaces.iterator();
 		while( gatheringPlaceIterator.hasNext() )
 		{
@@ -105,7 +114,7 @@ public class AbstractProperty extends AbstractObject
 	{
 		List<Vector2f> avaibleGatheringPlaces = getAvaibleGatheringPlaces();
 		if( !avaibleGatheringPlaces.isEmpty() )
-			return avaibleGatheringPlaces.get( 0 );
+			return avaibleGatheringPlaces.remove( 0 );
 		else
 			return null;
 	}

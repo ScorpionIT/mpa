@@ -1,10 +1,11 @@
 package mpa.core.ai;
 
-import java.util.Collections;
+import java.util.List;
 
 import javax.vecmath.Vector2f;
 
 import mpa.core.logic.GameManager;
+import mpa.core.logic.building.Tower;
 import mpa.core.logic.character.AbstractCharacter;
 import mpa.core.logic.character.Player;
 import mpa.core.logic.character.Player.Item;
@@ -33,6 +34,34 @@ class CombatState extends AIState
 		playerToAttack = abs;
 	}
 
+	private void preRoutine( OpponentAI opponentAI )
+	{
+		if( playerToAttack instanceof Player && playerToAttack != null )
+		{
+			List<Tower> towers = ( ( Player ) opponentAI.player ).getTowers();
+			Tower toDestroy = null;
+			float minDistance = Float.MAX_VALUE;
+
+			for( Tower t : towers )
+			{
+				float dinstaceOpponentToTower = MyMath.distanceFloat( playerToAttack.getPosition(),
+						t.getPosition() );
+				if( dinstaceOpponentToTower < minDistance )
+				{
+					minDistance = dinstaceOpponentToTower;
+					toDestroy = t;
+				}
+			}
+			while( !GameManager.getInstance().createTowerCrushers( opponentAI.player, toDestroy )
+					.isEmpty() );
+
+			while( !GameManager.getInstance()
+					.createMinions( opponentAI.player, 1, ( ( Player ) playerToAttack ) ).isEmpty() );
+
+		}
+
+	}
+
 	private void computePath( Player me, AbstractCharacter him, boolean physicall )
 	{
 		Vector2f parallelVector = MyMath.computeDirection( me.getPosition(), him.getPosition() );
@@ -54,127 +83,80 @@ class CombatState extends AIState
 	@Override
 	void action( OpponentAI opponentAI )
 	{
-		// System.out.println( "sono nel COMBAT STATE" );
-
-		if( playerToAttack != null && !playerToAttack.amIAlive() )
-			playerToAttack = null;
-		if( playerToAttack == null )
+		if( playerToAttack != null && playerToAttack.amIAlive() )
 		{
-			float distance = Float.MAX_VALUE;
-
-			if( bullies.isEmpty() )
-			{
-				for( Player opponent : opponentAI.knownPlayers )
-				{
-					if( opponent == opponentAI.player )
-						continue;
-					float distance2 = MyMath.distanceFloat( opponentAI.player.getX(),
-							opponentAI.player.getY(), opponent.getX(), opponent.getY() );
-					if( ( opponentAI.player.getPlayerLevel().ordinal() >= opponent.getPlayerLevel()
-							.ordinal() ) && distance2 < distance )
-					{
-						distance = distance2;
-						playerToAttack = opponent;
-					}
-				}
-			}
-			else
-			{
-				for( Enemy opponent : bullies )
-				{
-					float distance2 = MyMath.distanceFloat( opponentAI.player.getX(),
-							opponentAI.player.getY(), opponent.getEnemy().getX(), opponent
-									.getEnemy().getY() );
-					if( distance2 < distance )
-					{
-						distance = distance2;
-						playerToAttack = opponent.getEnemy();
-					}
-				}
-			}
-
-		}
-		cleanBulliesList();
-		if( playerToAttack == null )
-			return;
-		else if( !playerToAttack.amIAlive() && !bullies.isEmpty() )
-		{
-
-			Collections.sort( bullies );
-			playerToAttack = bullies.remove( 0 ).getEnemy();
-			pointToReach = null;
-		}
-
-		if( pointToReach == null )
-		{
-			float distanceBetweenUs = MyMath.distanceFloat( opponentAI.player.getPosition(),
+			// preRoutine( opponentAI );
+			float distanceMeToHim = MyMath.distanceFloat( opponentAI.player.getPosition(),
 					playerToAttack.getPosition() );
-			if( distanceBetweenUs < AbstractCharacter.getPace() )
-			{
-				Vector2f direction = MyMath.computeDirection( opponentAI.player.getPosition(),
-						playerToAttack.getPosition() );
-				pointToReach = new Vector2f( opponentAI.player.getX() + direction.x
-						* distanceBetweenUs / 2, distanceBetweenUs / 2 );
-				opponentAI.player.stopMoving();
-				opponentAI.player.setPosition( pointToReach );
-			}
-			else
-			{
-				computePath( opponentAI.player, playerToAttack, true );
-			}
 
-			return;
-		}
-		else
-		{
-			Vector2f currentPosition = playerToAttack.getPosition();
-
-			if( MyMath.distanceFloat( currentPosition.x, currentPosition.y, pointToReach.x,
-					pointToReach.y ) > Math.max( opponentAI.player.getRangeOfDistanceAttack(),
-					opponentAI.player.getRangeOfPhysicallAttack() ) * 1.5 )
-			{
-				computePath( opponentAI.player, playerToAttack, true );
-				return;
-
-			}
-			if( MyMath.distanceFloat( opponentAI.player.getX(), opponentAI.player.getY(),
-					playerToAttack.getX(), playerToAttack.getY() ) <= opponentAI.player
-					.getRangeOfDistanceAttack() )
+			if( distanceMeToHim < opponentAI.player.getRangeOfPhysicallAttack() )
 			{
 				opponentAI.player.stopMoving();
-				opponentAI.player.setSelectedItem( Item.GRANADE );
+				GameManager.getInstance().changeSelectedItem( opponentAI.player, Item.WEAPON );
 				GameManager.getInstance().playerAction( opponentAI.player,
 						playerToAttack.getPosition() );
 			}
-			else if( MyMath.distanceFloat( opponentAI.player.getX(), opponentAI.player.getY(),
-					playerToAttack.getX(), playerToAttack.getY() ) <= opponentAI.player
-					.getRangeOfPhysicallAttack() )
+			if( distanceMeToHim < opponentAI.player.getRangeOfDistanceAttack()
+					&& opponentAI.player.getPotionAmount( Potions.GRANADE ) > 0 )
 			{
 				opponentAI.player.stopMoving();
-				opponentAI.player.setSelectedItem( Item.WEAPON );
+				GameManager.getInstance().changeSelectedItem( opponentAI.player, Item.GRANADE );
 				GameManager.getInstance().playerAction( opponentAI.player,
 						playerToAttack.getPosition() );
 			}
+
+			if( pointToReach == null )
+			{
+				computePath( opponentAI.player, playerToAttack, true );
+			}
 			else
 			{
-				float distanceBetweenUs = MyMath.distanceFloat( opponentAI.player.getPosition(),
+				float distanceOldPositionToNew = MyMath.distanceFloat( pointToReach,
 						playerToAttack.getPosition() );
-				if( distanceBetweenUs < AbstractCharacter.getPace() )
-				{
-					Vector2f direction = MyMath.computeDirection( opponentAI.player.getPosition(),
-							playerToAttack.getPosition() );
-					pointToReach = new Vector2f( opponentAI.player.getX() + direction.x
-							* distanceBetweenUs / 2, distanceBetweenUs / 2 );
-					opponentAI.player.stopMoving();
-					opponentAI.player.setPosition( pointToReach );
-				}
-				else
-				{
+
+				if( distanceOldPositionToNew > 20f )
 					computePath( opponentAI.player, playerToAttack, true );
+			}
+		}
+		else if( ( playerToAttack == null ) || ( !playerToAttack.amIAlive() ) )
+		{
+			if( !bullies.isEmpty() )
+			{
+				float minDistance = Float.MAX_VALUE;
+				Enemy toAttack = null;
+				for( Enemy enemy : bullies )
+				{
+					float distanceFromEnemy = MyMath.distanceFloat(
+							opponentAI.player.getPosition(), enemy.getEnemy().getPosition() );
+					if( distanceFromEnemy < minDistance )
+					{
+						minDistance = distanceFromEnemy;
+						toAttack = enemy;
+					}
+				}
+				if( toAttack != null )
+				{
+					playerToAttack = toAttack.getEnemy();
+					computePath( opponentAI.player, playerToAttack, true );
+					return;
+				}
+			}
+			float minDistance = Float.MAX_VALUE;
+			for( Player p : opponentAI.knownPlayers )
+			{
+				if( p == opponentAI.player )
+					continue;
+				float distanceMeToHim = MyMath.distanceFloat( opponentAI.player.getPosition(),
+						p.getPosition() );
+				if( distanceMeToHim < minDistance )
+				{
+					minDistance = distanceMeToHim;
+					playerToAttack = p;
 				}
 
 			}
-
+			if( playerToAttack != null )
+				computePath( opponentAI.player, playerToAttack, true );
 		}
 
 	}
@@ -203,6 +185,8 @@ class CombatState extends AIState
 				&& opponentAI.player.isThereAnyFreeSulbaltern()
 				&& opponentAI.canGoToThisState( ConquestState.class ) )
 			nextState = new ConquestState();
+		else if( opponentAI.shouldICreateTowers() && opponentAI.canIcreateTowers() )
+			nextState = new FortificationState();
 		else if( !opponentAI.knownAllTheWorld
 				&& opponentAI.canGoToThisState( ExplorationState.class ) )
 			nextState = new ExplorationState();

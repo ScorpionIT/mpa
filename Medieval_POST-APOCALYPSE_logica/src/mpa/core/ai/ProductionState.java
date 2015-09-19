@@ -117,6 +117,8 @@ class ProductionState extends AIState
 		else if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings()
 				&& opponentAI.canGoToThisState( ConquestState.class ) )
 			nextState = new ConquestState();
+		else if( opponentAI.shouldICreateTowers() && opponentAI.canIcreateTowers() )
+			nextState = new FortificationState();
 		else if( opponentAI.areThereWeakerPlayers() )
 			nextState = new CombatState();
 		else if( !opponentAI.knownAllTheWorld

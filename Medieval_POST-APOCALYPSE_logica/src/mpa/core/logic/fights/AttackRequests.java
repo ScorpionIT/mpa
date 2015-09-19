@@ -63,16 +63,8 @@ public class AttackRequests extends MyThread
 				}
 				for( AbstractCharacter hitPlayer : hitPlayers )
 				{
-					System.out.println();
-					System.out.println();
-					System.out.println();
-					System.out.println( "mi ha rsistuito cosa ?!?!? " + hitPlayers.size() );
-					System.out.println();
-					System.out.println();
-					System.out.println();
 					if( hitPlayer != attacker && AI_players.keySet().contains( hitPlayer ) )
 						AI_players.get( hitPlayer ).gotAttackedBy( attacker );
-
 				}
 
 			}

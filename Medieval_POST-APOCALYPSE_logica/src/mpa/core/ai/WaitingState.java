@@ -30,11 +30,13 @@ class WaitingState extends AIState
 
 		if( opponentAI.player.canUpgrade() )
 			nextState = new StrengtheningState();
+		else if( opponentAI.areThereWeakerPlayers() )
+			nextState = new CombatState();
 		else if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings()
 				&& opponentAI.player.isThereAnyFreeSulbaltern() )
 			nextState = new ConquestState();
-		else if( opponentAI.areThereWeakerPlayers() )
-			nextState = new CombatState();
+		else if( opponentAI.shouldICreateTowers() && opponentAI.canIcreateTowers() )
+			nextState = new FortificationState();
 		else if( !opponentAI.knownAllTheWorld )
 			nextState = new ExplorationState();
 		else if( opponentAI.player.canUpgrade() || opponentAI.player.canBuyPotions() )
@@ -44,5 +46,4 @@ class WaitingState extends AIState
 
 		return nextState;
 	}
-
 }
