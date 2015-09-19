@@ -483,11 +483,7 @@ public class GameManagerProxy
 		if (potionType.toLowerCase().equals("mp"))
 			player.buyPotion(Potions.MP);
 		else if (potionType.toLowerCase().equals("hp"))
-		{
-			System.out.println("AVEVO " + player.getPotionAmount(Potions.HP));
 			player.buyPotion(Potions.HP);
-			System.out.println("ORA HO " + player.getPotionAmount(Potions.HP));
-		}
 		else if (potionType.toLowerCase().equals("granade"))
 			player.buyPotion(Potions.GRANADE);
 		return true;

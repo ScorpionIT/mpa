@@ -570,10 +570,7 @@ public class Player extends AbstractCharacter
 		try
 		{
 			writeLock.lock();
-			System.out.println("E COSA PIÙ IMPORTANTE SONO " + name);
-			System.out.println("AVEVO " + potions.get(potion) + " DI " + potion);
 			potions.put(potion, potions.get(potion) - 1);
-			System.out.println("ORA HO " + potions.get(potion) + " DI " + potion);
 			return potion;
 		} finally
 		{
