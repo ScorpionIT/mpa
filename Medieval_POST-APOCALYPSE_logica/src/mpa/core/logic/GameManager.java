@@ -355,17 +355,26 @@ public class GameManager
 		if (target != null && p != null)
 			p.setDirection(MyMath.computeDirection(p.getPosition(), target));
 
-		if (p.getSelectedItem().equals(Item.WEAPON) || p.getSelectedItem().equals(Item.GRANADE) || p.getSelectedItem().equals(Item.FLASH_BANG))
+		if (p.getSelectedItem().equals(Item.WEAPON) || (p.getSelectedItem().equals(Item.GRANADE) && p.getPotionAmount(Potions.GRANADE) > 0)
+				|| (p.getSelectedItem().equals(Item.FLASH_BANG) && p.getPotionAmount(Potions.FLASH_BANG) > 0))
+		{
 			attackRequests.addRequest(p, target);
+		}
 		else if (p.getSelectedItem().equals(Item.HP_POTION))
 		{
-			p.restoreHealth(Potions.HP);
-			p.takePotion(Potions.HP);
+			if (p.getPotionAmount(Potions.HP) > 0)
+			{
+				p.restoreHealth(Potions.HP);
+				p.takePotion(Potions.HP);
+			}
 		}
 		else
 		{
-			p.restoreHealth(Potions.MP);
-			p.takePotion(Potions.MP);
+			if (p.getPotionAmount(Potions.MP) > 0)
+			{
+				p.restoreHealth(Potions.MP);
+				p.takePotion(Potions.MP);
+			}
 		}
 
 		return hitPlayers;

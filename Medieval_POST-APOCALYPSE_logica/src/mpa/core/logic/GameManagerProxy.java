@@ -408,6 +408,18 @@ public class GameManagerProxy
 
 	}
 
+	public int getLifeTower(String objectID)
+	{
+
+		AbstractPrivateProperty object = objects.get("tower").get(objectID);
+		if (object != null)
+		{
+			return ((Tower) object).getLife();
+		}
+		return 0;
+
+	}
+
 	public Map<String, Map<String, Integer>> getPlayersResourceAmount()
 	{
 		Map<String, Map<String, Integer>> playersResourceAmount = new HashMap<>();

@@ -3,6 +3,8 @@ package mpa.gui.gameGui.playingGUI;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.vecmath.Vector2f;
@@ -27,24 +29,26 @@ import com.jme3.util.TangentBinormalGenerator;
 public class GuiObjectManager
 {
 	private static GuiObjectManager _guiGuiObjectManager = null;
-	private HashMap<String, Spatial> players = new HashMap<>();
-	private HashMap<String, Spatial> headQuarters = new HashMap<>();
-	private HashMap<Integer, Spatial> woods = new HashMap<>();
-	private HashMap<Integer, Spatial> fields = new HashMap<>();
-	private HashMap<Integer, Spatial> caves = new HashMap<>();
-	private HashMap<Integer, Spatial> mines = new HashMap<>();
-	private HashMap<String, Spatial> minions = new HashMap<>();
-	private HashMap<String, Spatial> towerCrushers = new HashMap<>();
-	private HashMap<String, Spatial> towers = new HashMap<>();
-	private HashMap<String, Spatial> hitPlayers = new HashMap<>();
-	private ArrayList<Vector2f> pointToVisit = new ArrayList<>();
+	private Map<String, Spatial> players = new HashMap<>();
+	private Map<String, Spatial> headQuarters = new HashMap<>();
+	private Map<Integer, Spatial> woods = new HashMap<>();
+	private Map<Integer, Spatial> fields = new HashMap<>();
+	private Map<Integer, Spatial> caves = new HashMap<>();
+	private Map<Integer, Spatial> mines = new HashMap<>();
+	private Map<String, Spatial> minions = new HashMap<>();
+	private Map<String, Spatial> towerCrushers = new HashMap<>();
+	private Map<String, Spatial> towers = new HashMap<>();
+	private Map<String, Spatial> hitPlayers = new HashMap<>();
+	private List<Vector2f> pointToVisit = new ArrayList<>();
 
-	private HashMap<String, Circle2D> playersCirlces = new HashMap<>();
+	private Map<Spatial, Circle2D> spatialCirlces = new HashMap<>();
 
-	private HashMap<String, Color> playersColors = new HashMap<>();
+	private Map<String, Color> playersColors = new HashMap<>();
 
-	private HashMap<Spatial, SpatialAnimationController> animationControllerSpatial = new HashMap<>();
-	private ArrayList<Vector2f> path = null;
+	private Map<Spatial, LifeBar> spatialsLifeBars = new HashMap<>();
+
+	private Map<Spatial, SpatialAnimationController> animationControllerSpatial = new HashMap<>();
+	private List<Vector2f> path = null;
 
 	private float worldDimension;
 
@@ -79,7 +83,7 @@ public class GuiObjectManager
 		}
 	}
 
-	public ArrayList<Vector2f> getPath()
+	public List<Vector2f> getPath()
 	{
 		return path;
 	}
@@ -143,15 +147,15 @@ public class GuiObjectManager
 		// }
 	}
 
-	public void addPlayer(String name, Vector2f hqPosition, Vector2f gatheringPlace, Vector2f direction)
+	public void addPlayer(String name, Vector2f hqPosition, Vector2f gatheringPlace, Vector2f direction, int life)
 	{
-		gameGui.getAssetManager().registerLocator("./Assets/Models/Skeleton.zip", ZipLocator.class);
+		gameGui.getAssetManager().registerLocator(GameProperties.getInstance().getPath("ModelsPath") + "Skeleton.zip", ZipLocator.class);
 		Spatial playerModel = gameGui.getAssetManager().loadModel("Skeleton.mesh.xml");
 		playerModel.scale(MyMath.scaleFactor(getModelBounds(playerModel), "player"));
 
 		Vector3f playerPosition = new Vector3f(gatheringPlace.x, 10, gatheringPlace.y);
 		playerModel.setLocalTranslation(playerPosition);
-		addPlayerCircle(playerPosition, name);
+		addPlayerCircle(playerPosition, name, playerModel);
 
 		animationControllerSpatial.put(playerModel, new SpatialAnimationController(playerModel, this, name, "player"));
 
@@ -165,7 +169,9 @@ public class GuiObjectManager
 		players.put(name, playerModel);
 		gameGui.attachMobileObject(playerModel);
 
-		gameGui.getAssetManager().registerLocator("Assets/Models/baker_house.zip", ZipLocator.class);
+		addModelLifeBar(playerModel, playerPosition, life);
+
+		gameGui.getAssetManager().registerLocator(GameProperties.getInstance().getPath("ModelsPath") + "baker_house.zip", ZipLocator.class);
 		Spatial hqModel = gameGui.getAssetManager().loadModel("baker_house.mesh.xml");
 		hqModel.setLocalTranslation(new Vector3f(hqPosition.x, 0, hqPosition.y));
 		hqModel.rotate(0, 90, 0);
@@ -181,17 +187,50 @@ public class GuiObjectManager
 
 	}
 
-	private void addPlayerCircle(Vector3f position, String playerName)
+	private void addModelLifeBar(Spatial model, Vector3f playerPosition, int life)
 	{
-		Color color = new Color(new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat(), 0.8f);
+		LifeBar lifeBar = new LifeBar(gameGui.getAssetManager(), getModelBounds(model), playerPosition.y);
+		lifeBar.setLife(life);
+
+		lifeBar.setLocalTraslation(playerPosition);
+		gameGui.attachLifeBar(lifeBar);
+		spatialsLifeBars.put(model, lifeBar);
+
+	}
+
+	private void updateModelLifeBar(String playerName, Spatial playerModel, Vector2f playerPosition, int life)
+	{
+		LifeBar lifeBar = spatialsLifeBars.get(playerModel);
+		lifeBar.setLife(life);
+
+		lifeBar.setLocalTraslation(playerPosition);
+
+	}
+
+	private void addPlayerCircle(Vector3f position, String playerName, Spatial playerModel)
+	{
+		Color color = null;
+		if (playerName.equals(this.playingPlayer))
+			color = new Color(0.9f, 0f, 0.2f, 0.8f);
+		else
+			color = new Color(new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat(), 0.8f);
 		Circle2D circle2D = createCircle(color, GameProperties.getInstance().getObjectWidth("player") * 2);
 		gameGui.attachCircle(circle2D);
 
-		playersCirlces.put(playerName, circle2D);
+		spatialCirlces.put(playerModel, circle2D);
 		playersColors.put(playerName, color);
 
 		if (playerName.equals(playingPlayer))
 			gameGui.getNiftyHandler().updateResourcePanel();
+
+	}
+
+	private void addMinionCircle(String boss, Spatial minionModel)
+	{
+		Circle2D circle2D = createCircle(playersColors.get(boss), GameProperties.getInstance().getObjectWidth("minion") * 2);
+		gameGui.attachCircle(circle2D);
+
+		spatialCirlces.put(minionModel, circle2D);
 
 	}
 
@@ -220,7 +259,7 @@ public class GuiObjectManager
 				hitPlayers.put(s, towerCrushers.get(s));
 	}
 
-	public ArrayList<Spatial> getHitCharacters()
+	public List<Spatial> getHitCharacters()
 	{
 		try
 		{
@@ -240,21 +279,21 @@ public class GuiObjectManager
 		switch (type)
 		{
 			case "WOOD":
-				gameGui.getAssetManager().registerLocator("Assets/Models/Wood.zip", ZipLocator.class);
+				gameGui.getAssetManager().registerLocator(GameProperties.getInstance().getPath("ModelsPath") + "Wood.zip", ZipLocator.class);
 				model = gameGui.getAssetManager().loadModel("Tree.mesh.xml");
 				model.scale(MyMath.scaleFactor(getModelBounds(model), "wood"));
 				woods.put(ID, model);
 				model.rotate(90, 0, 0);
 				break;
 			case "FIELD":
-				gameGui.getAssetManager().registerLocator("Assets/Models/CornField.zip", ZipLocator.class);
+				gameGui.getAssetManager().registerLocator(GameProperties.getInstance().getPath("ModelsPath") + "CornField.zip", ZipLocator.class);
 				model = gameGui.getAssetManager().loadModel("CornField.mesh.xml");
 				model.scale(MyMath.scaleFactor(getModelBounds(model), "field"));
 				fields.put(ID, model);
 				model.rotate(90, 0, 0);
 				break;
 			case "CAVE":
-				gameGui.getAssetManager().registerLocator("Assets/Models/stones.zip", ZipLocator.class);
+				gameGui.getAssetManager().registerLocator(GameProperties.getInstance().getPath("ModelsPath") + "stones.zip", ZipLocator.class);
 				model = gameGui.getAssetManager().loadModel("stones.mesh.xml");
 				System.out.println("prima dello scale + " + getModelBounds(model));
 				model.scale(MyMath.scaleFactor(getModelBounds(model), "cave"));
@@ -262,7 +301,7 @@ public class GuiObjectManager
 				caves.put(ID, model);
 				break;
 			case "MINE":
-				gameGui.getAssetManager().registerLocator("Assets/Models/Wood.zip", ZipLocator.class);
+				gameGui.getAssetManager().registerLocator(GameProperties.getInstance().getPath("ModelsPath") + "Wood.zip", ZipLocator.class);
 				model = gameGui.getAssetManager().loadModel("Tree.mesh.xml");
 				model.scale(MyMath.scaleFactor(getModelBounds(model), "mine"));
 				mines.put(ID, model);
@@ -304,21 +343,23 @@ public class GuiObjectManager
 		gameGui.spheres.attachChild(sphereGeo);
 	}
 
-	public void addMinion(String ID)
+	public void addMinion(String ID, String boss)
 	{
 
-		gameGui.getAssetManager().registerLocator("./Assets/Models/Monster1.zip", ZipLocator.class);
+		gameGui.getAssetManager().registerLocator(GameProperties.getInstance().getPath("ModelsPath") + "Monster1.zip", ZipLocator.class);
 		Spatial minionModel = gameGui.getAssetManager().loadModel("Monster1.mesh.xml");
 		minionModel.scale(MyMath.scaleFactor(getModelBounds(minionModel), "minion"));
 		minions.put(ID, minionModel);
 		gameGui.attachMobileObject(minionModel);
 		animationControllerSpatial.put(minionModel, new SpatialAnimationController(minionModel, this, ID, "minion"));
 
+		addMinionCircle(boss, minionModel);
+
 	}
 
 	public void addTowerCrusher(String ID)
 	{
-		gameGui.getAssetManager().registerLocator("./Assets/Models/Troll.zip", ZipLocator.class);
+		gameGui.getAssetManager().registerLocator(GameProperties.getInstance().getPath("ModelsPath") + "Troll.zip", ZipLocator.class);
 		Spatial towerCrusherModel = gameGui.getAssetManager().loadModel("Troll.mesh.xml");
 		towerCrusherModel.scale(MyMath.scaleFactor(getModelBounds(towerCrusherModel), "towerCrusher"));
 		towerCrushers.put(ID, towerCrusherModel);
@@ -327,18 +368,22 @@ public class GuiObjectManager
 
 	}
 
-	public void addTower(Vector2f position, String ID)
+	public void addTower(Vector2f position, String ID, int life)
 	{
-		gameGui.getAssetManager().registerLocator("Assets/Models/tower.zip", ZipLocator.class);
+		gameGui.getAssetManager().registerLocator(GameProperties.getInstance().getPath("ModelsPath") + "tower.zip", ZipLocator.class);
 		Spatial tower = gameGui.getAssetManager().loadModel("tower.mesh.xml");
-		tower.setLocalTranslation(position.x, 0, position.y);
+		Vector3f positionModel = new Vector3f(position.x, 0, position.y);
+		tower.setLocalTranslation(positionModel);
 		tower.scale(MyMath.scaleFactor(getModelBounds(tower), "tower"));
+
+		addModelLifeBar(tower, positionModel, life);
+
 		tower.rotate(90, 0, 0);
 		gameGui.attachStaticObject(tower);
 		towers.put(ID, tower);
 	}
 
-	public synchronized void updatePlayerPosition(String name, Vector2f position, Vector2f direction, boolean isMoving)
+	public synchronized void updatePlayerPosition(String name, Vector2f position, Vector2f direction, boolean isMoving, int life)
 	{
 
 		Spatial player = players.get(name);
@@ -357,12 +402,20 @@ public class GuiObjectManager
 			Quaternion quad = new Quaternion();
 			quad.lookAt(vector, upVector);
 
+			updateModelLifeBar(name, player, position, life);
+
 			player.setLocalRotation(quad);
 			player.setLocalTranslation(position.x, 15, position.y);
 
-			Circle2D circle2d = playersCirlces.get(name);
-			circle2d.setLocalTranslation(position.x - circle2d.getRadius() / 2, 1, position.y + circle2d.getRadius() / 2);
+			Circle2D circle2d = spatialCirlces.get(player);
+			updateCirclePosition(circle2d, position);
+
 		}
+	}
+
+	private void updateCirclePosition(Circle2D circle2d, Vector2f position)
+	{
+		circle2d.setLocalTranslation(position.x - circle2d.getRadius() / 2, 1, position.y + circle2d.getRadius() / 2);
 	}
 
 	public synchronized void updateMinionPosition(String ID, Vector2f position, Vector2f direction, boolean isMoving)
@@ -383,6 +436,9 @@ public class GuiObjectManager
 			quad.lookAt(vector, upVector);
 			minion.setLocalRotation(quad);
 			minion.setLocalTranslation(position.x, 10, position.y);
+
+			Circle2D circle2d = spatialCirlces.get(minion);
+			updateCirclePosition(circle2d, position);
 		}
 	}
 
@@ -416,7 +472,9 @@ public class GuiObjectManager
 
 	public void removeTower(String ID)
 	{
+		gameGui.detachLifeBar(spatialsLifeBars.remove(towers.get(ID)));
 		gameGui.detachStaticObject(towers.remove(ID));
+
 	}
 
 	public void killMinion(String ID)
@@ -456,15 +514,14 @@ public class GuiObjectManager
 			System.exit(0);
 		gameGui.detachMobileObject(players.get(name));
 		animationControllerSpatial.remove(players.get(name));
+		gameGui.detachLifeBar(spatialsLifeBars.get(players.get(name)));
+		gameGui.detachCircle(spatialCirlces.remove(players.get(name)));
 		players.remove(name);
-		gameGui.detachCircle(playersCirlces.remove(name));
 		playersColors.remove(name);
 		gameGui.getNiftyHandler().removePlayer(name);
-		if (name.equals(playingPlayer))
-			System.exit(0);
 	}
 
-	public HashMap<String, Color> getPlayersColors()
+	public Map<String, Color> getPlayersColors()
 	{
 		return playersColors;
 	}
@@ -473,6 +530,7 @@ public class GuiObjectManager
 	{
 		gameGui.detachMobileObject(minions.get(ID));
 		animationControllerSpatial.remove(minions.get(ID));
+		gameGui.detachCircle(spatialCirlces.remove(minions.get(ID)));
 		minions.remove(ID);
 	}
 

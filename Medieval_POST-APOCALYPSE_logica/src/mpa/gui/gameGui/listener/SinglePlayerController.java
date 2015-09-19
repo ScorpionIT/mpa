@@ -74,7 +74,8 @@ public class SinglePlayerController extends ListenerImplementation
 
 			if (!tower.equals(""))
 			{
-				GuiObjectManager.getInstance().addTower(new javax.vecmath.Vector2f(towerAvaiblePosition.x, towerAvaiblePosition.y), tower);
+				GuiObjectManager.getInstance().addTower(new javax.vecmath.Vector2f(towerAvaiblePosition.x, towerAvaiblePosition.y), tower,
+						gManagerProxy.getLifeTower(tower));
 				return tower;
 			}
 		}
@@ -87,7 +88,7 @@ public class SinglePlayerController extends ListenerImplementation
 	{
 		ArrayList<String> minions = gManagerProxy.createMinions(boss, quantity, target);
 		for (String ID : minions)
-			GuiObjectManager.getInstance().addMinion(ID);
+			GuiObjectManager.getInstance().addMinion(ID, boss);
 
 		return minions;
 	}
@@ -110,7 +111,8 @@ public class SinglePlayerController extends ListenerImplementation
 		for (String p : playersPositions.keySet())
 		{
 			javax.vecmath.Vector2f[] positions = playersPositions.get(p);
-			GuiObjectManager.getInstance().updatePlayerPosition(p, positions[0], positions[1], gManagerProxy.isMovingPlayer(p));
+			GuiObjectManager.getInstance().updatePlayerPosition(p, positions[0], positions[1], gManagerProxy.isMovingPlayer(p),
+					gManagerProxy.getPLayerHP(p));
 		}
 
 		for (String m : minionsPositions.keySet())
@@ -139,7 +141,7 @@ public class SinglePlayerController extends ListenerImplementation
 			javax.vecmath.Vector2f[] positions = initPs.get(p);
 			System.out.println("positions= " + positions);
 			System.out.println(GuiObjectManager.getInstance());
-			GuiObjectManager.getInstance().addPlayer(p, positions[2], positions[0], positions[1]);
+			GuiObjectManager.getInstance().addPlayer(p, positions[2], positions[0], positions[1], gManagerProxy.getPLayerHP(p));
 		}
 		HashMap<String, javax.vecmath.Vector2f> fields = gManagerProxy.getFields();
 		HashMap<String, javax.vecmath.Vector2f> caves = gManagerProxy.getCaves();
