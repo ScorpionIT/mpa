@@ -15,45 +15,43 @@ public class Minion extends AbstractCharacter
 	private Vector2f targetPosition;
 	private int health = 20;
 
-	public Minion( String name, float x, float y, int health, Headquarter headquarter, Player boss,
-			Player target )
+	public Minion(String name, float x, float y, int health, Headquarter headquarter, Player boss, Player target)
 	{
-		super( name, x, y, health, headquarter );
+		super(name, x, y, health, headquarter);
 		this.boss = boss;
 		this.target = target;
-		this.targetPosition = new Vector2f( target.getX(), target.getY() );
-		setID( name );
+		this.targetPosition = new Vector2f(target.getX(), target.getY());
+		setID(name);
 
-		GameManager.getInstance().computePath( this, target.getX(), target.getY() );
+		GameManager.getInstance().computePath(this, target.getX(), target.getY());
 	}
 
 	@Override
 	public boolean movePlayer()
 	{
 		// writeLock.lock();
-		if( GameManager.getInstance().isPlayerDead( target ) )
+		if (GameManager.getInstance().isPlayerDead(target))
 		{
-			for( Player p : GameManager.getInstance().getPlayers() )
-				if( p != boss )
+			for (Player p : GameManager.getInstance().getPlayers())
+				if (p != boss)
 				{
 					target = p;
 					targetPosition = p.getPosition();
-					GameManager.getInstance()
-							.computePath( this, targetPosition.x, targetPosition.y );
+					GameManager.getInstance().computePath(this, targetPosition.x, targetPosition.y);
 					break;
 				}
 		}
 
-		if( MyMath.distanceFloat( x, y, target.getX(), target.getY() ) <= rangeOfPhysicallAttack )
+		if (MyMath.distanceFloat(x, y, target.getX(), target.getY()) <= rangeOfPhysicallAttack)
 		{
-			System.out.println( "sono un minion e sto attaccando" );
-			GameManager.getInstance().attackPhysically( this );
+			System.out.println("sono un minion e sto attaccando");
+			GameManager.getInstance().attackPhysically(this);
 		}
 
-		if( MyMath.distanceFloat( targetPosition.x, targetPosition.y, target.getX(), target.getY() ) > 15f )
+		if (MyMath.distanceFloat(targetPosition.x, targetPosition.y, target.getX(), target.getY()) > 15f)
 		{
-			targetPosition.set( target.getX(), target.getY() );
-			GameManager.getInstance().computePath( this, targetPosition.x, targetPosition.y );
+			targetPosition.set(target.getX(), target.getY());
+			GameManager.getInstance().computePath(this, targetPosition.x, targetPosition.y);
 		}
 
 		return super.movePlayer();
@@ -85,7 +83,7 @@ public class Minion extends AbstractCharacter
 	}
 
 	@Override
-	public boolean inflictDamage( int damage )
+	public boolean inflictDamage(int damage)
 	{
 		try
 		{
@@ -98,5 +96,10 @@ public class Minion extends AbstractCharacter
 
 			writeLock.unlock();
 		}
+	}
+
+	public Player getBoss()
+	{
+		return boss;
 	}
 }

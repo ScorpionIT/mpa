@@ -39,7 +39,7 @@ public class GameProperties
 			float xMin = objectWidth.get(obj) / 2;
 			float yMin = objectHeght.get(obj) / 2;
 			float collisionRay = (float) Math.sqrt(Math.pow(xMin, 2) + Math.pow(yMin, 2));
-			collisionRays.put(obj, collisionRay);
+			collisionRays.put(obj.toLowerCase(), collisionRay);
 		}
 	}
 
@@ -322,7 +322,6 @@ public class GameProperties
 
 	public String getModelName(String key)
 	{
-		System.out.println("sto chiedendo " + key+ modelsName.get(key.toLowerCase()));
 		return modelsName.get(key.toLowerCase());
 
 	}
@@ -351,7 +350,8 @@ public class GameProperties
 
 	public float getCollisionRay(String type)
 	{
-		return collisionRays.get(type);
+
+		return collisionRays.get(type.toLowerCase());
 	}
 
 	public float getRotationAngle(String object)

@@ -199,12 +199,12 @@ public class GuiObjectManager
 
 	}
 
-	private void updateModelLifeBar(String playerName, Spatial playerModel, Vector2f playerPosition, int life)
+	private void updateModelLifeBar(Spatial model, Vector2f position, int life)
 	{
-		LifeBar lifeBar = spatialsLifeBars.get(playerModel);
+		LifeBar lifeBar = spatialsLifeBars.get(model);
 		lifeBar.setLife(life);
 
-		lifeBar.setLocalTraslation(playerPosition);
+		lifeBar.setLocalTraslation(position);
 
 	}
 
@@ -344,9 +344,8 @@ public class GuiObjectManager
 		gameGui.spheres.attachChild(sphereGeo);
 	}
 
-	public void addMinion(String ID, String boss)
+	private void addMinion(String ID, String boss)
 	{
-
 		gameGui.getAssetManager().registerLocator(modelsPath + GameProperties.getInstance().getModelName("minion") + ".zip", ZipLocator.class);
 		Spatial minionModel = gameGui.getAssetManager().loadModel(GameProperties.getInstance().getModelName("minion") + ".mesh.xml");
 		minionModel.scale(MyMath.scaleFactor(getModelBounds(minionModel), "minion"));
@@ -369,20 +368,30 @@ public class GuiObjectManager
 
 	}
 
-	public void addTower(Vector2f position, String ID, int life)
+	public void updateTower(Vector2f position, String ID, int life)
 	{
-		gameGui.getAssetManager().registerLocator(modelsPath + GameProperties.getInstance().getModelName("tower") + ".zip", ZipLocator.class);
-		Spatial tower = gameGui.getAssetManager().loadModel(GameProperties.getInstance().getModelName("tower") + ".mesh.xml");
-		Vector3f positionModel = new Vector3f(position.x, 0, position.y);
-		tower.setLocalTranslation(positionModel);
-		tower.rotate(90, 0, 0);
-		tower.scale(MyMath.scaleFactor(getModelBounds(tower), "tower"));
+		if (!towers.containsKey(ID))
+		{
+			gameGui.getAssetManager().registerLocator(modelsPath + GameProperties.getInstance().getModelName("tower") + ".zip", ZipLocator.class);
+			Spatial tower = gameGui.getAssetManager().loadModel(GameProperties.getInstance().getModelName("tower") + ".mesh.xml");
+			Vector3f positionModel = new Vector3f(position.x, 0, position.y);
+			tower.setLocalTranslation(positionModel);
+			tower.rotate(90, 0, 0);
+			tower.scale(MyMath.scaleFactor(getModelBounds(tower), "tower"));
 
-		positionModel.z += 20;
-		addModelLifeBar(tower, positionModel, life);
+			positionModel.z += 20;
+			addModelLifeBar(tower, positionModel, life);
 
-		gameGui.attachStaticObject(tower);
-		towers.put(ID, tower);
+			gameGui.attachStaticObject(tower);
+			towers.put(ID, tower);
+		}
+		else
+		{
+			Spatial tower = towers.get(ID);
+			Vector2f positionModel = new Vector2f(position.x, position.y);
+			positionModel.y += 20;
+			updateModelLifeBar(tower, positionModel, life);
+		}
 	}
 
 	public synchronized void updatePlayerPosition(String name, Vector2f position, Vector2f direction, boolean isMoving, int life)
@@ -404,7 +413,7 @@ public class GuiObjectManager
 			Quaternion quad = new Quaternion();
 			quad.lookAt(vector, upVector);
 
-			updateModelLifeBar(name, player, position, life);
+			updateModelLifeBar(player, position, life);
 
 			player.setLocalRotation(quad);
 			player.setLocalTranslation(position.x, 15, position.y);
@@ -420,8 +429,14 @@ public class GuiObjectManager
 		circle2d.setLocalTranslation(position.x - circle2d.getRadius() / 2, 1, position.y + circle2d.getRadius() / 2);
 	}
 
-	public synchronized void updateMinionPosition(String ID, Vector2f position, Vector2f direction, boolean isMoving)
+	public synchronized void updateMinionPosition(String ID, Vector2f position, Vector2f direction, boolean isMoving, String boss)
 	{
+
+		if (!minions.containsKey(ID))
+		{
+			addMinion(ID, boss);
+			return;
+		}
 		Spatial minion = minions.get(ID);
 		if (minion != null)
 		{

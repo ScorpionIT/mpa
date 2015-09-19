@@ -58,17 +58,17 @@ public class MultiPlayerController extends ListenerImplementation
 	}
 
 	@Override
-	public String createTower(String property)
+	public boolean createTower(String property)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		return false;
 	}
 
 	@Override
-	public ArrayList<String> createMinions(String boss, String target, int quantity)
+	public void createMinions(String boss, String target, int quantity)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		return;
 	}
 
 	@Override
@@ -202,6 +202,13 @@ public class MultiPlayerController extends ListenerImplementation
 	{
 		// TODO Stub di metodo generato automaticamente
 		return 0;
+	}
+
+	@Override
+	public String getMinionBoss(String ID)
+	{
+		// TODO Stub di metodo generato automaticamente
+		return null;
 	}
 
 }

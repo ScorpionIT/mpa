@@ -66,6 +66,7 @@ public class NiftyController implements ScreenController
 
 	public void onClickButtonCreateTowerButton()
 	{
+		// System.out.println("SONO SELECTED OBJECT " + niftyHandler.getSelectedObject());
 		gameController.createTower(niftyHandler.getSelectedObject());
 		niftyHandler.removeSelectedPanel();
 		niftyHandler.setButtonOccupyClicked(true);

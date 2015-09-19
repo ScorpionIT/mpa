@@ -17,7 +17,7 @@ public class PathCalculatorThread extends Thread
 	ReentrantLock lock = new ReentrantLock();
 	Condition cond = lock.newCondition();
 
-	public PathCalculatorThread( AbstractCharacter player, float xGoal, float yGoal )
+	public PathCalculatorThread(AbstractCharacter player, float xGoal, float yGoal)
 	{
 		this.player = player;
 		this.xGoal = xGoal;
@@ -31,9 +31,12 @@ public class PathCalculatorThread extends Thread
 		path = null;
 		lock.lock();
 
-		path = new PathCalculatorImplementation( new Vector2f( player.getX(), player.getY() ),
-				new Vector2f( xGoal, yGoal ), player.getCollisionRay() ).computePath();
-		this.player.setPath( path );
+		if (player != null)
+		{
+			path = new PathCalculatorImplementation(new Vector2f(player.getX(), player.getY()), new Vector2f(xGoal, yGoal), player.getCollisionRay())
+					.computePath();
+			this.player.setPath(path);
+		}
 		cond.signal();
 		lock.unlock();
 	}
@@ -43,11 +46,11 @@ public class PathCalculatorThread extends Thread
 		try
 		{
 			lock.lock();
-			while( path == null )
+			while (path == null)
 				try
 				{
 					cond.await();
-				} catch( InterruptedException e )
+				} catch (InterruptedException e)
 				{
 					// TODO Auto-generated catch block
 					e.printStackTrace();

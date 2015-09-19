@@ -145,6 +145,24 @@ public class GameManagerProxy
 		return toReturn;
 	}
 
+	public Map<String, Vector2f> getTowers()
+	{
+		List<Tower> towersObject = gm.getTowers();
+		for (Tower tower : towersObject)
+		{
+			if (!objects.get("tower").containsKey(tower.getID()))
+				objects.get("tower").put(tower.getID(), tower);
+		}
+
+		HashMap<String, Vector2f> toReturn = new HashMap<>();
+
+		HashMap<String, AbstractPrivateProperty> towers = objects.get("tower");
+		for (String s : towers.keySet())
+			toReturn.put(s, towers.get(s).getPosition());
+
+		return toReturn;
+	}
+
 	public ArrayList<String> createMinions(String boss, int quantity, String target)
 	{
 		ArrayList<Minion> createdMinions = gm.createMinions(players.get(boss), quantity, players.get(target));
@@ -224,6 +242,7 @@ public class GameManagerProxy
 		List<Vector2f> gatheringPlaces = objects.get(field[0].toLowerCase()).get(field[1]).getAvaibleGatheringPlaces();
 		if (gatheringPlaces != null && !gatheringPlaces.isEmpty())
 		{
+			System.out.println("NON CI ARRIVO");
 			return gatheringPlaces.get(0);
 		}
 		else
@@ -427,7 +446,6 @@ public class GameManagerProxy
 
 		for (Player player : listPlayers)
 		{
-			// if (!gm.takeDeadPlayers().contains(player.getName()))
 			playersResourceAmount.put(player.getName(), player.getResources());
 		}
 		return playersResourceAmount;
@@ -515,4 +533,14 @@ public class GameManagerProxy
 		return -100;
 	}
 
+	public String getMinionBoss(String ID)
+	{
+		Minion minion = minions.get(ID);
+		if (minion != null)
+		{
+			return minion.getBoss().getName();
+		}
+		else
+			return null;
+	}
 }

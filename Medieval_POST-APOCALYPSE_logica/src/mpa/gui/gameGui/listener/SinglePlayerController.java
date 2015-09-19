@@ -64,8 +64,10 @@ public class SinglePlayerController extends ListenerImplementation
 	}
 
 	@Override
-	public String createTower(String property)
+	public boolean createTower(String property)
 	{
+
+		System.out.println("SONO QUI");
 
 		javax.vecmath.Vector2f towerAvaiblePosition = gManagerProxy.getTowerAvaiblePosition(property);
 		if (towerAvaiblePosition != null)
@@ -74,23 +76,20 @@ public class SinglePlayerController extends ListenerImplementation
 
 			if (!tower.equals(""))
 			{
-				GuiObjectManager.getInstance().addTower(new javax.vecmath.Vector2f(towerAvaiblePosition.x, towerAvaiblePosition.y), tower,
-						gManagerProxy.getLifeTower(tower));
-				return tower;
+				return true;
 			}
 		}
-		return null;
+		return false;
 
 	}
 
 	@Override
-	public ArrayList<String> createMinions(String boss, String target, int quantity)
+	public void createMinions(String boss, String target, int quantity)
 	{
-		ArrayList<String> minions = gManagerProxy.createMinions(boss, quantity, target);
-		for (String ID : minions)
-			GuiObjectManager.getInstance().addMinion(ID, boss);
+		gManagerProxy.createMinions(boss, quantity, target);
+		// for (String ID : minions)
+		// GuiObjectManager.getInstance().addMinion(ID, boss);
 
-		return minions;
 	}
 
 	@Override
@@ -98,6 +97,7 @@ public class SinglePlayerController extends ListenerImplementation
 	{
 		List<String> deadMinions = gManagerProxy.takeDeadMinions();
 		List<String> deadPlayers = gManagerProxy.takeDeadPlayers();
+		Map<String, javax.vecmath.Vector2f> towers = gManagerProxy.getTowers();
 		List<String> attackingPlayers = gManagerProxy.takePlayerAttacks();
 		List<String> attackingMinions = gManagerProxy.takeMinionAttacks();
 		Map<String, javax.vecmath.Vector2f[]> playersPositions = gManagerProxy.getPlayersPositions();
@@ -118,7 +118,8 @@ public class SinglePlayerController extends ListenerImplementation
 		for (String m : minionsPositions.keySet())
 		{
 			javax.vecmath.Vector2f[] positions = minionsPositions.get(m);
-			GuiObjectManager.getInstance().updateMinionPosition(m, positions[0], positions[1], gManagerProxy.isMovingMinion(m));
+			GuiObjectManager.getInstance().updateMinionPosition(m, positions[0], positions[1], gManagerProxy.isMovingMinion(m),
+					gManagerProxy.getMinionBoss(m));
 		}
 		for (String playerName : attackingPlayers)
 		{
@@ -129,6 +130,11 @@ public class SinglePlayerController extends ListenerImplementation
 		{
 			GuiObjectManager.getInstance().startMInionAttackAnimation(idMinion);
 
+		}
+
+		for (String towerID : towers.keySet())
+		{
+			GuiObjectManager.getInstance().updateTower(towers.get(towerID), towerID, gManagerProxy.getLifeTower(towerID));
 		}
 	}
 
@@ -251,6 +257,12 @@ public class SinglePlayerController extends ListenerImplementation
 	public int getPlayerGranade(String playerName)
 	{
 		return gManagerProxy.getPotionAmount(playerName, "GRANADE");
+	}
+
+	@Override
+	public String getMinionBoss(String ID)
+	{
+		return gManagerProxy.getMinionBoss(ID);
 	}
 
 }

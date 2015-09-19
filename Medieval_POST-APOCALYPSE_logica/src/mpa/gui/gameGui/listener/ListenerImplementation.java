@@ -1,6 +1,5 @@
 package mpa.gui.gameGui.listener;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,9 +20,9 @@ public abstract class ListenerImplementation
 
 	public abstract boolean occupyProperty(String property);
 
-	public abstract String createTower(String property);
+	public abstract boolean createTower(String property);
 
-	public abstract ArrayList<String> createMinions(String boss, String target, int quantity);
+	public abstract void createMinions(String boss, String target, int quantity);
 
 	public abstract String createTowerCrusher(String boss, String target);
 
@@ -62,5 +61,7 @@ public abstract class ListenerImplementation
 	public abstract int getPlayerMPPotion(String playerName);
 
 	public abstract int getPlayerGranade(String playerName);
+
+	public abstract String getMinionBoss(String ID);
 
 }
