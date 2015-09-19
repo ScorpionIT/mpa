@@ -366,9 +366,9 @@ public class ResourcesPanel
 
 		labelHPAndMP.text("HP: " + HP + " " + "MP: " + MP);
 		labelLevel.text("Level: " + level);
-		labelMPPotion.text("MP Potions :" + numberOfMPPotions);
-		labelHPPotion.text("HP Potions :" + numberOfHPPotions);
-		labelGranade.text("MP Potions :" + numberOfGranades);
+		labelMPPotion.text("MP Potions : " + numberOfMPPotions);
+		labelHPPotion.text("HP Potions : " + numberOfHPPotions);
+		labelGranade.text("Granade : " + numberOfGranades);
 
 		if (nifty.getCurrentScreen().findElementByName("#informationPanel") != null)
 		{

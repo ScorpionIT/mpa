@@ -40,18 +40,24 @@ public class NiftyController implements ScreenController
 
 	public void onClickBuyHPPotion()
 	{
+		System.out.println("SONO IN BUY HP POTION");
+		if (gameController.buyHPPotion(GuiObjectManager.getInstance().getPlayingPlayer()))
+			System.out.println("HO COMPRATO");
+		else
+			System.out.println("NON HO COMPRATO");
 
-		gameController.buyHPPotion(GuiObjectManager.getInstance().getPlayingPlayer());
 	}
 
 	public void onClickBuyMPPotion()
 	{
+		System.out.println("SONO IN BUY MP POTION");
 		gameController.buyMPPotion(GuiObjectManager.getInstance().getPlayingPlayer());
 
 	}
 
 	public void onClickBuyGranade()
 	{
+		System.out.println("SONO IN BUY GRANADE");
 		gameController.buyGranade(GuiObjectManager.getInstance().getPlayingPlayer());
 
 	}

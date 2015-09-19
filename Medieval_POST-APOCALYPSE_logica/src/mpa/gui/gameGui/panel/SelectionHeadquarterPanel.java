@@ -4,7 +4,6 @@ import mpa.gui.gameGui.listener.ListenerImplementation;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
-import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.controls.listbox.builder.ListBoxBuilder;
 import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
 import de.lessvoid.nifty.elements.Element;
@@ -74,37 +73,37 @@ public class SelectionHeadquarterPanel
 					}
 				});
 
-				control(new LabelBuilder("#Insert Minions' number")
+				image(new ImageBuilder("#Insert Minions' number")
 				{
 					{
-						text("Insert Minions' number");
+						filename("insertMinionsNumber.png");
 						x("10%");
 						y("20%");
-						width("40%");
-						height("10%");
+						width("30%");
+						height("8%");
 					}
 
 				});
 
-				control(new LabelBuilder("#Choose Enemy")
+				image(new ImageBuilder("#Choose Enemy")
 				{
 					{
-						text("Choose Enemy");
+						filename("chooseEnemy.png");
 						x("10%");
-						y("40%");
-						width("40%");
-						height("10%");
+						y("41%");
+						width("20%");
+						height("8%");
 					}
 
 				});
-				control(new LabelBuilder("#Create")
+				image(new ImageBuilder("#Create")
 				{
 					{
-						text("Create");
+						filename("createMinions.png");
 						x("70%");
 						y("80%");
-						width("30%");
-						height("20%");
+						width("20%");
+						height("10%");
 						interactOnClick("onClickCreateMinion()");
 
 					}

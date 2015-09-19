@@ -358,9 +358,15 @@ public class GameManager
 		if (p.getSelectedItem().equals(Item.WEAPON) || p.getSelectedItem().equals(Item.GRANADE) || p.getSelectedItem().equals(Item.FLASH_BANG))
 			attackRequests.addRequest(p, target);
 		else if (p.getSelectedItem().equals(Item.HP_POTION))
+		{
 			p.restoreHealth(Potions.HP);
+			p.takePotion(Potions.HP);
+		}
 		else
+		{
 			p.restoreHealth(Potions.MP);
+			p.takePotion(Potions.MP);
+		}
 
 		return hitPlayers;
 	}
