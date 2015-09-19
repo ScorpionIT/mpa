@@ -11,23 +11,24 @@ import com.jme3.scene.shape.Box;
 
 public class LifeBar
 {
-	final int maxLife = 100;
-	final int maxBoxDimension = 10;
-	final int limitRedLife = 30;
-	float yTraslation;
+	private int maxLife = 100;
+	private final int maxBoxDimension = 10;
+	private final int limitRedLife = 30;
+	private float yTraslation;
 	private AssetManager assetManager;
-	Box greenBox;
-	Box grayBox;
-	Geometry geometryGreenBox;
-	Geometry geometryGrayBox;
-	Material materialGreenBox;
-	Material materialGrayBox;
-	Material materialRedBox;
-	int life = -1;
+	private Box greenBox;
+	private Box grayBox;
+	private Geometry geometryGreenBox;
+	private Geometry geometryGrayBox;
+	private Material materialGreenBox;
+	private Material materialGrayBox;
+	private Material materialRedBox;
+	private int life = -1;
 
 	public LifeBar(AssetManager assetManager, Vector3f boundingBoxModel, float yTranslationModel)
 	{
 		this.assetManager = assetManager;
+
 		yTraslation = boundingBoxModel.y * 2 + yTranslationModel;
 
 		greenBox = new Box(10, 1, 1);
@@ -48,6 +49,10 @@ public class LifeBar
 
 	boolean setLife(int life)
 	{
+		if (this.life == -1)
+		{
+			maxLife = life;
+		}
 		if (this.life == life)
 			return false;
 
@@ -80,8 +85,8 @@ public class LifeBar
 
 	void setLocalTraslation(Vector3f modelPosition)
 	{
-		geometryGreenBox.setLocalTranslation(modelPosition.x + grayBox.xExtent, yTraslation, modelPosition.y);
-		geometryGrayBox.setLocalTranslation(modelPosition.x - greenBox.xExtent, yTraslation, modelPosition.y);
+		geometryGreenBox.setLocalTranslation(modelPosition.x + grayBox.xExtent, yTraslation, modelPosition.z);
+		geometryGrayBox.setLocalTranslation(modelPosition.x - greenBox.xExtent, yTraslation, modelPosition.z);
 	}
 
 	public Geometry getGreenGeometry()

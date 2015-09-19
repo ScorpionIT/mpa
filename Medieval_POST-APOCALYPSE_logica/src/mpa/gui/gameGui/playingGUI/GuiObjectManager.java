@@ -55,6 +55,7 @@ public class GuiObjectManager
 	private GameGui gameGui;
 	private Vector3f upVector = new Vector3f(0, 1, 0);
 	private String playingPlayer;
+	private String modelsPath = GameProperties.getInstance().getPath("ModelsPath");
 
 	private GuiObjectManager(GameGui gameGui, String playingPlayer, boolean multiplayer)
 	{
@@ -149,8 +150,8 @@ public class GuiObjectManager
 
 	public void addPlayer(String name, Vector2f hqPosition, Vector2f gatheringPlace, Vector2f direction, int life)
 	{
-		gameGui.getAssetManager().registerLocator(GameProperties.getInstance().getPath("ModelsPath") + "Skeleton.zip", ZipLocator.class);
-		Spatial playerModel = gameGui.getAssetManager().loadModel("Skeleton.mesh.xml");
+		gameGui.getAssetManager().registerLocator(modelsPath + GameProperties.getInstance().getModelName("player") + ".zip", ZipLocator.class);
+		Spatial playerModel = gameGui.getAssetManager().loadModel(GameProperties.getInstance().getModelName("player") + ".mesh.xml");
 		playerModel.scale(MyMath.scaleFactor(getModelBounds(playerModel), "player"));
 
 		Vector3f playerPosition = new Vector3f(gatheringPlace.x, 10, gatheringPlace.y);
@@ -171,8 +172,8 @@ public class GuiObjectManager
 
 		addModelLifeBar(playerModel, playerPosition, life);
 
-		gameGui.getAssetManager().registerLocator(GameProperties.getInstance().getPath("ModelsPath") + "baker_house.zip", ZipLocator.class);
-		Spatial hqModel = gameGui.getAssetManager().loadModel("baker_house.mesh.xml");
+		gameGui.getAssetManager().registerLocator(modelsPath + GameProperties.getInstance().getModelName("headquarter") + ".zip", ZipLocator.class);
+		Spatial hqModel = gameGui.getAssetManager().loadModel(GameProperties.getInstance().getModelName("headquarter") + ".mesh.xml");
 		hqModel.setLocalTranslation(new Vector3f(hqPosition.x, 0, hqPosition.y));
 		hqModel.rotate(0, 90, 0);
 
@@ -187,12 +188,12 @@ public class GuiObjectManager
 
 	}
 
-	private void addModelLifeBar(Spatial model, Vector3f playerPosition, int life)
+	private void addModelLifeBar(Spatial model, Vector3f position, int life)
 	{
-		LifeBar lifeBar = new LifeBar(gameGui.getAssetManager(), getModelBounds(model), playerPosition.y);
+		LifeBar lifeBar = new LifeBar(gameGui.getAssetManager(), getModelBounds(model), position.y);
 		lifeBar.setLife(life);
 
-		lifeBar.setLocalTraslation(playerPosition);
+		lifeBar.setLocalTraslation(position);
 		gameGui.attachLifeBar(lifeBar);
 		spatialsLifeBars.put(model, lifeBar);
 
@@ -227,7 +228,7 @@ public class GuiObjectManager
 
 	private void addMinionCircle(String boss, Spatial minionModel)
 	{
-		Circle2D circle2D = createCircle(playersColors.get(boss), GameProperties.getInstance().getObjectWidth("minion") * 2);
+		Circle2D circle2D = createCircle(playersColors.get(boss), GameProperties.getInstance().getObjectWidth("minion"));
 		gameGui.attachCircle(circle2D);
 
 		spatialCirlces.put(minionModel, circle2D);
@@ -279,30 +280,30 @@ public class GuiObjectManager
 		switch (type)
 		{
 			case "WOOD":
-				gameGui.getAssetManager().registerLocator(GameProperties.getInstance().getPath("ModelsPath") + "Wood.zip", ZipLocator.class);
-				model = gameGui.getAssetManager().loadModel("Tree.mesh.xml");
+				gameGui.getAssetManager().registerLocator(modelsPath + GameProperties.getInstance().getModelName("wood") + ".zip", ZipLocator.class);
+				model = gameGui.getAssetManager().loadModel(GameProperties.getInstance().getModelName("wood") + ".mesh.xml");
 				model.scale(MyMath.scaleFactor(getModelBounds(model), "wood"));
 				woods.put(ID, model);
 				model.rotate(90, 0, 0);
 				break;
 			case "FIELD":
-				gameGui.getAssetManager().registerLocator(GameProperties.getInstance().getPath("ModelsPath") + "CornField.zip", ZipLocator.class);
-				model = gameGui.getAssetManager().loadModel("CornField.mesh.xml");
+				gameGui.getAssetManager().registerLocator(modelsPath + GameProperties.getInstance().getModelName("field") + ".zip", ZipLocator.class);
+				model = gameGui.getAssetManager().loadModel(GameProperties.getInstance().getModelName("field") + ".mesh.xml");
 				model.scale(MyMath.scaleFactor(getModelBounds(model), "field"));
 				fields.put(ID, model);
 				model.rotate(90, 0, 0);
 				break;
 			case "CAVE":
-				gameGui.getAssetManager().registerLocator(GameProperties.getInstance().getPath("ModelsPath") + "stones.zip", ZipLocator.class);
-				model = gameGui.getAssetManager().loadModel("stones.mesh.xml");
+				gameGui.getAssetManager().registerLocator(modelsPath + GameProperties.getInstance().getModelName("cave") + ".zip", ZipLocator.class);
+				model = gameGui.getAssetManager().loadModel(GameProperties.getInstance().getModelName("cave") + ".mesh.xml");
 				System.out.println("prima dello scale + " + getModelBounds(model));
 				model.scale(MyMath.scaleFactor(getModelBounds(model), "cave"));
 				System.out.println("dopo dello scale + " + getModelBounds(model));
 				caves.put(ID, model);
 				break;
 			case "MINE":
-				gameGui.getAssetManager().registerLocator(GameProperties.getInstance().getPath("ModelsPath") + "Wood.zip", ZipLocator.class);
-				model = gameGui.getAssetManager().loadModel("Tree.mesh.xml");
+				gameGui.getAssetManager().registerLocator(modelsPath + GameProperties.getInstance().getModelName("mine") + ".zip", ZipLocator.class);
+				model = gameGui.getAssetManager().loadModel(GameProperties.getInstance().getModelName("mine") + ".mesh.xml");
 				model.scale(MyMath.scaleFactor(getModelBounds(model), "mine"));
 				mines.put(ID, model);
 				model.rotate(90, 0, 0);
@@ -346,8 +347,8 @@ public class GuiObjectManager
 	public void addMinion(String ID, String boss)
 	{
 
-		gameGui.getAssetManager().registerLocator(GameProperties.getInstance().getPath("ModelsPath") + "Monster1.zip", ZipLocator.class);
-		Spatial minionModel = gameGui.getAssetManager().loadModel("Monster1.mesh.xml");
+		gameGui.getAssetManager().registerLocator(modelsPath + GameProperties.getInstance().getModelName("minion") + ".zip", ZipLocator.class);
+		Spatial minionModel = gameGui.getAssetManager().loadModel(GameProperties.getInstance().getModelName("minion") + ".mesh.xml");
 		minionModel.scale(MyMath.scaleFactor(getModelBounds(minionModel), "minion"));
 		minions.put(ID, minionModel);
 		gameGui.attachMobileObject(minionModel);
@@ -359,8 +360,8 @@ public class GuiObjectManager
 
 	public void addTowerCrusher(String ID)
 	{
-		gameGui.getAssetManager().registerLocator(GameProperties.getInstance().getPath("ModelsPath") + "Troll.zip", ZipLocator.class);
-		Spatial towerCrusherModel = gameGui.getAssetManager().loadModel("Troll.mesh.xml");
+		gameGui.getAssetManager().registerLocator(modelsPath + GameProperties.getInstance().getModelName("towerCrusher") + ".zip", ZipLocator.class);
+		Spatial towerCrusherModel = gameGui.getAssetManager().loadModel(GameProperties.getInstance().getModelName("towerCrusher") + ".mesh.xml");
 		towerCrusherModel.scale(MyMath.scaleFactor(getModelBounds(towerCrusherModel), "towerCrusher"));
 		towerCrushers.put(ID, towerCrusherModel);
 		gameGui.attachMobileObject(towerCrusherModel);
@@ -370,15 +371,16 @@ public class GuiObjectManager
 
 	public void addTower(Vector2f position, String ID, int life)
 	{
-		gameGui.getAssetManager().registerLocator(GameProperties.getInstance().getPath("ModelsPath") + "tower.zip", ZipLocator.class);
-		Spatial tower = gameGui.getAssetManager().loadModel("tower.mesh.xml");
+		gameGui.getAssetManager().registerLocator(modelsPath + GameProperties.getInstance().getModelName("tower") + ".zip", ZipLocator.class);
+		Spatial tower = gameGui.getAssetManager().loadModel(GameProperties.getInstance().getModelName("tower") + ".mesh.xml");
 		Vector3f positionModel = new Vector3f(position.x, 0, position.y);
 		tower.setLocalTranslation(positionModel);
+		tower.rotate(90, 0, 0);
 		tower.scale(MyMath.scaleFactor(getModelBounds(tower), "tower"));
 
+		positionModel.z += 20;
 		addModelLifeBar(tower, positionModel, life);
 
-		tower.rotate(90, 0, 0);
 		gameGui.attachStaticObject(tower);
 		towers.put(ID, tower);
 	}

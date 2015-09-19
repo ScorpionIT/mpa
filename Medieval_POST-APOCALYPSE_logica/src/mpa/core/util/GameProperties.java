@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
@@ -21,6 +23,7 @@ public class GameProperties
 	private HashMap<String, Float> rotationAngle = new HashMap<>();
 
 	private String[] characterType = { "player", "minion", "towerCrusher" };
+	private Map<String, String> modelsName = new HashMap<>();
 
 	private GameProperties()
 	{
@@ -29,6 +32,7 @@ public class GameProperties
 		loadDimensionObjects();
 		loadPrices();
 		loadRotationAngle();
+		loadModelsName();
 
 		for (String obj : objectHeght.keySet())
 		{
@@ -196,6 +200,50 @@ public class GameProperties
 		}
 	}
 
+	private void loadModelsName()
+	{
+
+		Properties properties = null;
+		FileInputStream fileInput = null;
+		try
+		{
+			fileInput = new FileInputStream(new File("./Properties/ModelsName.properties"));
+			properties = new Properties();
+			properties.load(fileInput);
+
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		} finally
+		{
+
+			try
+			{
+				fileInput.close();
+			} catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		for (String object : worldObjects)
+		{
+			String name = properties.getProperty(object);
+			if (name != null)
+			{
+				modelsName.put(object.toLowerCase(), name);
+			}
+		}
+
+		for (String character : characterType)
+		{
+			String name = properties.getProperty(character);
+			if (name != null)
+			{
+				modelsName.put(character.toLowerCase(), name);
+			}
+		}
+	}
+
 	private void loadRotationAngle()
 	{
 
@@ -272,6 +320,13 @@ public class GameProperties
 
 	}
 
+	public String getModelName(String key)
+	{
+		System.out.println("sto chiedendo " + key+ modelsName.get(key.toLowerCase()));
+		return modelsName.get(key.toLowerCase());
+
+	}
+
 	public Integer getObjectWidth(String key)
 	{
 		return objectWidth.get(key.toLowerCase());
@@ -284,7 +339,7 @@ public class GameProperties
 
 	}
 
-	public ArrayList<String> getWorldObject()
+	public List<String> getWorldObject()
 	{
 		return worldObjects;
 	}

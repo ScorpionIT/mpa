@@ -51,6 +51,11 @@ public class GameGuiClickListener implements ActionListener
 		gameGui.getGroundNode().collideWith(ray, crs);
 		Vector2f contactPoint;
 
+		if (!isPressed && name.equals("Click") && !gameGui.canClick())
+		{
+			niftyHandler.removeVisiblePanel();
+			return;
+		}
 		if (!isPressed && name.equals("Click") && crs.getClosestCollision() != null)
 		{
 
@@ -61,35 +66,12 @@ public class GameGuiClickListener implements ActionListener
 			System.out.println("ho cliccato su " + pickedObject);
 			if (!isPressed && pickedObject.equals("GROUND"))
 			{
-				if (!gameGui.canClick())
-				{
-					if (niftyHandler.isVisibleSelectionPanel())
-					{
-						niftyHandler.removeSelectedPanel();
-					}
-					else if (niftyHandler.isVisibleHeadquarterPanel())
-					{
-						niftyHandler.removeHeadquarterPanel();
-					}
-				}
-				else
-				{
-					System.out.println("ci entro?");
-					listener.computePath(contactPoint);
-				}
+				System.out.println("ci entro?");
+				listener.computePath(contactPoint);
 
 			}
 
-			else if (!isPressed && !pickedObject.equals("GROUND") && niftyHandler.isVisibleSelectionPanel())
-			{
-				niftyHandler.removeSelectedPanel();
-			}
-			else if (!isPressed && !pickedObject.equals("GROUND") && niftyHandler.isVisibleHeadquarterPanel())
-			{
-				niftyHandler.removeHeadquarterPanel();
-			}
-			else if (!pickedObject.equals("GROUND") && !niftyHandler.isVisibleChoosePanel() && !niftyHandler.isVisibleOpponentPropertiesPanel()
-					&& !niftyHandler.isVisibleHeadquarterPanel() && !niftyHandler.isVisibleSelectionPanel())
+			else if (!pickedObject.equals("GROUND"))
 			{
 
 				String[] split = pickedObject.split(":");
@@ -98,8 +80,7 @@ public class GameGuiClickListener implements ActionListener
 
 				System.out.println(GuiObjectManager.getInstance().getPlayingPlayer());
 				System.out.println(pickedObjectOwner);
-				if (split[0].toLowerCase().equals("headquarter") && pickedObjectOwner.equals(GuiObjectManager.getInstance().getPlayingPlayer())
-						&& !niftyHandler.isVisibleHeadquarterPanel())
+				if (split[0].toLowerCase().equals("headquarter") && pickedObjectOwner.equals(GuiObjectManager.getInstance().getPlayingPlayer()))
 				{
 					niftyHandler.setHeadquarterPanel();
 				}
@@ -127,7 +108,7 @@ public class GameGuiClickListener implements ActionListener
 			}
 		}
 
-		else if ("ChooseItem".equals(name))
+		else if ("ChooseItem".equals(name) && niftyHandler.canCreateChooseItemPanel())
 		{
 			if (isPressed)
 			{
@@ -142,7 +123,7 @@ public class GameGuiClickListener implements ActionListener
 			}
 		}
 
-		if ("attack".equals(name) && isPressed)
+		if ("attack".equals(name) && isPressed && gameGui.canClick())
 		{
 
 			// String player = GuiObjectManager.getInstance().getPlayingPlayer();

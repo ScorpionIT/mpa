@@ -390,4 +390,31 @@ public class NiftyHandler
 
 	}
 
+	public void removeVisiblePanel()
+	{
+		if (isVisibleSelectionPanel)
+		{
+			removeSelectedPanel();
+		}
+		else if (isVisibleHeadquarterPanel)
+		{
+			removeHeadquarterPanel();
+		}
+		else if (chooseObjectPanelIsVisible)
+		{
+			removeChooseItemPanel();
+		}
+
+	}
+
+	public boolean canCreateChooseItemPanel()
+	{
+		return !(isVisibleSelectionPanel || isVisibleHeadquarterPanel || opponentPropertiesPanelIsVisible);
+	}
+
+	public boolean caCreateOpponentResourcePanel()
+	{
+		return !(isVisibleSelectionPanel || isVisibleHeadquarterPanel || chooseObjectPanelIsVisible);
+	}
+
 }
