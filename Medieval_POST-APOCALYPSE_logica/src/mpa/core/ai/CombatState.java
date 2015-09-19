@@ -107,7 +107,22 @@ class CombatState extends AIState
 
 		if( pointToReach == null )
 		{
-			computePath( opponentAI.player, playerToAttack, true );
+			float distanceBetweenUs = MyMath.distanceFloat( opponentAI.player.getPosition(),
+					playerToAttack.getPosition() );
+			if( distanceBetweenUs < AbstractCharacter.getPace() )
+			{
+				Vector2f direction = MyMath.computeDirection( opponentAI.player.getPosition(),
+						playerToAttack.getPosition() );
+				pointToReach = new Vector2f( opponentAI.player.getX() + direction.x
+						* distanceBetweenUs / 2, distanceBetweenUs / 2 );
+				opponentAI.player.stopMoving();
+				opponentAI.player.setPosition( pointToReach );
+			}
+			else
+			{
+				computePath( opponentAI.player, playerToAttack, true );
+			}
+
 			return;
 		}
 		else
@@ -131,7 +146,7 @@ class CombatState extends AIState
 				GameManager.getInstance().playerAction( opponentAI.player,
 						playerToAttack.getPosition() );
 			}
-			if( MyMath.distanceFloat( opponentAI.player.getX(), opponentAI.player.getY(),
+			else if( MyMath.distanceFloat( opponentAI.player.getX(), opponentAI.player.getY(),
 					playerToAttack.getX(), playerToAttack.getY() ) <= opponentAI.player
 					.getRangeOfPhysicallAttack() )
 			{
@@ -139,6 +154,25 @@ class CombatState extends AIState
 				opponentAI.player.setSelectedItem( Item.WEAPON );
 				GameManager.getInstance().playerAction( opponentAI.player,
 						playerToAttack.getPosition() );
+			}
+			else
+			{
+				float distanceBetweenUs = MyMath.distanceFloat( opponentAI.player.getPosition(),
+						playerToAttack.getPosition() );
+				if( distanceBetweenUs < AbstractCharacter.getPace() )
+				{
+					Vector2f direction = MyMath.computeDirection( opponentAI.player.getPosition(),
+							playerToAttack.getPosition() );
+					pointToReach = new Vector2f( opponentAI.player.getX() + direction.x
+							* distanceBetweenUs / 2, distanceBetweenUs / 2 );
+					opponentAI.player.stopMoving();
+					opponentAI.player.setPosition( pointToReach );
+				}
+				else
+				{
+					computePath( opponentAI.player, playerToAttack, true );
+				}
+
 			}
 
 		}

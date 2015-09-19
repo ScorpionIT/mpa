@@ -71,6 +71,11 @@ public abstract class AbstractCharacter extends AbstractObject
 		readLock.unlock();
 	}
 
+	public static float getPace()
+	{
+		return PACE;
+	}
+
 	private void computeCurrentVector()
 	{
 		previousVector = new Vector2f( currentVector );

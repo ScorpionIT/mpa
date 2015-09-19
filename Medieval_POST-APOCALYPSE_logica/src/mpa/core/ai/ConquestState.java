@@ -29,8 +29,7 @@ public class ConquestState extends AIState
 	void action( OpponentAI opponentAI )
 	{
 		Player player = opponentAI.player;
-		// if( opponentAI.player.getName().equals( "Paola Maledetta 2" ) )
-		// System.out.println( "Conquest State" );
+
 		if( buildingToOccupy != null && walking )
 		{
 			Vector2f gathPlace = buildingToOccupy.getGatheringPlace();

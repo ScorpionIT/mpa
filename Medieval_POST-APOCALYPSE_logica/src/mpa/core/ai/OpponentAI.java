@@ -8,6 +8,7 @@ import javax.vecmath.Vector2f;
 import mpa.core.logic.AbstractObject;
 import mpa.core.logic.GameManager;
 import mpa.core.logic.MyThread;
+import mpa.core.logic.building.AbstractPrivateProperty;
 import mpa.core.logic.building.Headquarter;
 import mpa.core.logic.building.House;
 import mpa.core.logic.character.AbstractCharacter;
@@ -15,6 +16,7 @@ import mpa.core.logic.character.Player;
 import mpa.core.logic.character.Player.Item;
 import mpa.core.logic.resource.AbstractResourceProducer;
 import mpa.core.logic.tool.Potions;
+import mpa.core.util.GameProperties;
 
 public class OpponentAI extends MyThread
 {
@@ -242,5 +244,19 @@ public class OpponentAI extends MyThread
 	public void gotAttackedBy( AbstractCharacter bully )
 	{
 		aiState.heIsAttackingYou( bully, player );
+	}
+
+	boolean shouldICreateTowers()
+	{
+		for( AbstractPrivateProperty property : player.getProperties() )
+			if( property.getNumberOfTowers() < 4 )
+				return true;
+
+		return false;
+	}
+
+	boolean canIcreateTowers()
+	{
+		return player.hasEnoughResources( GameProperties.getInstance().getPrices( "tower" ) );
 	}
 }

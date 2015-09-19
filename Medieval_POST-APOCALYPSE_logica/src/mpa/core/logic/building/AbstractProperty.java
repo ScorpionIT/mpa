@@ -89,7 +89,7 @@ public class AbstractProperty extends AbstractObject
 	{
 		if( gatheringPlaces == null )
 			calculateGatheringPlaces();
-		ArrayList<Vector2f> avaibleGatheringPlaces = new ArrayList<>();
+		List<Vector2f> avaibleGatheringPlaces = new ArrayList<>();
 		Set<Vector2f> keySet = towers.keySet();
 		for( Vector2f vector2f : keySet )
 		{
@@ -99,6 +99,26 @@ public class AbstractProperty extends AbstractObject
 			}
 		}
 		return avaibleGatheringPlaces;
+	}
+
+	public Vector2f getAGatheringPlace()
+	{
+		List<Vector2f> avaibleGatheringPlaces = getAvaibleGatheringPlaces();
+		if( !avaibleGatheringPlaces.isEmpty() )
+			return avaibleGatheringPlaces.get( 0 );
+		else
+			return null;
+	}
+
+	public int getNumberOfTowers()
+	{
+		int number = 0;
+
+		for( Vector2f position : towers.keySet() )
+			if( towers.get( position ) == null )
+				number++;
+
+		return number;
 	}
 
 	public void addTower( Tower tower, Vector2f position )
