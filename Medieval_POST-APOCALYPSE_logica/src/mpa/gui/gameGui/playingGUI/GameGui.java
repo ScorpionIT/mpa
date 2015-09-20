@@ -349,7 +349,6 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 
 	public boolean canClick()
 	{
-		return !(niftyHandler.isVisibleSelectionPanel() || niftyHandler.isVisibleOpponentPropertiesPanel() || niftyHandler.isVisibleChoosePanel() || niftyHandler
-				.isVisibleHeadquarterPanel());
+		return niftyHandler.canClick();
 	}
 }

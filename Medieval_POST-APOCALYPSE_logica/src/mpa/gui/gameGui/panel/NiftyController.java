@@ -29,7 +29,7 @@ public class NiftyController implements ScreenController
 					Integer.parseInt(minionsQuantity));
 		}
 		niftyHandler.removeHeadquarterPanel();
-		// niftyHandler.setCreateButtonClicked(true);
+		niftyHandler.setCreateButtonClicked(true);
 
 	}
 
@@ -41,19 +41,25 @@ public class NiftyController implements ScreenController
 
 	public void onClickBuyHPPotion()
 	{
-		gameController.buyHPPotion(GuiObjectManager.getInstance().getPlayingPlayer());
+		niftyHandler.setButtonPotionClicked(true);
+		if (!gameController.buyHPPotion(GuiObjectManager.getInstance().getPlayingPlayer()))
+			niftyHandler.createMessageBox("non hai le risorse necessarie", "ok");
 
 	}
 
 	public void onClickBuyMPPotion()
 	{
-		gameController.buyMPPotion(GuiObjectManager.getInstance().getPlayingPlayer());
+		niftyHandler.setButtonPotionClicked(true);
+		if (!gameController.buyMPPotion(GuiObjectManager.getInstance().getPlayingPlayer()))
+			niftyHandler.createMessageBox("non hai le risorse necessarie", "ok");
 
 	}
 
 	public void onClickBuyGranade()
 	{
-		gameController.buyGranade(GuiObjectManager.getInstance().getPlayingPlayer());
+		niftyHandler.setButtonPotionClicked(true);
+		if (!gameController.buyGranade(GuiObjectManager.getInstance().getPlayingPlayer()))
+			niftyHandler.createMessageBox("non hai le risorse necessarie", "ok");
 
 	}
 

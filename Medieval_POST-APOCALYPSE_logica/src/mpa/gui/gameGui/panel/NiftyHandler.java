@@ -18,6 +18,8 @@ import com.jme3.renderer.ViewPort;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
+import de.lessvoid.nifty.controls.MessageBox;
+import de.lessvoid.nifty.controls.MessageBox.MessageType;
 import de.lessvoid.nifty.elements.Element;
 
 public class NiftyHandler
@@ -36,6 +38,8 @@ public class NiftyHandler
 	private SelectionHeadquarterHandler selectionHeadquarterHandler;
 	private boolean isVisibleHeadquarterPanel = false;
 	private boolean isVisibleSelectionPanel = false;
+	private boolean buttonPotionClicked = false;
+	private boolean messageBoxVisible = false;
 
 	public NiftyHandler(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort,
 			AppStateManager stateManager, ListenerImplementation playerController, GameGui gameGui)
@@ -54,8 +58,9 @@ public class NiftyHandler
 	private void initNifty(final NiftyController niftyController, AssetManager assetManager)
 	{
 
-		nifty.loadStyleFile("nifty-default-styles.xml");
 		nifty.loadControlFile("nifty-default-controls.xml");
+		nifty.loadStyleFile("nifty-default-styles.xml");
+
 		nifty.addScreen("main", new ScreenBuilder("main", niftyController)
 		{
 			{
@@ -101,6 +106,16 @@ public class NiftyHandler
 		nifty.gotoScreen("main");
 
 		initPanels(assetManager);
+
+	}
+
+	public void createMessageBox(final String message, String textButton)
+	{
+
+		MessageBox messageBox = new MessageBox(nifty, MessageType.CUSTOM, message, textButton);
+		messageBoxVisible = true;
+
+		messageBox.show();
 
 	}
 
@@ -369,6 +384,11 @@ public class NiftyHandler
 		return isVisibleHeadquarterPanel;
 	}
 
+	public boolean isButtonPotionClicked()
+	{
+		return buttonPotionClicked;
+	}
+
 	public void removeHeadquarterPanel()
 	{
 		if (nifty.getCurrentScreen().findElementByName("#selectedHeadquarter") != null)
@@ -390,9 +410,18 @@ public class NiftyHandler
 
 	}
 
+	public void setButtonPotionClicked(boolean clicked)
+	{
+		buttonPotionClicked = clicked;
+	}
+
 	public void removeVisiblePanel()
 	{
-		if (isVisibleSelectionPanel)
+		if (messageBoxVisible)
+			messageBoxVisible = false;
+		else if (buttonPotionClicked)
+			buttonPotionClicked = false;
+		else if (isVisibleSelectionPanel)
 		{
 			removeSelectedPanel();
 		}
@@ -405,6 +434,12 @@ public class NiftyHandler
 			removeChooseItemPanel();
 		}
 
+	}
+
+	public boolean canClick()
+	{
+		return !(isVisibleSelectionPanel || opponentPropertiesPanelIsVisible || chooseObjectPanelIsVisible || isVisibleHeadquarterPanel
+				|| buttonPotionClicked || messageBoxVisible);
 	}
 
 	public boolean canCreateChooseItemPanel()
