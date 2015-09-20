@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import mpa.core.logic.character.DependentCharacter;
-import mpa.core.logic.character.Player;
+import mpa.core.logic.characters.DependentCharacter;
+import mpa.core.logic.characters.Player;
 
 public abstract class AbstractPrivateProperty extends AbstractProperty
 {

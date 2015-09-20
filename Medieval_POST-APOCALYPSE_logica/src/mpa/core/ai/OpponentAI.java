@@ -13,11 +13,11 @@ import mpa.core.logic.MyThread;
 import mpa.core.logic.building.AbstractPrivateProperty;
 import mpa.core.logic.building.Headquarter;
 import mpa.core.logic.building.House;
-import mpa.core.logic.character.AbstractCharacter;
-import mpa.core.logic.character.Player;
-import mpa.core.logic.character.Player.Item;
-import mpa.core.logic.resource.AbstractResourceProducer;
-import mpa.core.logic.tool.Potions;
+import mpa.core.logic.characters.AbstractCharacter;
+import mpa.core.logic.characters.Player;
+import mpa.core.logic.characters.Player.Item;
+import mpa.core.logic.potions.Potions;
+import mpa.core.logic.resources.AbstractResourceProducer;
 import mpa.core.util.GameProperties;
 
 public class OpponentAI extends MyThread

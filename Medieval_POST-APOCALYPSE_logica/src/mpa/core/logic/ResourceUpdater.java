@@ -3,7 +3,7 @@ package mpa.core.logic;
 import java.util.List;
 
 import mpa.core.logic.building.Headquarter;
-import mpa.core.logic.resource.AbstractResourceProducer;
+import mpa.core.logic.resources.AbstractResourceProducer;
 
 public class ResourceUpdater extends MyThread
 {

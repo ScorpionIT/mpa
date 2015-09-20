@@ -1,9 +1,9 @@
 package mpa.core.logic;
 
-import mpa.core.logic.resource.Cave;
-import mpa.core.logic.resource.Field;
-import mpa.core.logic.resource.Mine;
-import mpa.core.logic.resource.Wood;
+import mpa.core.logic.resources.Cave;
+import mpa.core.logic.resources.Field;
+import mpa.core.logic.resources.Mine;
+import mpa.core.logic.resources.Wood;
 
 public class WorldFromMapInfo implements WorldCreator
 {

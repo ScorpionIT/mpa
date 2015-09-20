@@ -7,11 +7,11 @@ import javax.vecmath.Vector2f;
 
 import mpa.core.logic.GameManager;
 import mpa.core.logic.building.Tower;
-import mpa.core.logic.character.AbstractCharacter;
-import mpa.core.logic.character.Minion;
-import mpa.core.logic.character.Player;
-import mpa.core.logic.character.TowerCrusher;
-import mpa.core.logic.tool.Potions;
+import mpa.core.logic.characters.AbstractCharacter;
+import mpa.core.logic.characters.Minion;
+import mpa.core.logic.characters.Player;
+import mpa.core.logic.characters.TowerCrusher;
+import mpa.core.logic.potions.Potions;
 import mpa.core.maths.MyMath;
 
 public class CombatManager

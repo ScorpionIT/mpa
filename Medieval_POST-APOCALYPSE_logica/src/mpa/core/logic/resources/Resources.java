@@ -1,4 +1,4 @@
-package mpa.core.logic.resource;
+package mpa.core.logic.resources;
 
 public enum Resources
 {

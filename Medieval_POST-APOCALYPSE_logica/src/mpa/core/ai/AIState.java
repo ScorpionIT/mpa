@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mpa.core.logic.GameManager;
-import mpa.core.logic.character.AbstractCharacter;
-import mpa.core.logic.character.Minion;
-import mpa.core.logic.character.Player;
+import mpa.core.logic.characters.AbstractCharacter;
+import mpa.core.logic.characters.Minion;
+import mpa.core.logic.characters.Player;
 
 abstract class AIState
 {

@@ -2,7 +2,7 @@ package mpa.core.logic.building;
 
 import javax.vecmath.Vector2f;
 
-import mpa.core.logic.character.Player;
+import mpa.core.logic.characters.Player;
 
 public class Headquarter extends House
 {

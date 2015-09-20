@@ -15,15 +15,15 @@ import mpa.core.ai.OpponentAI;
 import mpa.core.logic.building.AbstractPrivateProperty;
 import mpa.core.logic.building.AbstractProperty;
 import mpa.core.logic.building.Tower;
-import mpa.core.logic.character.AbstractCharacter;
-import mpa.core.logic.character.DependentCharacter;
-import mpa.core.logic.character.Minion;
-import mpa.core.logic.character.Player;
-import mpa.core.logic.character.Player.Item;
-import mpa.core.logic.character.TowerCrusher;
+import mpa.core.logic.characters.AbstractCharacter;
+import mpa.core.logic.characters.DependentCharacter;
+import mpa.core.logic.characters.Minion;
+import mpa.core.logic.characters.Player;
+import mpa.core.logic.characters.Player.Item;
+import mpa.core.logic.characters.TowerCrusher;
 import mpa.core.logic.fights.AttackRequests;
 import mpa.core.logic.fights.CombatManager;
-import mpa.core.logic.tool.Potions;
+import mpa.core.logic.potions.Potions;
 import mpa.core.maths.MyMath;
 import mpa.core.util.GameProperties;
 
@@ -251,7 +251,12 @@ public class GameManager
 		minionsAlive.remove( m );
 	}
 
-	// TODO killTowerCrusher
+	private void killTowerCrusher( TowerCrusher towerCrusher )
+	{
+		towerCrusher.stopMoving();
+		deadTowerCrushers.add( towerCrusher );
+		towerCrushers.remove( towerCrusher );
+	}
 
 	public List<Player> getPlayers()
 	{
@@ -323,6 +328,7 @@ public class GameManager
 		towerCrusherIDs = null;
 		towerIDs = null;
 		towers = null;
+		gameManager = null;
 	}
 
 	public List<Player> getPlayersAround( Player player, float ray )
@@ -451,11 +457,18 @@ public class GameManager
 	{
 		for( Tower t : towers )
 		{
-			List<Player> hitPlayers = t.attack();
+			List<AbstractCharacter> hitPlayers = t.attack();
 
-			for( Player p : hitPlayers )
-				if( p.getHP() < 0 )
-					killPlayer( p );
+			for( AbstractCharacter character : hitPlayers )
+				if( !character.amIAlive() )
+				{
+					if( character instanceof Player )
+						killPlayer( ( ( Player ) character ) );
+					else if( character instanceof TowerCrusher )
+						killTowerCrusher( ( ( TowerCrusher ) character ) );
+					else if( character instanceof Minion )
+						killMinion( ( ( Minion ) character ) );
+				}
 		}
 	}
 

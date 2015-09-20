@@ -6,13 +6,13 @@ import javax.vecmath.Vector2f;
 
 import mpa.core.logic.GameManager;
 import mpa.core.logic.building.AbstractPrivateProperty;
-import mpa.core.logic.character.DependentCharacter;
-import mpa.core.logic.character.Player;
-import mpa.core.logic.resource.AbstractResourceProducer;
-import mpa.core.logic.resource.Cave;
-import mpa.core.logic.resource.Field;
-import mpa.core.logic.resource.Mine;
-import mpa.core.logic.resource.Wood;
+import mpa.core.logic.characters.DependentCharacter;
+import mpa.core.logic.characters.Player;
+import mpa.core.logic.resources.AbstractResourceProducer;
+import mpa.core.logic.resources.Cave;
+import mpa.core.logic.resources.Field;
+import mpa.core.logic.resources.Mine;
+import mpa.core.logic.resources.Wood;
 import mpa.core.maths.MyMath;
 
 public class ConquestState extends AIState

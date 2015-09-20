@@ -1,17 +1,21 @@
 package mpa.core.logic;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.vecmath.Vector2f;
 
 import mpa.core.logic.building.Headquarter;
-import mpa.core.logic.character.Player;
+import mpa.core.logic.characters.Player;
+
+import org.jdom2.JDOMException;
 
 public class WorldLoader
 {
 	MapInfo mapInfo;
 
-	public void loadMapInfo( MapInfoCreator mapInfoCreator, String path )
+	public void loadMapInfo( MapInfoCreator mapInfoCreator, String path ) throws JDOMException,
+			IOException
 	{
 		mapInfo = mapInfoCreator.createMapInfo( path );
 	}

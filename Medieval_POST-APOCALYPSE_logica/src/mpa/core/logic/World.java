@@ -14,7 +14,7 @@ import javax.vecmath.Vector2f;
 import mpa.core.logic.building.AbstractPrivateProperty;
 import mpa.core.logic.building.Headquarter;
 import mpa.core.logic.building.Tower;
-import mpa.core.logic.resource.AbstractResourceProducer;
+import mpa.core.logic.resources.AbstractResourceProducer;
 import mpa.core.maths.MyMath;
 
 public class World

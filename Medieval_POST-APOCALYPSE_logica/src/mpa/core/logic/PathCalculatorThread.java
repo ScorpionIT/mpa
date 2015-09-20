@@ -6,7 +6,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.vecmath.Vector2f;
 
-import mpa.core.logic.character.AbstractCharacter;
+import mpa.core.logic.characters.AbstractCharacter;
 
 public class PathCalculatorThread extends Thread
 {

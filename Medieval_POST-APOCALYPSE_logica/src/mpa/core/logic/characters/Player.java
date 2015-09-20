@@ -1,4 +1,4 @@
-package mpa.core.logic.character;
+package mpa.core.logic.characters;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,8 +11,8 @@ import mpa.core.logic.Level;
 import mpa.core.logic.building.AbstractPrivateProperty;
 import mpa.core.logic.building.Headquarter;
 import mpa.core.logic.building.Tower;
-import mpa.core.logic.tool.PotionManager;
-import mpa.core.logic.tool.Potions;
+import mpa.core.logic.potions.PotionManager;
+import mpa.core.logic.potions.Potions;
 
 public class Player extends AbstractCharacter
 {

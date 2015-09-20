@@ -1,4 +1,4 @@
-package mpa.core.logic.tool;
+package mpa.core.logic.potions;
 
 import mpa.core.logic.Level;
 

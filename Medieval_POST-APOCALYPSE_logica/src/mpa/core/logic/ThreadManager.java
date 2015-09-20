@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mpa.core.logic.character.Player;
+import mpa.core.logic.characters.Player;
 
 class ThreadManager
 {
@@ -107,8 +107,16 @@ class ThreadManager
 
 	public void destroyAllThreads( GameManager gameManager )
 	{
-		// TODO Auto-generated method stub
-
+		for( MyThread t : gameThreads )
+		{
+			t.setWorking( false );
+			t = null;
+		}
+		for( Player p : flashBangThreads.keySet() )
+		{
+			flashBangThreads.get( p ).setWorking( false );
+			flashBangThreads.remove( p );
+		}
 	}
 
 }

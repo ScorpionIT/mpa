@@ -10,7 +10,7 @@ import javax.vecmath.Vector2f;
 import mpa.core.logic.AbstractObject;
 import mpa.core.logic.GameManager;
 import mpa.core.logic.building.AbstractProperty;
-import mpa.core.logic.character.Player;
+import mpa.core.logic.characters.Player;
 import mpa.core.maths.MyMath;
 
 public class AIWorldManager

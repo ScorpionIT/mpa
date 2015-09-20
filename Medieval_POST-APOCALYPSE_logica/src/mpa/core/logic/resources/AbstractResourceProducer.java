@@ -1,7 +1,7 @@
-package mpa.core.logic.resource;
+package mpa.core.logic.resources;
 
 import mpa.core.logic.building.AbstractPrivateProperty;
-import mpa.core.logic.character.Player;
+import mpa.core.logic.characters.Player;
 
 public abstract class AbstractResourceProducer extends AbstractPrivateProperty
 {

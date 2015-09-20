@@ -3,8 +3,8 @@ package mpa.core.ai;
 import javax.vecmath.Vector2f;
 
 import mpa.core.logic.GameManager;
-import mpa.core.logic.character.Player;
-import mpa.core.logic.tool.Potions;
+import mpa.core.logic.characters.Player;
+import mpa.core.logic.potions.Potions;
 
 class ProductionState extends AIState
 {

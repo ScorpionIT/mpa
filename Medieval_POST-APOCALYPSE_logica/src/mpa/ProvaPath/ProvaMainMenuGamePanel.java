@@ -31,6 +31,8 @@ import mpa.gui.menuMap.MainMenuGamePanel;
 import mpa.gui.menuMap.MapListPanel;
 import mpa.gui.menuMap.MapPreview;
 
+import org.jdom2.JDOMException;
+
 public class ProvaMainMenuGamePanel extends MainMenuGamePanel
 {
 	/**
@@ -51,14 +53,14 @@ public class ProvaMainMenuGamePanel extends MainMenuGamePanel
 	int screenWidth;
 	int screenHeight;
 	DifficultyLevel difficultyLevelSelected = null;
-	private String textImagePath = GameProperties.getInstance().getPath("TextImagePath");
+	private String textImagePath = GameProperties.getInstance().getPath( "TextImagePath" );
 
-	public ProvaMainMenuGamePanel(int x, int y, int width, int height)
+	public ProvaMainMenuGamePanel( int x, int y, int width, int height )
 	{
 
-		this.setSize(width, height);
-		this.setLocation(x, y);
-		this.setLayout(null);
+		this.setSize( width, height );
+		this.setLocation( x, y );
+		this.setLayout( null );
 		screenWidth = this.getWidth();
 		screenHeight = this.getHeight();
 
@@ -69,88 +71,102 @@ public class ProvaMainMenuGamePanel extends MainMenuGamePanel
 		addInputNamePanel();
 
 		addDifficultyPanel();
-		System.out.println(textImagePath);
+		System.out.println( textImagePath );
 
 		try
 		{
-			Image imagePlay = ImageIO.read(new File(textImagePath + "/Play.png"));
-			imagePlay = imagePlay.getScaledInstance(screenWidth * 20 / this.getWidth() * 10, 40, Image.SCALE_FAST);
-			buttonPlay = new JLabel(new ImageIcon(imagePlay));
-		} catch (IOException e2)
+			Image imagePlay = ImageIO.read( new File( textImagePath + "/Play.png" ) );
+			imagePlay = imagePlay.getScaledInstance( screenWidth * 20 / this.getWidth() * 10, 40,
+					Image.SCALE_FAST );
+			buttonPlay = new JLabel( new ImageIcon( imagePlay ) );
+		} catch( IOException e2 )
 		{
 			// TODO Blocco catch generato automaticamente
 			e2.printStackTrace();
 		}
-		buttonPlay.setBounds(this.getWidth() - this.getWidth() * 15 / 100, 52 + screenHeight * 80 / 100, screenWidth * 20 / this.getWidth() * 10, 40);
-		buttonPlay.addMouseListener(new MouseAdapter()
+		buttonPlay.setBounds( this.getWidth() - this.getWidth() * 15 / 100,
+				52 + screenHeight * 80 / 100, screenWidth * 20 / this.getWidth() * 10, 40 );
+		buttonPlay.addMouseListener( new MouseAdapter()
 		{
 			@Override
-			public void mouseReleased(MouseEvent e)
+			public void mouseReleased( MouseEvent e )
 			{
 				playerName = inputNamePanel.getPlayerName();
-				if (playerName == null || playerName.equals(""))
+				if( playerName == null || playerName.equals( "" ) )
 				{
-					JOptionPane.showMessageDialog(new Frame(), "Inserisci il nome che preferisci", "", JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog( new Frame(), "Inserisci il nome che preferisci",
+							"", JOptionPane.PLAIN_MESSAGE );
 				}
-				else if (selectedHQ == null)
-					JOptionPane.showMessageDialog(new Frame(), "Seleziona il quartier generale", "", JOptionPane.PLAIN_MESSAGE);
-				else if (difficultyLevelSelected == null)
-					JOptionPane.showMessageDialog(new Frame(), "Seleziona la difficoltà", "", JOptionPane.PLAIN_MESSAGE);
+				else if( selectedHQ == null )
+					JOptionPane.showMessageDialog( new Frame(), "Seleziona il quartier generale",
+							"", JOptionPane.PLAIN_MESSAGE );
+				else if( difficultyLevelSelected == null )
+					JOptionPane.showMessageDialog( new Frame(), "Seleziona la difficoltà", "",
+							JOptionPane.PLAIN_MESSAGE );
 				else
 				{
-					World world = ProvaMainMenuGamePanel.this.worldLoader.loadWorld(new WorldFromMapInfo());
-					GameManager.init(world, difficultyLevelSelected, false);
-					ProvaMainMenuGamePanel.this.selectedHQIndex = ProvaMainMenuGamePanel.this.worldLoader.makePlayers(
-							ProvaMainMenuGamePanel.this.playerName, world, ProvaMainMenuGamePanel.this.selectedHQ);
+					World world = ProvaMainMenuGamePanel.this.worldLoader
+							.loadWorld( new WorldFromMapInfo() );
+					GameManager.init( world, difficultyLevelSelected, false );
+					ProvaMainMenuGamePanel.this.selectedHQIndex = ProvaMainMenuGamePanel.this.worldLoader
+							.makePlayers( ProvaMainMenuGamePanel.this.playerName, world,
+									ProvaMainMenuGamePanel.this.selectedHQ );
 
 					int screenWidth = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
 					int screenHeight = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
 
 					JFrame frame = new JFrame();
-					frame.setLocation(0, 0);
+					frame.setLocation( 0, 0 );
 
-					frame.setSize(1000, 1000);
-					frame.setLocation((screenWidth - 1000) / 2, 0);
-					ProvaPath provaPath = new ProvaPath(playerName);
-					provaPath.setBounds(0, 0, 1000, 1000);
+					frame.setSize( 1000, 1000 );
+					frame.setLocation( ( screenWidth - 1000 ) / 2, 0 );
+					ProvaPath provaPath = new ProvaPath( playerName );
+					provaPath.setBounds( 0, 0, 1000, 1000 );
 
-					frame.setContentPane(new Panel());
-					frame.getContentPane().setBackground(Color.BLACK);
-					frame.getContentPane().add(provaPath);
-					frame.getContentPane().setLayout(null);
-					frame.getContentPane().setVisible(true);;
-					frame.setVisible(true);
-					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+					frame.setContentPane( new Panel() );
+					frame.getContentPane().setBackground( Color.BLACK );
+					frame.getContentPane().add( provaPath );
+					frame.getContentPane().setLayout( null );
+					frame.getContentPane().setVisible( true );;
+					frame.setVisible( true );
+					frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 
 				}
 			}
-		});
+		} );
 
-		this.add(buttonPlay);
+		this.add( buttonPlay );
 		try
 		{
-			backgroundImage = ImageIO.read(new File("Assets/BackgroundImages/mainMenu.jpg"));
-		} catch (IOException e1)
+			backgroundImage = ImageIO.read( new File( "Assets/BackgroundImages/mainMenu.jpg" ) );
+		} catch( IOException e1 )
 		{
 			e1.printStackTrace();
 		}
-		this.setVisible(true);
+		this.setVisible( true );
 	}
 
-	public void setMap(String mapName)
+	public void setMap( String mapName )
 	{
 		mapPreview.removeAll();
-		worldLoader.loadMapInfo(new MapFromXMLCreator(), mapName);
+		try
+		{
+			worldLoader.loadMapInfo( new MapFromXMLCreator(), mapName );
+		} catch( JDOMException | IOException e )
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		mapInfo = worldLoader.getMapInfo();
-		mapPreview.setMapDimension(mapInfo.getWidth(), mapInfo.getHeight());
-		mapPreview.loadMap(mapInfo);
+		mapPreview.setMapDimension( mapInfo.getWidth(), mapInfo.getHeight() );
+		mapPreview.loadMap( mapInfo );
 		selectedHQ = null;
 		this.repaint();
 	}
 
-	public void setSelectedHeadQuarter(Pair<Float, Float> headQuarterPosition)
+	public void setSelectedHeadQuarter( Pair<Float, Float> headQuarterPosition )
 	{
-		if (mapInfo.getHeadQuarters().contains(headQuarterPosition))
+		if( mapInfo.getHeadQuarters().contains( headQuarterPosition ) )
 			selectedHQ = headQuarterPosition;
 	}
 
@@ -159,75 +175,79 @@ public class ProvaMainMenuGamePanel extends MainMenuGamePanel
 		return selectedHQ;
 	}
 
-	public void setPlayerName(String playerName)
+	public void setPlayerName( String playerName )
 	{
 		this.playerName = playerName;
 	}
 
-	public void setDifficultyLevel(DifficultyLevel difficultyLevel)
+	public void setDifficultyLevel( DifficultyLevel difficultyLevel )
 	{
 		this.difficultyLevelSelected = difficultyLevel;
 	}
 
 	private void addMapPreviewPanel()
 	{
-		mapPreview = new MapPreview(this);
-		mapPreview.setBounds(screenWidth * 55 / 100, 30, screenWidth * 45 / 100 - 30, screenHeight * 55 / 100);
+		mapPreview = new MapPreview( this );
+		mapPreview.setBounds( screenWidth * 55 / 100, 30, screenWidth * 45 / 100 - 30,
+				screenHeight * 55 / 100 );
 		mapPreview.repaint();
-		this.add(mapPreview);
+		this.add( mapPreview );
 	}
 
 	private void addMapListPanel()
 	{
-		mapListPanel = new MapListPanel(this);
-		mapListPanel.setBounds(screenWidth * 80 / 100, 50 + screenHeight * 60 / 100, screenWidth * 19 / 100 + 5, screenHeight * 20 / 100);
-		System.out.println(mapListPanel.getBounds());
-		this.add(mapListPanel);
+		mapListPanel = new MapListPanel( this );
+		mapListPanel.setBounds( screenWidth * 80 / 100, 50 + screenHeight * 60 / 100,
+				screenWidth * 19 / 100 + 5, screenHeight * 20 / 100 );
+		System.out.println( mapListPanel.getBounds() );
+		this.add( mapListPanel );
 	}
 
 	private void addInputNamePanel()
 	{
 		inputNamePanel = new InputNamePanel();
-		inputNamePanel.setBounds(40, 45, screenWidth * 50 / 100, screenHeight * 40 / 100);
-		inputNamePanel.setOpaque(false);
-		this.add(inputNamePanel);
+		inputNamePanel.setBounds( 40, 45, screenWidth * 50 / 100, screenHeight * 40 / 100 );
+		inputNamePanel.setOpaque( false );
+		this.add( inputNamePanel );
 	}
 
 	private void addDifficultyPanel()
 	{
-		difficultyPanel = new DifficultyPanel(this);
-		difficultyPanel.setBounds(40, screenHeight * 60 / 100, screenWidth * 45 / 100, screenHeight * 25 / 100);
+		difficultyPanel = new DifficultyPanel( this );
+		difficultyPanel.setBounds( 40, screenHeight * 60 / 100, screenWidth * 45 / 100,
+				screenHeight * 25 / 100 );
 		this.repaint();
-		this.add(difficultyPanel);
+		this.add( difficultyPanel );
 	}
 
 	@Override
-	protected void paintComponent(Graphics g)
+	protected void paintComponent( Graphics g )
 	{
-		super.paintComponent(g);
-		g.drawImage(backgroundImage, 0, 0, screenWidth, screenHeight, this);
+		super.paintComponent( g );
+		g.drawImage( backgroundImage, 0, 0, screenWidth, screenHeight, this );
 	}
 
-	public static void main(String[] args)
+	public static void main( String[] args )
 	{
 
 		int screenWidth = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
 		int screenHeight = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
 
 		JFrame frame = new JFrame();
-		frame.setLocation(0, 0);
+		frame.setLocation( 0, 0 );
 
-		frame.setSize(screenWidth, screenHeight);
-		ProvaMainMenuGamePanel mainMenuGamePanel = new ProvaMainMenuGamePanel(screenWidth * 15 / 100, screenHeight * 10 / 100,
-				screenWidth * 70 / 100, screenHeight * 80 / 100);
+		frame.setSize( screenWidth, screenHeight );
+		ProvaMainMenuGamePanel mainMenuGamePanel = new ProvaMainMenuGamePanel(
+				screenWidth * 15 / 100, screenHeight * 10 / 100, screenWidth * 70 / 100,
+				screenHeight * 80 / 100 );
 
-		frame.setContentPane(new Panel());
-		frame.getContentPane().setBackground(Color.BLACK);
-		frame.getContentPane().add(mainMenuGamePanel);
-		frame.getContentPane().setLayout(null);
-		frame.getContentPane().setVisible(true);;
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setContentPane( new Panel() );
+		frame.getContentPane().setBackground( Color.BLACK );
+		frame.getContentPane().add( mainMenuGamePanel );
+		frame.getContentPane().setLayout( null );
+		frame.getContentPane().setVisible( true );;
+		frame.setVisible( true );
+		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 	}
 
 }

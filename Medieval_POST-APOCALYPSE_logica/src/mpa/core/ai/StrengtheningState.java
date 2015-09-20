@@ -3,7 +3,7 @@ package mpa.core.ai;
 import javax.vecmath.Vector2f;
 
 import mpa.core.logic.GameManager;
-import mpa.core.logic.character.Player;
+import mpa.core.logic.characters.Player;
 
 class StrengtheningState extends AIState
 {

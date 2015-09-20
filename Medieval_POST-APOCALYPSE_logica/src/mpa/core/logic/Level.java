@@ -1,7 +1,7 @@
 package mpa.core.logic;
 
-import mpa.core.logic.character.Player;
-import mpa.core.logic.tool.Potions;
+import mpa.core.logic.characters.Player;
+import mpa.core.logic.potions.Potions;
 
 public enum Level
 {

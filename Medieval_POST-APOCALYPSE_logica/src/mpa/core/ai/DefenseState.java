@@ -6,11 +6,11 @@ import java.util.List;
 import javax.vecmath.Vector2f;
 
 import mpa.core.logic.GameManager;
-import mpa.core.logic.character.Minion;
-import mpa.core.logic.character.Player;
-import mpa.core.logic.character.Player.Item;
-import mpa.core.logic.character.TowerCrusher;
-import mpa.core.logic.tool.Potions;
+import mpa.core.logic.characters.Minion;
+import mpa.core.logic.characters.Player;
+import mpa.core.logic.characters.TowerCrusher;
+import mpa.core.logic.characters.Player.Item;
+import mpa.core.logic.potions.Potions;
 
 public class DefenseState extends AIState
 {

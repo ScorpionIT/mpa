@@ -1,4 +1,4 @@
-package mpa.core.logic.character;
+package mpa.core.logic.characters;
 
 import java.util.List;
 

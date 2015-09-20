@@ -1,8 +1,8 @@
 package mpa.core.logic;
 
-import mpa.core.logic.character.Player;
+import mpa.core.logic.characters.Player;
 
-public class FlashBangThread extends Thread
+public class FlashBangThread extends MyThread
 {
 	private Player player;
 	private final long STANDARD_TIME_TO_WAKE = 15000;
@@ -26,8 +26,9 @@ public class FlashBangThread extends Thread
 	}
 
 	@Override
-	public void run()
+	public synchronized void run()
 	{
+		super.run();
 		startingTime = System.currentTimeMillis();
 
 		residualTime = System.currentTimeMillis() - startingTime;

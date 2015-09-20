@@ -3,7 +3,7 @@ package mpa.gui.gameGui.playingGUI;
 import java.util.concurrent.locks.ReentrantLock;
 
 import mpa.core.logic.GameManager;
-import mpa.core.logic.character.Player;
+import mpa.core.logic.characters.Player;
 import mpa.gui.gameGui.listener.GameGuiClickListener;
 import mpa.gui.gameGui.listener.GameGuiKeyActionListener;
 import mpa.gui.gameGui.listener.GameGuiMouseListener;

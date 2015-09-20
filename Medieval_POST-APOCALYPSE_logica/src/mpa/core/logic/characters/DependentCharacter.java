@@ -1,9 +1,9 @@
-package mpa.core.logic.character;
+package mpa.core.logic.characters;
 
 import mpa.core.logic.Level;
 import mpa.core.logic.building.AbstractPrivateProperty;
 import mpa.core.logic.building.Headquarter;
-import mpa.core.logic.resource.AbstractResourceProducer;
+import mpa.core.logic.resources.AbstractResourceProducer;
 
 public class DependentCharacter extends AbstractCharacter
 {

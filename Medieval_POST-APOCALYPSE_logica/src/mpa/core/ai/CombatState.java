@@ -6,11 +6,11 @@ import javax.vecmath.Vector2f;
 
 import mpa.core.logic.GameManager;
 import mpa.core.logic.building.Tower;
-import mpa.core.logic.character.AbstractCharacter;
-import mpa.core.logic.character.Player;
-import mpa.core.logic.character.Player.Item;
+import mpa.core.logic.characters.AbstractCharacter;
+import mpa.core.logic.characters.Player;
+import mpa.core.logic.characters.Player.Item;
 import mpa.core.logic.fights.CombatManager;
-import mpa.core.logic.tool.Potions;
+import mpa.core.logic.potions.Potions;
 import mpa.core.maths.MyMath;
 
 class CombatState extends AIState
