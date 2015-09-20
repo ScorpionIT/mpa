@@ -214,7 +214,7 @@ public class ResourcesPanel
 	// TODO UNIRE CON L'ALTRO PANNELLO DELLE RISORSE
 	private void initResourcePanel()
 	{
-		resourcesBackgroundPanel = new PanelBuilder("resourcesBackground")
+		resourcesBackgroundPanel = new PanelBuilder("#resourcesBackground")
 		{
 
 			{
@@ -369,14 +369,14 @@ public class ResourcesPanel
 		labelMPPotion.text("MP Potions : " + numberOfMPPotions);
 		labelHPPotion.text("HP Potions : " + numberOfHPPotions);
 		labelGranade.text("Granade : " + numberOfGranades);
-
 		if (nifty.getCurrentScreen().findElementByName("#informationPanel") != null)
 		{
 			nifty.getCurrentScreen().findElementByName("#informationPanel").markForRemoval();
 			nifty.removeElement(nifty.getCurrentScreen(), nifty.getCurrentScreen().findElementByName("#informationPanel"));
-			Element findElementByName = nifty.getCurrentScreen().findElementByName("resourcesBackground");
+			Element findElementByName = nifty.getCurrentScreen().findElementByName("#resourcesBackground");
 			findElementByName.add(informationPanel.build(nifty, nifty.getCurrentScreen(), findElementByName));
 		}
+
 	}
 
 	public void updateResourceLabel(Nifty nifty, String resourceName, int value)
@@ -385,18 +385,22 @@ public class ResourcesPanel
 		LabelBuilder labelBuilder = resourcesValueLabel.get(resourceName);
 		labelBuilder.text(Integer.toString(value));
 
-		removeResourcesLabel(resourceName, nifty);
-
-		Element findElementByName = nifty.getCurrentScreen().findElementByName(resourceName + "Panel");
-		findElementByName.add(labelBuilder.build(nifty, nifty.getCurrentScreen(), findElementByName));
+		// rebuildResourcesLabel(labelBuilder, resourceName, nifty);
+		//
+		// Element findElementByName = nifty.getCurrentScreen().findElementByName(resourceName +
+		// "Panel");
+		// findElementByName.add(labelBuilder.build(nifty, nifty.getCurrentScreen(),
+		// findElementByName));
 	}
 
-	private synchronized void removeResourcesLabel(String resourceName, Nifty nifty)
+	private void rebuildResourcesLabel(LabelBuilder labelBuilder, String resourceName, Nifty nifty)
 	{
 		if (nifty.getCurrentScreen().findElementByName("Avaible" + resourceName) != null)
 		{
 			nifty.getCurrentScreen().findElementByName("Avaible" + resourceName).markForRemoval();
 			nifty.removeElement(nifty.getCurrentScreen(), nifty.getCurrentScreen().findElementByName("Avaible" + resourceName));
+			Element findElementByName = nifty.getCurrentScreen().findElementByName(resourceName + "Panel");
+			findElementByName.add(labelBuilder.build(nifty, nifty.getCurrentScreen(), findElementByName));
 		}
 	}
 }
