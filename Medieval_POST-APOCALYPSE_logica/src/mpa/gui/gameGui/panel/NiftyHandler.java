@@ -150,10 +150,13 @@ public class NiftyHandler
 
 	}
 
-	public void setHeadquarterPanel()
+	public void setHeadquarterPanel(String objectType, String objectID)
 	{
 		selectionHeadquarterHandler.addSelectionHeadquarter(nifty);
+		selectedObjectID = objectID;
+		selectedObjectType = objectType;
 		isVisibleHeadquarterPanel = true;
+
 	}
 
 	public void removeSelectedPanel()
@@ -393,6 +396,8 @@ public class NiftyHandler
 		{
 			nifty.getCurrentScreen().findElementByName("#selectedHeadquarter").markForRemoval();
 			nifty.removeElement(nifty.getCurrentScreen(), nifty.getCurrentScreen().findElementByName("#selectedHeadquarter"));
+			selectedObjectID = null;
+			selectedObjectType = null;
 		}
 		isVisibleHeadquarterPanel = false;
 	}

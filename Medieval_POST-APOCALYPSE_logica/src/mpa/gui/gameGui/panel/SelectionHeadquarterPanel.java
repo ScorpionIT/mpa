@@ -19,6 +19,7 @@ public class SelectionHeadquarterPanel
 	private final String listId = "#listBoxEnemy";
 	private TextFieldBuilder textFieldMinionNumber;
 	private final String textFieldId = "#textFieldMinion ";
+	private ImageBuilder createTowerButton;
 
 	public SelectionHeadquarterPanel(int panelWidth, int panelHeight, final int xPanel, final int yPanel, HandlerImplementation gameController)
 	{
@@ -29,7 +30,7 @@ public class SelectionHeadquarterPanel
 		textFieldMinionNumber = new TextFieldBuilder(textFieldId)
 		{
 			{
-				x("10%");
+				x("15%");
 				y("30%");
 				width("40%");
 				height("10%");
@@ -44,12 +45,27 @@ public class SelectionHeadquarterPanel
 				optionalHorizontalScrollbar();
 				optionalVerticalScrollbar();
 				selectionModeSingle();
-				x("10%");
+				x("15%");
 				y("50%");
 
 				width("40%");
 				height("10%");
 			}
+		};
+
+		createTowerButton = new ImageBuilder()
+		{
+			{
+				filename("createTower1.png");
+				width("50%");
+				height("20%");
+
+				x("15%");
+				y("80%");
+				interactOnClick("onClickButtonCreateTowerButton()");
+
+			}
+
 		};
 
 		selectionPanel = new PanelBuilder("#selectedHeadquarter")
@@ -66,7 +82,7 @@ public class SelectionHeadquarterPanel
 				image(new ImageBuilder()
 				{
 					{
-						filename("selectedPanel.png");
+						filename("backgroundHeadquarterPanel.png");
 						width("100%");
 						height("100%");
 
@@ -77,7 +93,7 @@ public class SelectionHeadquarterPanel
 				{
 					{
 						filename("insertMinionsNumber.png");
-						x("10%");
+						x("15%");
 						y("20%");
 						width("30%");
 						height("8%");
@@ -89,7 +105,7 @@ public class SelectionHeadquarterPanel
 				{
 					{
 						filename("chooseEnemy.png");
-						x("10%");
+						x("15%");
 						y("41%");
 						width("20%");
 						height("8%");
@@ -100,11 +116,26 @@ public class SelectionHeadquarterPanel
 				{
 					{
 						filename("createMinions.png");
-						x("70%");
+						x("65%");
 						y("80%");
 						width("20%");
 						height("10%");
 						interactOnClick("onClickCreateMinion()");
+
+					}
+
+				});
+
+				image(new ImageBuilder()
+				{
+					{
+						filename("createTower1.png");
+						width("20%");
+						height("10%");
+
+						x("15%");
+						y("80%");
+						interactOnClick("onClickButtonCreateTowerHeadquarterButton()");
 
 					}
 

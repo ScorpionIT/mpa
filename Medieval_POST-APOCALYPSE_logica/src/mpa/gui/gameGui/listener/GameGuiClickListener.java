@@ -82,7 +82,7 @@ public class GameGuiClickListener implements ActionListener
 				System.out.println(pickedObjectOwner);
 				if (split[0].toLowerCase().equals("headquarter") && pickedObjectOwner.equals(GuiObjectManager.getInstance().getPlayingPlayer()))
 				{
-					niftyHandler.setHeadquarterPanel();
+					niftyHandler.setHeadquarterPanel(split[0], split[1]);
 				}
 				else
 				{

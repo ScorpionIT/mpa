@@ -71,11 +71,21 @@ public class NiftyController implements ScreenController
 		niftyHandler.setButtonOccupyClicked(true);
 	}
 
-	public void onClickButtonCreateTowerButton()
+	public void onClickButtonCreateTowerButton(boolean headquarter)
 	{
 		gameController.createTower(niftyHandler.getSelectedObject());
+
 		niftyHandler.removeSelectedPanel();
 		niftyHandler.setButtonOccupyClicked(true);
+
+	}
+
+	public void onClickButtonCreateTowerHeadquarterButton()
+	{
+		if (!gameController.createTower(niftyHandler.getSelectedObject()))
+			niftyHandler.createMessageBox("non hai le risorse necessarie", "ok");
+		niftyHandler.removeHeadquarterPanel();
+		niftyHandler.setCreateButtonClicked(true);
 	}
 
 	public void onClickButtonForward()
