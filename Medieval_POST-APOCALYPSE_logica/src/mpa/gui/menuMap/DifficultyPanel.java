@@ -99,15 +99,16 @@ public class DifficultyPanel extends JPanel
 				imageChooseDifficultyLevel.getHeight(this));
 
 		this.add(label);
+		yComponent += imageChooseDifficultyLevel.getHeight(this) - imageChooseDifficultyLevel.getHeight(this) * 30 / 100;
 
 		for (AbstractButton button : buttonList)
 		{
-			yComponent += increment;
 
 			button.addActionListener(actionListenerRadioButton);
 			button.setOpaque(false);
 			button.setBounds(xComponent, yComponent, this.getWidth() - xComponent, increment);
 			this.add(button);
+			yComponent += increment;
 
 		}
 	}

@@ -1,6 +1,8 @@
 package mpa.gui.menuMap;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -8,6 +10,7 @@ import java.awt.Panel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -16,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import mpa.core.ai.DifficultyLevel;
 import mpa.core.logic.GameManager;
@@ -74,11 +78,11 @@ public class MainMenuGamePanel extends JPanel
 		addInputNamePanel();
 
 		addDifficultyPanel();
-		System.out.println(textImagePath);
 
+		Image imagePlay = null;
 		try
 		{
-			Image imagePlay = ImageIO.read(new File(textImagePath + "/Play.png"));
+			imagePlay = ImageIO.read(new File(textImagePath + "/Play.png"));
 			imagePlay = imagePlay.getScaledInstance(screenWidth * 20 / this.getWidth() * 10, 40, Image.SCALE_FAST);
 			buttonPlay = new JLabel(new ImageIcon(imagePlay));
 		} catch (IOException e2)
@@ -86,7 +90,8 @@ public class MainMenuGamePanel extends JPanel
 			// TODO Blocco catch generato automaticamente
 			e2.printStackTrace();
 		}
-		buttonPlay.setBounds(this.getWidth() - this.getWidth() * 15 / 100, 52 + screenHeight * 80 / 100, screenWidth * 20 / this.getWidth() * 10, 40);
+		buttonPlay.setBounds(this.getWidth() - imagePlay.getWidth(this), 52 + screenHeight * 80 / 100, imagePlay.getWidth(this),
+				imagePlay.getHeight(this));
 		buttonPlay.addMouseListener(new MouseAdapter()
 		{
 			@Override
@@ -95,12 +100,13 @@ public class MainMenuGamePanel extends JPanel
 				playerName = inputNamePanel.getPlayerName();
 				if (playerName == null || playerName.equals(""))
 				{
-					JOptionPane.showMessageDialog(new Frame(), "Inserisci il nome che preferisci", "", JOptionPane.PLAIN_MESSAGE);
+					setButtonsStyle();
+					JOptionPane.showMessageDialog(new Frame(), "Inserisci il nome che preferisci", "Message", JOptionPane.PLAIN_MESSAGE);
 				}
 				else if (selectedHQ == null)
-					JOptionPane.showMessageDialog(new Frame(), "Seleziona il quartier generale", "", JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(new Frame(), "Seleziona il quartier generale", "Message", JOptionPane.PLAIN_MESSAGE);
 				else if (difficultyLevelSelected == null)
-					JOptionPane.showMessageDialog(new Frame(), "Seleziona la difficoltà", "", JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(new Frame(), "Seleziona la difficoltà", "Message", JOptionPane.PLAIN_MESSAGE);
 				else
 				{
 					World world = MainMenuGamePanel.this.worldLoader.loadWorld(new WorldFromMapInfo());
@@ -157,6 +163,7 @@ public class MainMenuGamePanel extends JPanel
 					t.start();
 				}
 			}
+
 		});
 
 		this.add(buttonPlay);
@@ -168,6 +175,23 @@ public class MainMenuGamePanel extends JPanel
 			e1.printStackTrace();
 		}
 		this.setVisible(true);
+	}
+
+	private void setButtonsStyle()
+	{
+
+		Font font = null;
+		try
+		{
+			font = Font.createFont(Font.PLAIN, new FileInputStream("./Assets/Fonts/KELMSCOT.TTF"));
+		} catch (FontFormatException | IOException e)
+		{
+			// TODO Blocco catch generato automaticamente
+			e.printStackTrace();
+		}
+		font = font.deriveFont(Font.PLAIN, 15);
+		UIManager.put("Label.font", font);
+		UIManager.put("Button.font", new Font("URW Chancery L", Font.BOLD, 13));
 	}
 
 	public void setMap(String mapName)

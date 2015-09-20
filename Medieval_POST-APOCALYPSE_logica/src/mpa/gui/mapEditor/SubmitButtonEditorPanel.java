@@ -1,10 +1,13 @@
 package mpa.gui.mapEditor;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 public class SubmitButtonEditorPanel extends JPanel
 {
@@ -16,6 +19,11 @@ public class SubmitButtonEditorPanel extends JPanel
 	{
 		this.mainMapEditorPanel = mainMapEditorPanel;
 		this.setLayout(null);
+
+		Color button = new Color(1f, 1f, 0f, 0.5f);
+		UIManager.put("Button.font", new Font("Comic Sans MS", Font.BOLD, 15));
+		UIManager.put("Button.background", button);
+
 		submitButton = new JButton("Submit");
 
 		submitButton.addMouseListener(new MouseAdapter()

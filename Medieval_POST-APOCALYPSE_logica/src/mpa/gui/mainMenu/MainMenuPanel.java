@@ -1,7 +1,11 @@
 package mpa.gui.mainMenu;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Panel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
@@ -12,6 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import mpa.core.util.GameProperties;
+import mpa.gui.mapEditor.MainMapEditorPanel;
+import mpa.gui.menuMap.MainMenuGamePanel;
 
 public class MainMenuPanel extends JPanel
 {
@@ -28,70 +34,117 @@ public class MainMenuPanel extends JPanel
 	private JLabel quit;
 	private String textImagePath = GameProperties.getInstance().getPath("TextImagePath");
 
-	public MainMenuPanel(int x, int y, int width, int height)
+	public MainMenuPanel(int x, int y, int width, int height, final JFrame mainFrame)
 	{
 		setBounds(x, y, width, height);
 
-		int yIncrement = (this.getHeight() - this.getHeight() / 2) / 6;
+		int yIncrement = (this.getHeight() - this.getHeight() * 60 / 100) / 6;
 		int yComponent = this.getHeight() / 4;
+		int xComponent;
 		setLayout(null);
 		try
 		{
-			backgroundImage = ImageIO.read(new File("Assets/BackgroundImages/mainMenu.jpg"));
+			backgroundImage = ImageIO.read(new File("Assets/BackgroundImages/backgroundMainPanel.jpg"));
 		} catch (IOException e1)
 		{
 			e1.printStackTrace();
 		}
-
+		ImageIcon imageIcon = null;
 		title = new JLabel("CI SARÀ UN'IMMAGINE");
 		title.setBounds(25 * width / 100, 0, 50 * width / 100, 10 * height / 100);
 		title.setVisible(true);
 		add(title);
 
-		singlePlayer = loadJLabel("SinglePlayer.png");
-		singlePlayer.setBounds(5, yComponent, 25 * width / 100, yIncrement);
+		imageIcon = loadImageIcon("SinglePlayer.png");
+		singlePlayer = new JLabel(imageIcon);
+		xComponent = this.getWidth() * 50 / 100 - imageIcon.getIconWidth() / 2;
+		singlePlayer.setBounds(xComponent, yComponent, imageIcon.getIconWidth(), yIncrement);
 		singlePlayer.setVisible(true);
+		singlePlayer.addMouseListener(new java.awt.event.MouseAdapter()
+		{
+			@Override
+			public void mouseReleased(MouseEvent e)
+			{
+				MainMenuGamePanel mainMenuGamePanel = new MainMenuGamePanel(mainFrame.getWidth() * 15 / 100, mainFrame.getHeight() * 10 / 100,
+						mainFrame.getWidth() * 70 / 100, mainFrame.getHeight() * 80 / 100);
+
+				mainFrame.setContentPane(new Panel());
+				mainFrame.getContentPane().setBackground(Color.BLACK);
+				mainFrame.getContentPane().add(mainMenuGamePanel);
+				mainFrame.getContentPane().setLayout(null);
+				mainFrame.getContentPane().setVisible(true);;
+				mainFrame.setVisible(true);
+			}
+		});
 		add(singlePlayer);
 
 		yComponent += yIncrement;
 
-		multiPlayer = loadJLabel("Multiplayer.png");
-		multiPlayer.setBounds(5, yComponent, 25 * width / 100, yIncrement);
+		imageIcon = loadImageIcon("Multiplayer.png");
+		multiPlayer = new JLabel(imageIcon);
+		xComponent = this.getWidth() * 50 / 100 - imageIcon.getIconWidth() / 2;
+		multiPlayer.setBounds(xComponent, yComponent, imageIcon.getIconWidth(), yIncrement);
 		multiPlayer.setVisible(true);
 		add(multiPlayer);
 
 		yComponent += yIncrement;
 
-		createServer = loadJLabel("CreateServer.png");
-		createServer.setBounds(5, yComponent, 25 * width / 100, yIncrement);
+		imageIcon = loadImageIcon("CreateServer.png");
+		createServer = new JLabel(imageIcon);
+		xComponent = this.getWidth() * 50 / 100 - imageIcon.getIconWidth() / 2;
+		createServer.setBounds(xComponent, yComponent, imageIcon.getIconWidth(), yIncrement);
 		createServer.setVisible(true);
 		add(createServer);
 
 		yComponent += yIncrement;
 
-		mapEditor = loadJLabel("MapEditor.png");
-		mapEditor.setBounds(5, yComponent, 25 * width / 100, yIncrement);
+		imageIcon = loadImageIcon("MapEditor.png");
+		mapEditor = new JLabel(imageIcon);
+		xComponent = this.getWidth() * 50 / 100 - imageIcon.getIconWidth() / 2;
+		mapEditor.setBounds(xComponent, yComponent, imageIcon.getIconWidth(), yIncrement);
 		mapEditor.setVisible(true);
+		mapEditor.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mouseReleased(MouseEvent e)
+			{
+				mainFrame.getContentPane().add(new MainMapEditorPanel());
+				mainFrame.getContentPane().setVisible(true);;
+				mainFrame.setVisible(true);
+			}
+		});
 		add(mapEditor);
 
 		yComponent += yIncrement;
 
-		options = loadJLabel("Options.png");
-		options.setBounds(5, yComponent, 25 * width / 100, yIncrement);
+		imageIcon = loadImageIcon("Options.png");
+		options = new JLabel(imageIcon);
+		xComponent = this.getWidth() * 50 / 100 - imageIcon.getIconWidth() / 2;
+		options.setBounds(xComponent, yComponent, imageIcon.getIconWidth(), yIncrement);
 		options.setVisible(true);
 		add(options);
 
 		yComponent += yIncrement;
 
-		quit = loadJLabel("Quit.png");
-		quit.setBounds(5, yComponent, 25 * width / 100, yIncrement);
+		imageIcon = loadImageIcon("Quit.png");
+		quit = new JLabel(imageIcon);
+		xComponent = this.getWidth() * 50 / 100 - imageIcon.getIconWidth() / 2;
+		quit.setBounds(xComponent, yComponent, imageIcon.getIconWidth(), yIncrement);
 		quit.setVisible(true);
+		quit.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mouseReleased(MouseEvent e)
+			{
+				System.exit(0);
+			}
+		});
 		add(quit);
 
 		setVisible(true);
 	}
 
-	private JLabel loadJLabel(String fileName)
+	private ImageIcon loadImageIcon(String fileName)
 	{
 
 		Image imageText = null;
@@ -101,12 +154,13 @@ public class MainMenuPanel extends JPanel
 			// imageText = imageText.getScaledInstance(imageText.getWidth(this) * percentuage / 100,
 			// imageText.getHeight(this) * percentuage / 100,
 			// Image.SCALE_FAST);
+
 		} catch (IOException e)
 		{
 			// TODO Blocco catch generato automaticamente
 			e.printStackTrace();
 		}
-		return new JLabel(new ImageIcon(imageText));
+		return new ImageIcon(imageText);
 	}
 
 	@Override
@@ -126,7 +180,7 @@ public class MainMenuPanel extends JPanel
 
 		frame.setSize(screenWidth, screenHeight);
 
-		MainMenuPanel mp = new MainMenuPanel(0, 0, screenWidth, screenHeight);
+		MainMenuPanel mp = new MainMenuPanel(0, 0, screenWidth, screenHeight, frame);
 		frame.add(mp);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
