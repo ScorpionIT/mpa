@@ -29,13 +29,14 @@ public class NiftyController implements ScreenController
 					Integer.parseInt(minionsQuantity));
 		}
 		niftyHandler.removeHeadquarterPanel();
-		niftyHandler.setCreateButtonClicked(true);
+		// niftyHandler.setCreateButtonClicked(true);
 
 	}
 
 	public void onClickButtonAttackTowerButton()
 	{
 		gameController.createTowerCrusher(GuiObjectManager.getInstance().getPlayingPlayer(), niftyHandler.getSelectedObjectID());
+		niftyHandler.removeSelectedPanel();
 	}
 
 	public void onClickBuyHPPotion()
@@ -66,7 +67,6 @@ public class NiftyController implements ScreenController
 
 	public void onClickButtonCreateTowerButton()
 	{
-		// System.out.println("SONO SELECTED OBJECT " + niftyHandler.getSelectedObject());
 		gameController.createTower(niftyHandler.getSelectedObject());
 		niftyHandler.removeSelectedPanel();
 		niftyHandler.setButtonOccupyClicked(true);

@@ -235,6 +235,15 @@ public class GuiObjectManager
 
 	}
 
+	private void addTowerCrusherCircle(String boss, Spatial towerCrusherModel)
+	{
+		Circle2D circle2D = createCircle(playersColors.get(boss), GameProperties.getInstance().getObjectWidth("towerCrusher"));
+		gameGui.attachCircle(circle2D);
+
+		spatialCirlces.put(towerCrusherModel, circle2D);
+
+	}
+
 	public Vector3f getModelBounds(Spatial model)
 	{
 		BoundingBox box = (BoundingBox) model.getWorldBound();
@@ -357,7 +366,7 @@ public class GuiObjectManager
 
 	}
 
-	public void addTowerCrusher(String ID)
+	private void addTowerCrusher(String ID, String boss, int life, Vector2f position)
 	{
 		gameGui.getAssetManager().registerLocator(modelsPath + GameProperties.getInstance().getModelName("towerCrusher") + ".zip", ZipLocator.class);
 		Spatial towerCrusherModel = gameGui.getAssetManager().loadModel(GameProperties.getInstance().getModelName("towerCrusher") + ".mesh.xml");
@@ -365,6 +374,11 @@ public class GuiObjectManager
 		towerCrushers.put(ID, towerCrusherModel);
 		gameGui.attachMobileObject(towerCrusherModel);
 		animationControllerSpatial.put(towerCrusherModel, new SpatialAnimationController(towerCrusherModel, this, ID, "towerCrusher"));
+
+		addTowerCrusherCircle(boss, towerCrusherModel);
+
+		Vector3f positionModel = new Vector3f(position.x, 20, position.y);
+		addModelLifeBar(towerCrusherModel, positionModel, life);
 
 	}
 
@@ -459,18 +473,21 @@ public class GuiObjectManager
 		}
 	}
 
-	public void updateTowerCrusherPosition(String ID, Vector2f position, Vector2f direction)
+	public void updateTowerCrusherPosition(String ID, Vector2f position, Vector2f direction, boolean isMoving, String boss, int life)
 	{
-
+		if (!towerCrushers.containsKey(ID))
+		{
+			addTowerCrusher(ID, boss, life, position);
+		}
 		Spatial towerCrusher = towerCrushers.get(ID);
 		if (towerCrusher != null)
 		{
-			// if (isMoving)
-			// {
-			// animationControllerSpatial.get(minion).startWalkAnimation(1f);
-			// }
-			// else
-			// animationControllerSpatial.get(minion).stopWalkAnimation();
+			if (isMoving)
+			{
+				animationControllerSpatial.get(towerCrusher).startWalkAnimation(1f);
+			}
+			else
+				animationControllerSpatial.get(towerCrusher).stopWalkAnimation();
 
 			Vector3f vector = new Vector3f(-direction.x, 0, -direction.y);
 			vector = MyMath.rotateY(vector, GameProperties.getInstance().getRotationAngle(towerCrusher.getName()));
@@ -478,6 +495,11 @@ public class GuiObjectManager
 			quad.lookAt(vector, upVector);
 			towerCrusher.setLocalRotation(quad);
 			towerCrusher.setLocalTranslation(position.x, 10, position.y);
+
+			Circle2D circle2d = spatialCirlces.get(towerCrusher);
+			updateCirclePosition(circle2d, position);
+
+			updateModelLifeBar(towerCrusher, position, life);
 
 		}
 		// Spatial crusher = towerCrushers.get(ID);
@@ -509,6 +531,21 @@ public class GuiObjectManager
 		}
 	}
 
+	public void killTowerCrusher(String ID)
+	{
+		if (towerCrushers.get(ID) != null)
+		{
+			SpatialAnimationController spatialAnimationController = animationControllerSpatial.get(towerCrushers.get(ID));
+			if (spatialAnimationController != null)
+			{
+				if (!spatialAnimationController.startDeathAnimation())
+				{
+					removeTowerCrusher(ID);
+				}
+			}
+		}
+	}
+
 	public void killPlayer(String name)
 	{
 		if (players.get(name) != null)
@@ -525,6 +562,16 @@ public class GuiObjectManager
 
 	}
 
+	synchronized void removeTowerCrusher(String ID)
+	{
+		gameGui.detachMobileObject(towerCrushers.get(ID));
+		animationControllerSpatial.remove(towerCrushers.get(ID));
+		gameGui.detachLifeBar(spatialsLifeBars.get(towerCrushers.get(ID)));
+		gameGui.detachCircle(spatialCirlces.remove(towerCrushers.get(ID)));
+		towerCrushers.remove(ID);
+
+	}
+
 	synchronized void removePlayer(String name)
 	{
 		if (name.equals(playingPlayer))
@@ -536,11 +583,6 @@ public class GuiObjectManager
 		players.remove(name);
 		playersColors.remove(name);
 		gameGui.getNiftyHandler().removePlayer(name);
-	}
-
-	public Map<String, Color> getPlayersColors()
-	{
-		return playersColors;
 	}
 
 	synchronized void removeMinion(String ID)
@@ -557,7 +599,7 @@ public class GuiObjectManager
 		animationControllerSpatial.get(players.get(playingPlayerName)).startAttackAnimation(1.8f);
 	}
 
-	public void startMInionAttackAnimation(String ID)
+	public void startMinionAttackAnimation(String ID)
 	{
 		if (minions.get(ID) != null)
 		{
@@ -566,10 +608,23 @@ public class GuiObjectManager
 		}
 	}
 
+	public void startTowerCrusherAttackAnimation(String ID)
+	{
+		if (towerCrushers.get(ID) != null)
+		{
+			animationControllerSpatial.get(towerCrushers.get(ID)).stopAnimation();
+			animationControllerSpatial.get(towerCrushers.get(ID)).startAttackAnimation(1f);
+		}
+	}
+
 	public Color getPlayingPlayerColor()
 	{
 		return playersColors.get(playingPlayer);
 	}
 
+	public Map<String, Color> getPlayersColors()
+	{
+		return playersColors;
+	}
 	// TODO retrieve informations
 }

@@ -194,8 +194,8 @@ public class GameProperties
 			if (width != null && height != null)
 			{
 
-				objectWidth.put(character, Integer.parseInt(width));
-				objectHeght.put(character, Integer.parseInt(height));
+				objectWidth.put(character.toLowerCase(), Integer.parseInt(width));
+				objectHeght.put(character.toLowerCase(), Integer.parseInt(height));
 			}
 		}
 	}

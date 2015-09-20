@@ -16,25 +16,25 @@ public class TowerCrusher extends AbstractCharacter
 	private Tower target;
 	private int health = 10;
 
-	public TowerCrusher( String name, float x, float y, int health, Headquarter headquarter,
-			Player boss, Player enemy, Tower target )
+	public TowerCrusher(String name, float x, float y, int health, Headquarter headquarter, Player boss, Player enemy, Tower target)
 	{
-		super( name, x, y, health, headquarter );
-		setID( name );
+		super(name, x, y, health, headquarter);
+		setID(name);
 		this.boss = boss;
 		this.target = target;
 		this.enemy = enemy;
+		GameManager.getInstance().computePath(this, target.getGatheringPlace().x, target.getGatheringPlace().y);
 
 	}
 
 	@Override
 	public boolean movePlayer()
 	{
-		if( GameManager.getInstance().isTowerDestroyed( target ) )
+		if (GameManager.getInstance().isTowerDestroyed(target))
 		{
-			if( GameManager.getInstance().isPlayerDead( enemy ) )
-				for( Player p : GameManager.getInstance().getPlayers() )
-					if( p != boss )
+			if (GameManager.getInstance().isPlayerDead(enemy))
+				for (Player p : GameManager.getInstance().getPlayers())
+					if (p != boss)
 					{
 						enemy = p;
 						break;
@@ -43,20 +43,20 @@ public class TowerCrusher extends AbstractCharacter
 
 			float minDistance = Float.MAX_VALUE;
 
-			for( Tower t : towers )
+			for (Tower t : towers)
 			{
-				float currentDistance = MyMath.distanceFloat( x, y, t.getX(), t.getY() );
-				if( currentDistance < minDistance )
+				float currentDistance = MyMath.distanceFloat(x, y, t.getX(), t.getY());
+				if (currentDistance < minDistance)
 				{
 					target = t;
 					minDistance = currentDistance;
 				}
 			}
 			enemy = target.getOwner();
-			GameManager.getInstance().computePath( this, target.getX(), target.getY() );
+			GameManager.getInstance().computePath(this, target.getX(), target.getY());
 		}
-		if( MyMath.distanceFloat( x, y, target.getX(), target.getY() ) < rangeOfPhysicallAttack )
-			GameManager.getInstance().attackPhysically( this );
+		if (MyMath.distanceFloat(x, y, target.getX(), target.getY()) < rangeOfPhysicallAttack)
+			GameManager.getInstance().attackPhysically(this);
 
 		return super.movePlayer();
 	}
@@ -80,6 +80,16 @@ public class TowerCrusher extends AbstractCharacter
 	public float getRangeOfAttack()
 	{
 		return rangeOfPhysicallAttack;
+	}
+
+	public Player getBoss()
+	{
+		return boss;
+	}
+
+	public int getHealth()
+	{
+		return health;
 	}
 
 }

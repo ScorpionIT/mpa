@@ -1,6 +1,5 @@
 package mpa.gui.gameGui.listener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,9 +65,6 @@ public class SinglePlayerController extends ListenerImplementation
 	@Override
 	public boolean createTower(String property)
 	{
-
-		System.out.println("SONO QUI");
-
 		javax.vecmath.Vector2f towerAvaiblePosition = gManagerProxy.getTowerAvaiblePosition(property);
 		if (towerAvaiblePosition != null)
 		{
@@ -97,12 +93,15 @@ public class SinglePlayerController extends ListenerImplementation
 	{
 		List<String> deadMinions = gManagerProxy.takeDeadMinions();
 		List<String> deadPlayers = gManagerProxy.takeDeadPlayers();
+		List<String> deadTowerCrushers = gManagerProxy.takeDeadTowerCrushers();
 		Map<String, javax.vecmath.Vector2f> towers = gManagerProxy.getTowers();
 		List<String> attackingPlayers = gManagerProxy.takePlayerAttacks();
 		List<String> attackingMinions = gManagerProxy.takeMinionAttacks();
+		List<String> attackingTowerCrushers = gManagerProxy.takeTowerCrusherAttacks();
 		Map<String, javax.vecmath.Vector2f[]> playersPositions = gManagerProxy.getPlayersPositions();
 
 		Map<String, javax.vecmath.Vector2f[]> minionsPositions = gManagerProxy.getMinionsPositions();
+		Map<String, javax.vecmath.Vector2f[]> towerCrusherPositions = gManagerProxy.getTowerCrushersPositions();
 
 		for (String m : deadMinions)
 			GuiObjectManager.getInstance().killMinion(m);
@@ -121,6 +120,14 @@ public class SinglePlayerController extends ListenerImplementation
 			GuiObjectManager.getInstance().updateMinionPosition(m, positions[0], positions[1], gManagerProxy.isMovingMinion(m),
 					gManagerProxy.getMinionBoss(m));
 		}
+
+		for (String towerCrusherID : towerCrusherPositions.keySet())
+		{
+			javax.vecmath.Vector2f[] positions = towerCrusherPositions.get(towerCrusherID);
+			GuiObjectManager.getInstance().updateTowerCrusherPosition(towerCrusherID, positions[0], positions[1],
+					gManagerProxy.isMovingTowerCrusher(towerCrusherID), gManagerProxy.getTowerCrusherBoss(towerCrusherID),
+					gManagerProxy.getTowerCrusherLife(towerCrusherID));
+		}
 		for (String playerName : attackingPlayers)
 		{
 			GuiObjectManager.getInstance().startPlayerAttackAnimation(playerName);
@@ -128,13 +135,22 @@ public class SinglePlayerController extends ListenerImplementation
 		}
 		for (String idMinion : attackingMinions)
 		{
-			GuiObjectManager.getInstance().startMInionAttackAnimation(idMinion);
+			GuiObjectManager.getInstance().startMinionAttackAnimation(idMinion);
 
 		}
 
 		for (String towerID : towers.keySet())
 		{
 			GuiObjectManager.getInstance().updateTower(towers.get(towerID), towerID, gManagerProxy.getLifeTower(towerID));
+		}
+		for (String towerCrusherID : attackingTowerCrushers)
+		{
+			GuiObjectManager.getInstance().startTowerCrusherAttackAnimation(towerCrusherID);
+		}
+
+		for (String towerCrusherID : deadTowerCrushers)
+		{
+			GuiObjectManager.getInstance().killTowerCrusher(towerCrusherID);
 		}
 	}
 
@@ -217,10 +233,10 @@ public class SinglePlayerController extends ListenerImplementation
 	@Override
 	public String createTowerCrusher(String boss, String target)
 	{
-		ArrayList<String> towerCrusher = gManagerProxy.createTowerCrushers(boss, target);
-		GuiObjectManager.getInstance().addTowerCrusher(towerCrusher.get(0));
+		String towerCrusher = gManagerProxy.createTowerCrushers(boss, target);
+		// GuiObjectManager.getInstance().addTowerCrusher(towerCrusher.get(0));
 
-		return towerCrusher.get(0);
+		return towerCrusher;
 	}
 
 	@Override

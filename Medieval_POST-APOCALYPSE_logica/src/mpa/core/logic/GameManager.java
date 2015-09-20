@@ -47,6 +47,7 @@ public class GameManager
 
 	private List<Player> deadPlayers = new ArrayList<>();
 	private List<Minion> deadMinions = new ArrayList<>();
+	private List<TowerCrusher> deadTowerCrushers = new ArrayList<>();
 
 	private static GameManager gameManager = null;
 
@@ -157,6 +158,14 @@ public class GameManager
 		return towerCrushers;
 	}
 
+	public TowerCrusher createTowerCrusher(Player boss, Tower target)
+	{
+		TowerCrusher createTowerCrusher = boss.createTowerCrusher(target, towerCrusherIDs.getID());
+		towerCrushers.add(createTowerCrusher);
+
+		return createTowerCrusher;
+	}
+
 	public void updateCharacterPositions()
 	{
 		readLock.lock();
@@ -169,6 +178,11 @@ public class GameManager
 		for (Minion minion : minionsAlive)
 		{
 			minion.movePlayer();
+		}
+
+		for (TowerCrusher towerCrusher : towerCrushers)
+		{
+			towerCrusher.movePlayer();
 		}
 		readLock.unlock();
 	}
@@ -289,6 +303,18 @@ public class GameManager
 		return deads;
 	}
 
+	List<TowerCrusher> takeDeadTowerCrushers()
+	{
+		List<TowerCrusher> deads = new ArrayList<>();
+
+		for (TowerCrusher towerCrusherID : deadTowerCrushers)
+			deads.add(towerCrusherID);
+
+		deadTowerCrushers.clear();
+
+		return deads;
+	}
+
 	public void endGame(Object applicant)
 	{
 		if (!(applicant instanceof GameManagerProxy))
@@ -300,6 +326,7 @@ public class GameManager
 		attackRequests = null;
 		deadMinions = null;
 		deadPlayers = null;
+		towerCrushers = null;
 		minionIDs = null;
 		minionsAlive = null;
 		towerCrusherIDs = null;
@@ -331,8 +358,6 @@ public class GameManager
 			readLock.unlock();
 		}
 	}
-
-	// TODO takeDeadTowerCrushers
 
 	List<AbstractCharacter> attackPhysically(Player attacker)
 	{

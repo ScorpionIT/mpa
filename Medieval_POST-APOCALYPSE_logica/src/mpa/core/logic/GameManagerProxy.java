@@ -176,20 +176,13 @@ public class GameManagerProxy
 		return minionNames;
 	}
 
-	public ArrayList<String> createTowerCrushers(String boss, String target)
+	public String createTowerCrushers(String boss, String target)
 	{
-		ArrayList<TowerCrusher> createdTowerCrushers = GameManager.getInstance().createTowerCrushers(players.get(boss),
-				(Tower) objects.get("tower").get(target));
+		TowerCrusher createdTowerCrushers = GameManager.getInstance().createTowerCrusher(players.get(boss), (Tower) objects.get("tower").get(target));
 
-		ArrayList<String> towerCrusherNames = new ArrayList<>();
+		towerCrushers.put(createdTowerCrushers.getID(), createdTowerCrushers);
 
-		for (TowerCrusher tC : createdTowerCrushers)
-		{
-			towerCrushers.put(tC.getID(), tC);
-			towerCrusherNames.add(tC.getID());
-		}
-
-		return towerCrusherNames;
+		return createdTowerCrushers.getID();
 	}
 
 	public boolean conquer(String abstractPrivateProperty, String player)
@@ -355,7 +348,16 @@ public class GameManagerProxy
 		return names;
 	}
 
-	// TODO takeDeadTowerCrushers
+	public List<String> takeDeadTowerCrushers()
+	{
+		List<TowerCrusher> deadTowerCrushers = gm.takeDeadTowerCrushers();
+		List<String> names = new ArrayList<>();
+
+		for (TowerCrusher towerCrusherID : deadTowerCrushers)
+			names.add(towerCrusherID.getName());
+
+		return names;
+	}
 
 	public HashMap<String, Vector2f[]> getPlayersPositions()
 	{
@@ -439,6 +441,16 @@ public class GameManagerProxy
 
 	}
 
+	public int getTowerCrusherLife(String towerCrusherID)
+	{
+		TowerCrusher towerCrusher = towerCrushers.get(towerCrusherID);
+		if (towerCrusher != null)
+		{
+			return towerCrusher.getHealth();
+		}
+		return 0;
+	}
+
 	public Map<String, Map<String, Integer>> getPlayersResourceAmount()
 	{
 		Map<String, Map<String, Integer>> playersResourceAmount = new HashMap<>();
@@ -484,6 +496,15 @@ public class GameManagerProxy
 	{
 		ArrayList<Vector2f> minionPath = minions.get(ID).getPath();
 		if (minionPath == null || minionPath.isEmpty())
+			return false;
+		else
+			return true;
+	}
+
+	public boolean isMovingTowerCrusher(String ID)
+	{
+		ArrayList<Vector2f> towerCrusherID = towerCrushers.get(ID).getPath();
+		if (towerCrusherID == null || towerCrusherID.isEmpty())
 			return false;
 		else
 			return true;
@@ -543,4 +564,32 @@ public class GameManagerProxy
 		else
 			return null;
 	}
+
+	public String getTowerCrusherBoss(String ID)
+	{
+		TowerCrusher towercrusher = towerCrushers.get(ID);
+		if (towercrusher != null)
+		{
+			return towercrusher.getBoss().getName();
+		}
+		else
+			return null;
+	}
+
+	public Map<String, javax.vecmath.Vector2f[]> getTowerCrushersPositions()
+	{
+		HashMap<String, Vector2f[]> newPositions = new HashMap<>();
+
+		for (String towerCrusherID : towerCrushers.keySet())
+		{
+			Vector2f[] position = new Vector2f[2];
+			position[0] = towerCrushers.get(towerCrusherID).getPosition();
+			position[1] = towerCrushers.get(towerCrusherID).getPlayerDirection();
+			newPositions.put(towerCrusherID, position);
+		}
+
+		return newPositions;
+
+	}
+
 }

@@ -60,7 +60,7 @@ public class LifeBar
 		int xGreenBox = (life * maxBoxDimension) / maxLife;
 		greenBox.xExtent = xGreenBox;
 
-		if (life < limitRedLife)
+		if (life < limitRedLife && maxLife > limitRedLife)
 			geometryGreenBox.setMaterial(materialRedBox);
 
 		else
