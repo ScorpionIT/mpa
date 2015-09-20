@@ -2,6 +2,8 @@ package mpa.core.ai;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.vecmath.Vector2f;
 
@@ -23,13 +25,13 @@ public class OpponentAI extends MyThread
 	Player player;
 	AIState aiState = new ExplorationState();
 	AIWorldManager worldManager;
-	ArrayList<Player> knownPlayers = new ArrayList<>();
-	ArrayList<AbstractObject> knownBuildings = new ArrayList<>();
+	List<Player> knownPlayers = new ArrayList<>();
+	List<AbstractObject> knownBuildings = new ArrayList<>();
 
-	private HashMap<String, Integer> states = new HashMap<>();
+	private Map<String, Integer> states = new HashMap<>();
 	private final int MAXIMUM_TIMES_PER_STATE = 5;
-	private ArrayList<House> knownHeadQuarters = new ArrayList<>();
-	private ArrayList<AbstractResourceProducer> knownResourceProducers = new ArrayList<>();
+	private List<House> knownHeadQuarters = new ArrayList<>();
+	private List<AbstractResourceProducer> knownResourceProducers = new ArrayList<>();
 
 	boolean knownAllTheWorld = false;
 
@@ -114,7 +116,7 @@ public class OpponentAI extends MyThread
 
 	void addBuildings( Vector2f position )
 	{
-		ArrayList<AbstractObject> newBuildings = worldManager.getBuildings( position );
+		List<AbstractObject> newBuildings = worldManager.getBuildings( position );
 
 		for( AbstractObject obj : newBuildings )
 		{
@@ -130,12 +132,12 @@ public class OpponentAI extends MyThread
 		}
 	}
 
-	public ArrayList<House> getKnownHeadQuarters()
+	public List<House> getKnownHeadQuarters()
 	{
 		return knownHeadQuarters;
 	}
 
-	public ArrayList<AbstractResourceProducer> getKnownResourceProducers()
+	public List<AbstractResourceProducer> getKnownResourceProducers()
 	{
 		return knownResourceProducers;
 	}
@@ -169,7 +171,7 @@ public class OpponentAI extends MyThread
 
 	boolean areThereWeakerPlayers()
 	{
-		ArrayList<Player> deads = new ArrayList<>();
+		List<Player> deads = new ArrayList<>();
 		try
 		{
 			for( Player p : knownPlayers )

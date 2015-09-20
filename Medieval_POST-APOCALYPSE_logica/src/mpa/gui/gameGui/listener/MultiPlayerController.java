@@ -7,7 +7,7 @@ import java.util.Set;
 
 import com.jme3.math.Vector2f;
 
-public class MultiPlayerController extends ListenerImplementation
+public class MultiPlayerController extends HandlerImplementation
 {
 
 	public MultiPlayerController()

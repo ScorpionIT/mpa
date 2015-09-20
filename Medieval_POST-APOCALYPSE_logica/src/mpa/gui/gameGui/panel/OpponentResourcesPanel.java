@@ -25,7 +25,7 @@ public class OpponentResourcesPanel
 	private Map<String, Integer> resources;
 	private int widthPanel;
 	private String playerName;
-	private HashMap<String, LabelBuilder> resourcesValueLabel = new HashMap<>();
+	private Map<String, LabelBuilder> resourcesValueLabel = new HashMap<>();
 	private LabelBuilder labelNameBuilder;
 	private LabelBuilder labelHPAndMP;
 	private Color playerColor;

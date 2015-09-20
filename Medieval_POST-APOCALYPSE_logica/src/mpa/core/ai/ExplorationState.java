@@ -1,6 +1,6 @@
 package mpa.core.ai;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.vecmath.Vector2f;
 
@@ -33,7 +33,7 @@ class ExplorationState extends AIState
 				// System.out.println( "sto cercandoo di andare in  " + pointToReach.toString() );
 				if( pointToReach.x == 500 && pointToReach.y == 300 )
 				{
-					ArrayList<Vector2f> path = opponentAI.player.getPath();
+					List<Vector2f> path = opponentAI.player.getPath();
 					// if( path != null )
 					// System.out.println( "e la size del path è " + path.size() );
 				}
@@ -93,7 +93,7 @@ class ExplorationState extends AIState
 				if( pointToReach.x == 500 && pointToReach.y == 300 )
 				{
 					// System.out.println( "sto calcolando il path per quel punto" );
-					ArrayList<Vector2f> path = opponentAI.player.getPath();
+					List<Vector2f> path = opponentAI.player.getPath();
 					// if( path != null )
 					// System.out.println( "e la size del path è " + path.size() );
 				}

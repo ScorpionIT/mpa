@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import mpa.gui.gameGui.listener.ListenerImplementation;
+import mpa.gui.gameGui.listener.HandlerImplementation;
 import mpa.gui.gameGui.playingGUI.GuiObjectManager;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
@@ -26,7 +26,7 @@ public class OpponentPropertiesPanel
 	private int heightPanel = 30;
 	private int startY = 7;
 
-	private ListenerImplementation gameController;
+	private HandlerImplementation gameController;
 	private int currentPage = 1;
 	int numberOfPlayerForPage;
 	int numberOfPages;
@@ -36,7 +36,7 @@ public class OpponentPropertiesPanel
 
 	private Map<String, OpponentResourcesPanel> playersResources = new LinkedHashMap<>();
 
-	public OpponentPropertiesPanel(ListenerImplementation playerController)
+	public OpponentPropertiesPanel(HandlerImplementation playerController)
 	{
 
 		this.gameController = playerController;

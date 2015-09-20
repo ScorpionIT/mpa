@@ -1,6 +1,7 @@
 package mpa.core.logic.fights;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.vecmath.Vector2f;
 
@@ -19,9 +20,9 @@ public class CombatManager
 	private final int MP_REQUIRED_FOR_PHYSICALL_ATTACK = 10;
 	private final int MP_REQUIRED_FOR_DISTANCE_ATTACK = 15;
 
-	private ArrayList<Player> playerAttacks = new ArrayList<>();
-	private ArrayList<Minion> minionAttacks = new ArrayList<>();
-	private ArrayList<TowerCrusher> towerCrusherAttacks = new ArrayList<>();
+	private List<Player> playerAttacks = new ArrayList<>();
+	private List<Minion> minionAttacks = new ArrayList<>();
+	private List<TowerCrusher> towerCrusherAttacks = new ArrayList<>();
 
 	private CombatManager()
 	{
@@ -35,9 +36,9 @@ public class CombatManager
 		return combatManager;
 	}
 
-	public synchronized ArrayList<Player> takePlayerAttacks()
+	public synchronized List<Player> takePlayerAttacks()
 	{
-		ArrayList<Player> attackers = new ArrayList<>();
+		List<Player> attackers = new ArrayList<>();
 
 		for( Player p : playerAttacks )
 			attackers.add( p );
@@ -47,9 +48,9 @@ public class CombatManager
 
 	}
 
-	public synchronized ArrayList<Minion> takeMinionAttacks()
+	public synchronized List<Minion> takeMinionAttacks()
 	{
-		ArrayList<Minion> attackers = new ArrayList<>();
+		List<Minion> attackers = new ArrayList<>();
 
 		for( Minion m : minionAttacks )
 			attackers.add( m );
@@ -59,9 +60,9 @@ public class CombatManager
 
 	}
 
-	public synchronized ArrayList<TowerCrusher> takeTowerCrusherAttacks()
+	public synchronized List<TowerCrusher> takeTowerCrusherAttacks()
 	{
-		ArrayList<TowerCrusher> attackers = new ArrayList<>();
+		List<TowerCrusher> attackers = new ArrayList<>();
 
 		for( TowerCrusher t : towerCrusherAttacks )
 			attackers.add( t );
@@ -71,9 +72,9 @@ public class CombatManager
 
 	}
 
-	public synchronized ArrayList<AbstractCharacter> attackPhysically( Minion attacker )
+	public synchronized List<AbstractCharacter> attackPhysically( Minion attacker )
 	{
-		ArrayList<Player> deadPlayers = new ArrayList<>();
+		List<Player> deadPlayers = new ArrayList<>();
 		try
 		{
 			GameManager.getInstance().takeLock();
@@ -82,7 +83,7 @@ public class CombatManager
 			minionAttacks.add( attacker );
 			attacker.stopMoving();
 
-			ArrayList<AbstractCharacter> hitPlayers = new ArrayList<>();
+			List<AbstractCharacter> hitPlayers = new ArrayList<>();
 
 			Vector2f direction = attacker.getPlayerDirection();
 
@@ -136,19 +137,19 @@ public class CombatManager
 		}
 	}
 
-	public synchronized ArrayList<AbstractCharacter> attackPhysically( Player attacker )
+	public synchronized List<AbstractCharacter> attackPhysically( Player attacker )
 	{
 
-		ArrayList<Player> deadPlayers = new ArrayList<>();
-		ArrayList<Minion> deadMinions = new ArrayList<>();
-		ArrayList<TowerCrusher> deadTowerCrushers = new ArrayList<>();
+		List<Player> deadPlayers = new ArrayList<>();
+		List<Minion> deadMinions = new ArrayList<>();
+		List<TowerCrusher> deadTowerCrushers = new ArrayList<>();
 		try
 		{
 			GameManager.getInstance().takeLock();
 
 			attacker.getWriteLock();
 
-			ArrayList<AbstractCharacter> hitPlayers = new ArrayList<>();
+			List<AbstractCharacter> hitPlayers = new ArrayList<>();
 			if( attacker.getMP() < MP_REQUIRED_FOR_PHYSICALL_ATTACK )
 				return hitPlayers;
 			else
@@ -159,7 +160,7 @@ public class CombatManager
 
 			Vector2f direction = attacker.getPlayerDirection();
 
-			ArrayList<AbstractCharacter> allCharacters = new ArrayList<>();
+			List<AbstractCharacter> allCharacters = new ArrayList<>();
 			for( Player p : GameManager.getInstance().getPlayers() )
 				allCharacters.add( p );
 			for( Minion m : GameManager.getInstance().getMinionsAlive() )
@@ -240,9 +241,9 @@ public class CombatManager
 			hit.setPosition( newPosition );
 	}
 
-	public ArrayList<Tower> attackOnTower( TowerCrusher tC )
+	public List<Tower> attackOnTower( TowerCrusher tC )
 	{
-		ArrayList<Tower> hitTowers = new ArrayList<>();
+		List<Tower> hitTowers = new ArrayList<>();
 
 		Tower target = tC.getTarget();
 
@@ -261,13 +262,13 @@ public class CombatManager
 
 	}
 
-	private synchronized ArrayList<AbstractCharacter> granadeAttack( Player attacker,
-			Vector2f target, boolean isFlashBang )
+	private synchronized List<AbstractCharacter> granadeAttack( Player attacker, Vector2f target,
+			boolean isFlashBang )
 	{
-		ArrayList<AbstractCharacter> hitPlayers = new ArrayList<>();
-		ArrayList<Player> deadPlayers = new ArrayList<>();
-		ArrayList<Minion> deadMinions = new ArrayList<>();
-		ArrayList<TowerCrusher> deadTowerCrushers = new ArrayList<>();
+		List<AbstractCharacter> hitPlayers = new ArrayList<>();
+		List<Player> deadPlayers = new ArrayList<>();
+		List<Minion> deadMinions = new ArrayList<>();
+		List<TowerCrusher> deadTowerCrushers = new ArrayList<>();
 
 		try
 		{
@@ -294,7 +295,7 @@ public class CombatManager
 						+ attacker.getPlayerDirection().y * attacker.getRangeOfDistanceAttack() );
 			}
 
-			ArrayList<AbstractCharacter> allCharacters = new ArrayList<>();
+			List<AbstractCharacter> allCharacters = new ArrayList<>();
 			for( Player p : GameManager.getInstance().getPlayers() )
 				allCharacters.add( p );
 			for( Minion m : GameManager.getInstance().getMinionsAlive() )
@@ -360,8 +361,7 @@ public class CombatManager
 
 	}
 
-	public ArrayList<AbstractCharacter> distanceAttack( Player attacker, Potions potion,
-			Vector2f target )
+	public List<AbstractCharacter> distanceAttack( Player attacker, Potions potion, Vector2f target )
 	{
 
 		switch( potion )

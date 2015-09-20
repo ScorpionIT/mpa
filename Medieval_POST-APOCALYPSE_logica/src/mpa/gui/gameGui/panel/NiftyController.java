@@ -1,6 +1,6 @@
 package mpa.gui.gameGui.panel;
 
-import mpa.gui.gameGui.listener.ListenerImplementation;
+import mpa.gui.gameGui.listener.HandlerImplementation;
 import mpa.gui.gameGui.playingGUI.GuiObjectManager;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
@@ -10,9 +10,9 @@ public class NiftyController implements ScreenController
 {
 
 	private NiftyHandler niftyHandler;
-	private ListenerImplementation gameController;
+	private HandlerImplementation gameController;
 
-	public NiftyController(NiftyHandler niftyHandler, ListenerImplementation gameController)
+	public NiftyController(NiftyHandler niftyHandler, HandlerImplementation gameController)
 	{
 		this.niftyHandler = niftyHandler;
 		this.gameController = gameController;

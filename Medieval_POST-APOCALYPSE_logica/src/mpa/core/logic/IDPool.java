@@ -1,11 +1,12 @@
 package mpa.core.logic;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class IDPool
 {
-	private ArrayList<Integer> avalaibleIDs = new ArrayList<>();
-	private ArrayList<Integer> usedIDs = new ArrayList<>();
+	private List<Integer> avalaibleIDs = new ArrayList<>();
+	private List<Integer> usedIDs = new ArrayList<>();
 	private int lastGeneratedID;
 
 	public IDPool( int numberOfIDs )

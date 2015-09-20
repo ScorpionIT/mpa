@@ -62,7 +62,6 @@ public abstract class AbstractPrivateProperty extends AbstractProperty
 	}
 
 	public void setController( DependentCharacter controller )
-			throws ControllerAlreadyPresentException, DifferentOwnerException
 	{
 		writeLock.lock();
 		// if( this.controllers != null )

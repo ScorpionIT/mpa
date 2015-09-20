@@ -2,16 +2,18 @@ package mpa.core.logic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import mpa.core.logic.character.Player;
 
 class ThreadManager
 {
 	private static ThreadManager threadManager;
-	private ArrayList<MyThread> gameThreads = new ArrayList<>();
+	private List<MyThread> gameThreads = new ArrayList<>();
 	private boolean pause = false;
-	private HashMap<Player, FlashBangThread> flashBangThreads = new HashMap<>();
-	private HashMap<Player, Long> flashBangThreadResidualTimeToSleep = new HashMap<>();
+	private Map<Player, FlashBangThread> flashBangThreads = new HashMap<>();
+	private Map<Player, Long> flashBangThreadResidualTimeToSleep = new HashMap<>();
 
 	private ThreadManager()
 	{

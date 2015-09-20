@@ -1,16 +1,15 @@
 package mpa.core.logic;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import mpa.core.logic.building.Headquarter;
 import mpa.core.logic.resource.AbstractResourceProducer;
 
 public class ResourceUpdater extends MyThread
 {
-	private ArrayList<AbstractResourceProducer> resources = GameManager.getInstance().getWorld()
+	private List<AbstractResourceProducer> resources = GameManager.getInstance().getWorld()
 			.getResourceProducers();
-	private ArrayList<Headquarter> headquarters = GameManager.getInstance().getWorld()
-			.getHeadquarters();
+	private List<Headquarter> headquarters = GameManager.getInstance().getWorld().getHeadquarters();
 
 	private static final int INTERVAL = 2000;
 

@@ -15,12 +15,12 @@ import com.jme3.math.Vector3f;
 public class GameGuiClickListener implements ActionListener
 {
 
-	private ListenerImplementation listener;
+	private HandlerImplementation listener;
 	private GameGui gameGui;
 
 	private NiftyHandler niftyHandler;
 
-	public GameGuiClickListener(ListenerImplementation listener, GameGui gameGui)
+	public GameGuiClickListener(HandlerImplementation listener, GameGui gameGui)
 	{
 		this.listener = listener;
 		this.gameGui = gameGui;

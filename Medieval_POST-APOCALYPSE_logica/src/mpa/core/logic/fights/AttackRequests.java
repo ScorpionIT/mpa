@@ -1,7 +1,8 @@
 package mpa.core.logic.fights;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
 import javax.vecmath.Vector2f;
@@ -16,12 +17,12 @@ import mpa.core.logic.tool.Potions;
 
 public class AttackRequests extends MyThread
 {
-	private ArrayList<AbstractCharacter> attackList = new ArrayList<>();
-	private ArrayList<Vector2f> targets = new ArrayList<>();
-	private HashMap<Player, OpponentAI> AI_players;
+	private List<AbstractCharacter> attackList = new ArrayList<>();
+	private List<Vector2f> targets = new ArrayList<>();
+	private Map<Player, OpponentAI> AI_players;
 	private ReentrantLock lock = new ReentrantLock();
 
-	public AttackRequests( HashMap<Player, OpponentAI> AI_players )
+	public AttackRequests( Map<Player, OpponentAI> AI_players )
 	{
 		this.AI_players = AI_players;
 	}
@@ -41,7 +42,7 @@ public class AttackRequests extends MyThread
 		{
 			lock.lock();
 			super.run();
-			ArrayList<AbstractCharacter> hitPlayers = new ArrayList<>();
+			List<AbstractCharacter> hitPlayers = new ArrayList<>();
 			if( !attackList.isEmpty() )
 			{
 				AbstractCharacter attacker = attackList.remove( 0 );

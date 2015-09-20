@@ -2,6 +2,8 @@ package mpa.core.ai;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.vecmath.Vector2f;
 
@@ -14,13 +16,13 @@ import mpa.core.maths.MyMath;
 public class AIWorldManager
 {
 
-	ArrayList<Vector2f> openList = new ArrayList<>();
-	ArrayList<Vector2f> closedList = new ArrayList<>();
-	ArrayList<Vector2f> allPoints = new ArrayList<>();
+	List<Vector2f> openList = new ArrayList<>();
+	List<Vector2f> closedList = new ArrayList<>();
+	List<Vector2f> allPoints = new ArrayList<>();
 	float ray;
 	private int fragmentsX;
 	private int fragmentsY;
-	private HashMap<Vector2f, ArrayList<AbstractObject>> buildings = new HashMap<>();
+	private Map<Vector2f, List<AbstractObject>> buildings = new HashMap<>();
 
 	public AIWorldManager( DifficultyLevel level )
 	{
@@ -70,10 +72,10 @@ public class AIWorldManager
 			{
 				Vector2f position = new Vector2f( ray + ray * i, ray + ray * j );
 
-				ArrayList<AbstractObject> collisions = GameManager.getInstance().getWorld()
+				List<AbstractObject> collisions = GameManager.getInstance().getWorld()
 						.checkForCollision( position.x, position.y, ray );
 
-				ArrayList<AbstractObject> buildingList = GameManager
+				List<AbstractObject> buildingList = GameManager
 						.getInstance()
 						.getWorld()
 						.getObjectsInTheRange( position.x - ray, position.x + ray,
@@ -106,7 +108,7 @@ public class AIWorldManager
 			}
 	}
 
-	public ArrayList<Vector2f> getAllPoints()
+	public List<Vector2f> getAllPoints()
 	{
 		return allPoints;
 	}
@@ -168,7 +170,7 @@ public class AIWorldManager
 		return nextLocation;
 	}
 
-	ArrayList<AbstractObject> getBuildings( Vector2f position )
+	List<AbstractObject> getBuildings( Vector2f position )
 	{
 		return buildings.get( position );
 	}

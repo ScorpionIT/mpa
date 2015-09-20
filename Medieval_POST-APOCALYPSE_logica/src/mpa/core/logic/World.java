@@ -5,6 +5,8 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.vecmath.Vector2f;
@@ -19,11 +21,11 @@ public class World
 {
 	private float width;
 	private float height;
-	private HashMap<Vector2f, ArrayList<AbstractObject>> objectX = new HashMap<>();
-	private HashMap<Vector2f, ArrayList<AbstractObject>> objectY = new HashMap<>();
-	private ArrayList<AbstractPrivateProperty> allObjects = new ArrayList<>();
-	private ArrayList<AbstractResourceProducer> resourceProducers = new ArrayList<AbstractResourceProducer>();
-	private ArrayList<Headquarter> headquarters = new ArrayList<>();
+	private Map<Vector2f, List<AbstractObject>> objectX = new HashMap<>();
+	private Map<Vector2f, List<AbstractObject>> objectY = new HashMap<>();
+	private List<AbstractPrivateProperty> allObjects = new ArrayList<>();
+	private List<AbstractResourceProducer> resourceProducers = new ArrayList<AbstractResourceProducer>();
+	private List<Headquarter> headquarters = new ArrayList<>();
 
 	public World( float width, float height )
 	{
@@ -60,12 +62,12 @@ public class World
 		return true;
 	}
 
-	public HashMap<Vector2f, ArrayList<AbstractObject>> getObjectX()
+	public Map<Vector2f, List<AbstractObject>> getObjectX()
 	{
 		return objectX;
 	}
 
-	public HashMap<Vector2f, ArrayList<AbstractObject>> getObjectY()
+	public Map<Vector2f, List<AbstractObject>> getObjectY()
 	{
 		return objectY;
 	}
@@ -80,15 +82,15 @@ public class World
 		return height;
 	}
 
-	public ArrayList<AbstractPrivateProperty> getAllObjects()
+	public List<AbstractPrivateProperty> getAllObjects()
 	{
 		return allObjects;
 	}
 
-	public ArrayList<AbstractObject> getObjectsXInTheRange( float x )
+	public List<AbstractObject> getObjectsXInTheRange( float x )
 	{
 		Set<Vector2f> keySet = objectX.keySet();
-		ArrayList<AbstractObject> abstractObjectsX = new ArrayList<>();
+		List<AbstractObject> abstractObjectsX = new ArrayList<>();
 		for( Vector2f pos : keySet )
 		{
 			if( x >= pos.x && x <= pos.y )
@@ -99,12 +101,11 @@ public class World
 		return abstractObjectsX;
 	}
 
-	public ArrayList<AbstractObject> getObjectsInTheRange( float xMin, float xMax, float yMin,
-			float yMax )
+	public List<AbstractObject> getObjectsInTheRange( float xMin, float xMax, float yMin, float yMax )
 	{
-		ArrayList<AbstractObject> objects = new ArrayList<>();
-		ArrayList<AbstractObject> objectsX = getObjectsXInTheRange( ( int ) xMin, ( int ) xMax );
-		ArrayList<AbstractObject> objectsY = getObjectsYInTheRange( ( int ) yMin, ( int ) yMax );
+		List<AbstractObject> objects = new ArrayList<>();
+		List<AbstractObject> objectsX = getObjectsXInTheRange( ( int ) xMin, ( int ) xMax );
+		List<AbstractObject> objectsY = getObjectsYInTheRange( ( int ) yMin, ( int ) yMax );
 
 		for( AbstractObject objX : objectsX )
 		{
@@ -123,18 +124,18 @@ public class World
 		return objects;
 	}
 
-	public ArrayList<Headquarter> getHeadquarters()
+	public List<Headquarter> getHeadquarters()
 	{
 		return headquarters;
 	}
 
-	public ArrayList<AbstractObject> checkForCollision( float x, float y, float collisionRay )
+	public List<AbstractObject> checkForCollision( float x, float y, float collisionRay )
 	{
-		ArrayList<AbstractObject> objectsXInTheRange = getObjectsXInTheRange( x );
-		ArrayList<AbstractObject> objectsYInTheRange = getObjectsYInTheRange( y );
+		List<AbstractObject> objectsXInTheRange = getObjectsXInTheRange( x );
+		List<AbstractObject> objectsYInTheRange = getObjectsYInTheRange( y );
 
-		ArrayList<AbstractObject> collisions = new ArrayList<>();
-		ArrayList<AbstractObject> intersection = new ArrayList<>();
+		List<AbstractObject> collisions = new ArrayList<>();
+		List<AbstractObject> intersection = new ArrayList<>();
 
 		for( AbstractObject objX : objectsXInTheRange )
 		{
@@ -160,12 +161,12 @@ public class World
 
 	}
 
-	public ArrayList<AbstractObject> checkForCollisionInTheRange( float xMin, float xMax,
-			float yMin, float yMax, float collisionRay )
+	public List<AbstractObject> checkForCollisionInTheRange( float xMin, float xMax, float yMin,
+			float yMax, float collisionRay )
 	{
 
 		int extraRange = 10;
-		ArrayList<AbstractObject> collisions = new ArrayList<>();
+		List<AbstractObject> collisions = new ArrayList<>();
 		Line2D.Float line = new Line2D.Float( xMin, yMin, xMax, yMax );
 		for( AbstractPrivateProperty abstractPrivateProperty : allObjects )
 		{
@@ -190,10 +191,10 @@ public class World
 
 	}
 
-	public ArrayList<AbstractObject> getObjectsYInTheRange( float y )
+	public List<AbstractObject> getObjectsYInTheRange( float y )
 	{
 		Set<Vector2f> keySet = objectY.keySet();
-		ArrayList<AbstractObject> abstractObjectsY = new ArrayList<>();
+		List<AbstractObject> abstractObjectsY = new ArrayList<>();
 		for( Vector2f pos : keySet )
 		{
 			if( y >= pos.x && y <= pos.y )
@@ -204,10 +205,10 @@ public class World
 		return abstractObjectsY;
 	}
 
-	public ArrayList<AbstractObject> getObjectsXInTheRange( float xMin, float xMax )
+	public List<AbstractObject> getObjectsXInTheRange( float xMin, float xMax )
 	{
 		Set<Vector2f> keySet = objectX.keySet();
-		ArrayList<AbstractObject> abstractObjectsX = new ArrayList<>();
+		List<AbstractObject> abstractObjectsX = new ArrayList<>();
 		for( Vector2f pos : keySet )
 		{
 			if( ( pos.x <= xMax && pos.x >= xMin ) || ( pos.y <= xMax && pos.y >= xMin ) )
@@ -215,14 +216,13 @@ public class World
 			else if( ( xMin >= pos.x && xMin <= pos.y ) || ( xMax >= pos.x && xMax <= pos.y ) )
 				abstractObjectsX.addAll( objectX.get( pos ) );
 		}
-		// System.out.println( "numero abstract object x " + abstractObjectsX.size() );
 		return abstractObjectsX;
 	}
 
-	public ArrayList<AbstractObject> getObjectsYInTheRange( int yMin, int yMax )
+	public List<AbstractObject> getObjectsYInTheRange( int yMin, int yMax )
 	{
 		Set<Vector2f> keySet = objectY.keySet();
-		ArrayList<AbstractObject> abstractObjectsY = new ArrayList<>();
+		List<AbstractObject> abstractObjectsY = new ArrayList<>();
 		for( Vector2f pos : keySet )
 		{
 			if( ( pos.x <= yMax && pos.x >= yMin ) || ( pos.y <= yMax && pos.y >= yMin ) )
@@ -263,8 +263,8 @@ public class World
 
 	public AbstractObject pickedObject( float xGoal, float yGoal )
 	{
-		ArrayList<AbstractObject> objectsXInTheRange = getObjectsXInTheRange( xGoal );
-		ArrayList<AbstractObject> objectsYInTheRange = getObjectsYInTheRange( yGoal );
+		List<AbstractObject> objectsXInTheRange = getObjectsXInTheRange( xGoal );
+		List<AbstractObject> objectsYInTheRange = getObjectsYInTheRange( yGoal );
 
 		objectsXInTheRange.addAll( objectsYInTheRange );
 		for( AbstractObject abstractObject : objectsXInTheRange )
@@ -279,7 +279,7 @@ public class World
 		return null;
 	}
 
-	public ArrayList<AbstractResourceProducer> getResourceProducers()
+	public List<AbstractResourceProducer> getResourceProducers()
 	{
 		return resourceProducers;
 	}

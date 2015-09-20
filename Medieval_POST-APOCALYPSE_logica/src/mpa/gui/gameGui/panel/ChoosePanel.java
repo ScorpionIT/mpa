@@ -1,6 +1,7 @@
 package mpa.gui.gameGui.panel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.PanelBuilder;
@@ -13,7 +14,7 @@ public class ChoosePanel
 
 	private PanelBuilder choosePanel;
 	private String[] listObject = { "WEAPON", "GRANADE", "FLASH_BANG", "HP_POTION", "MP_POTION" };
-	private ArrayList<LabelBuilder> elementLabels = new ArrayList<LabelBuilder>();
+	private List<LabelBuilder> elementLabels = new ArrayList<LabelBuilder>();
 
 	private final int width = 130;
 	private final int height = 150;
@@ -28,57 +29,57 @@ public class ChoosePanel
 
 	private void initChoosePanel()
 	{
-		choosePanel = new PanelBuilder("#choosePanel")
+		choosePanel = new PanelBuilder( "#choosePanel" )
 		{
 
 			{
 				childLayoutAbsoluteInside();
 
-				width(Integer.toString(width));
-				height(Integer.toString(height));
+				width( Integer.toString( width ) );
+				height( Integer.toString( height ) );
 				alignRight();
 				valignTop();
-				visibleToMouse(true);
+				visibleToMouse( true );
 
-				style("nifty-panel-no-shadow");
+				style( "nifty-panel-no-shadow" );
 
 			}
 
 		};
 
-		int yIncrement = 100 / (listObject.length + 1);
+		int yIncrement = 100 / ( listObject.length + 1 );
 
 		int currentY = yIncrement / 2;
-		for (String obj : listObject)
+		for( String obj : listObject )
 		{
 
-			LabelBuilder labelBuilder = getLabelBuilder(obj, 25, currentY);
-			elementLabels.add(labelBuilder);
-			choosePanel.control(labelBuilder);
+			LabelBuilder labelBuilder = getLabelBuilder( obj, 25, currentY );
+			elementLabels.add( labelBuilder );
+			choosePanel.control( labelBuilder );
 			currentY += yIncrement;
 		}
 		initSelectedElment();
 
 	}
 
-	private LabelBuilder getLabelBuilder(final String text, final int x, final int y)
+	private LabelBuilder getLabelBuilder( final String text, final int x, final int y )
 	{
-		return new LabelBuilder(text + "Label")
+		return new LabelBuilder( text + "Label" )
 		{
 			{
 				childLayoutCenter();
-				text(text);
-				width("100%");
+				text( text );
+				width( "100%" );
 
-				y(Integer.toString(y) + "%");
+				y( Integer.toString( y ) + "%" );
 			}
 		};
 	}
 
-	public void changePosition(int x, int y)
+	public void changePosition( int x, int y )
 	{
-		choosePanel.x(Integer.toString(x));
-		choosePanel.y(Integer.toString(y));
+		choosePanel.x( Integer.toString( x ) );
+		choosePanel.y( Integer.toString( y ) );
 	}
 
 	public PanelBuilder get()
@@ -86,38 +87,38 @@ public class ChoosePanel
 		return choosePanel;
 	}
 
-	public Element build(Nifty nifty, Screen currentScreen, Element parent)
+	public Element build( Nifty nifty, Screen currentScreen, Element parent )
 	{
-		return choosePanel.build(nifty, currentScreen, parent);
+		return choosePanel.build( nifty, currentScreen, parent );
 	}
 
-	public void changeChoosenElement(boolean back)
+	public void changeChoosenElement( boolean back )
 	{
-		if (back)
+		if( back )
 		{
-			elementLabels.get(selectedElementIndex).backgroundColor("#0000");
+			elementLabels.get( selectedElementIndex ).backgroundColor( "#0000" );
 			selectedElementIndex -= 1;
-			if (selectedElementIndex < 0)
+			if( selectedElementIndex < 0 )
 				selectedElementIndex = elementLabels.size() - 1;
-			elementLabels.get(selectedElementIndex).backgroundColor("#f008");
+			elementLabels.get( selectedElementIndex ).backgroundColor( "#f008" );
 
 		}
 		else
 		{
-			elementLabels.get(selectedElementIndex).backgroundColor("#0000");
+			elementLabels.get( selectedElementIndex ).backgroundColor( "#0000" );
 			selectedElementIndex += 1;
-			if (selectedElementIndex > elementLabels.size() - 1)
+			if( selectedElementIndex > elementLabels.size() - 1 )
 				selectedElementIndex = 0;
-			elementLabels.get(selectedElementIndex).backgroundColor("#f008");
+			elementLabels.get( selectedElementIndex ).backgroundColor( "#f008" );
 		}
 	}
 
 	public void initSelectedElment()
 	{
 
-		elementLabels.get(selectedElementIndex).backgroundColor("#0000");
+		elementLabels.get( selectedElementIndex ).backgroundColor( "#0000" );
 		selectedElementIndex = 0;
-		elementLabels.get(selectedElementIndex).backgroundColor("#f008");
+		elementLabels.get( selectedElementIndex ).backgroundColor( "#f008" );
 	}
 
 	public String getSelectedElement()
@@ -126,9 +127,9 @@ public class ChoosePanel
 
 	}
 
-	public void setVisible(boolean visible)
+	public void setVisible( boolean visible )
 	{
-		choosePanel.visible(visible);
+		choosePanel.visible( visible );
 	}
 
 	public int getHeight()

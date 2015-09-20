@@ -1,6 +1,6 @@
 package mpa.core.ai;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.vecmath.Vector2f;
 
@@ -153,7 +153,7 @@ public class ConquestState extends AIState
 		{
 			if( minAmount == 0 )
 			{
-				ArrayList<DependentCharacter> subalterns = player.getSubalterns();
+				List<DependentCharacter> subalterns = player.getSubalterns();
 
 				for( DependentCharacter dC : subalterns )
 				{

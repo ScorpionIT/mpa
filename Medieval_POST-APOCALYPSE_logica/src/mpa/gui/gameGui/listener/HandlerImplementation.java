@@ -6,7 +6,7 @@ import java.util.Set;
 
 import com.jme3.math.Vector2f;
 
-public abstract class ListenerImplementation
+public abstract class HandlerImplementation
 {
 	public abstract void setPause();
 

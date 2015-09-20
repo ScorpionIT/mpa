@@ -1,6 +1,6 @@
 package mpa.gui.gameGui.panel;
 
-import mpa.gui.gameGui.listener.ListenerImplementation;
+import mpa.gui.gameGui.listener.HandlerImplementation;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
@@ -12,7 +12,7 @@ import de.lessvoid.nifty.screen.Screen;
 public class SelectionHeadquarterPanel
 {
 	private ListBoxBuilder listBoxBuilder;
-	private ListenerImplementation gameController;
+	private HandlerImplementation gameController;
 	private PanelBuilder selectionPanel;
 	private int panelWidth;
 	private int panelHeight;
@@ -20,7 +20,7 @@ public class SelectionHeadquarterPanel
 	private TextFieldBuilder textFieldMinionNumber;
 	private final String textFieldId = "#textFieldMinion ";
 
-	public SelectionHeadquarterPanel(int panelWidth, int panelHeight, final int xPanel, final int yPanel, ListenerImplementation gameController)
+	public SelectionHeadquarterPanel(int panelWidth, int panelHeight, final int xPanel, final int yPanel, HandlerImplementation gameController)
 	{
 		this.panelWidth = panelWidth;
 		this.panelHeight = panelHeight;

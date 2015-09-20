@@ -11,16 +11,18 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
+
 public class GameProperties
 {
 	private static GameProperties instance = null;
-	private HashMap<String, Integer> objectWidth = new HashMap<>();
-	private HashMap<String, Integer> objectHeght = new HashMap<>();
+	private Map<String, Integer> objectWidth = new HashMap<>();
+	private Map<String, Integer> objectHeght = new HashMap<>();
 	private Set<Entry<Object, Object>> paths;
-	private ArrayList<String> worldObjects = new ArrayList<>();
-	private HashMap<String, HashMap<String, Integer>> prices = new HashMap<>();
-	private HashMap<String, Float> collisionRays = new HashMap<>();
-	private HashMap<String, Float> rotationAngle = new HashMap<>();
+	private List<String> worldObjects = new ArrayList<>();
+	private Map<String, Map<String, Integer>> prices = new HashMap<>();
+	private Map<String, Float> collisionRays = new HashMap<>();
+	private Map<String, Float> rotationAngle = new HashMap<>();
 
 	private String[] characterType = { "player", "minion", "towerCrusher" };
 	private Map<String, String> modelsName = new HashMap<>();
@@ -34,18 +36,18 @@ public class GameProperties
 		loadRotationAngle();
 		loadModelsName();
 
-		for (String obj : objectHeght.keySet())
+		for( String obj : objectHeght.keySet() )
 		{
-			float xMin = objectWidth.get(obj) / 2;
-			float yMin = objectHeght.get(obj) / 2;
-			float collisionRay = (float) Math.sqrt(Math.pow(xMin, 2) + Math.pow(yMin, 2));
-			collisionRays.put(obj.toLowerCase(), collisionRay);
+			float xMin = objectWidth.get( obj ) / 2;
+			float yMin = objectHeght.get( obj ) / 2;
+			float collisionRay = ( float ) Math.sqrt( Math.pow( xMin, 2 ) + Math.pow( yMin, 2 ) );
+			collisionRays.put( obj.toLowerCase(), collisionRay );
 		}
 	}
 
 	public static GameProperties getInstance()
 	{
-		if (instance == null)
+		if( instance == null )
 		{
 			instance = new GameProperties();
 
@@ -61,11 +63,11 @@ public class GameProperties
 		FileInputStream fileInput = null;
 		try
 		{
-			fileInput = new FileInputStream(new File("./Properties/Prices.properties"));
+			fileInput = new FileInputStream( new File( "./Properties/Prices.properties" ) );
 			properties = new Properties();
-			properties.load(fileInput);
+			properties.load( fileInput );
 
-		} catch (IOException e)
+		} catch( IOException e )
 		{
 			e.printStackTrace();
 		} finally
@@ -74,44 +76,44 @@ public class GameProperties
 			try
 			{
 				fileInput.close();
-			} catch (IOException e)
+			} catch( IOException e )
 			{
 				e.printStackTrace();
 			}
 		}
 
 		Set<Object> keySet = properties.keySet();
-		for (Object object : keySet)
+		for( Object object : keySet )
 		{
-			String value = properties.getProperty((String) object);
-			String[] values = value.split(",");
+			String value = properties.getProperty( ( String ) object );
+			String[] values = value.split( "," );
 
-			HashMap<String, Integer> _prices = new HashMap<>();
+			Map<String, Integer> _prices = new HashMap<>();
 			int type = 0;
-			for (String price : values)
+			for( String price : values )
 			{
-				switch (type)
+				switch( type )
 				{
 					case 0:
-						_prices.put("WHEAT", Integer.parseInt(price));
+						_prices.put( "WHEAT", Integer.parseInt( price ) );
 						break;
 					case 1:
-						_prices.put("WOOD", Integer.parseInt(price));
+						_prices.put( "WOOD", Integer.parseInt( price ) );
 						break;
 					case 2:
-						_prices.put("IRON", Integer.parseInt(price));
+						_prices.put( "IRON", Integer.parseInt( price ) );
 						break;
 					case 3:
-						_prices.put("STONE", Integer.parseInt(price));
+						_prices.put( "STONE", Integer.parseInt( price ) );
 						break;
 					case 4:
-						_prices.put("HERBS", Integer.parseInt(price));
+						_prices.put( "HERBS", Integer.parseInt( price ) );
 						break;
 
 				}
 				type++;
 			}
-			prices.put((String) object, _prices);
+			prices.put( ( String ) object, _prices );
 		}
 	}
 
@@ -121,11 +123,11 @@ public class GameProperties
 		FileInputStream fileInput = null;
 		try
 		{
-			fileInput = new FileInputStream(new File("./Properties/Buildings.properties"));
+			fileInput = new FileInputStream( new File( "./Properties/Buildings.properties" ) );
 			properties = new Properties();
-			properties.load(fileInput);
+			properties.load( fileInput );
 
-		} catch (IOException e)
+		} catch( IOException e )
 		{
 			e.printStackTrace();
 		} finally
@@ -134,16 +136,16 @@ public class GameProperties
 			try
 			{
 				fileInput.close();
-			} catch (IOException e)
+			} catch( IOException e )
 			{
 				e.printStackTrace();
 			}
 		}
 
 		Set<Object> keySet = properties.keySet();
-		for (Object object : keySet)
+		for( Object object : keySet )
 		{
-			worldObjects.add(properties.getProperty((String) object));
+			worldObjects.add( properties.getProperty( ( String ) object ) );
 		}
 
 	}
@@ -155,11 +157,11 @@ public class GameProperties
 		FileInputStream fileInput = null;
 		try
 		{
-			fileInput = new FileInputStream(new File("./Properties/Dimension.properties"));
+			fileInput = new FileInputStream( new File( "./Properties/Dimension.properties" ) );
 			properties = new Properties();
-			properties.load(fileInput);
+			properties.load( fileInput );
 
-		} catch (IOException e)
+		} catch( IOException e )
 		{
 			e.printStackTrace();
 		} finally
@@ -168,34 +170,34 @@ public class GameProperties
 			try
 			{
 				fileInput.close();
-			} catch (IOException e)
+			} catch( IOException e )
 			{
 				e.printStackTrace();
 			}
 		}
-		for (String object : worldObjects)
+		for( String object : worldObjects )
 		{
 
-			String width = properties.getProperty(object + "Width");
-			String height = properties.getProperty(object + "Height");
-			if (width != null && height != null)
+			String width = properties.getProperty( object + "Width" );
+			String height = properties.getProperty( object + "Height" );
+			if( width != null && height != null )
 			{
 
-				objectWidth.put(object, Integer.parseInt(width));
-				objectHeght.put(object, Integer.parseInt(height));
+				objectWidth.put( object, Integer.parseInt( width ) );
+				objectHeght.put( object, Integer.parseInt( height ) );
 			}
 		}
 
-		for (String character : characterType)
+		for( String character : characterType )
 		{
 
-			String width = properties.getProperty(character + "Width");
-			String height = properties.getProperty(character + "Height");
-			if (width != null && height != null)
+			String width = properties.getProperty( character + "Width" );
+			String height = properties.getProperty( character + "Height" );
+			if( width != null && height != null )
 			{
 
-				objectWidth.put(character.toLowerCase(), Integer.parseInt(width));
-				objectHeght.put(character.toLowerCase(), Integer.parseInt(height));
+				objectWidth.put( character.toLowerCase(), Integer.parseInt( width ) );
+				objectHeght.put( character.toLowerCase(), Integer.parseInt( height ) );
 			}
 		}
 	}
@@ -207,11 +209,11 @@ public class GameProperties
 		FileInputStream fileInput = null;
 		try
 		{
-			fileInput = new FileInputStream(new File("./Properties/ModelsName.properties"));
+			fileInput = new FileInputStream( new File( "./Properties/ModelsName.properties" ) );
 			properties = new Properties();
-			properties.load(fileInput);
+			properties.load( fileInput );
 
-		} catch (IOException e)
+		} catch( IOException e )
 		{
 			e.printStackTrace();
 		} finally
@@ -220,26 +222,26 @@ public class GameProperties
 			try
 			{
 				fileInput.close();
-			} catch (IOException e)
+			} catch( IOException e )
 			{
 				e.printStackTrace();
 			}
 		}
-		for (String object : worldObjects)
+		for( String object : worldObjects )
 		{
-			String name = properties.getProperty(object);
-			if (name != null)
+			String name = properties.getProperty( object );
+			if( name != null )
 			{
-				modelsName.put(object.toLowerCase(), name);
+				modelsName.put( object.toLowerCase(), name );
 			}
 		}
 
-		for (String character : characterType)
+		for( String character : characterType )
 		{
-			String name = properties.getProperty(character);
-			if (name != null)
+			String name = properties.getProperty( character );
+			if( name != null )
 			{
-				modelsName.put(character.toLowerCase(), name);
+				modelsName.put( character.toLowerCase(), name );
 			}
 		}
 	}
@@ -251,11 +253,11 @@ public class GameProperties
 		FileInputStream fileInput = null;
 		try
 		{
-			fileInput = new FileInputStream(new File("./Properties/Rotation.properties"));
+			fileInput = new FileInputStream( new File( "./Properties/Rotation.properties" ) );
 			properties = new Properties();
-			properties.load(fileInput);
+			properties.load( fileInput );
 
-		} catch (IOException e)
+		} catch( IOException e )
 		{
 			e.printStackTrace();
 		} finally
@@ -264,15 +266,16 @@ public class GameProperties
 			try
 			{
 				fileInput.close();
-			} catch (IOException e)
+			} catch( IOException e )
 			{
 				e.printStackTrace();
 			}
 		}
 		Set<Object> keySet = properties.keySet();
-		for (Object object : keySet)
+		for( Object object : keySet )
 		{
-			rotationAngle.put((String) object, Float.parseFloat(properties.getProperty((String) object)));
+			rotationAngle.put( ( String ) object,
+					Float.parseFloat( properties.getProperty( ( String ) object ) ) );
 		}
 
 	}
@@ -283,36 +286,43 @@ public class GameProperties
 		FileInputStream fileInput = null;
 		try
 		{
-			fileInput = new FileInputStream(new File("./Properties/Paths.properties"));
+			fileInput = new FileInputStream( new File( "./Properties/Paths.properties" ) );
 			properties = new Properties();
-			properties.load(fileInput);
+			properties.load( fileInput );
 
-		} catch (IOException e)
+		} catch( IOException e )
 		{
-			e.printStackTrace();
+			JOptionPane.showMessageDialog( null,
+					"Properties File cannot be found or it is corrupted :(", "UNRECOVERABLE ERROR",
+					JOptionPane.ERROR_MESSAGE );
+			System.exit( 1 );
 		} finally
 		{
 
-			try
+			boolean closed = true;
+			do
 			{
-				fileInput.close();
-			} catch (IOException e)
-			{
-				e.printStackTrace();
-			}
+				try
+				{
+					fileInput.close();
+				} catch( IOException e )
+				{
+					closed = false;
+				}
+			} while( !closed );
 		}
 
 		paths = properties.entrySet();
 
 	}
 
-	public String getPath(String key)
+	public String getPath( String key )
 	{
-		for (Entry<Object, Object> entry : paths)
+		for( Entry<Object, Object> entry : paths )
 		{
-			if (entry.getKey().equals(key))
+			if( entry.getKey().equals( key ) )
 			{
-				return (String) entry.getValue();
+				return ( String ) entry.getValue();
 			}
 
 		}
@@ -320,21 +330,21 @@ public class GameProperties
 
 	}
 
-	public String getModelName(String key)
+	public String getModelName( String key )
 	{
-		return modelsName.get(key.toLowerCase());
+		return modelsName.get( key.toLowerCase() );
 
 	}
 
-	public Integer getObjectWidth(String key)
+	public Integer getObjectWidth( String key )
 	{
-		return objectWidth.get(key.toLowerCase());
+		return objectWidth.get( key.toLowerCase() );
 
 	}
 
-	public Integer getObjectHeight(String key)
+	public Integer getObjectHeight( String key )
 	{
-		return objectHeght.get(key.toLowerCase());
+		return objectHeght.get( key.toLowerCase() );
 
 	}
 
@@ -343,26 +353,26 @@ public class GameProperties
 		return worldObjects;
 	}
 
-	public HashMap<String, Integer> getPrices(String type)
+	public Map<String, Integer> getPrices( String type )
 	{
-		return prices.get(type);
+		return prices.get( type );
 	}
 
-	public float getCollisionRay(String type)
+	public float getCollisionRay( String type )
 	{
 
-		return collisionRays.get(type.toLowerCase());
+		return collisionRays.get( type.toLowerCase() );
 	}
 
-	public float getRotationAngle(String object)
+	public float getRotationAngle( String object )
 	{
 
-		String[] split = object.split("-");
-		for (String modelName : rotationAngle.keySet())
+		String[] split = object.split( "-" );
+		for( String modelName : rotationAngle.keySet() )
 		{
-			if (modelName.equals(split[0]))
+			if( modelName.equals( split[0] ) )
 			{
-				return rotationAngle.get(modelName);
+				return rotationAngle.get( modelName );
 			}
 
 		}

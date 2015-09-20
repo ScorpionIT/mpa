@@ -3,7 +3,7 @@ package mpa.gui.gameGui.panel;
 import java.util.List;
 import java.util.Set;
 
-import mpa.gui.gameGui.listener.ListenerImplementation;
+import mpa.gui.gameGui.listener.HandlerImplementation;
 import mpa.gui.gameGui.playingGUI.GuiObjectManager;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.ListBox;
@@ -16,11 +16,11 @@ public class SelectionHeadquarterHandler
 	SelectionHeadquarterPanel selectionHeadquarterPanel;
 	private int windowWidth;
 	private int windowHeight;
-	private ListenerImplementation gameController;
+	private HandlerImplementation gameController;
 	ListBox listBox = null;
 	private TextField textFieldMinionsNumber = null;
 
-	public SelectionHeadquarterHandler(int windowWidth, int windowHeight, ListenerImplementation gameController)
+	public SelectionHeadquarterHandler(int windowWidth, int windowHeight, HandlerImplementation gameController)
 
 	{
 		this.windowWidth = windowWidth;

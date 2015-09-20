@@ -3,7 +3,7 @@ package mpa.gui.gameGui.panel;
 import java.util.Map;
 import java.util.Set;
 
-import mpa.gui.gameGui.listener.ListenerImplementation;
+import mpa.gui.gameGui.listener.HandlerImplementation;
 import mpa.gui.gameGui.playingGUI.GameGui;
 import mpa.gui.gameGui.playingGUI.GuiObjectManager;
 
@@ -32,7 +32,7 @@ public class NiftyHandler
 	private OpponentPropertiesPanel opponentPropertiesPanel;
 	private ChoosePanel choosePanel;
 	private GameGui gameGui;
-	private ListenerImplementation gameController;
+	private HandlerImplementation gameController;
 	private boolean opponentPropertiesPanelIsVisible = false;
 	private boolean chooseObjectPanelIsVisible = false;
 	private SelectionHeadquarterHandler selectionHeadquarterHandler;
@@ -42,7 +42,7 @@ public class NiftyHandler
 	private boolean messageBoxVisible = false;
 
 	public NiftyHandler(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort,
-			AppStateManager stateManager, ListenerImplementation playerController, GameGui gameGui)
+			AppStateManager stateManager, HandlerImplementation playerController, GameGui gameGui)
 	{
 		this.gameController = playerController;
 		this.gameGui = gameGui;

@@ -2,7 +2,7 @@ package mpa.core.logic.tool;
 
 import mpa.core.logic.Level;
 
-public enum Potions implements Weapon
+public enum Potions
 {
 	HP, MP, GRANADE, FLASH_BANG;
 

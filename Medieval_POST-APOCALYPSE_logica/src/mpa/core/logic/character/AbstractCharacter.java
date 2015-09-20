@@ -1,13 +1,13 @@
 package mpa.core.logic.character;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.vecmath.Vector2f;
 
 import mpa.core.logic.AbstractObject;
-import mpa.core.logic.Inventory;
 import mpa.core.logic.building.Headquarter;
 import mpa.core.maths.MyMath;
 import mpa.core.util.GameProperties;
@@ -16,7 +16,7 @@ public abstract class AbstractCharacter extends AbstractObject
 {
 	private static final float PACE = 5;
 
-	protected ArrayList<Vector2f> path = new ArrayList<>();
+	protected List<Vector2f> path = new ArrayList<>();
 	private Vector2f previousVector;
 	private Vector2f currentVector = new Vector2f( 0.0f, 0.0f );
 	private float numberOfIterationsPerVector;
@@ -25,7 +25,6 @@ public abstract class AbstractCharacter extends AbstractObject
 
 	protected String name;
 	protected int health; // 0 - 100
-	protected Inventory bag;
 	protected double paceX;
 	protected double paceY;
 
@@ -84,8 +83,6 @@ public abstract class AbstractCharacter extends AbstractObject
 
 		numberOfIterationsPerVector = ( float ) ( MyMath.distanceFloat( path.get( 0 ).x,
 				path.get( 0 ).y, path.get( 1 ).x, path.get( 1 ).y ) / PACE );
-		// paceX = currentVector.x / numberOfIterationsPerVector;
-		// paceY = currentVector.y / numberOfIterationsPerVector;
 
 		float absX = Math.abs( currentVector.x );
 		float absY = Math.abs( currentVector.y );
@@ -95,7 +92,7 @@ public abstract class AbstractCharacter extends AbstractObject
 			currentVector = new Vector2f( currentVector.x / absY, currentVector.y / absY );
 	}
 
-	public void setPath( ArrayList<Vector2f> path )
+	public void setPath( List<Vector2f> path )
 	{
 		writeLock.lock();
 
@@ -107,7 +104,6 @@ public abstract class AbstractCharacter extends AbstractObject
 		else if( path.size() == 1 )
 		{
 			Vector2f point = new Vector2f( path.get( 0 ).x, path.get( 0 ).y );
-			// currentVector = new Vector2f( point.x - x, point.y - y );
 			currentVector = new Vector2f( -point.x + x, -point.y + y );
 
 			numberOfIterationsPerVector = ( int ) ( MyMath.distanceFloat( x, point.x, y, point.y ) / PACE );
@@ -198,7 +194,7 @@ public abstract class AbstractCharacter extends AbstractObject
 		}
 	}
 
-	public ArrayList<Vector2f> getPath()
+	public List<Vector2f> getPath()
 	{
 		try
 		{

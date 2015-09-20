@@ -7,10 +7,10 @@ import com.jme3.input.controls.ActionListener;
 public class GameGuiKeyActionListener implements ActionListener
 {
 
-	private ListenerImplementation handler;
+	private HandlerImplementation handler;
 	private NiftyHandler niftyHandler;
 
-	public GameGuiKeyActionListener(ListenerImplementation handler, NiftyHandler niftyHandler)
+	public GameGuiKeyActionListener(HandlerImplementation handler, NiftyHandler niftyHandler)
 	{
 		this.handler = handler;
 		this.niftyHandler = niftyHandler;

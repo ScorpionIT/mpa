@@ -25,46 +25,46 @@ public class LifeBar
 	private Material materialRedBox;
 	private int life = -1;
 
-	public LifeBar(AssetManager assetManager, Vector3f boundingBoxModel, float yTranslationModel)
+	public LifeBar( AssetManager assetManager, Vector3f boundingBoxModel, float yTranslationModel )
 	{
 		this.assetManager = assetManager;
 
 		yTraslation = boundingBoxModel.y * 2 + yTranslationModel;
 
-		greenBox = new Box(10, 1, 1);
-		geometryGreenBox = new Geometry("GreenBox", greenBox);
-		materialGreenBox = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-		materialGreenBox.setColor("Color", ColorRGBA.Green);
-		geometryGreenBox.setMaterial(materialGreenBox);
+		greenBox = new Box( 10, 1, 1 );
+		geometryGreenBox = new Geometry( "GreenBox", greenBox );
+		materialGreenBox = new Material( assetManager, "Common/MatDefs/Misc/Unshaded.j3md" );
+		materialGreenBox.setColor( "Color", ColorRGBA.Green );
+		geometryGreenBox.setMaterial( materialGreenBox );
 
-		grayBox = new Box(10, 1, 1);
-		geometryGrayBox = new Geometry("GreyBox", grayBox);
+		grayBox = new Box( 10, 1, 1 );
+		geometryGrayBox = new Geometry( "GreyBox", grayBox );
 		materialGrayBox = materialGreenBox.clone();
-		materialGrayBox.setColor("Color", ColorRGBA.Gray);
-		geometryGrayBox.setMaterial(materialGrayBox);
+		materialGrayBox.setColor( "Color", ColorRGBA.Gray );
+		geometryGrayBox.setMaterial( materialGrayBox );
 
 		materialRedBox = materialGrayBox.clone();
-		materialRedBox.setColor("Color", ColorRGBA.Red);
+		materialRedBox.setColor( "Color", ColorRGBA.Red );
 	}
 
-	boolean setLife(int life)
+	boolean setLife( int life )
 	{
-		if (this.life == -1)
+		if( this.life == -1 )
 		{
 			maxLife = life;
 		}
-		if (this.life == life)
+		if( this.life == life )
 			return false;
 
 		this.life = life;
-		int xGreenBox = (life * maxBoxDimension) / maxLife;
+		int xGreenBox = ( life * maxBoxDimension ) / maxLife;
 		greenBox.xExtent = xGreenBox;
 
-		if (life < limitRedLife && maxLife > limitRedLife)
-			geometryGreenBox.setMaterial(materialRedBox);
+		if( life < limitRedLife && maxLife > limitRedLife )
+			geometryGreenBox.setMaterial( materialRedBox );
 
 		else
-			geometryGreenBox.setMaterial(materialGreenBox);
+			geometryGreenBox.setMaterial( materialGreenBox );
 		greenBox.updateBound();
 		greenBox.updateGeometry();
 		geometryGreenBox.updateModelBound();
@@ -77,16 +77,20 @@ public class LifeBar
 
 	}
 
-	void setLocalTraslation(Vector2f modelPosition)
+	void setLocalTraslation( Vector2f modelPosition )
 	{
-		geometryGreenBox.setLocalTranslation(modelPosition.x + grayBox.xExtent, yTraslation, modelPosition.y);
-		geometryGrayBox.setLocalTranslation(modelPosition.x - greenBox.xExtent, yTraslation, modelPosition.y);
+		geometryGreenBox.setLocalTranslation( modelPosition.x + grayBox.xExtent, yTraslation,
+				modelPosition.y );
+		geometryGrayBox.setLocalTranslation( modelPosition.x - greenBox.xExtent, yTraslation,
+				modelPosition.y );
 	}
 
-	void setLocalTraslation(Vector3f modelPosition)
+	void setLocalTraslation( Vector3f modelPosition )
 	{
-		geometryGreenBox.setLocalTranslation(modelPosition.x + grayBox.xExtent, yTraslation, modelPosition.z);
-		geometryGrayBox.setLocalTranslation(modelPosition.x - greenBox.xExtent, yTraslation, modelPosition.z);
+		geometryGreenBox.setLocalTranslation( modelPosition.x + grayBox.xExtent, yTraslation,
+				modelPosition.z );
+		geometryGrayBox.setLocalTranslation( modelPosition.x - greenBox.xExtent, yTraslation,
+				modelPosition.z );
 	}
 
 	public Geometry getGreenGeometry()
