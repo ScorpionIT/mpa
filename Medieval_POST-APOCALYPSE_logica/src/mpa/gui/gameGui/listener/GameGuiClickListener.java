@@ -1,7 +1,5 @@
 package mpa.gui.gameGui.listener;
 
-import java.util.List;
-
 import mpa.gui.gameGui.panel.NiftyHandler;
 import mpa.gui.gameGui.playingGUI.GameGui;
 import mpa.gui.gameGui.playingGUI.GuiObjectManager;
@@ -136,14 +134,7 @@ public class GameGuiClickListener implements ActionListener
 				// contactPoint = new Vector2f(crs.getClosestCollision().getContactPoint().x,
 				// crs.getClosestCollision().getContactPoint().z);
 
-				List<String> hitPlayers = listener.playerAction(contactPoint);
-
-				if (hitPlayers.isEmpty())
-					System.out.println("non ho colpito niente");
-				else
-					for (String pl : hitPlayers)
-						System.out.println("ho colpito " + pl);
-
+				listener.playerAction(contactPoint);
 			}
 		}
 	}

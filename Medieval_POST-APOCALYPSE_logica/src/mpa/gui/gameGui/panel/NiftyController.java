@@ -35,8 +35,11 @@ public class NiftyController implements ScreenController
 		else
 		{
 
-			gameController.createMinions(GuiObjectManager.getInstance().getPlayingPlayer(), niftyHandler.getMinionsTarget(),
-					Integer.parseInt(minionsQuantity));
+			if (!gameController.createMinions(GuiObjectManager.getInstance().getPlayingPlayer(), niftyHandler.getMinionsTarget(),
+					Integer.parseInt(minionsQuantity)))
+			{
+				niftyHandler.createMessageBox("non hai le risorse necessarie", "ok");
+			}
 		}
 		niftyHandler.removeHeadquarterPanel();
 		niftyHandler.setCreateButtonClicked(true);
@@ -45,7 +48,10 @@ public class NiftyController implements ScreenController
 
 	public void onClickButtonAttackTowerButton()
 	{
-		gameController.createTowerCrusher(GuiObjectManager.getInstance().getPlayingPlayer(), niftyHandler.getSelectedObjectID());
+		if (!gameController.createTowerCrusher(GuiObjectManager.getInstance().getPlayingPlayer(), niftyHandler.getSelectedObjectID()))
+		{
+			niftyHandler.createMessageBox("non hai le risorse necessarie", "ok");
+		}
 		niftyHandler.removeSelectedPanel();
 		niftyHandler.setSelectionPanelVisible(true);
 	}
@@ -86,9 +92,10 @@ public class NiftyController implements ScreenController
 		niftyHandler.setSelectionPanelVisible(true);
 	}
 
-	public void onClickButtonCreateTowerButton(boolean headquarter)
+	public void onClickButtonCreateTowerButton()
 	{
-		gameController.createTower(niftyHandler.getSelectedObject());
+		if (!gameController.createTower(niftyHandler.getSelectedObject()))
+			niftyHandler.createMessageBox("non hai le risorse necessarie", "ok");
 
 		niftyHandler.removeSelectedPanel();
 		niftyHandler.setSelectionPanelVisible(true);

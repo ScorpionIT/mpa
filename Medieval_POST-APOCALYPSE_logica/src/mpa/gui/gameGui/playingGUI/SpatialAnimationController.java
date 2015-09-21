@@ -66,7 +66,7 @@ public class SpatialAnimationController implements AnimEventListener
 
 	public void stopWalkAnimation()
 	{
-		if (channel.getAnimationName() != null && channel.getAnimationName().equals("walk"))
+		if (channel.getAnimationName() != null && channel.getAnimationName().equals("walk") && !channel.getAnimationName().equals("death"))
 		{
 			channel.setAnim("stand");
 		}

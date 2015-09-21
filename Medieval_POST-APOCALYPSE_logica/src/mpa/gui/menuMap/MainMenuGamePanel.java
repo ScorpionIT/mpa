@@ -143,8 +143,8 @@ public class MainMenuGamePanel extends JPanel
 							// gameSettings.setFullscreen( true );
 
 							gameSettings.setResolution(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width, java.awt.Toolkit
-									.getDefaultToolkit().getScreenSize().height - 70);
-							// gameSettings.setFullscreen( true );
+									.getDefaultToolkit().getScreenSize().height);
+							gameSettings.setFullscreen(true);
 							gameSettings.setVSync(false);
 							gameSettings.setTitle("Stellar Conquest");
 							gameSettings.setUseInput(true);

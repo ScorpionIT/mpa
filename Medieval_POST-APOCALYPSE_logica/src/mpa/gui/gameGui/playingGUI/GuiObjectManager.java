@@ -56,6 +56,7 @@ public class GuiObjectManager
 	private Vector3f upVector = new Vector3f(0, 1, 0);
 	private String playingPlayer;
 	private String modelsPath = GameProperties.getInstance().getPath("ModelsPath");
+	private boolean endGame = false;
 
 	private GuiObjectManager(GameGui gameGui, String playingPlayer, boolean multiplayer)
 	{
@@ -412,14 +413,16 @@ public class GuiObjectManager
 	{
 
 		Spatial player = players.get(name);
-		if (player != null)
+		if (player != null && life > 0)
 		{
 			if (isMoving)
 			{
 				animationControllerSpatial.get(player).startWalkAnimation(1f);
 			}
 			else
+			{
 				animationControllerSpatial.get(player).stopWalkAnimation();
+			}
 
 			Vector3f vector = new Vector3f(-direction.x, 0, -direction.y);
 
@@ -575,7 +578,9 @@ public class GuiObjectManager
 	synchronized void removePlayer(String name)
 	{
 		if (name.equals(playingPlayer))
-			System.exit(0);
+		{
+			gameGui.getNiftyHandler().setLosingScreen();
+		}
 		gameGui.detachMobileObject(players.get(name));
 		animationControllerSpatial.remove(players.get(name));
 		gameGui.detachLifeBar(spatialsLifeBars.get(players.get(name)));

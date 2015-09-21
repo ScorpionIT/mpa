@@ -177,11 +177,17 @@ public class GameManagerProxy
 
 	public String createTowerCrushers(String boss, String target)
 	{
-		TowerCrusher createdTowerCrushers = GameManager.getInstance().createTowerCrusher(players.get(boss), (Tower) objects.get("tower").get(target));
+		List<TowerCrusher> createdTowerCrushers = GameManager.getInstance().createTowerCrushers(players.get(boss),
+				(Tower) objects.get("tower").get(target));
 
-		towerCrushers.put(createdTowerCrushers.getID(), createdTowerCrushers);
+		if (!createdTowerCrushers.isEmpty())
+		{
+			towerCrushers.put(createdTowerCrushers.get(0).getID(), createdTowerCrushers.get(0));
+			return createdTowerCrushers.get(0).getID();
+		}
+		else
+			return null;
 
-		return createdTowerCrushers.getID();
 	}
 
 	public boolean conquer(String abstractPrivateProperty, String player)
@@ -306,7 +312,7 @@ public class GameManagerProxy
 		List<String> attackers = new ArrayList<>();
 
 		for (Minion m : GameManager.getInstance().takeMinionAttacks())
-			attackers.add(m.getName());
+			attackers.add(m.getID());
 
 		return attackers;
 	}
@@ -316,7 +322,7 @@ public class GameManagerProxy
 		List<String> attackers = new ArrayList<>();
 
 		for (TowerCrusher t : GameManager.getInstance().takeTowerCrusherAttacks())
-			attackers.add(t.getName());
+			attackers.add(t.getID());
 
 		return attackers;
 
@@ -342,7 +348,10 @@ public class GameManagerProxy
 		List<String> names = new ArrayList<>();
 
 		for (Minion m : deadMinions)
-			names.add(m.getName());
+		{
+			// minions.remove(m.getID());
+			names.add(m.getID());
+		}
 
 		return names;
 	}
@@ -352,9 +361,11 @@ public class GameManagerProxy
 		List<TowerCrusher> deadTowerCrushers = gm.takeDeadTowerCrushers();
 		List<String> names = new ArrayList<>();
 
-		for (TowerCrusher towerCrusherID : deadTowerCrushers)
-			names.add(towerCrusherID.getName());
-
+		for (TowerCrusher towerCrusher : deadTowerCrushers)
+		{
+			towerCrushers.remove(towerCrusher.getID());
+			names.add(towerCrusher.getID());
+		}
 		return names;
 	}
 
@@ -377,12 +388,19 @@ public class GameManagerProxy
 	{
 		Map<String, Vector2f[]> newPositions = new HashMap<>();
 
-		for (String m : minions.keySet())
+		List<Minion> minionsAlive = gm.getMinionsAlive();
+
+		for (Minion m : minionsAlive)
 		{
+			if (!minions.containsKey(m.getID()))
+			{
+				minions.put(m.getID(), m);
+			}
+
 			Vector2f[] position = new Vector2f[2];
-			position[0] = minions.get(m).getPosition();
-			position[1] = minions.get(m).getPlayerDirection();
-			newPositions.put(m, position);
+			position[0] = m.getPosition();
+			position[1] = m.getPlayerDirection();
+			newPositions.put(m.getID(), position);
 		}
 
 		return newPositions;
@@ -578,13 +596,19 @@ public class GameManagerProxy
 	public Map<String, javax.vecmath.Vector2f[]> getTowerCrushersPositions()
 	{
 		Map<String, Vector2f[]> newPositions = new HashMap<>();
+		List<TowerCrusher> towerCrushersObject = gm.getTowerCrushers();
 
-		for (String towerCrusherID : towerCrushers.keySet())
+		for (TowerCrusher towerCrusher : towerCrushersObject)
 		{
+			if (!towerCrushers.containsKey(towerCrusher.getID()))
+			{
+				towerCrushers.put(towerCrusher.getID(), towerCrusher);
+			}
+
 			Vector2f[] position = new Vector2f[2];
-			position[0] = towerCrushers.get(towerCrusherID).getPosition();
-			position[1] = towerCrushers.get(towerCrusherID).getPlayerDirection();
-			newPositions.put(towerCrusherID, position);
+			position[0] = towerCrusher.getPosition();
+			position[1] = towerCrusher.getPlayerDirection();
+			newPositions.put(towerCrusher.getID(), position);
 		}
 
 		return newPositions;
