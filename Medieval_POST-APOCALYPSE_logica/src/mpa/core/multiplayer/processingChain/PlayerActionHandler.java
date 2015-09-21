@@ -18,7 +18,7 @@ public class PlayerActionHandler extends ProcessingChain
 	public String[] processRequest( String request )
 	{
 		String[] strings = request.split( ":" );
-		if( strings.length == 3 && strings[1].equals( "do" ) && strings[2].split( "," ).length == 2 )
+		if( strings.length == 3 && strings[1].equals( "Do" ) && strings[2].split( "," ).length == 2 )
 		{
 			String[] direction = strings[2].split( "," );
 

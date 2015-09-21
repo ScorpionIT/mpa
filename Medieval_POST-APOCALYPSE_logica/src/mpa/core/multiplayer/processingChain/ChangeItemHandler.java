@@ -14,7 +14,7 @@ public class ChangeItemHandler extends ProcessingChain
 	public String[] processRequest( String request )
 	{
 		String[] strings = request.split( ":" );
-		if( strings.length == 3 && strings[0].equals( "change item" ) )
+		if( strings.length == 3 && strings[0].equals( "ChangeItem" ) )
 		{
 			GameManagerProxy.getInstance().changeSelectedItem( strings[1], strings[2] );
 			return new String[0];

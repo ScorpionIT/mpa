@@ -26,50 +26,54 @@ public class SinglePlayerController extends HandlerImplementation
 	}
 
 	@Override
-	public String getPickedObject(Vector2f click)
+	public String getPickedObject( Vector2f click )
 	{
-		return GameManagerProxy.getInstance().getPickedObject(click);
+		return GameManagerProxy.getInstance().getPickedObject( click );
 	}
 
 	@Override
-	public String getPickedObjectOwner(String objectType, String objectID)
+	public String getPickedObjectOwner( String objectType, String objectID )
 	{
-		return gManagerProxy.getObjectOwner(objectType, objectID);
+		return gManagerProxy.getObjectOwner( objectType, objectID );
 	}
 
 	@Override
-	public int getPickedObjectProductivity(String objectType, String objectID)
+	public int getPickedObjectProductivity( String objectType, String objectID )
 	{
-		return gManagerProxy.getObjectProductivity(objectType, objectID);
+		return gManagerProxy.getObjectProductivity( objectType, objectID );
 	}
 
 	@Override
-	public void changeItem(String item)
+	public void changeItem( String item )
 	{
-		gManagerProxy.changeSelectedItem(GuiObjectManager.getInstance().getPlayingPlayer(), item);
+		gManagerProxy.changeSelectedItem( GuiObjectManager.getInstance().getPlayingPlayer(), item );
 	}
 
 	@Override
-	public List<String> playerAction(Vector2f direction)
+	public void playerAction( Vector2f direction )
 	{
-		return gManagerProxy.playerAction(GuiObjectManager.getInstance().getPlayingPlayer(), new javax.vecmath.Vector2f(direction.x, direction.y));
+		gManagerProxy.playerAction( GuiObjectManager.getInstance().getPlayingPlayer(),
+				new javax.vecmath.Vector2f( direction.x, direction.y ) );
 	}
 
 	@Override
-	public boolean occupyProperty(String property)
+	public boolean occupyProperty( String property )
 	{
-		return gManagerProxy.occupyProperty(GuiObjectManager.getInstance().getPlayingPlayer(), property);
+		return gManagerProxy.occupyProperty( GuiObjectManager.getInstance().getPlayingPlayer(),
+				property );
 	}
 
 	@Override
-	public boolean createTower(String property)
+	public boolean createTower( String property )
 	{
-		javax.vecmath.Vector2f towerAvaiblePosition = gManagerProxy.getTowerAvaiblePosition(property);
-		if (towerAvaiblePosition != null)
+		javax.vecmath.Vector2f towerAvaiblePosition = gManagerProxy
+				.getTowerAvaiblePosition( property );
+		if( towerAvaiblePosition != null )
 		{
-			String tower = gManagerProxy.createTower(GuiObjectManager.getInstance().getPlayingPlayer(), towerAvaiblePosition, property);
+			String tower = gManagerProxy.createTower( GuiObjectManager.getInstance()
+					.getPlayingPlayer(), towerAvaiblePosition, property );
 
-			if (!tower.equals(""))
+			if( !tower.equals( "" ) )
 			{
 				return true;
 			}
@@ -79,11 +83,11 @@ public class SinglePlayerController extends HandlerImplementation
 	}
 
 	@Override
-	public boolean createMinions(String boss, String target, int quantity)
+	public boolean createMinions( String boss, String target, int quantity )
 	{
-		List<String> createMinions = gManagerProxy.createMinions(boss, quantity, target);
-		System.out.println("SONO QUI " + createMinions);
-		if (createMinions != null && !createMinions.isEmpty())
+		List<String> createMinions = gManagerProxy.createMinions( boss, quantity, target );
+		System.out.println( "SONO QUI " + createMinions );
+		if( createMinions != null && !createMinions.isEmpty() )
 			return true;
 		else
 			return false;
@@ -102,63 +106,69 @@ public class SinglePlayerController extends HandlerImplementation
 		List<String> attackingPlayers = gManagerProxy.takePlayerAttacks();
 		List<String> attackingMinions = gManagerProxy.takeMinionAttacks();
 		List<String> attackingTowerCrushers = gManagerProxy.takeTowerCrusherAttacks();
-		Map<String, javax.vecmath.Vector2f[]> playersPositions = gManagerProxy.getPlayersPositions();
+		Map<String, javax.vecmath.Vector2f[]> playersPositions = gManagerProxy
+				.getPlayersPositions();
 
-		Map<String, javax.vecmath.Vector2f[]> minionsPositions = gManagerProxy.getMinionsPositions();
-		Map<String, javax.vecmath.Vector2f[]> towerCrusherPositions = gManagerProxy.getTowerCrushersPositions();
+		Map<String, javax.vecmath.Vector2f[]> minionsPositions = gManagerProxy
+				.getMinionsPositions();
+		Map<String, javax.vecmath.Vector2f[]> towerCrusherPositions = gManagerProxy
+				.getTowerCrushersPositions();
 
-		for (String m : deadMinions)
-			GuiObjectManager.getInstance().killMinion(m);
-		for (String p : deadPlayers)
-			GuiObjectManager.getInstance().killPlayer(p);
-		for (String towerCrusherID : deadTowerCrushers)
-			GuiObjectManager.getInstance().killTowerCrusher(towerCrusherID);
+		for( String m : deadMinions )
+			GuiObjectManager.getInstance().killMinion( m );
+		for( String p : deadPlayers )
+			GuiObjectManager.getInstance().killPlayer( p );
+		for( String towerCrusherID : deadTowerCrushers )
+			GuiObjectManager.getInstance().killTowerCrusher( towerCrusherID );
 
-		for (String p : playersPositions.keySet())
+		for( String p : playersPositions.keySet() )
 		{
 
-			javax.vecmath.Vector2f[] positions = playersPositions.get(p);
-			GuiObjectManager.getInstance().updatePlayerPosition(p, positions[0], positions[1], gManagerProxy.isMovingPlayer(p),
-					gManagerProxy.getPLayerHP(p));
+			javax.vecmath.Vector2f[] positions = playersPositions.get( p );
+			GuiObjectManager.getInstance().updatePlayerPosition( p, positions[0], positions[1],
+					gManagerProxy.isMovingPlayer( p ), gManagerProxy.getPLayerHP( p ) );
 		}
 
-		for (String m : minionsPositions.keySet())
+		for( String m : minionsPositions.keySet() )
 		{
 			// if (!deadMinions.contains(m))
 			{
-				javax.vecmath.Vector2f[] positions = minionsPositions.get(m);
-				GuiObjectManager.getInstance().updateMinionPosition(m, positions[0], positions[1], gManagerProxy.isMovingMinion(m),
-						gManagerProxy.getMinionBoss(m));
+				javax.vecmath.Vector2f[] positions = minionsPositions.get( m );
+				GuiObjectManager.getInstance().updateMinionPosition( m, positions[0], positions[1],
+						gManagerProxy.isMovingMinion( m ), gManagerProxy.getMinionBoss( m ) );
 			}
 		}
 
-		for (String towerCrusherID : towerCrusherPositions.keySet())
+		for( String towerCrusherID : towerCrusherPositions.keySet() )
 		{
-			System.out.println("!!!!!!!!!!!!!!");
-			System.out.println(towerCrusherID);
-			System.out.println("!!!!!!!!!!!!!!");
-			javax.vecmath.Vector2f[] positions = towerCrusherPositions.get(towerCrusherID);
-			GuiObjectManager.getInstance().updateTowerCrusherPosition(towerCrusherID, positions[0], positions[1],
-					gManagerProxy.isMovingTowerCrusher(towerCrusherID), gManagerProxy.getTowerCrusherBoss(towerCrusherID),
-					gManagerProxy.getTowerCrusherLife(towerCrusherID));
+			System.out.println( "!!!!!!!!!!!!!!" );
+			System.out.println( towerCrusherID );
+			System.out.println( "!!!!!!!!!!!!!!" );
+			javax.vecmath.Vector2f[] positions = towerCrusherPositions.get( towerCrusherID );
+			GuiObjectManager.getInstance().updateTowerCrusherPosition( towerCrusherID,
+					positions[0], positions[1],
+					gManagerProxy.isMovingTowerCrusher( towerCrusherID ),
+					gManagerProxy.getTowerCrusherBoss( towerCrusherID ),
+					gManagerProxy.getTowerCrusherLife( towerCrusherID ) );
 		}
-		for (String playerName : attackingPlayers)
+		for( String playerName : attackingPlayers )
 		{
-			GuiObjectManager.getInstance().startPlayerAttackAnimation(playerName);
+			GuiObjectManager.getInstance().startPlayerAttackAnimation( playerName );
 		}
-		for (String idMinion : attackingMinions)
+		for( String idMinion : attackingMinions )
 		{
-			GuiObjectManager.getInstance().startMinionAttackAnimation(idMinion);
+			GuiObjectManager.getInstance().startMinionAttackAnimation( idMinion );
 
 		}
 
-		for (String towerID : towers.keySet())
+		for( String towerID : towers.keySet() )
 		{
-			GuiObjectManager.getInstance().updateTower(towers.get(towerID), towerID, gManagerProxy.getLifeTower(towerID));
+			GuiObjectManager.getInstance().updateTower( towers.get( towerID ), towerID,
+					gManagerProxy.getLifeTower( towerID ) );
 		}
-		for (String towerCrusherID : attackingTowerCrushers)
+		for( String towerCrusherID : attackingTowerCrushers )
 		{
-			GuiObjectManager.getInstance().startTowerCrusherAttackAnimation(towerCrusherID);
+			GuiObjectManager.getInstance().startTowerCrusherAttackAnimation( towerCrusherID );
 		}
 	}
 
@@ -166,40 +176,46 @@ public class SinglePlayerController extends HandlerImplementation
 	public void createStateInformation()
 	{
 		Map<String, javax.vecmath.Vector2f[]> initPs = gManagerProxy.getPlayers();
-		for (String p : initPs.keySet())
+		for( String p : initPs.keySet() )
 		{
-			javax.vecmath.Vector2f[] positions = initPs.get(p);
-			System.out.println("positions= " + positions);
-			System.out.println(GuiObjectManager.getInstance());
-			GuiObjectManager.getInstance().addPlayer(p, positions[2], positions[0], positions[1], gManagerProxy.getPLayerHP(p));
+			javax.vecmath.Vector2f[] positions = initPs.get( p );
+			System.out.println( "positions= " + positions );
+			System.out.println( GuiObjectManager.getInstance() );
+			GuiObjectManager.getInstance().addPlayer( p, positions[2], positions[0], positions[1],
+					gManagerProxy.getPLayerHP( p ) );
 		}
 		Map<String, javax.vecmath.Vector2f> fields = gManagerProxy.getFields();
 		Map<String, javax.vecmath.Vector2f> caves = gManagerProxy.getCaves();
 		Map<String, javax.vecmath.Vector2f> woods = gManagerProxy.getWoods();
 		Map<String, javax.vecmath.Vector2f> mines = gManagerProxy.getMines();
 
-		for (String s : fields.keySet())
-			GuiObjectManager.getInstance().addResource("FIELD", Integer.parseInt(s), fields.get(s));
-		for (String s : caves.keySet())
-			GuiObjectManager.getInstance().addResource("CAVE", Integer.parseInt(s), caves.get(s));
-		for (String s : woods.keySet())
-			GuiObjectManager.getInstance().addResource("WOOD", Integer.parseInt(s), woods.get(s));
-		for (String s : mines.keySet())
-			GuiObjectManager.getInstance().addResource("MINE", Integer.parseInt(s), mines.get(s));
+		for( String s : fields.keySet() )
+			GuiObjectManager.getInstance().addResource( "FIELD", Integer.parseInt( s ),
+					fields.get( s ) );
+		for( String s : caves.keySet() )
+			GuiObjectManager.getInstance().addResource( "CAVE", Integer.parseInt( s ),
+					caves.get( s ) );
+		for( String s : woods.keySet() )
+			GuiObjectManager.getInstance().addResource( "WOOD", Integer.parseInt( s ),
+					woods.get( s ) );
+		for( String s : mines.keySet() )
+			GuiObjectManager.getInstance().addResource( "MINE", Integer.parseInt( s ),
+					mines.get( s ) );
 
-		GuiObjectManager.getInstance().setWorldDimension(gManagerProxy.worldDimension());
+		GuiObjectManager.getInstance().setWorldDimension( gManagerProxy.worldDimension() );
 	}
 
 	@Override
-	public void computePath(Vector2f click)
+	public void computePath( Vector2f click )
 	{
-		gManagerProxy.computePath(GuiObjectManager.getInstance().getPlayingPlayer(), click.x, click.y);
+		gManagerProxy.computePath( GuiObjectManager.getInstance().getPlayingPlayer(), click.x,
+				click.y );
 	}
 
 	@Override
-	public Map<String, Integer> getPlayerResourcesAmount(String playerName)
+	public Map<String, Integer> getPlayerResourcesAmount( String playerName )
 	{
-		return gManagerProxy.getPlayerResourcesAmout(playerName);
+		return gManagerProxy.getPlayerResourcesAmout( playerName );
 	}
 
 	@Override
@@ -209,27 +225,27 @@ public class SinglePlayerController extends HandlerImplementation
 	}
 
 	@Override
-	public void computePath(Vector2f click, String playerName)
+	public void computePath( Vector2f click, String playerName )
 	{
-		gManagerProxy.computePath(playerName, click.x, click.y);
+		gManagerProxy.computePath( playerName, click.x, click.y );
 	}
 
 	@Override
-	public String getPlayerLevel(String player)
+	public String getPlayerLevel( String player )
 	{
-		return gManagerProxy.getPlayerLevel(player);
+		return gManagerProxy.getPlayerLevel( player );
 	}
 
 	@Override
-	public int getPlayerHP(String playerName)
+	public int getPlayerHP( String playerName )
 	{
-		return gManagerProxy.getPLayerHP(playerName);
+		return gManagerProxy.getPLayerHP( playerName );
 	}
 
 	@Override
-	public int getPlayerMP(String playerName)
+	public int getPlayerMP( String playerName )
 	{
-		return gManagerProxy.getPlayerMP(playerName);
+		return gManagerProxy.getPlayerMP( playerName );
 	}
 
 	@Override
@@ -239,11 +255,11 @@ public class SinglePlayerController extends HandlerImplementation
 	}
 
 	@Override
-	public boolean createTowerCrusher(String boss, String target)
+	public boolean createTowerCrusher( String boss, String target )
 	{
-		String towerCrusher = gManagerProxy.createTowerCrushers(boss, target);
+		String towerCrusher = gManagerProxy.createTowerCrushers( boss, target );
 		// GuiObjectManager.getInstance().addTowerCrusher(towerCrusher.get(0));
-		if (towerCrusher == null)
+		if( towerCrusher == null )
 			return false;
 		else
 			return true;
@@ -251,45 +267,45 @@ public class SinglePlayerController extends HandlerImplementation
 	}
 
 	@Override
-	public boolean buyHPPotion(String playerName)
+	public boolean buyHPPotion( String playerName )
 	{
-		return gManagerProxy.buyPotion(playerName, "HP");
+		return gManagerProxy.buyPotion( playerName, "HP" );
 	}
 
 	@Override
-	public boolean buyMPPotion(String playerName)
+	public boolean buyMPPotion( String playerName )
 	{
-		return gManagerProxy.buyPotion(playerName, "MP");
+		return gManagerProxy.buyPotion( playerName, "MP" );
 	}
 
 	@Override
-	public boolean buyGranade(String playerName)
+	public boolean buyGranade( String playerName )
 	{
-		return gManagerProxy.buyPotion(playerName, "GRANADE");
+		return gManagerProxy.buyPotion( playerName, "GRANADE" );
 	}
 
 	@Override
-	public int getPlayerHPPotion(String playerName)
+	public int getPlayerHPPotion( String playerName )
 	{
-		return gManagerProxy.getPotionAmount(playerName, "HP");
+		return gManagerProxy.getPotionAmount( playerName, "HP" );
 	}
 
 	@Override
-	public int getPlayerMPPotion(String playerName)
+	public int getPlayerMPPotion( String playerName )
 	{
-		return gManagerProxy.getPotionAmount(playerName, "MP");
+		return gManagerProxy.getPotionAmount( playerName, "MP" );
 	}
 
 	@Override
-	public int getPlayerGranade(String playerName)
+	public int getPlayerGranade( String playerName )
 	{
-		return gManagerProxy.getPotionAmount(playerName, "GRANADE");
+		return gManagerProxy.getPotionAmount( playerName, "GRANADE" );
 	}
 
 	@Override
-	public String getMinionBoss(String ID)
+	public String getMinionBoss( String ID )
 	{
-		return gManagerProxy.getMinionBoss(ID);
+		return gManagerProxy.getMinionBoss( ID );
 	}
 
 	@Override

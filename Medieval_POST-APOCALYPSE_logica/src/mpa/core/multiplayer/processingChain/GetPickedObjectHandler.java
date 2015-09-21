@@ -19,7 +19,7 @@ public class GetPickedObjectHandler extends ProcessingChain
 		String[] strings = request.split( ":" );
 		String[] position = strings[1].split( "," );
 
-		if( strings.length > 1 && strings[0].equals( "what is this" ) && position.length == 2 )
+		if( strings.length > 1 && strings[0].equals( "PickedObject" ) && position.length == 2 )
 		{
 			String[] result = new String[1];
 			result[0] = GameManagerProxy.getInstance()
