@@ -5,6 +5,7 @@ import java.util.List;
 import javax.vecmath.Vector2f;
 
 import mpa.core.logic.GameManager;
+import mpa.core.logic.GameManagerProxy;
 import mpa.core.logic.building.Tower;
 import mpa.core.logic.characters.AbstractCharacter;
 import mpa.core.logic.characters.Player;
@@ -39,7 +40,7 @@ class CombatState extends AIState
 	{
 		if( playerToAttack instanceof Player && playerToAttack != null )
 		{
-			List<Tower> towers = ( ( Player ) opponentAI.player ).getTowers();
+			List<Tower> towers = ( ( Player ) playerToAttack ).getTowers();
 			Tower toDestroy = null;
 			float minDistance = Float.MAX_VALUE;
 
@@ -53,20 +54,25 @@ class CombatState extends AIState
 					toDestroy = t;
 				}
 			}
-			while( !GameManager.getInstance().createTowerCrushers( opponentAI.player, toDestroy )
-					.isEmpty() )
+
+			if( toDestroy != null )
 			{
-				System.out.println( "mi sono impintato qua?" );
+				while( GameManagerProxy.getInstance().createTowerCrushers(
+						opponentAI.player.getName(), toDestroy.getID() ) != null )
+				{
+					System.out.println( "mi sono impintato qua?" );
+				}
 			}
 
-			while( !GameManager.getInstance()
-					.createMinions( opponentAI.player, 1, ( ( Player ) playerToAttack ) ).isEmpty() )
+			while( !GameManagerProxy
+					.getInstance()
+					.createMinions( opponentAI.player.getName(), 1,
+							( ( Player ) playerToAttack ).getName() ).isEmpty() )
 			{
 				System.out.println( "mi sono impintato qua 2?" );
 			}
 
 		}
-
 	}
 
 	private void computePath( Player me, AbstractCharacter him, boolean physicall )

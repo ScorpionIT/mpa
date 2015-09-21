@@ -9,12 +9,12 @@ import mpa.core.maths.MyMath;
 
 public class TowerCrusher extends AbstractCharacter
 {
-	private int attackStrength = 5;
+	private int attackStrength = 20;
 	private float rangeOfPhysicallAttack = 3;
 	private Player boss;
 	private Player enemy;
 	private Tower target;
-	private int health = 10;
+	private int health = 50;
 
 	public TowerCrusher( String name, float x, float y, int health, Headquarter headquarter,
 			Player boss, Player enemy, Tower target )

@@ -172,6 +172,8 @@ public class GameManager
 
 	public TowerCrusher createTowerCrusher( Player boss, Tower target )
 	{
+		if( !boss.hasEnoughResources( GameProperties.getInstance().getPrices( "towercrusher" ) ) )
+			return null;
 		TowerCrusher createTowerCrusher = boss.createTowerCrusher( target, towerCrusherIDs.getID() );
 		towerCrushers.add( createTowerCrusher );
 
@@ -262,6 +264,7 @@ public class GameManager
 		m.stopMoving();
 		deadMinions.add( m );
 		minionsAlive.remove( m );
+		minionIDs.freeID( m.getID() );
 		writeLock.unlock();
 	}
 

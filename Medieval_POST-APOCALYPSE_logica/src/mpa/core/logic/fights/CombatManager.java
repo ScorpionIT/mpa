@@ -196,7 +196,7 @@ public class CombatManager
 				}
 				else
 				{
-					p.stopMoving();
+					// p.stopMoving();
 					p.setDirection( new Vector2f( -direction.x, -direction.y ) );
 					if( p.inflictDamage( attacker.getPhysicallAttackDamage() ) )
 					{
@@ -245,6 +245,7 @@ public class CombatManager
 		List<Tower> hitTowers = new ArrayList<>();
 
 		Tower target = tC.getTarget();
+		towerCrusherAttacks.add( tC );
 
 		if( MyMath.distanceFloat( tC.getX(), tC.getY(), target.getX(), target.getY() ) <= tC
 				.getRangeOfAttack() )
