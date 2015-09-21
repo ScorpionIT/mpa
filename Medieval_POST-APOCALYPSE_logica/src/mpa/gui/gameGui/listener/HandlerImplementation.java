@@ -22,9 +22,9 @@ public abstract class HandlerImplementation
 
 	public abstract boolean createTower(String property);
 
-	public abstract void createMinions(String boss, String target, int quantity);
+	public abstract boolean createMinions(String boss, String target, int quantity);
 
-	public abstract String createTowerCrusher(String boss, String target);
+	public abstract boolean createTowerCrusher(String boss, String target);
 
 	public abstract void updateInformation();
 
@@ -63,5 +63,7 @@ public abstract class HandlerImplementation
 	public abstract int getPlayerGranade(String playerName);
 
 	public abstract String getMinionBoss(String ID);
+
+	public abstract void endGame();
 
 }
