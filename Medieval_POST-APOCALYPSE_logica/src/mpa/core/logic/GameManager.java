@@ -133,6 +133,14 @@ public class GameManager
 	{
 		List<Minion> minions = new ArrayList<>();
 
+		Map<String, Integer> required = new HashMap<String, Integer>();
+		Map<String, Integer> prices = GameProperties.getInstance().getPrices( "minion" );
+		for( String element : prices.keySet() )
+			required.put( element, prices.get( element ) * quantity );
+
+		if( !boss.hasEnoughResources( required ) )
+			return minions;
+
 		List<Vector2f> computeRandomPointsCircumference = MyMath.computeRandomPointsCircumference(
 				boss.getHeadquarter().getPosition(), MyMath.distanceFloat( boss.getHeadquarter()
 						.getPosition(), boss.getHeadquarter().getGatheringPlace() ), quantity );
@@ -155,6 +163,8 @@ public class GameManager
 	public List<TowerCrusher> createTowerCrushers( Player boss, Tower target )
 	{
 		List<TowerCrusher> towerCrushers = new ArrayList<>();
+		if( !boss.hasEnoughResources( GameProperties.getInstance().getPrices( "towercrusher" ) ) )
+			return towerCrushers;
 		towerCrushers.add( boss.createTowerCrusher( target, towerCrusherIDs.getID() ) );
 
 		return towerCrushers;
@@ -429,7 +439,7 @@ public class GameManager
 
 			List<Player> hitPlayers = null;
 			if( target != null && p != null )
-				p.setDirection( target );
+				p.setDirection( MyMath.computeDirection( p.getPosition(), target ) );
 
 			if( p != null && p.getSelectedItem().equals( Item.WEAPON )
 					|| p.getSelectedItem().equals( Item.GRANADE )

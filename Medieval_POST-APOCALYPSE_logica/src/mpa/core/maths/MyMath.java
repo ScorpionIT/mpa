@@ -242,7 +242,8 @@ public class MyMath
 		else
 			maxValue = Math.abs( direction.y );
 
-		direction.set( direction.x / maxValue, direction.y / maxValue );
+		if( maxValue > 1 )
+			direction.set( direction.x / maxValue, direction.y / maxValue );
 
 		return direction;
 	}

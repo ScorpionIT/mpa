@@ -18,6 +18,7 @@ class CombatState extends AIState
 	private AbstractCharacter playerToAttack;
 	private Vector2f pointToReach = null;
 	int a = 0;
+	private float maxMovementAllowed = 20f;
 
 	CombatState()
 	{
@@ -53,10 +54,16 @@ class CombatState extends AIState
 				}
 			}
 			while( !GameManager.getInstance().createTowerCrushers( opponentAI.player, toDestroy )
-					.isEmpty() );
+					.isEmpty() )
+			{
+				System.out.println( "mi sono impintato qua?" );
+			}
 
 			while( !GameManager.getInstance()
-					.createMinions( opponentAI.player, 1, ( ( Player ) playerToAttack ) ).isEmpty() );
+					.createMinions( opponentAI.player, 1, ( ( Player ) playerToAttack ) ).isEmpty() )
+			{
+				System.out.println( "mi sono impintato qua 2?" );
+			}
 
 		}
 
@@ -69,9 +76,9 @@ class CombatState extends AIState
 		float actualDistance;
 
 		if( physicall )
-			actualDistance = modulus - me.getRangeOfPhysicallAttack() - 3;
+			actualDistance = modulus - me.getRangeOfPhysicallAttack() + 3;
 		else
-			actualDistance = modulus - me.getRangeOfDistanceAttack() - 3;
+			actualDistance = modulus - me.getRangeOfDistanceAttack() + 3;
 
 		pointToReach = new Vector2f( me.getX() + parallelVector.x * actualDistance, me.getY()
 				+ parallelVector.y * actualDistance );
@@ -83,21 +90,13 @@ class CombatState extends AIState
 	@Override
 	void action( OpponentAI opponentAI )
 	{
+		// opponentAI.player.getWriteLock();
 		if( playerToAttack != null && playerToAttack.amIAlive() )
 		{
-			// preRoutine( opponentAI );
+			preRoutine( opponentAI );
 			float distanceMeToHim = MyMath.distanceFloat( opponentAI.player.getPosition(),
 					playerToAttack.getPosition() );
 
-			if( distanceMeToHim < opponentAI.player.getRangeOfPhysicallAttack() )
-			{
-				opponentAI.player.stopMoving();
-				GameManager.getInstance().changeSelectedItem( opponentAI.player, Item.WEAPON );
-				GameManager.getInstance().playerAction( opponentAI.player,
-						playerToAttack.getPosition() );
-				if( opponentAI.player.getName().equals( "Paola Maledetta 2" ) )
-					System.out.println( "ho attaccato per la " + ++a + " volta" );
-			}
 			if( distanceMeToHim < opponentAI.player.getRangeOfDistanceAttack()
 					&& opponentAI.player.getPotionAmount( Potions.GRANADE ) > 0 )
 			{
@@ -110,6 +109,26 @@ class CombatState extends AIState
 					System.out.println( "ho attaccato per la " + ++a + " volta" );
 			}
 
+			if( distanceMeToHim < opponentAI.player.getRangeOfPhysicallAttack() )
+			{
+				opponentAI.player.stopMoving();
+				GameManager.getInstance().changeSelectedItem( opponentAI.player, Item.WEAPON );
+				GameManager.getInstance().playerAction( opponentAI.player,
+						playerToAttack.getPosition() );
+				if( opponentAI.player.getName().equals( "Paola Maledetta 2" ) )
+					System.out.println( "ho attaccato per la " + ++a + " volta" );
+			}
+			else if( pointToReach != null
+					&& MyMath.distanceFloat( playerToAttack.getPosition(), pointToReach ) < maxMovementAllowed )
+			{
+				opponentAI.player.stopMoving();
+				Vector2f vector = MyMath.computeDirection( opponentAI.player.getPosition(),
+						playerToAttack.getPosition() );
+				opponentAI.player.setPosition( new Vector2f( opponentAI.player.getPosition().x
+						+ Player.getPace() * vector.x, opponentAI.player.getPosition().y
+						+ Player.getPace() * vector.y ) );
+			}
+
 			if( pointToReach == null )
 			{
 				computePath( opponentAI.player, playerToAttack, true );
@@ -119,7 +138,7 @@ class CombatState extends AIState
 				float distanceOldPositionToNew = MyMath.distanceFloat( pointToReach,
 						playerToAttack.getPosition() );
 
-				if( distanceOldPositionToNew > 20f )
+				if( distanceOldPositionToNew > maxMovementAllowed )
 					computePath( opponentAI.player, playerToAttack, true );
 			}
 		}
@@ -163,6 +182,7 @@ class CombatState extends AIState
 			if( playerToAttack != null )
 				computePath( opponentAI.player, playerToAttack, true );
 		}
+		// opponentAI.player.leaveWriteLock();
 
 	}
 

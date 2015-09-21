@@ -209,8 +209,8 @@ public class CombatManager
 					}
 					else
 					{
-						moveHitPlayer( p, attacker.getCurrentVector(),
-								attacker.getPhysicallAttackDamage() );
+						// moveHitPlayer( p, attacker.getCurrentVector(),
+						// attacker.getPhysicallAttackDamage() );
 						hitPlayers.add( p );
 					}
 					p.leaveWriteLock();
@@ -233,8 +233,8 @@ public class CombatManager
 
 	private void moveHitPlayer( AbstractCharacter hit, Vector2f direction, int strength )
 	{
-		Vector2f newPosition = new Vector2f( hit.getX() + direction.x * strength / 4, hit.getY()
-				+ direction.y * strength / 4 );
+		Vector2f newPosition = new Vector2f( hit.getX() + direction.x * strength, hit.getY()
+				+ direction.y * strength );
 		if( GameManager.getInstance().getWorld()
 				.checkForCollision( newPosition.x, newPosition.y, hit.getCollisionRay() ).isEmpty() )
 			hit.setPosition( newPosition );

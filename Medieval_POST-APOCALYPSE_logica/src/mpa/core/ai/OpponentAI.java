@@ -57,7 +57,7 @@ public class OpponentAI extends MyThread
 			super.run();
 			try
 			{
-				sleep( 1000 );
+				sleep( 500 );
 			} catch( InterruptedException e )
 			{
 				e.printStackTrace();

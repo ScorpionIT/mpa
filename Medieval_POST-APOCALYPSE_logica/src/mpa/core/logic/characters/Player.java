@@ -13,6 +13,7 @@ import mpa.core.logic.building.Headquarter;
 import mpa.core.logic.building.Tower;
 import mpa.core.logic.potions.PotionManager;
 import mpa.core.logic.potions.Potions;
+import mpa.core.util.GameProperties;
 
 public class Player extends AbstractCharacter
 {
@@ -636,12 +637,15 @@ public class Player extends AbstractCharacter
 
 	public Minion createMinion( Player target, String ID, Vector2f position )
 	{
+		takeResources( GameProperties.getInstance().getPrices( "minion" ) );
+
 		return new Minion( ID, position.x, position.y, 5 + 2 * level.ordinal(), headquarter, this,
 				target );
 	}
 
 	public TowerCrusher createTowerCrusher( Tower target, String ID )
 	{
+		takeResources( GameProperties.getInstance().getPrices( "towercrusher" ) );
 		return new TowerCrusher( ID, headquarter.getGatheringPlace().x,
 				headquarter.getGatheringPlace().y, 5 + 2 * level.ordinal(), headquarter, this,
 				target.getOwner(), target );

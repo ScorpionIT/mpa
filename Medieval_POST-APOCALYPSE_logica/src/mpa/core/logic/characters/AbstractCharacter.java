@@ -86,10 +86,14 @@ public abstract class AbstractCharacter extends AbstractObject
 
 		float absX = Math.abs( currentVector.x );
 		float absY = Math.abs( currentVector.y );
-		if( absX >= absY )
-			currentVector = new Vector2f( currentVector.x / absX, currentVector.y / absX );
-		else
-			currentVector = new Vector2f( currentVector.x / absY, currentVector.y / absY );
+		float max = Math.max( absX, absY );
+
+		if( max >= 1 )
+			currentVector = new Vector2f( currentVector.x / max, currentVector.y / max );
+		// if( absX >= absY )
+		// currentVector = new Vector2f( currentVector.x / absX, currentVector.y / absX );
+		// else
+		// currentVector = new Vector2f( currentVector.x / absY, currentVector.y / absY );
 	}
 
 	public void setPath( List<Vector2f> path )
@@ -250,10 +254,14 @@ public abstract class AbstractCharacter extends AbstractObject
 
 		float absX = Math.abs( currentVector.x );
 		float absY = Math.abs( currentVector.y );
-		if( absX >= absY )
-			currentVector = new Vector2f( currentVector.x / absX, currentVector.y / absX );
-		else
-			currentVector = new Vector2f( currentVector.x / absY, currentVector.y / absY );
+		float max = Math.max( absX, absY );
+
+		if( max >= 1 )
+			currentVector = new Vector2f( currentVector.x / max, currentVector.y / max );
+		// if( absX >= absY )
+		// currentVector = new Vector2f( currentVector.x / absX, currentVector.y / absX );
+		// else
+		// currentVector = new Vector2f( currentVector.x / absY, currentVector.y / absY );
 	}
 
 	public void setName( String name )
