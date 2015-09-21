@@ -76,7 +76,10 @@ public class SelectionHeadquarterHandler
 	public String getMinionsTarget()
 	{
 		List selection = listBox.getSelection();
-		return (String) selection.get(0);
+		if (selection != null && !selection.isEmpty())
+			return (String) selection.get(0);
+		else
+			return null;
 	}
 
 	public void setVisible(boolean visible)

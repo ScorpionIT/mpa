@@ -51,7 +51,7 @@ public class GameGuiClickListener implements ActionListener
 		gameGui.getGroundNode().collideWith(ray, crs);
 		Vector2f contactPoint;
 
-		if (!isPressed && name.equals("Click") && !gameGui.canClick())
+		if (!isPressed && (name.equals("Click") || name.equals("attack")) && !gameGui.canClick())
 		{
 			niftyHandler.removeVisiblePanel();
 			return;

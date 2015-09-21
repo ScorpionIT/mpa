@@ -22,7 +22,17 @@ public class NiftyController implements ScreenController
 	public void onClickCreateMinion()
 	{
 		String minionsQuantity = niftyHandler.getMinionsQuantity();
-		if (minionsQuantity.matches("\\d+"))
+
+		if (!minionsQuantity.matches("\\d+"))
+		{
+			niftyHandler.createMessageBox("inserire un numero", "ok");
+
+		}
+		else if (niftyHandler.getMinionsTarget() == null)
+		{
+			niftyHandler.createMessageBox("selezionare un nemico", "ok");
+		}
+		else
 		{
 
 			gameController.createMinions(GuiObjectManager.getInstance().getPlayingPlayer(), niftyHandler.getMinionsTarget(),
@@ -37,13 +47,18 @@ public class NiftyController implements ScreenController
 	{
 		gameController.createTowerCrusher(GuiObjectManager.getInstance().getPlayingPlayer(), niftyHandler.getSelectedObjectID());
 		niftyHandler.removeSelectedPanel();
+		niftyHandler.setSelectionPanelVisible(true);
 	}
 
 	public void onClickBuyHPPotion()
 	{
-		niftyHandler.setButtonPotionClicked(true);
 		if (!gameController.buyHPPotion(GuiObjectManager.getInstance().getPlayingPlayer()))
+		{
 			niftyHandler.createMessageBox("non hai le risorse necessarie", "ok");
+			niftyHandler.setButtonPotionClicked(true);
+		}
+
+		// gameController.buyHPPotion(GuiObjectManager.getInstance().getPlayingPlayer());
 
 	}
 
@@ -68,7 +83,7 @@ public class NiftyController implements ScreenController
 
 		gameController.occupyProperty(niftyHandler.getSelectedObject());
 		niftyHandler.removeSelectedPanel();
-		niftyHandler.setButtonOccupyClicked(true);
+		niftyHandler.setSelectionPanelVisible(true);
 	}
 
 	public void onClickButtonCreateTowerButton(boolean headquarter)
@@ -76,7 +91,7 @@ public class NiftyController implements ScreenController
 		gameController.createTower(niftyHandler.getSelectedObject());
 
 		niftyHandler.removeSelectedPanel();
-		niftyHandler.setButtonOccupyClicked(true);
+		niftyHandler.setSelectionPanelVisible(true);
 
 	}
 

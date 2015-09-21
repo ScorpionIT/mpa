@@ -424,26 +424,32 @@ public class NiftyHandler
 
 	public void setCreateButtonClicked(boolean clicked)
 	{
-		isVisibleHeadquarterPanel = true;
+		isVisibleHeadquarterPanel = clicked;
 	}
 
-	public void setButtonOccupyClicked(boolean clicked)
+	public void setSelectionPanelVisible(boolean clicked)
 	{
-		isVisibleSelectionPanel = true;
+		isVisibleSelectionPanel = clicked;
 
 	}
 
 	public void setButtonPotionClicked(boolean clicked)
 	{
+		System.out.println("HO CLICKATO SUL BOTTONE E HO SETTATO LA VARIABILE");
 		buttonPotionClicked = clicked;
+		System.out.println(buttonPotionClicked);
 	}
 
 	public void removeVisiblePanel()
 	{
 		if (messageBoxVisible)
+		{
 			messageBoxVisible = false;
+		}
 		else if (buttonPotionClicked)
+		{
 			buttonPotionClicked = false;
+		}
 		else if (isVisibleSelectionPanel)
 		{
 			removeSelectedPanel();
