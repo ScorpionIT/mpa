@@ -605,4 +605,11 @@ public class GameManagerProxy
 	{
 		gm.endGame(this);
 	}
+
+	public boolean upgradeLevel(String playername)
+	{
+		Player player = players.get(playername);
+		return gm.upgradeLevel(player);
+	}
+
 }

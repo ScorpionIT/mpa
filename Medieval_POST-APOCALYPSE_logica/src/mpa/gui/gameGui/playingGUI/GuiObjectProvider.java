@@ -9,6 +9,7 @@ import mpa.core.util.GameProperties;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.plugins.ZipLocator;
 import com.jme3.bounding.BoundingBox;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 
@@ -99,7 +100,7 @@ public class GuiObjectProvider
 	{
 		assetManager.registerLocator(modelsPath + GameProperties.getInstance().getModelName("tower") + ".zip", ZipLocator.class);
 		Spatial tower = assetManager.loadModel(GameProperties.getInstance().getModelName("tower") + ".mesh.xml");
-		tower.rotate(90, 0, 0);
+		tower.rotate(FastMath.PI / 2, 0, 0);
 		tower.scale(MyMath.scaleFactor(getModelBounds(tower), "tower"));
 		towers.add(tower);
 	}

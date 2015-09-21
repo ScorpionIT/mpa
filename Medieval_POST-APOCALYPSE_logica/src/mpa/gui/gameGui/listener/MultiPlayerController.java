@@ -18,7 +18,7 @@ public class MultiPlayerController extends HandlerImplementation
 {
 	private Socket socket;
 
-	public MultiPlayerController( Socket socket )
+	public MultiPlayerController(Socket socket)
 	{
 		this.socket = socket;
 	}
@@ -39,25 +39,24 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+				BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-				outToServer.writeBytes( "getPlayerResourcesAmount" + '\n' );
+				outToServer.writeBytes("getPlayerResourcesAmount" + '\n');
 
-				int numberOfPlayer = Integer.parseInt( inFromServer.readLine() );
+				int numberOfPlayer = Integer.parseInt(inFromServer.readLine());
 
 				Map<String, Integer> resources = null;
 				String player = null;
-				for( int index = 0; index <= numberOfPlayer; )
+				for (int index = 0; index <= numberOfPlayer;)
 				{
 					String response = inFromServer.readLine();
-					String[] fields = response.split( "=" );
+					String[] fields = response.split("=");
 
-					if( fields[0].equals( "Player" ) )
+					if (fields[0].equals("Player"))
 					{
-						if( index != 0 )
-							reply.put( player, resources );
+						if (index != 0)
+							reply.put(player, resources);
 
 						resources = new HashMap<String, Integer>();
 						index++;
@@ -65,20 +64,20 @@ public class MultiPlayerController extends HandlerImplementation
 					}
 					else
 					{
-						resources.put( fields[0], Integer.parseInt( fields[1] ) );
+						resources.put(fields[0], Integer.parseInt(fields[1]));
 					}
 				}
 
-			} catch( IOException e )
+			} catch (IOException e)
 			{
 				isOk = false;
 			}
-		} while( !isOk );
+		} while (!isOk);
 		return reply;
 	}
 
 	@Override
-	public String getPickedObject( Vector2f click )
+	public String getPickedObject(Vector2f click)
 	{
 
 		boolean isOk = true;
@@ -87,64 +86,60 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+				BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-				outToServer.writeBytes( "PickedObject" + String.valueOf( click.x ) + ","
-						+ String.valueOf( click.y ) + '\n' );
+				outToServer.writeBytes("PickedObject" + String.valueOf(click.x) + "," + String.valueOf(click.y) + '\n');
 				reply = inFromServer.readLine();
 
-			} catch( IOException e )
+			} catch (IOException e)
 			{
 
 			}
-		} while( !isOk );
+		} while (!isOk);
 
 		return reply;
 	}
 
 	@Override
-	public void changeItem( String item )
+	public void changeItem(String item)
 	{
 		boolean isOk = true;
 		do
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
-				outToServer.writeBytes( "ChangeItem:"
-						+ GuiObjectManager.getInstance().getPlayingPlayer() + ":" + item + '\n' );
-			} catch( IOException e )
+				DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+				outToServer.writeBytes("ChangeItem:" + GuiObjectManager.getInstance().getPlayingPlayer() + ":" + item + '\n');
+			} catch (IOException e)
 			{
 				isOk = false;
 			}
 
-		} while( !isOk );
+		} while (!isOk);
 	}
 
 	@Override
-	public void playerAction( Vector2f direction )
+	public void playerAction(Vector2f direction)
 	{
 		boolean isOk = true;
 		do
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
-				outToServer.writeBytes( "Do:" + GuiObjectManager.getInstance().getPlayingPlayer()
-						+ ":" + String.valueOf( direction.x ) + "," + String.valueOf( direction.y )
-						+ '\n' );
-			} catch( IOException e )
+				DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+				outToServer.writeBytes("Do:" + GuiObjectManager.getInstance().getPlayingPlayer() + ":" + String.valueOf(direction.x) + ","
+						+ String.valueOf(direction.y) + '\n');
+			} catch (IOException e)
 			{
 				isOk = false;
 			}
 
-		} while( !isOk );
+		} while (!isOk);
 	}
 
 	@Override
-	public boolean occupyProperty( String property )
+	public boolean occupyProperty(String property)
 	{
 		boolean isOk = true;
 		String reply = null;
@@ -152,37 +147,34 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
-				outToServer
-						.writeBytes( "Occupy:" + GuiObjectManager.getInstance().getPlayingPlayer()
-								+ ":" + property + '\n' );
+				DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+				outToServer.writeBytes("Occupy:" + GuiObjectManager.getInstance().getPlayingPlayer() + ":" + property + '\n');
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 				reply = inFromServer.readLine();
 
-			} catch( IOException e )
+			} catch (IOException e)
 			{
 				isOk = false;
 			}
 
-		} while( !isOk );
-		if( reply.equals( "OK" ) )
+		} while (!isOk);
+		if (reply.equals("OK"))
 			return true;
 		else
 			return false;
 	}
 
 	@Override
-	public boolean createTower( String property )
+	public boolean createTower(String property)
 	{
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean createMinions( String boss, String target, int quantity )
+	public boolean createMinions(String boss, String target, int quantity)
 	{
 
 		boolean isOk = true;
@@ -191,22 +183,20 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
-				outToServer.writeBytes( "Bless:" + "Minions" + boss + ":"
-						+ String.valueOf( quantity ) + ":" + target + '\n' );
+				DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+				outToServer.writeBytes("Bless:" + "Minions" + boss + ":" + String.valueOf(quantity) + ":" + target + '\n');
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 				reply = inFromServer.readLine();
 
-			} catch( IOException e )
+			} catch (IOException e)
 			{
 				isOk = false;
 			}
 
-		} while( !isOk );
-		if( reply.equals( "OK" ) )
+		} while (!isOk);
+		if (reply.equals("OK"))
 			return true;
 		else
 			return false;
@@ -227,27 +217,26 @@ public class MultiPlayerController extends HandlerImplementation
 	}
 
 	@Override
-	public void computePath( Vector2f click )
+	public void computePath(Vector2f click)
 	{
 		boolean isOk = true;
 		do
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
-				outToServer.writeBytes( "GoThere:"
-						+ GuiObjectManager.getInstance().getPlayingPlayer() + ":"
-						+ String.valueOf( click.x ) + "," + String.valueOf( click.y ) + '\n' );
-			} catch( IOException e )
+				DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+				outToServer.writeBytes("GoThere:" + GuiObjectManager.getInstance().getPlayingPlayer() + ":" + String.valueOf(click.x) + ","
+						+ String.valueOf(click.y) + '\n');
+			} catch (IOException e)
 			{
 				isOk = false;
 			}
 
-		} while( !isOk );
+		} while (!isOk);
 	}
 
 	@Override
-	public String getPickedObjectOwner( String objectType, String objectID )
+	public String getPickedObjectOwner(String objectType, String objectID)
 	{
 		boolean isOk = true;
 		String reply = null;
@@ -255,26 +244,25 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
-				outToServer.writeBytes( "InfoOn:" + "OWNER:" + objectType + "," + objectID + '\n' );
+				DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+				outToServer.writeBytes("InfoOn:" + "OWNER:" + objectType + "," + objectID + '\n');
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 				reply = inFromServer.readLine();
 
-			} catch( IOException e )
+			} catch (IOException e)
 			{
 				isOk = false;
 			}
 
-		} while( !isOk );
+		} while (!isOk);
 
 		return reply;
 	}
 
 	@Override
-	public int getPickedObjectProductivity( String objectType, String objectID )
+	public int getPickedObjectProductivity(String objectType, String objectID)
 	{
 		boolean isOk = true;
 		String reply = null;
@@ -282,27 +270,25 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
-				outToServer.writeBytes( "InfoOn:" + "PRODUCTIVITY:" + objectType + "," + objectID
-						+ '\n' );
+				DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+				outToServer.writeBytes("InfoOn:" + "PRODUCTIVITY:" + objectType + "," + objectID + '\n');
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 				reply = inFromServer.readLine();
 
-			} catch( IOException e )
+			} catch (IOException e)
 			{
 				isOk = false;
 			}
 
-		} while( !isOk );
+		} while (!isOk);
 
-		return Integer.parseInt( reply );
+		return Integer.parseInt(reply);
 	}
 
 	@Override
-	public Map<String, Integer> getPlayerResourcesAmount( String playerName )
+	public Map<String, Integer> getPlayerResourcesAmount(String playerName)
 	{
 		boolean isOk = true;
 		Map<String, Integer> reply = new HashMap<String, Integer>();
@@ -310,27 +296,26 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
-				outToServer.writeBytes( "PlayerInfo:" + playerName + ":" + "MP" + '\n' );
+				DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+				outToServer.writeBytes("PlayerInfo:" + playerName + ":" + "MP" + '\n');
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 				String message = inFromServer.readLine();
 
-				while( !message.equals( "." ) )
+				while (!message.equals("."))
 				{
-					String[] amount = message.split( "=" );
-					reply.put( amount[0], Integer.parseInt( amount[1] ) );
+					String[] amount = message.split("=");
+					reply.put(amount[0], Integer.parseInt(amount[1]));
 					message = inFromServer.readLine();
 				}
 
-			} catch( IOException e )
+			} catch (IOException e)
 			{
 				isOk = false;
 			}
 
-		} while( !isOk );
+		} while (!isOk);
 
 		return reply;
 	}
@@ -344,33 +329,32 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
-				outToServer.writeBytes( "PlayersNames" + '\n' );
+				DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+				outToServer.writeBytes("PlayersNames" + '\n');
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-				reply = Integer.parseInt( inFromServer.readLine() );
+				reply = Integer.parseInt(inFromServer.readLine());
 
-			} catch( IOException e )
+			} catch (IOException e)
 			{
 				isOk = false;
 			}
 
-		} while( !isOk );
+		} while (!isOk);
 
 		return reply;
 	}
 
 	@Override
-	public void computePath( Vector2f click, String playerName )
+	public void computePath(Vector2f click, String playerName)
 	{
 		// TODO Stub di metodo generato automaticamente
 
 	}
 
 	@Override
-	public String getPlayerLevel( String player )
+	public String getPlayerLevel(String player)
 	{
 		boolean isOk = true;
 		String reply = null;
@@ -378,26 +362,25 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
-				outToServer.writeBytes( "PlayerInfo:" + player + ":" + "LEVEL" + '\n' );
+				DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+				outToServer.writeBytes("PlayerInfo:" + player + ":" + "LEVEL" + '\n');
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 				reply = inFromServer.readLine();
 
-			} catch( IOException e )
+			} catch (IOException e)
 			{
 				isOk = false;
 			}
 
-		} while( !isOk );
+		} while (!isOk);
 
 		return reply;
 	}
 
 	@Override
-	public int getPlayerHP( String player )
+	public int getPlayerHP(String player)
 	{
 		boolean isOk = true;
 		int reply = 0;
@@ -405,27 +388,26 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
-				outToServer.writeBytes( "PlayerInfo:" + player + ":" + "HP" + '\n' );
+				DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+				outToServer.writeBytes("PlayerInfo:" + player + ":" + "HP" + '\n');
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-				reply = Integer.parseInt( inFromServer.readLine() );
+				reply = Integer.parseInt(inFromServer.readLine());
 
-			} catch( IOException e )
+			} catch (IOException e)
 			{
 				isOk = false;
 			}
 
-		} while( !isOk );
+		} while (!isOk);
 
 		return reply;
 
 	}
 
 	@Override
-	public int getPlayerMP( String player )
+	public int getPlayerMP(String player)
 	{
 		boolean isOk = true;
 		int reply = 0;
@@ -433,20 +415,19 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
-				outToServer.writeBytes( "PlayerInfo:" + player + ":" + "MP" + '\n' );
+				DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+				outToServer.writeBytes("PlayerInfo:" + player + ":" + "MP" + '\n');
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-				reply = Integer.parseInt( inFromServer.readLine() );
+				reply = Integer.parseInt(inFromServer.readLine());
 
-			} catch( IOException e )
+			} catch (IOException e)
 			{
 				isOk = false;
 			}
 
-		} while( !isOk );
+		} while (!isOk);
 
 		return reply;
 	}
@@ -460,33 +441,32 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
-				outToServer.writeBytes( "PlayersNames" + '\n' );
+				DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+				outToServer.writeBytes("PlayersNames" + '\n');
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 				String message = inFromServer.readLine();
 
-				while( !message.equals( "." ) )
+				while (!message.equals("."))
 				{
-					reply.add( message );
+					reply.add(message);
 					message = inFromServer.readLine();
 				}
 
-			} catch( IOException e )
+			} catch (IOException e)
 			{
 				isOk = false;
 			}
 
-		} while( !isOk );
+		} while (!isOk);
 
 		return reply;
 
 	}
 
 	@Override
-	public boolean createTowerCrusher( String boss, String target )
+	public boolean createTowerCrusher(String boss, String target)
 	{
 		boolean isOk = true;
 		String reply = null;
@@ -494,29 +474,27 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
-				outToServer.writeBytes( "Bless:" + "TowerCrusher" + boss + ":" + ":" + target
-						+ '\n' );
+				DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+				outToServer.writeBytes("Bless:" + "TowerCrusher" + boss + ":" + ":" + target + '\n');
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 				reply = inFromServer.readLine();
 
-			} catch( IOException e )
+			} catch (IOException e)
 			{
 				isOk = false;
 			}
 
-		} while( !isOk );
-		if( reply.equals( "OK" ) )
+		} while (!isOk);
+		if (reply.equals("OK"))
 			return true;
 		else
 			return false;
 	}
 
 	@Override
-	public boolean buyHPPotion( String playerName )
+	public boolean buyHPPotion(String playerName)
 	{
 		boolean isOk = true;
 		String reply = null;
@@ -524,29 +502,28 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
-				outToServer.writeBytes( "Buy:" + playerName + ":" + "HP" + '\n' );
+				DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+				outToServer.writeBytes("Buy:" + playerName + ":" + "HP" + '\n');
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 				reply = inFromServer.readLine();
 
-			} catch( IOException e )
+			} catch (IOException e)
 			{
 				isOk = false;
 			}
 
-		} while( !isOk );
+		} while (!isOk);
 
-		if( reply.equals( "OK" ) )
+		if (reply.equals("OK"))
 			return true;
 		else
 			return false;
 	}
 
 	@Override
-	public boolean buyMPPotion( String playerName )
+	public boolean buyMPPotion(String playerName)
 	{
 		boolean isOk = true;
 		String reply = null;
@@ -554,29 +531,28 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
-				outToServer.writeBytes( "Buy:" + playerName + ":" + "MP" + '\n' );
+				DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+				outToServer.writeBytes("Buy:" + playerName + ":" + "MP" + '\n');
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 				reply = inFromServer.readLine();
 
-			} catch( IOException e )
+			} catch (IOException e)
 			{
 				isOk = false;
 			}
 
-		} while( !isOk );
+		} while (!isOk);
 
-		if( reply.equals( "OK" ) )
+		if (reply.equals("OK"))
 			return true;
 		else
 			return false;
 	}
 
 	@Override
-	public boolean buyGranade( String playerName )
+	public boolean buyGranade(String playerName)
 	{
 		boolean isOk = true;
 		String reply = null;
@@ -584,29 +560,28 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
-				outToServer.writeBytes( "Buy:" + playerName + ":" + "GRANADE" + '\n' );
+				DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+				outToServer.writeBytes("Buy:" + playerName + ":" + "GRANADE" + '\n');
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 				reply = inFromServer.readLine();
 
-			} catch( IOException e )
+			} catch (IOException e)
 			{
 				isOk = false;
 			}
 
-		} while( !isOk );
+		} while (!isOk);
 
-		if( reply.equals( "OK" ) )
+		if (reply.equals("OK"))
 			return true;
 		else
 			return false;
 	}
 
 	@Override
-	public int getPlayerHPPotion( String playerName )
+	public int getPlayerHPPotion(String playerName)
 	{
 		boolean isOk = true;
 		int reply = 0;
@@ -614,26 +589,25 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
-				outToServer.writeBytes( "GetPotionAmount:" + playerName + ":" + "HP" + '\n' );
+				DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+				outToServer.writeBytes("GetPotionAmount:" + playerName + ":" + "HP" + '\n');
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-				reply = Integer.parseInt( inFromServer.readLine() );
+				reply = Integer.parseInt(inFromServer.readLine());
 
-			} catch( IOException e )
+			} catch (IOException e)
 			{
 				isOk = false;
 			}
 
-		} while( !isOk );
+		} while (!isOk);
 
 		return reply;
 	}
 
 	@Override
-	public int getPlayerMPPotion( String playerName )
+	public int getPlayerMPPotion(String playerName)
 	{
 		boolean isOk = true;
 		int reply = 0;
@@ -641,27 +615,26 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
-				outToServer.writeBytes( "GetPotionAmount:" + playerName + ":" + "MP" + '\n' );
+				DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+				outToServer.writeBytes("GetPotionAmount:" + playerName + ":" + "MP" + '\n');
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-				reply = Integer.parseInt( inFromServer.readLine() );
+				reply = Integer.parseInt(inFromServer.readLine());
 
-			} catch( IOException e )
+			} catch (IOException e)
 			{
 				isOk = false;
 			}
 
-		} while( !isOk );
+		} while (!isOk);
 
 		return reply;
 
 	}
 
 	@Override
-	public int getPlayerGranade( String playerName )
+	public int getPlayerGranade(String playerName)
 	{
 		boolean isOk = true;
 		int reply = 0;
@@ -669,27 +642,26 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
-				outToServer.writeBytes( "GetPotionAmount:" + playerName + ":" + "GRANADE" + '\n' );
+				DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+				outToServer.writeBytes("GetPotionAmount:" + playerName + ":" + "GRANADE" + '\n');
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-				reply = Integer.parseInt( inFromServer.readLine() );
+				reply = Integer.parseInt(inFromServer.readLine());
 
-			} catch( IOException e )
+			} catch (IOException e)
 			{
 				isOk = false;
 			}
 
-		} while( !isOk );
+		} while (!isOk);
 
 		return reply;
 
 	}
 
 	@Override
-	public String getMinionBoss( String ID )
+	public String getMinionBoss(String ID)
 	{
 		// TODO Stub di metodo generato automaticamente
 		return null;
@@ -700,6 +672,13 @@ public class MultiPlayerController extends HandlerImplementation
 	{
 		return;
 
+	}
+
+	@Override
+	public boolean upgradeLevel(String playingPlayer)
+	{
+		// TODO Stub di metodo generato automaticamente
+		return false;
 	}
 
 }

@@ -141,6 +141,20 @@ public class SelectionHeadquarterPanel
 
 				});
 
+				image(new ImageBuilder()
+				{
+					{
+						filename("upgradeLevel.png");
+						width("20%");
+						height("10%");
+
+						x("38%");
+						y("80%");
+						interactOnClick("onClickButtonUpgradeLevelButton()");
+
+					}
+
+				});
 				control(listBoxBuilder);
 				control(textFieldMinionNumber);
 			}

@@ -295,4 +295,10 @@ public class SinglePlayerController extends HandlerImplementation
 		gManagerProxy.endGame();
 	}
 
+	@Override
+	public boolean upgradeLevel(String playingPlayer)
+	{
+		return gManagerProxy.upgradeLevel(playingPlayer);
+	}
+
 }

@@ -19,6 +19,7 @@ import com.jme3.asset.plugins.ZipLocator;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
@@ -178,7 +179,7 @@ public class GuiObjectManager
 		gameGui.getAssetManager().registerLocator(modelsPath + GameProperties.getInstance().getModelName("headquarter") + ".zip", ZipLocator.class);
 		Spatial hqModel = gameGui.getAssetManager().loadModel(GameProperties.getInstance().getModelName("headquarter") + ".mesh.xml");
 		hqModel.setLocalTranslation(new Vector3f(hqPosition.x, 0, hqPosition.y));
-		hqModel.rotate(0, 90, 0);
+		hqModel.rotate(0, FastMath.PI, 0);
 
 		hqModel.scale(MyMath.scaleFactor(getModelBounds(hqModel), "headquarter"));
 		headQuarters.put(name, hqModel);
@@ -296,14 +297,14 @@ public class GuiObjectManager
 				model = gameGui.getAssetManager().loadModel(GameProperties.getInstance().getModelName("wood") + ".mesh.xml");
 				model.scale(MyMath.scaleFactor(getModelBounds(model), "wood"));
 				woods.put(ID, model);
-				model.rotate(90, 0, 0);
+				model.rotate(FastMath.PI / 2, 0, 0);
 				break;
 			case "FIELD":
 				gameGui.getAssetManager().registerLocator(modelsPath + GameProperties.getInstance().getModelName("field") + ".zip", ZipLocator.class);
 				model = gameGui.getAssetManager().loadModel(GameProperties.getInstance().getModelName("field") + ".mesh.xml");
 				model.scale(MyMath.scaleFactor(getModelBounds(model), "field"));
 				fields.put(ID, model);
-				model.rotate(90, 0, 0);
+				model.rotate(FastMath.PI / 2, 0, 0);
 				break;
 			case "CAVE":
 				gameGui.getAssetManager().registerLocator(modelsPath + GameProperties.getInstance().getModelName("cave") + ".zip", ZipLocator.class);
@@ -318,7 +319,7 @@ public class GuiObjectManager
 				model = gameGui.getAssetManager().loadModel(GameProperties.getInstance().getModelName("mine") + ".mesh.xml");
 				model.scale(MyMath.scaleFactor(getModelBounds(model), "mine"));
 				mines.put(ID, model);
-				model.rotate(90, 0, 0);
+				model.rotate(FastMath.PI / 2, 0, 0);
 				break;
 		// TODO
 		}

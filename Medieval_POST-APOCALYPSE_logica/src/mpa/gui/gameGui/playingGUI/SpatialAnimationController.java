@@ -16,6 +16,7 @@ public class SpatialAnimationController implements AnimEventListener
 	private String name;
 	private GuiObjectManager guiObjectManager;
 	private String type;
+	private boolean dead = false;
 
 	public SpatialAnimationController(Spatial model, GuiObjectManager guiObjectManager, String name, String type)
 	{
@@ -48,9 +49,11 @@ public class SpatialAnimationController implements AnimEventListener
 			else if (type.equals("towerCrusher"))
 				guiObjectManager.removeTower(name);;
 		}
-		else if (animName.equals("attack"))
+		else if (animName.equals("attack") || animName.equals("attack1"))
 		{
 			channel.setAnim("stand");
+			if (dead)
+				channel.setAnim("death");
 		}
 	}
 
@@ -103,6 +106,7 @@ public class SpatialAnimationController implements AnimEventListener
 	{
 		if (control.getAnim("death") != null)
 		{
+			dead = true;
 			channel.setAnim("death");
 			channel.setLoopMode(LoopMode.DontLoop);
 			return true;

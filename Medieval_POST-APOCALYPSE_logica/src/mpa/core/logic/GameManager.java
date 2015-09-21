@@ -133,6 +133,10 @@ public class GameManager
 	{
 		List<Minion> minions = new ArrayList<>();
 
+		if (boss == null)
+		{
+			return minions;
+		}
 		Map<String, Integer> required = new HashMap<String, Integer>();
 		Map<String, Integer> prices = GameProperties.getInstance().getPrices("minion");
 		for (String element : prices.keySet())
@@ -597,4 +601,14 @@ public class GameManager
 		return !towers.contains(t);
 	}
 
+	public boolean upgradeLevel(Player player)
+	{
+		if (player.canUpgrade())
+		{
+			player.upgradeLevel();
+			return true;
+		}
+		else
+			return false;
+	}
 }

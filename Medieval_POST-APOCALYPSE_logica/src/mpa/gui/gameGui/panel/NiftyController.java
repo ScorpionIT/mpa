@@ -95,7 +95,7 @@ public class NiftyController implements ScreenController
 	public void onClickButtonCreateTowerButton()
 	{
 		if (!gameController.createTower(niftyHandler.getSelectedObject()))
-			niftyHandler.createMessageBox("non hai le risorse necessarie", "ok");
+			niftyHandler.createMessageBox("non hai le risorse necessarie oppure non c'è spazio per costruire la torretta", "ok");
 
 		niftyHandler.removeSelectedPanel();
 		niftyHandler.setSelectionPanelVisible(true);
@@ -115,6 +115,14 @@ public class NiftyController implements ScreenController
 
 		niftyHandler.changePageOpponentResourcesPanel(false);
 
+	}
+
+	public void onClickButtonUpgradeLevelButton()
+	{
+		if (!gameController.upgradeLevel(GuiObjectManager.getInstance().getPlayingPlayer()))
+			niftyHandler.createMessageBox("non hai le risorse necessarie per aumentare il tuo livello", "ok");
+		niftyHandler.removeHeadquarterPanel();
+		niftyHandler.setCreateButtonClicked(true);
 	}
 
 	public void onClickButtonBack()
