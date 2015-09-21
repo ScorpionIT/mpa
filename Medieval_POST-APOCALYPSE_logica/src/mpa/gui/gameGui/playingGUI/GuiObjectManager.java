@@ -56,11 +56,13 @@ public class GuiObjectManager
 	private Vector3f upVector = new Vector3f(0, 1, 0);
 	private String playingPlayer;
 	private String modelsPath = GameProperties.getInstance().getPath("ModelsPath");
-	private boolean endGame = false;
+
+	private GuiObjectProvider guiObjectProvider;
 
 	private GuiObjectManager(GameGui gameGui, String playingPlayer, boolean multiplayer)
 	{
 		this.gameGui = gameGui;
+		guiObjectProvider = new GuiObjectProvider(gameGui.getAssetManager(), 20, 10, 10);
 		if (!multiplayer)
 		{
 
@@ -356,9 +358,7 @@ public class GuiObjectManager
 
 	private void addMinion(String ID, String boss)
 	{
-		gameGui.getAssetManager().registerLocator(modelsPath + GameProperties.getInstance().getModelName("minion") + ".zip", ZipLocator.class);
-		Spatial minionModel = gameGui.getAssetManager().loadModel(GameProperties.getInstance().getModelName("minion") + ".mesh.xml");
-		minionModel.scale(MyMath.scaleFactor(getModelBounds(minionModel), "minion"));
+		Spatial minionModel = guiObjectProvider.getMinionSpatial();
 		minions.put(ID, minionModel);
 		gameGui.attachMobileObject(minionModel);
 		animationControllerSpatial.put(minionModel, new SpatialAnimationController(minionModel, this, ID, "minion"));
@@ -369,9 +369,7 @@ public class GuiObjectManager
 
 	private void addTowerCrusher(String ID, String boss, int life, Vector2f position)
 	{
-		gameGui.getAssetManager().registerLocator(modelsPath + GameProperties.getInstance().getModelName("towerCrusher") + ".zip", ZipLocator.class);
-		Spatial towerCrusherModel = gameGui.getAssetManager().loadModel(GameProperties.getInstance().getModelName("towerCrusher") + ".mesh.xml");
-		towerCrusherModel.scale(MyMath.scaleFactor(getModelBounds(towerCrusherModel), "towerCrusher"));
+		Spatial towerCrusherModel = guiObjectProvider.getTowerCrusherSpatial();
 		towerCrushers.put(ID, towerCrusherModel);
 		gameGui.attachMobileObject(towerCrusherModel);
 		animationControllerSpatial.put(towerCrusherModel, new SpatialAnimationController(towerCrusherModel, this, ID, "towerCrusher"));
@@ -387,18 +385,7 @@ public class GuiObjectManager
 	{
 		if (!towers.containsKey(ID))
 		{
-			gameGui.getAssetManager().registerLocator(modelsPath + GameProperties.getInstance().getModelName("tower") + ".zip", ZipLocator.class);
-			Spatial tower = gameGui.getAssetManager().loadModel(GameProperties.getInstance().getModelName("tower") + ".mesh.xml");
-			Vector3f positionModel = new Vector3f(position.x, 0, position.y);
-			tower.setLocalTranslation(positionModel);
-			tower.rotate(90, 0, 0);
-			tower.scale(MyMath.scaleFactor(getModelBounds(tower), "tower"));
-
-			positionModel.z += 20;
-			addModelLifeBar(tower, positionModel, life);
-
-			gameGui.attachStaticObject(tower);
-			towers.put(ID, tower);
+			createTower(position, ID, life);
 		}
 		else
 		{
@@ -407,6 +394,19 @@ public class GuiObjectManager
 			positionModel.y += 20;
 			updateModelLifeBar(tower, positionModel, life);
 		}
+	}
+
+	private void createTower(Vector2f position, String ID, int life)
+	{
+		Spatial tower = guiObjectProvider.getTowerSpatial();
+
+		Vector3f positionModel = new Vector3f(position.x, 0, position.y);
+		tower.setLocalTranslation(positionModel);
+		positionModel.z += 20;
+		addModelLifeBar(tower, positionModel, life);
+
+		gameGui.attachStaticObject(tower);
+		towers.put(ID, tower);
 	}
 
 	public synchronized void updatePlayerPosition(String name, Vector2f position, Vector2f direction, boolean isMoving, int life)
@@ -476,7 +476,7 @@ public class GuiObjectManager
 		}
 	}
 
-	public void updateTowerCrusherPosition(String ID, Vector2f position, Vector2f direction, boolean isMoving, String boss, int life)
+	public synchronized void updateTowerCrusherPosition(String ID, Vector2f position, Vector2f direction, boolean isMoving, String boss, int life)
 	{
 		if (!towerCrushers.containsKey(ID))
 		{
@@ -515,7 +515,10 @@ public class GuiObjectManager
 	public void removeTower(String ID)
 	{
 		gameGui.detachLifeBar(spatialsLifeBars.remove(towers.get(ID)));
-		gameGui.detachStaticObject(towers.remove(ID));
+		gameGui.detachStaticObject(towers.get(ID));
+		guiObjectProvider.addTowerSpatial(towers.get(ID));
+
+		towers.remove(ID);
 
 	}
 
@@ -571,6 +574,7 @@ public class GuiObjectManager
 		animationControllerSpatial.remove(towerCrushers.get(ID));
 		gameGui.detachLifeBar(spatialsLifeBars.get(towerCrushers.get(ID)));
 		gameGui.detachCircle(spatialCirlces.remove(towerCrushers.get(ID)));
+		guiObjectProvider.addTowerCrusherSpatial(towerCrushers.get(ID));
 		towerCrushers.remove(ID);
 
 	}
@@ -600,6 +604,7 @@ public class GuiObjectManager
 		gameGui.detachMobileObject(minions.get(ID));
 		animationControllerSpatial.remove(minions.get(ID));
 		gameGui.detachCircle(spatialCirlces.remove(minions.get(ID)));
+		guiObjectProvider.addMinionSpatial(minions.get(ID));
 		minions.remove(ID);
 	}
 
