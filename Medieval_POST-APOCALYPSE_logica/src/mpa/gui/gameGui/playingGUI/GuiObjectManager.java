@@ -581,6 +581,11 @@ public class GuiObjectManager
 		{
 			gameGui.getNiftyHandler().setLosingScreen();
 		}
+		else if (players.size() == 1 && players.containsKey(playingPlayer))
+		{
+			gameGui.getNiftyHandler().setWinningScreen();
+
+		}
 		gameGui.detachMobileObject(players.get(name));
 		animationControllerSpatial.remove(players.get(name));
 		gameGui.detachLifeBar(spatialsLifeBars.get(players.get(name)));

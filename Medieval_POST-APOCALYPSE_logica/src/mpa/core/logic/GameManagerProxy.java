@@ -349,7 +349,7 @@ public class GameManagerProxy
 
 		for (Minion m : deadMinions)
 		{
-			// minions.remove(m.getID());
+			minions.remove(m.getID());
 			names.add(m.getID());
 		}
 
@@ -388,19 +388,12 @@ public class GameManagerProxy
 	{
 		Map<String, Vector2f[]> newPositions = new HashMap<>();
 
-		List<Minion> minionsAlive = gm.getMinionsAlive();
-
-		for (Minion m : minionsAlive)
+		for (String m : minions.keySet())
 		{
-			if (!minions.containsKey(m.getID()))
-			{
-				minions.put(m.getID(), m);
-			}
-
 			Vector2f[] position = new Vector2f[2];
-			position[0] = m.getPosition();
-			position[1] = m.getPlayerDirection();
-			newPositions.put(m.getID(), position);
+			position[0] = minions.get(m).getPosition();
+			position[1] = minions.get(m).getPlayerDirection();
+			newPositions.put(m, position);
 		}
 
 		return newPositions;
@@ -520,8 +513,8 @@ public class GameManagerProxy
 
 	public boolean isMovingTowerCrusher(String ID)
 	{
-		List<Vector2f> towerCrusherID = towerCrushers.get(ID).getPath();
-		if (towerCrusherID == null || towerCrusherID.isEmpty())
+		List<Vector2f> towerCrusherPath = towerCrushers.get(ID).getPath();
+		if (towerCrusherPath == null || towerCrusherPath.isEmpty())
 			return false;
 		else
 			return true;
@@ -596,21 +589,14 @@ public class GameManagerProxy
 	public Map<String, javax.vecmath.Vector2f[]> getTowerCrushersPositions()
 	{
 		Map<String, Vector2f[]> newPositions = new HashMap<>();
-		List<TowerCrusher> towerCrushersObject = gm.getTowerCrushers();
 
-		for (TowerCrusher towerCrusher : towerCrushersObject)
+		for (String towerCrusherID : towerCrushers.keySet())
 		{
-			if (!towerCrushers.containsKey(towerCrusher.getID()))
-			{
-				towerCrushers.put(towerCrusher.getID(), towerCrusher);
-			}
-
 			Vector2f[] position = new Vector2f[2];
-			position[0] = towerCrusher.getPosition();
-			position[1] = towerCrusher.getPlayerDirection();
-			newPositions.put(towerCrusher.getID(), position);
+			position[0] = towerCrushers.get(towerCrusherID).getPosition();
+			position[1] = towerCrushers.get(towerCrusherID).getPlayerDirection();
+			newPositions.put(towerCrusherID, position);
 		}
-
 		return newPositions;
 
 	}

@@ -163,7 +163,9 @@ public class GameManager
 		List<TowerCrusher> towerCrushers = new ArrayList<>();
 		if (!boss.hasEnoughResources(GameProperties.getInstance().getPrices("towercrusher")))
 			return towerCrushers;
-		towerCrushers.add(boss.createTowerCrusher(target, towerCrusherIDs.getID()));
+		TowerCrusher createTowerCrusher = boss.createTowerCrusher(target, towerCrusherIDs.getID());
+		this.towerCrushers.add(createTowerCrusher);
+		towerCrushers.add(createTowerCrusher);
 
 		return towerCrushers;
 	}
