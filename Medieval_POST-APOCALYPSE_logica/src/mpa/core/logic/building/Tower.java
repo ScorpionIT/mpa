@@ -2,6 +2,7 @@ package mpa.core.logic.building;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.vecmath.Vector2f;
@@ -19,7 +20,7 @@ public class Tower extends AbstractPrivateProperty
 
 	private int damage = 5;
 	private int life = 50;
-	private float range = 20f;
+	private float range = 50f;
 	private static Map<Resources, Integer> PRICE = new HashMap<>();
 	private AbstractPrivateProperty property = null;
 
@@ -46,12 +47,12 @@ public class Tower extends AbstractPrivateProperty
 		}
 	}
 
-	public ArrayList<AbstractCharacter> attack()
+	public List<AbstractCharacter> attack()
 	{
 		try
 		{
 			readLock.lock();
-			ArrayList<AbstractCharacter> hitCharacters = new ArrayList<>();
+			List<AbstractCharacter> hitCharacters = new ArrayList<>();
 
 			GameManager.getInstance().takeLock();
 
@@ -60,7 +61,10 @@ public class Tower extends AbstractPrivateProperty
 				if( p != owner
 						&& MyMath.distanceFloat( x, y, p.getX(), p.getY() ) <= range
 								+ owner.getPlayerLevel().ordinal() )
+				{
 					hitCharacters.add( p );
+					System.out.println( "sto facendo danno" );
+				}
 			}
 
 			for( Minion m : GameManager.getInstance().getMinionsAlive() )
@@ -85,6 +89,7 @@ public class Tower extends AbstractPrivateProperty
 		} finally
 		{
 			readLock.unlock();
+			GameManager.getInstance().leaveLock();
 		}
 	}
 

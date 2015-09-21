@@ -200,7 +200,6 @@ public class CombatManager
 					p.setDirection( new Vector2f( -direction.x, -direction.y ) );
 					if( p.inflictDamage( attacker.getPhysicallAttackDamage() ) )
 					{
-						System.out.println( "è morto?" );
 						if( p instanceof Player )
 							deadPlayers.add( ( ( Player ) p ) );
 						else if( p instanceof Minion )

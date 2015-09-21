@@ -2,7 +2,7 @@ package mpa.core.logic;
 
 public class TowerThread extends MyThread
 {
-	private static long TIME_TO_SLEEP = 500;
+	private static long TIME_TO_SLEEP = 1000;
 
 	@Override
 	public synchronized void run()

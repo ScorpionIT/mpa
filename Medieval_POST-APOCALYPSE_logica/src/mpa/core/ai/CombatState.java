@@ -95,6 +95,8 @@ class CombatState extends AIState
 				GameManager.getInstance().changeSelectedItem( opponentAI.player, Item.WEAPON );
 				GameManager.getInstance().playerAction( opponentAI.player,
 						playerToAttack.getPosition() );
+				if( opponentAI.player.getName().equals( "Paola Maledetta 2" ) )
+					System.out.println( "ho attaccato per la " + ++a + " volta" );
 			}
 			if( distanceMeToHim < opponentAI.player.getRangeOfDistanceAttack()
 					&& opponentAI.player.getPotionAmount( Potions.GRANADE ) > 0 )
@@ -103,6 +105,9 @@ class CombatState extends AIState
 				GameManager.getInstance().changeSelectedItem( opponentAI.player, Item.GRANADE );
 				GameManager.getInstance().playerAction( opponentAI.player,
 						playerToAttack.getPosition() );
+
+				if( opponentAI.player.getName().equals( "Paola Maledetta 2" ) )
+					System.out.println( "ho attaccato per la " + ++a + " volta" );
 			}
 
 			if( pointToReach == null )

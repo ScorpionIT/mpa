@@ -14,8 +14,8 @@ import mpa.core.logic.building.Headquarter;
 import mpa.core.logic.building.Tower;
 import mpa.core.logic.characters.Minion;
 import mpa.core.logic.characters.Player;
-import mpa.core.logic.characters.TowerCrusher;
 import mpa.core.logic.characters.Player.Item;
+import mpa.core.logic.characters.TowerCrusher;
 import mpa.core.logic.potions.Potions;
 import mpa.core.logic.resources.AbstractResourceProducer;
 

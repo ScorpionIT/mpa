@@ -74,6 +74,7 @@ public class GameManager
 			gameManager = new GameManager( world, level );
 			ThreadManager.getInstance().addGameThread( new PositionUpdater() );
 			ThreadManager.getInstance().addGameThread( new ResourceUpdater() );
+			ThreadManager.getInstance().addGameThread( new TowerThread() );
 			ThreadManager.getInstance().startGameThreads();
 
 			if( multiplayer )
@@ -232,6 +233,7 @@ public class GameManager
 	public void killPlayer( Player p )
 	{
 		writeLock.lock();
+
 		p.die();
 		if( players.contains( p ) )
 			players.remove( p );
@@ -286,7 +288,15 @@ public class GameManager
 			List<Player> deads = new ArrayList<>();
 
 			for( Player p : deadPlayers )
+			{
+				System.out.println( "STO KILLANDO " + p.getName() );
+				System.out.println( "STO KILLANDO " + p.getName() );
+				System.out.println( "STO KILLANDO " + p.getName() );
+				System.out.println( "STO KILLANDO " + p.getName() );
+				System.out.println( "STO KILLANDO " + p.getName() );
+				System.out.println( "STO KILLANDO " + p.getName() );
 				deads.add( p );
+			}
 
 			deadPlayers.clear();
 
@@ -413,34 +423,42 @@ public class GameManager
 
 	public List<Player> playerAction( Player p, Vector2f target )
 	{
-		List<Player> hitPlayers = null;
-		if( target != null && p != null )
-			p.setDirection( MyMath.computeDirection( p.getPosition(), target ) );
+		try
+		{
+			p.getWriteLock();
 
-		if( p != null && p.getSelectedItem().equals( Item.WEAPON )
-				|| p.getSelectedItem().equals( Item.GRANADE )
-				|| p.getSelectedItem().equals( Item.FLASH_BANG ) )
-		{
-			attackRequests.addRequest( p, target );
-		}
-		else if( p.getSelectedItem().equals( Item.HP_POTION ) )
-		{
-			if( p.getPotionAmount( Potions.HP ) > 0 )
-			{
-				p.restoreHealth( Potions.HP );
-				p.takePotion( Potions.HP );
-			}
-		}
-		else
-		{
-			if( p.getPotionAmount( Potions.MP ) > 0 )
-			{
-				p.restoreHealth( Potions.MP );
-				p.takePotion( Potions.MP );
-			}
-		}
+			List<Player> hitPlayers = null;
+			if( target != null && p != null )
+				p.setDirection( target );
 
-		return hitPlayers;
+			if( p != null && p.getSelectedItem().equals( Item.WEAPON )
+					|| p.getSelectedItem().equals( Item.GRANADE )
+					|| p.getSelectedItem().equals( Item.FLASH_BANG ) )
+			{
+				attackRequests.addRequest( p, target );
+			}
+			else if( p.getSelectedItem().equals( Item.HP_POTION ) )
+			{
+				if( p.getPotionAmount( Potions.HP ) > 0 )
+				{
+					p.restoreHealth( Potions.HP );
+					p.takePotion( Potions.HP );
+				}
+			}
+			else
+			{
+				if( p.getPotionAmount( Potions.MP ) > 0 )
+				{
+					p.restoreHealth( Potions.MP );
+					p.takePotion( Potions.MP );
+				}
+			}
+
+			return hitPlayers;
+		} finally
+		{
+			p.leaveWriteLock();
+		}
 	}
 
 	public boolean occupyProperty( Player player, AbstractPrivateProperty property )
@@ -482,21 +500,36 @@ public class GameManager
 
 	void checkForTowerDamages()
 	{
+		writeLock.lock();
+		System.out.println( "sono dopo il lock" );
 		for( Tower t : towers )
 		{
-			List<AbstractCharacter> hitPlayers = t.attack();
+			List<AbstractCharacter> hitCharacters = t.attack();
 
-			for( AbstractCharacter character : hitPlayers )
+			for( AbstractCharacter hitCharacter : hitCharacters )
+			{
+				if( hitCharacter != t.getOwner() )
+					hitCharacter.inflictDamage( t.getDamage() );
+			}
+
+			for( AbstractCharacter character : hitCharacters )
+			{
 				if( !character.amIAlive() )
 				{
-					if( character instanceof Player )
-						killPlayer( ( ( Player ) character ) );
-					else if( character instanceof TowerCrusher )
-						killTowerCrusher( ( ( TowerCrusher ) character ) );
-					else if( character instanceof Minion )
-						killMinion( ( ( Minion ) character ) );
+					if( character != t.getOwner() )
+					{
+						if( character instanceof Player )
+							killPlayer( ( ( Player ) character ) );
+						else if( character instanceof TowerCrusher )
+							killTowerCrusher( ( ( TowerCrusher ) character ) );
+						else if( character instanceof Minion )
+							killMinion( ( ( Minion ) character ) );
+					}
 				}
+			}
 		}
+		writeLock.unlock();
+		System.out.println( "CI ARRIVO QUA?" );
 	}
 
 	public Level getPlayerLevel( Player player )

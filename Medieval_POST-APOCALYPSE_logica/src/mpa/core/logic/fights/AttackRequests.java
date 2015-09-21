@@ -40,7 +40,7 @@ public class AttackRequests extends MyThread
 	{
 		while( true )
 		{
-			lock.lock();
+			// lock.lock();
 			super.run();
 			List<AbstractCharacter> hitPlayers = new ArrayList<>();
 			if( !attackList.isEmpty() )
@@ -72,7 +72,7 @@ public class AttackRequests extends MyThread
 				}
 
 			}
-			lock.unlock();
+			// lock.unlock();
 		}
 	}
 
