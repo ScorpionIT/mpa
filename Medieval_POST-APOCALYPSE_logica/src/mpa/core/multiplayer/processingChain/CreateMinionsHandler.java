@@ -18,25 +18,24 @@ public class CreateMinionsHandler extends ProcessingChain
 		// TODO towerCrusher sono creati uno alla volta
 		String[] strings = request.split( ":" );
 
-		if( strings.length == 5 && strings[0].equals( "blessMinions" ) )
+		if( strings.length == 5 && strings[0].equals( "Bless" ) )
 		{
-			List<String> minions;
-			if( strings[2].equals( "minions" ) )
-				minions = GameManagerProxy.getInstance().createMinions( strings[1],
+			List<String> minions = null;
+			String tC = null;
+			if( strings[1].equals( "Minions" ) )
+			{
+				minions = GameManagerProxy.getInstance().createMinions( strings[2],
 						Integer.parseInt( strings[3] ), strings[4] );
-
-			// else
-			// minions = GameManagerProxy.getInstance().createTowerCrushers( strings[1],
-			// Integer.parseInt( strings[3] ), strings[4] );
-			// String[] reply = new String[minions.size()];
-			//
-			// for (int i = 0; i < minions.size(); i++)
-			// if (i != minions.size() - 1)
-			// reply[i] = minions.get(i) + ",";
-			// else
-			// reply[i] = minions.get(i) + ".";
-
-			// return reply;
+			}
+			else if( strings[1].equals( "TowerCrusher" ) )
+			{
+				tC = GameManagerProxy.getInstance().createTowerCrushers( strings[2], strings[4] );
+			}
+			String[] reply = new String[1];
+			if( ( minions == null || minions.isEmpty() ) && tC == null )
+				reply[0] = "NO";
+			else
+				reply[0] = "OK";
 		}
 		else if( hasNext() )
 			return next.processRequest( request );

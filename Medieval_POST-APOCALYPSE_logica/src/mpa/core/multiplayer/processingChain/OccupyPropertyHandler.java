@@ -15,13 +15,14 @@ public class OccupyPropertyHandler extends ProcessingChain
 	{
 		String[] strings = request.split( ":" );
 
-		if( strings.length == 3 && strings[0].equals( "do" ) )
+		if( strings.length == 4 && strings[0].equals( "Occupy" ) )
 		{
 			String[] reply = new String[1];
-			if( GameManagerProxy.getInstance().occupyProperty( strings[1], strings[2] ) )
-				reply[0] = new String( "ok" );
+			if( GameManagerProxy.getInstance().occupyProperty( strings[1],
+					strings[2] + ":" + strings[3] ) )
+				reply[0] = new String( "OK" );
 			else
-				reply[0] = new String( "no" );
+				reply[0] = new String( "NO" );
 
 			return reply;
 		}

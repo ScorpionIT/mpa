@@ -15,18 +15,22 @@ public class GetPickedObjectInfo extends ProcessingChain
 	{
 		String[] strings = request.split( ":" );
 
-		if( strings.length == 2 && strings[0].equals( "InfoOn" )
-				&& strings[1].split( "," ).length == 2 )
+		if( strings.length == 3 && strings[0].equals( "InfoOn" )
+				&& strings[2].split( "," ).length == 2 )
 		{
-			String[] objectInfo = strings[1].split( "," );
-			String objectOwner = GameManagerProxy.getInstance().getObjectOwner( objectInfo[0],
-					objectInfo[1] );
+			String[] objectInfo = strings[2].split( "," );
+			String info = new String();
+			if( strings[1].equals( "OWNER" ) )
+				info = GameManagerProxy.getInstance().getObjectOwner( objectInfo[0], objectInfo[1] );
+			else if( strings[1].equals( "PRODUCTIVITY" ) )
+				info = String.valueOf( GameManagerProxy.getInstance().getObjectProductivity(
+						objectInfo[0], objectInfo[1] ) );
 
 			int objectProductivity = GameManagerProxy.getInstance().getObjectProductivity(
 					objectInfo[0], objectInfo[1] );
 
 			String[] reply = new String[1];
-			reply[0] = objectOwner + ":" + String.valueOf( objectProductivity );
+			reply[0] = info + ":" + String.valueOf( objectProductivity );
 
 			return reply;
 		}

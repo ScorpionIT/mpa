@@ -15,7 +15,7 @@ public class ComputePathHandler extends ProcessingChain
 	{
 		String[] strings = request.split( ":" );
 
-		if( strings.length == 3 && strings[0].equals( "go there" )
+		if( strings.length == 3 && strings[0].equals( "GoThere" )
 				&& strings[2].split( "," ).length == 2 )
 		{
 			String[] direction = strings[2].split( "," );
