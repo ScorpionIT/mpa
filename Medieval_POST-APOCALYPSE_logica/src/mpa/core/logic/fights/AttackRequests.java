@@ -65,7 +65,10 @@ public class AttackRequests extends MyThread
 				for( AbstractCharacter hitPlayer : hitPlayers )
 				{
 					if( hitPlayer != attacker && AI_players.keySet().contains( hitPlayer ) )
+					{
+						System.out.println( "ho segnalato l'attacco" );
 						AI_players.get( hitPlayer ).gotAttackedBy( attacker );
+					}
 				}
 
 			}

@@ -103,7 +103,7 @@ public class CombatManager
 				if( !( MyMath.distanceFloat(
 						attacker.getX() + direction.x * attacker.getRangeOfPhysicallAttack(),
 						attacker.getY() + direction.y * attacker.getRangeOfPhysicallAttack(),
-						p.getX(), p.getY() ) <= 1 || distanceFloat2 <= attacker
+						p.getX(), p.getY() ) <= 0 || distanceFloat2 < attacker
 						.getRangeOfPhysicallAttack() ) )
 				{
 					p.leaveWriteLock();
@@ -188,7 +188,7 @@ public class CombatManager
 				if( !( MyMath.distanceFloat(
 						attacker.getX() + direction.x * attacker.getRangeOfPhysicallAttack(),
 						attacker.getY() + direction.y * attacker.getRangeOfPhysicallAttack(),
-						p.getX(), p.getY() ) <= 1 || distanceFloat2 <= attacker
+						p.getX(), p.getY() ) < 1 || distanceFloat2 < attacker
 						.getRangeOfPhysicallAttack() ) )
 				{
 

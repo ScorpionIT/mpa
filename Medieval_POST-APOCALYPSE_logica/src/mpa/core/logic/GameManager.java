@@ -246,16 +246,20 @@ public class GameManager
 
 	public void killMinion( Minion m )
 	{
+		writeLock.lock();
 		m.stopMoving();
 		deadMinions.add( m );
 		minionsAlive.remove( m );
+		writeLock.unlock();
 	}
 
 	private void killTowerCrusher( TowerCrusher towerCrusher )
 	{
+		writeLock.lock();
 		towerCrusher.stopMoving();
 		deadTowerCrushers.add( towerCrusher );
 		towerCrushers.remove( towerCrusher );
+		writeLock.unlock();
 	}
 
 	public List<Player> getPlayers()
@@ -276,43 +280,65 @@ public class GameManager
 	List<Player> takeDeadPlayers()
 	{
 
-		List<Player> deads = new ArrayList<>();
+		try
+		{
+			writeLock.lock();
+			List<Player> deads = new ArrayList<>();
 
-		for( Player p : deadPlayers )
-			deads.add( p );
+			for( Player p : deadPlayers )
+				deads.add( p );
 
-		deadPlayers.clear();
+			deadPlayers.clear();
 
-		return deads;
+			return deads;
+		} finally
+		{
+			writeLock.unlock();
+		}
 
 	}
 
 	List<Minion> takeDeadMinions()
 	{
-		List<Minion> deads = new ArrayList<>();
+		try
+		{
+			writeLock.lock();
+			List<Minion> deads = new ArrayList<>();
 
-		for( Minion m : deadMinions )
-			deads.add( m );
+			for( Minion m : deadMinions )
+				deads.add( m );
 
-		deadMinions.clear();
+			deadMinions.clear();
 
-		return deads;
+			return deads;
+		} finally
+		{
+			writeLock.unlock();
+		}
 	}
 
 	List<TowerCrusher> takeDeadTowerCrushers()
 	{
-		List<TowerCrusher> deads = new ArrayList<>();
+		try
+		{
+			writeLock.lock();
+			List<TowerCrusher> deads = new ArrayList<>();
 
-		for( TowerCrusher towerCrusherID : deadTowerCrushers )
-			deads.add( towerCrusherID );
+			for( TowerCrusher towerCrusherID : deadTowerCrushers )
+				deads.add( towerCrusherID );
 
-		deadTowerCrushers.clear();
+			deadTowerCrushers.clear();
 
-		return deads;
+			return deads;
+		} finally
+		{
+			writeLock.unlock();
+		}
 	}
 
 	public void endGame( Object applicant )
 	{
+		writeLock.lock();
 		if( !( applicant instanceof GameManagerProxy ) )
 			return;
 		ThreadManager.getInstance().destroyAllThreads( gameManager );
@@ -329,6 +355,7 @@ public class GameManager
 		towerIDs = null;
 		towers = null;
 		gameManager = null;
+		writeLock.unlock();
 	}
 
 	public List<Player> getPlayersAround( Player player, float ray )

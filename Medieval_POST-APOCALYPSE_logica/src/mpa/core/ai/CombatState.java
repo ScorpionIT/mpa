@@ -85,7 +85,7 @@ class CombatState extends AIState
 	{
 		if( playerToAttack != null && playerToAttack.amIAlive() )
 		{
-			preRoutine( opponentAI );
+			// preRoutine( opponentAI );
 			float distanceMeToHim = MyMath.distanceFloat( opponentAI.player.getPosition(),
 					playerToAttack.getPosition() );
 

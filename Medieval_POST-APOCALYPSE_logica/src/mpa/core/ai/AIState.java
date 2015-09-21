@@ -38,7 +38,7 @@ abstract class AIState
 	AIState changeState( OpponentAI opponentAI )
 	{
 		boolean shouldIFight = false;
-		Player prey = null;
+		AbstractCharacter prey = null;
 
 		for( Player p : GameManager.getInstance().getPlayersAround( opponentAI.player,
 				opponentAI.worldManager.ray ) )
@@ -59,6 +59,8 @@ abstract class AIState
 		{
 			bullies.add( new Enemy( m, opponentAI.player ) );
 			shouldIFight = true;
+			if( prey == null )
+				prey = m;
 		}
 
 		if( shouldIFight && this instanceof CombatState )
