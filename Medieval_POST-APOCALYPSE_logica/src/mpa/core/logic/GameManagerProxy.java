@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.vecmath.Vector2f;
 
@@ -24,11 +25,11 @@ public class GameManagerProxy
 
 	private static GameManagerProxy gameManagerProxy = null;
 	private GameManager gm;
-	private Map<String, Player> players = new HashMap<>();
+	private Map<String, Player> players = new ConcurrentHashMap<>();
 	private Map<String, Headquarter> player_headquarter = new HashMap<>();
 
-	private Map<String, Minion> minions = new HashMap<>();
-	private Map<String, TowerCrusher> towerCrushers = new HashMap<>();
+	private Map<String, Minion> minions = new ConcurrentHashMap<>();
+	private Map<String, TowerCrusher> towerCrushers = new ConcurrentHashMap<>();
 	private Map<String, Map<String, AbstractPrivateProperty>> objects = new HashMap<>();
 
 	protected GameManagerProxy(GameManager gm)

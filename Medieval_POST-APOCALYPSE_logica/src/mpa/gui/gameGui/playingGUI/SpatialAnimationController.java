@@ -47,7 +47,7 @@ public class SpatialAnimationController implements AnimEventListener
 			else if (type.equals("minion"))
 				guiObjectManager.removeMinion(name);
 			else if (type.equals("towerCrusher"))
-				guiObjectManager.removeTower(name);;
+				guiObjectManager.removeTowerCrusher(name);
 		}
 		else if (animName.equals("attack") || animName.equals("attack1"))
 		{

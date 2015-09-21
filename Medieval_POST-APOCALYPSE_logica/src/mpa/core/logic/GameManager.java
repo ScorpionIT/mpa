@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
@@ -37,16 +38,16 @@ public class GameManager
 	private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 	private ReadLock readLock = lock.readLock();
 	private WriteLock writeLock = lock.writeLock();
-	private List<Minion> minionsAlive = new ArrayList<>();
-	private List<TowerCrusher> towerCrushers = new ArrayList<>();
+	private List<Minion> minionsAlive = new CopyOnWriteArrayList<>();
+	private List<TowerCrusher> towerCrushers = new CopyOnWriteArrayList<>();
 
 	private IDPool minionIDs;
 	private IDPool towerCrusherIDs;
 	private IDPool towerIDs;
 
-	private List<Player> deadPlayers = new ArrayList<>();
-	private List<Minion> deadMinions = new ArrayList<>();
-	private List<TowerCrusher> deadTowerCrushers = new ArrayList<>();
+	private List<Player> deadPlayers = new CopyOnWriteArrayList<Player>();
+	private List<Minion> deadMinions = new CopyOnWriteArrayList<>();
+	private List<TowerCrusher> deadTowerCrushers = new CopyOnWriteArrayList<>();
 
 	private static GameManager gameManager = null;
 
@@ -257,6 +258,25 @@ public class GameManager
 		}
 
 		deadPlayers.add(p);
+
+		for (Minion minion : minionsAlive)
+		{
+			if (minion.getBoss() == p)
+			{
+				deadMinions.add(minion);
+				minionsAlive.remove(minion);
+			}
+		}
+
+		for (TowerCrusher towerCrusher : towerCrushers)
+		{
+			if (towerCrusher.getBoss() == p)
+			{
+				deadTowerCrushers.add(towerCrusher);
+				towerCrushers.remove(towerCrusher);
+			}
+
+		}
 		writeLock.unlock();
 	}
 

@@ -64,8 +64,6 @@ public class NiftyController implements ScreenController
 			niftyHandler.setButtonPotionClicked(true);
 		}
 
-		// gameController.buyHPPotion(GuiObjectManager.getInstance().getPlayingPlayer());
-
 	}
 
 	public void onClickBuyMPPotion()
