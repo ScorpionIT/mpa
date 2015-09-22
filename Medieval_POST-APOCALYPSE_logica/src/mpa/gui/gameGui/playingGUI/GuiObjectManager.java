@@ -211,9 +211,7 @@ public class GuiObjectManager
 			case "CAVE":
 				gameGui.getAssetManager().registerLocator(modelsPath + GameProperties.getInstance().getModelName("cave") + ".zip", ZipLocator.class);
 				model = gameGui.getAssetManager().loadModel(GameProperties.getInstance().getModelName("cave") + ".mesh.xml");
-				System.out.println("prima dello scale + " + getModelBounds(model));
 				model.scale(MyMath.scaleFactor(getModelBounds(model), "cave"));
-				System.out.println("dopo dello scale + " + getModelBounds(model));
 				caves.put(ID, model);
 				break;
 			case "MINE":

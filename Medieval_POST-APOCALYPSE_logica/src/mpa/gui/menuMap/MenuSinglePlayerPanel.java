@@ -77,8 +77,6 @@ public class MenuSinglePlayerPanel extends JPanel
 		this.setSize(mainFrame.getWidth(), mainFrame.getHeight());
 		this.setLocation(0, 0);
 		this.setLayout(null);
-		// widthPanel = this.getWidth();
-		// heightPanel = this.getHeight();
 
 		xPanel = this.getWidth() * 15 / 100;
 		yPanel = this.getHeight() * 10 / 100;
@@ -102,7 +100,7 @@ public class MenuSinglePlayerPanel extends JPanel
 		createPlayButton();
 		try
 		{
-			backgroundImage = ImageIO.read(new File("Assets/BackgroundImages/background.jpg"));
+			backgroundImage = ImageIO.read(new File(GameProperties.getInstance().getPath("BackgroundImagesPath") + "/background.jpg"));
 			panelBackgroudImage = ImageIO.read(new File(GameProperties.getInstance().getPath("BackgroundImagesPath") + "/background1.jpg"));
 		} catch (IOException e1)
 		{
@@ -244,7 +242,7 @@ public class MenuSinglePlayerPanel extends JPanel
 		Font font = null;
 		try
 		{
-			font = Font.createFont(Font.PLAIN, new FileInputStream("./Assets/Fonts/KELMSCOT.TTF"));
+			font = Font.createFont(Font.PLAIN, new FileInputStream(GameProperties.getInstance().getPath("fontsPath") + "/KELMSCOT.TTF"));
 		} catch (FontFormatException | IOException e)
 		{
 			e.printStackTrace();

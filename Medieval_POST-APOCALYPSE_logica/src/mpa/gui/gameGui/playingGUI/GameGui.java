@@ -2,6 +2,7 @@ package mpa.gui.gameGui.playingGUI;
 
 import java.util.concurrent.locks.ReentrantLock;
 
+import mpa.core.util.GameProperties;
 import mpa.gui.gameGui.listener.GameGuiClickListener;
 import mpa.gui.gameGui.listener.GameGuiKeyActionListener;
 import mpa.gui.gameGui.listener.GameGuiMouseListener;
@@ -151,7 +152,7 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 		Geometry floor = new Geometry("the Floor", box);
 		floor.setLocalTranslation(worldDimension / 2, 0, worldDimension / 2);
 
-		assetManager.registerLocator("Assets/Textures/", FileLocator.class);
+		assetManager.registerLocator(GameProperties.getInstance().getPath("TexturePath"), FileLocator.class);
 		Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
 		Texture text1 = assetManager.loadTexture("grass-pattern.png");
 		floor.getMesh().scaleTextureCoordinates(new Vector2f(20, 20));

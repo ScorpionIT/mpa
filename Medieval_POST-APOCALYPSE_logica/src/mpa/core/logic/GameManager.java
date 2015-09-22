@@ -164,10 +164,6 @@ public class GameManager
 
 		List<Vector2f> computeRandomPointsCircumference = MyMath.computeRandomPointsCircumference(boss.getHeadquarter().getPosition(),
 				MyMath.distanceFloat(boss.getHeadquarter().getPosition(), boss.getHeadquarter().getGatheringPlace()), quantity);
-		// for( Vector2f vector2f : computeRandomPointsCircumference )
-		// {
-		// System.out.println( vector2f );
-		// }
 
 		for (int i = 0; i < quantity; i++)
 		{
@@ -349,12 +345,6 @@ public class GameManager
 
 			for (Player p : deadPlayers)
 			{
-				System.out.println("STO KILLANDO " + p.getName());
-				System.out.println("STO KILLANDO " + p.getName());
-				System.out.println("STO KILLANDO " + p.getName());
-				System.out.println("STO KILLANDO " + p.getName());
-				System.out.println("STO KILLANDO " + p.getName());
-				System.out.println("STO KILLANDO " + p.getName());
 				deads.add(p);
 
 			}
@@ -457,7 +447,6 @@ public class GameManager
 
 	List<AbstractCharacter> attackPhysically(Player attacker)
 	{
-		System.out.println("sto per attaccare");
 		return CombatManager.getInstance().attackPhysically(attacker);
 	}
 
@@ -478,7 +467,6 @@ public class GameManager
 
 	public void attackPhysically(Minion attacker)
 	{
-		System.out.println("sto per attaccare");
 		attackRequests.addRequest(attacker, attacker.getCurrentVector());
 	}
 
@@ -556,7 +544,6 @@ public class GameManager
 	void checkForTowerDamages()
 	{
 		writeLock.lock();
-		System.out.println("sono dopo il lock");
 		for (Tower t : towers)
 		{
 			List<AbstractCharacter> hitCharacters = t.attack();
@@ -584,7 +571,6 @@ public class GameManager
 			}
 		}
 		writeLock.unlock();
-		System.out.println("CI ARRIVO QUA?");
 	}
 
 	public Level getPlayerLevel(Player player)

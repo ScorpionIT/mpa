@@ -1,0 +1,33 @@
+<Map>
+	<Name>MarioSupreme</Name>
+	<Width>2000</Width>
+	<Height>2000</Height>
+	<Number>2</Number>
+	<Objects>
+		<Headquarters>
+			<Headquarter>442,376</Headquarter>
+			<Headquarter>1632,1559</Headquarter>
+		</Headquarters>
+		<Fields>
+			<Field>908,364</Field>
+			<Field>1098,364</Field>
+			<Field>905,573</Field>
+			<Field>1093,584</Field>
+			<Field>823,1481</Field>
+		</Fields>
+		<Caves>
+			<Cave>1523,626</Cave>
+			<Cave>1126,1295</Cave>
+			<Cave>105,562</Cave>
+			<Cave>753,908</Cave>
+		</Caves>
+		<Woods>
+			<Wood>279,1339</Wood>
+			<Wood>592,1259</Wood>
+			<Wood>575,1724</Wood>
+			<Wood>1778,1047</Wood>
+			<Wood>1191,1671</Wood>
+			<Wood>1364,1008</Wood>
+		</Woods>
+	</Objects>
+</Map>

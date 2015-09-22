@@ -3,6 +3,7 @@ package mpa.gui.gameGui.panel;
 import java.util.Map;
 import java.util.Set;
 
+import mpa.core.util.GameProperties;
 import mpa.gui.gameGui.listener.HandlerImplementation;
 import mpa.gui.gameGui.playingGUI.GameGui;
 import mpa.gui.gameGui.playingGUI.GuiObjectManager;
@@ -180,7 +181,7 @@ public class NiftyHandler
 								image(new ImageBuilder("#YouWLose")
 								{
 									{
-										filename("youLose.png");
+										filename("youLost.png");
 
 									}
 
@@ -218,11 +219,11 @@ public class NiftyHandler
 
 	private void initPanels(AssetManager assetManager)
 	{
-		assetManager.registerLocator("./Assets/BackgroundImages", FileLocator.class);
-		assetManager.registerLocator("./Assets/textImage", FileLocator.class);
+		assetManager.registerLocator(GameProperties.getInstance().getPath("backgroundImagesPath"), FileLocator.class);
+		assetManager.registerLocator(GameProperties.getInstance().getPath("textImagePath"), FileLocator.class);
 		selectionPanel = new SelectionPanel(gameGui.windowWidth(), gameGui.windowHeight());
 
-		assetManager.registerLocator("./Assets/iconResources", FileLocator.class);
+		assetManager.registerLocator(GameProperties.getInstance().getPath("IconResoucesPath"), FileLocator.class);
 
 		resourcesPanel = new ResourcesPanel();
 

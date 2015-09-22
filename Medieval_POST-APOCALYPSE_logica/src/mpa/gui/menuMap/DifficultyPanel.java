@@ -60,7 +60,7 @@ public class DifficultyPanel extends JPanel
 		};
 		try
 		{
-			backgroundImage = ImageIO.read(new File("Assets/BackgroundImages/difficultyPanel.png"));
+			backgroundImage = ImageIO.read(new File(GameProperties.getInstance().getPath("BackgroundImagesPath") + "/difficultyPanel.png"));
 		} catch (IOException e1)
 		{
 			e1.printStackTrace();

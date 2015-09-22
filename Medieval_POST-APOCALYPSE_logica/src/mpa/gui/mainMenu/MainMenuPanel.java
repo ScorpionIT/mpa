@@ -14,8 +14,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import mpa.core.util.GameProperties;
+import mpa.core.util.PlayerMusicThread;
 import mpa.gui.mapEditor.MainMapEditorPanel;
 import mpa.gui.menuMap.MenuSinglePlayerPanel;
+import mpa.gui.multiplayer.server.CreateServerMainPanel;
 
 public class MainMenuPanel extends JPanel
 {
@@ -26,9 +28,14 @@ public class MainMenuPanel extends JPanel
 	private JLabel multiPlayer;
 	private JLabel createServer;
 	private JLabel mapEditor;
-	private JLabel options;
+	private JLabel volume;
 	private JLabel quit;
+	private ImageIcon volumeON;
+	private ImageIcon volumeOFF;
 	private String textImagePath = GameProperties.getInstance().getPath("TextImagePath");
+	private PlayerMusicThread playerThread;
+
+	private JPanel createServerPanel = null;
 
 	public MainMenuPanel(int x, int y, int width, int height, final JFrame mainFrame)
 	{
@@ -38,9 +45,12 @@ public class MainMenuPanel extends JPanel
 		int yComponent = this.getHeight() / 4;
 		int xComponent;
 		setLayout(null);
+
+		playerThread = new PlayerMusicThread(GameProperties.getInstance().getPath("musicPath") + "/Canon in D by Pachelbel.wav");
+		playerThread.run();
 		try
 		{
-			backgroundImage = ImageIO.read(new File("Assets/BackgroundImages/backgroundMainPanel.jpg"));
+			backgroundImage = ImageIO.read(new File(GameProperties.getInstance().getPath("backgroundImagesPath") + "/backgroundMainPanel.jpg"));
 		} catch (IOException e1)
 		{
 			e1.printStackTrace();
@@ -58,29 +68,6 @@ public class MainMenuPanel extends JPanel
 			public void mouseReleased(MouseEvent e)
 			{
 				final JPanel menuSinglePlayerPanel = new MenuSinglePlayerPanel(MainMenuPanel.this, mainFrame);
-
-				JPanel panelConponent = new JPanel()
-				{
-
-					@Override
-					protected void paintComponent(Graphics g)
-					{
-
-						this.setBounds(0, 0, mainFrame.getWidth(), mainFrame.getHeight());
-						super.paintComponent(g);
-						Image background = null;
-						try
-						{
-							background = ImageIO.read(new File("Assets/BackgroundImages/background.jpg"));
-						} catch (IOException e)
-						{
-							// TODO Blocco catch generato automaticamente
-							e.printStackTrace();
-						}
-						g.drawImage(background, 0, 0, this.getWidth(), this.getHeight(), this);
-						this.add(menuSinglePlayerPanel);
-					}
-				};
 
 				mainFrame.setContentPane(menuSinglePlayerPanel);
 				mainFrame.getContentPane().setVisible(true);
@@ -128,7 +115,17 @@ public class MainMenuPanel extends JPanel
 			@Override
 			public void mouseReleased(MouseEvent e)
 			{
-				System.out.println("sono arrivatooooo");
+				if (createServerPanel == null)
+				{
+					createServerPanel = new CreateServerMainPanel(mainFrame.getX(), mainFrame.getY(), mainFrame.getWidth(), mainFrame.getHeight(),
+							mainFrame, MainMenuPanel.this);
+				}
+
+				mainFrame.setContentPane(createServerPanel);
+				mainFrame.getContentPane().setVisible(true);
+				mainFrame.setVisible(true);
+				createServerPanel.repaint();
+				mainFrame.setVisible(true);
 
 			}
 		});
@@ -158,12 +155,31 @@ public class MainMenuPanel extends JPanel
 
 		yComponent += yIncrement;
 
-		imageIcon = loadImageIcon("Options.png");
-		options = new JLabel(imageIcon);
+		volumeON = loadImageIcon("VolumeON.png");
+		volumeOFF = loadImageIcon("VolumeOFF.png");
+		volume = new JLabel(volumeON);
 		xComponent = this.getWidth() * 50 / 100 - imageIcon.getIconWidth() / 2;
-		options.setBounds(xComponent, yComponent, imageIcon.getIconWidth(), yIncrement);
-		options.setVisible(true);
-		add(options);
+		volume.setBounds(xComponent, yComponent, imageIcon.getIconWidth(), yIncrement);
+		volume.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mouseReleased(MouseEvent e)
+			{
+				if (volume.getIcon() == volumeON)
+				{
+					volume.setIcon(volumeOFF);
+					playerThread.stop();
+				}
+				else
+				{
+					volume.setIcon(volumeON);
+					playerThread.run();
+				}
+				volume.updateUI();
+			}
+		});
+		volume.setVisible(true);
+		add(volume);
 
 		yComponent += yIncrement;
 

@@ -19,7 +19,6 @@ public class FortificationState extends AIState
 	@Override
 	void action(OpponentAI opponentAI)
 	{
-		System.out.println("sono " + opponentAI.player.getName() + " e sto facendo bruttissimo nel fortification state");
 		if (gatheringPlace == null || !isWalking)
 		{
 			if (opponentAI.player.getHeadquarter().getNumberOfTowers() == 0)

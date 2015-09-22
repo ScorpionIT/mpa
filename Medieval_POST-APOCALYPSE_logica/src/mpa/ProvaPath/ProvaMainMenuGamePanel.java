@@ -131,7 +131,7 @@ public class ProvaMainMenuGamePanel extends MenuSinglePlayerPanel
 		this.add(buttonPlay);
 		try
 		{
-			backgroundImage = ImageIO.read(new File("Assets/BackgroundImages/mainMenu.jpg"));
+			backgroundImage = ImageIO.read(new File(GameProperties.getInstance().getPath("BackgroundImagesPath") + "/mainMenu.jpg"));
 		} catch (IOException e1)
 		{
 			e1.printStackTrace();

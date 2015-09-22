@@ -92,12 +92,10 @@ public class CombatManager
 				float distanceFloat = MyMath.distanceFloat(attacker.getX() + direction.x * attacker.getRangeOfPhysicallAttack(), attacker.getY()
 						+ direction.y * attacker.getRangeOfPhysicallAttack(), p.getX(), p.getY());
 
-				System.out.println("la distanza è " + distanceFloat);
 				p.getWriteLock();
 
 				float distanceFloat2 = MyMath.distanceFloat(attacker.getX(), attacker.getY(), p.getX(), p.getY());
 
-				System.out.println("distano " + distanceFloat2);
 				if (!(MyMath.distanceFloat(attacker.getX() + direction.x * attacker.getRangeOfPhysicallAttack(), attacker.getY() + direction.y
 						* attacker.getRangeOfPhysicallAttack(), p.getX(), p.getY()) <= 0 || distanceFloat2 < attacker.getRangeOfPhysicallAttack()))
 				{
@@ -108,7 +106,6 @@ public class CombatManager
 					p.stopMoving();
 					if (p.inflictDamage(attacker.getDamage()) && p instanceof Player)
 					{
-						System.out.println("è morto?");
 						deadPlayers.add(p);
 					}
 					else
@@ -173,11 +170,8 @@ public class CombatManager
 				float distanceFloat = MyMath.distanceFloat(attacker.getX() + direction.x * attacker.getRangeOfPhysicallAttack(), attacker.getY()
 						+ direction.y * attacker.getRangeOfPhysicallAttack(), p.getX(), p.getY());
 
-				System.out.println("la distanza è " + distanceFloat);
-
 				float distanceFloat2 = MyMath.distanceFloat(attacker.getX(), attacker.getY(), p.getX(), p.getY());
 
-				System.out.println("distano " + distanceFloat2);
 				if (!(MyMath.distanceFloat(attacker.getX() + direction.x * attacker.getRangeOfPhysicallAttack(), attacker.getY() + direction.y
 						* attacker.getRangeOfPhysicallAttack(), p.getX(), p.getY()) < 1 || distanceFloat2 < attacker.getRangeOfPhysicallAttack()))
 				{

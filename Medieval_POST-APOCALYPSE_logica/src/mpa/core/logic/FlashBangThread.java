@@ -10,10 +10,10 @@ public class FlashBangThread extends MyThread
 	private long startingTime;
 	private long residualTime;
 
-	public FlashBangThread( Player player, long timeToSleep )
+	public FlashBangThread(Player player, long timeToSleep)
 	{
 		super();
-		if( timeToSleep != -1 )
+		if (timeToSleep != -1)
 			timeToWake = timeToSleep;
 		else
 			timeToWake = STANDARD_TIME_TO_WAKE - 100 * player.getPlayerLevel().ordinal();
@@ -32,11 +32,10 @@ public class FlashBangThread extends MyThread
 		startingTime = System.currentTimeMillis();
 
 		residualTime = System.currentTimeMillis() - startingTime;
-		System.out.println( "TIME TO WAKE " + timeToWake );
-		while( residualTime < timeToWake )
+		while (residualTime < timeToWake)
 		{
-			System.out.println( residualTime + " " + isInterrupted() );
-			if( isInterrupted() )
+			System.out.println(residualTime + " " + isInterrupted());
+			if (isInterrupted())
 			{
 				return;
 			}
@@ -44,8 +43,7 @@ public class FlashBangThread extends MyThread
 		}
 
 		player.getWriteLock();
-		player.setFlashed( false );
-		System.out.println( "stiamo camminando? " + player.isFlashed() );
+		player.setFlashed(false);
 		player.leaveWriteLock();
 	}
 }

@@ -33,8 +33,6 @@ public class WorldFromMapInfo implements WorldCreator
 		{
 			Field field = new Field(position.getFirst(), position.getSecond(), null);
 			world.addObject(field);
-			System.out.println(field.width);
-			System.out.println(field.height);
 			field.setID(String.valueOf(fieldID++));
 		}
 		for (Pair<Float, Float> position : mapInfo.getMines())

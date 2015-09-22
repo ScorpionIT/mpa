@@ -44,7 +44,6 @@ public class MainMapEditorPanel extends JPanel
 
 	private boolean deleteMode = false;
 
-	// TODO creare un file proporties per le cartelle
 	private SubmitButtonEditorPanel submitButtonEditorPanel;
 	private JFrame mainFrame;
 	private MainMenuPanel mainMenuPanel;
@@ -147,8 +146,8 @@ public class MainMapEditorPanel extends JPanel
 		buttonsEditorPanel.setBounds(0, 0, this.getWidth() * 15 / 100, this.getHeight() * 5 / 100);
 		try
 		{
-			deleteCursor = ImageIO.read(new File("./Assets/iconPanel/deleteIcon.png")).getScaledInstance(this.getWidth() * 2 / 100,
-					this.getWidth() * 2 / 100, 0);
+			deleteCursor = ImageIO.read(new File(GameProperties.getInstance().getPath("PannelIconPath") + "/deleteIcon.png")).getScaledInstance(
+					this.getWidth() * 2 / 100, this.getWidth() * 2 / 100, 0);
 		} catch (IOException e)
 		{
 			e.printStackTrace();
@@ -168,7 +167,7 @@ public class MainMapEditorPanel extends JPanel
 	private void addIconMapEditorPanel()
 	{
 		iconMapEditorPanel.setBounds(0, this.buttonsEditorPanel.getHeight() + this.settingsMapEditorPanel.getHeight(), this.getWidth() * 15 / 100,
-				this.getHeight() - this.buttonsEditorPanel.getHeight() - this.settingsMapEditorPanel.getHeight() - this.getHeight() * 5 / 100);
+				this.getHeight() - this.buttonsEditorPanel.getHeight() - this.settingsMapEditorPanel.getHeight() - this.getHeight() * 10 / 100);
 		IconMotion iconMotion = new IconMotion(this);
 
 		iconMapEditorPanel.getIconPanel().addMouseListener(iconMotion);
