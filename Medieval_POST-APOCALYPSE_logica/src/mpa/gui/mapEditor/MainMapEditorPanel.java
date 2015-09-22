@@ -281,12 +281,11 @@ public class MainMapEditorPanel extends JPanel
 
 	public void backButton()
 	{
-
-		mainFrame.getContentPane().remove(this);
-		mainFrame.getContentPane().add(mainMenuPanel);
-		mainFrame.getContentPane().repaint();
+		mainFrame.setContentPane(mainMenuPanel);
+		mainFrame.getContentPane().setVisible(true);
 		mainFrame.setVisible(true);
 		mainMenuPanel.repaint();
+		mainFrame.setVisible(true);
 	}
 
 }

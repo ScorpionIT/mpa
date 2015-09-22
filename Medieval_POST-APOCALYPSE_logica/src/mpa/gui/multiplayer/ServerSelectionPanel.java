@@ -103,10 +103,11 @@ public class ServerSelectionPanel extends JPanel
 			public void mouseReleased(MouseEvent e)
 			{
 
-				ServerSelectionPanel.this.mainFrame.getContentPane().removeAll();
-				ServerSelectionPanel.this.mainFrame.getContentPane().add(ServerSelectionPanel.this.mainMenuPanel);
-				ServerSelectionPanel.this.mainFrame.setVisible(true);
-				ServerSelectionPanel.this.mainMenuPanel.repaint();
+				mainFrame.setContentPane(mainMenuPanel);
+				mainFrame.getContentPane().setVisible(true);
+				mainFrame.setVisible(true);
+				mainMenuPanel.repaint();
+				mainFrame.setVisible(true);
 
 			}
 		});

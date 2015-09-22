@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
@@ -48,6 +49,11 @@ public class GameManager
 	private List<Player> deadPlayers = new CopyOnWriteArrayList<Player>();
 	private List<Minion> deadMinions = new CopyOnWriteArrayList<>();
 	private List<TowerCrusher> deadTowerCrushers = new CopyOnWriteArrayList<>();
+
+	private Map<Player, Integer> numberOfMinions = new ConcurrentHashMap<>();
+	private Map<Player, Integer> numberOfTowerCrushers = new ConcurrentHashMap<>();
+	private final int MAX_NUMBER_MINIONS_FOR_PLAYER = 5;
+	private final int MAX_NUMBER_TOWER_CRUSHERS_FOR_PLAYER = 2;
 
 	private static GameManager gameManager = null;
 
@@ -120,6 +126,8 @@ public class GameManager
 	public void addPlayer(Player player)
 	{
 		players.add(player);
+		numberOfMinions.put(player, 0);
+		numberOfTowerCrushers.put(player, 0);
 	}
 
 	public void addAIPlayer(Player player)
@@ -137,6 +145,14 @@ public class GameManager
 		if (boss == null)
 		{
 			return minions;
+		}
+		if (numberOfMinions.get(boss) == MAX_NUMBER_MINIONS_FOR_PLAYER)
+		{
+			return minions;
+		}
+		if (numberOfMinions.get(boss) + quantity > MAX_NUMBER_MINIONS_FOR_PLAYER)
+		{
+			quantity = MAX_NUMBER_MINIONS_FOR_PLAYER - numberOfMinions.get(boss);
 		}
 		Map<String, Integer> required = new HashMap<String, Integer>();
 		Map<String, Integer> prices = GameProperties.getInstance().getPrices("minion");
@@ -159,18 +175,25 @@ public class GameManager
 			minions.add(createdMinion);
 			minionsAlive.add(createdMinion);
 		}
+		numberOfMinions.put(boss, numberOfMinions.get(boss) + quantity);
 
 		return minions;
 	}
 
 	public List<TowerCrusher> createTowerCrushers(Player boss, Tower target)
 	{
+
 		List<TowerCrusher> towerCrushers = new ArrayList<>();
+		if (numberOfTowerCrushers.get(boss) == MAX_NUMBER_TOWER_CRUSHERS_FOR_PLAYER)
+		{
+			return towerCrushers;
+		}
 		if (!boss.hasEnoughResources(GameProperties.getInstance().getPrices("towercrusher")))
 			return towerCrushers;
 		TowerCrusher createTowerCrusher = boss.createTowerCrusher(target, towerCrusherIDs.getID());
 		this.towerCrushers.add(createTowerCrusher);
 		towerCrushers.add(createTowerCrusher);
+		numberOfMinions.put(boss, numberOfTowerCrushers.get(boss) + 1);
 
 		return towerCrushers;
 	}

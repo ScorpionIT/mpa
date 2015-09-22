@@ -57,8 +57,7 @@ public class MainMenuPanel extends JPanel
 			@Override
 			public void mouseReleased(MouseEvent e)
 			{
-				final JPanel menuSinglePlayerPanel = new MenuSinglePlayerPanel(mainFrame.getWidth() * 15 / 100, mainFrame.getHeight() * 10 / 100,
-						mainFrame.getWidth() * 70 / 100, mainFrame.getHeight() * 80 / 100, MainMenuPanel.this, mainFrame);
+				final JPanel menuSinglePlayerPanel = new MenuSinglePlayerPanel(MainMenuPanel.this, mainFrame);
 
 				JPanel panelConponent = new JPanel()
 				{
@@ -83,8 +82,7 @@ public class MainMenuPanel extends JPanel
 					}
 				};
 
-				mainFrame.getContentPane().removeAll();
-				mainFrame.getContentPane().add(panelConponent);
+				mainFrame.setContentPane(menuSinglePlayerPanel);
 				mainFrame.getContentPane().setVisible(true);
 				mainFrame.setVisible(true);
 				menuSinglePlayerPanel.repaint();
@@ -107,8 +105,7 @@ public class MainMenuPanel extends JPanel
 			{
 				JPanel serverSelectionPanel = new mpa.gui.multiplayer.ServerSelectionPanel(mainFrame, MainMenuPanel.this);
 
-				mainFrame.getContentPane().removeAll();
-				mainFrame.getContentPane().add(serverSelectionPanel);
+				mainFrame.setContentPane(serverSelectionPanel);
 				mainFrame.getContentPane().setVisible(true);
 				mainFrame.setVisible(true);
 				serverSelectionPanel.repaint();
@@ -131,6 +128,7 @@ public class MainMenuPanel extends JPanel
 			@Override
 			public void mouseReleased(MouseEvent e)
 			{
+				System.out.println("sono arrivatooooo");
 
 			}
 		});
@@ -149,10 +147,11 @@ public class MainMenuPanel extends JPanel
 			public void mouseReleased(MouseEvent e)
 			{
 				MainMapEditorPanel mainMapEditorPanel = new MainMapEditorPanel(MainMenuPanel.this, mainFrame);
-				mainFrame.getContentPane().add(mainMapEditorPanel);
+				mainFrame.setContentPane(mainMapEditorPanel);
 				mainFrame.getContentPane().setVisible(true);
 				mainFrame.setVisible(true);
 				mainMapEditorPanel.repaint();
+				mainFrame.setVisible(true);
 			}
 		});
 		add(mapEditor);
@@ -223,7 +222,7 @@ public class MainMenuPanel extends JPanel
 		frame.setSize(screenWidth, screenHeight);
 
 		MainMenuPanel mainMenuPanel = new MainMenuPanel(0, 0, screenWidth, screenHeight, frame);
-		frame.add(mainMenuPanel);
+		frame.setContentPane(mainMenuPanel);
 		frame.setVisible(true);
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

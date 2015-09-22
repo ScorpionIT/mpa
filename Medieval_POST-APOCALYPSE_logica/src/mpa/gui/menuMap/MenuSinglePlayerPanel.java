@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -50,30 +51,39 @@ public class MenuSinglePlayerPanel extends JPanel
 	private JLabel buttonPlay;
 	private Image backgroundImage;
 	private int selectedHQIndex = 0;
-	int screenWidth;
-	int screenHeight;
-	DifficultyLevel difficultyLevelSelected = null;
+
+	private DifficultyLevel difficultyLevelSelected = null;
 	private String textImagePath = GameProperties.getInstance().getPath("TextImagePath");
 
 	private JLabel backButton = null;
 	private JFrame mainFrame;
 	private JPanel mainMenuPanel;
+	private int xPanel;
+	private int yPanel;
+	private int widthPanel;
+	private int heightPanel;
+	private BufferedImage panelBackgroudImage;
 
 	public MenuSinglePlayerPanel()
 	{
 		// TODO Stub di costruttore generato automaticamente
 	}
 
-	public MenuSinglePlayerPanel(int x, int y, int width, int height, JPanel mainMenuPanel, JFrame mainFrame)
+	public MenuSinglePlayerPanel(JPanel mainMenuPanel, JFrame mainFrame)
 	{
 
 		this.mainMenuPanel = mainMenuPanel;
 		this.mainFrame = mainFrame;
-		this.setSize(width, height);
-		this.setLocation(x, y);
+		this.setSize(mainFrame.getWidth(), mainFrame.getHeight());
+		this.setLocation(0, 0);
 		this.setLayout(null);
-		screenWidth = this.getWidth();
-		screenHeight = this.getHeight();
+		// widthPanel = this.getWidth();
+		// heightPanel = this.getHeight();
+
+		xPanel = this.getWidth() * 15 / 100;
+		yPanel = this.getHeight() * 10 / 100;
+		widthPanel = this.getWidth() * 70 / 100;
+		heightPanel = this.getHeight() * 80 / 100;
 
 		mapPreview = new MapPreview(this);
 		addMapPreviewPanel();
@@ -92,7 +102,8 @@ public class MenuSinglePlayerPanel extends JPanel
 		createPlayButton();
 		try
 		{
-			backgroundImage = ImageIO.read(new File("Assets/BackgroundImages/background1.jpg"));
+			backgroundImage = ImageIO.read(new File("Assets/BackgroundImages/background.jpg"));
+			panelBackgroudImage = ImageIO.read(new File(GameProperties.getInstance().getPath("BackgroundImagesPath") + "/background1.jpg"));
 		} catch (IOException e1)
 		{
 			e1.printStackTrace();
@@ -112,7 +123,7 @@ public class MenuSinglePlayerPanel extends JPanel
 			// TODO Blocco catch generato automaticamente
 			e2.printStackTrace();
 		}
-		buttonPlay.setBounds(this.getWidth() - imagePlay.getWidth(this) - imagePlay.getWidth(this) / 4, 52 + screenHeight * 80 / 100,
+		buttonPlay.setBounds(xPanel + widthPanel - imagePlay.getWidth(this) - imagePlay.getWidth(this) / 2, yPanel + heightPanel * 90 / 100,
 				imagePlay.getWidth(this), imagePlay.getHeight(this));
 
 		addPlayButtonListener();
@@ -208,17 +219,18 @@ public class MenuSinglePlayerPanel extends JPanel
 		{
 			e2.printStackTrace();
 		}
-		backButton.setBounds(50, 52 + screenHeight * 80 / 100, imageBack.getWidth(this), imageBack.getHeight(this));
+		backButton.setBounds(xPanel + imageBack.getWidth(this), yPanel + heightPanel * 90 / 100, imageBack.getWidth(this), imageBack.getHeight(this));
 		backButton.addMouseListener(new MouseAdapter()
 		{
 			@Override
 			public void mouseReleased(MouseEvent e)
 			{
 
-				MenuSinglePlayerPanel.this.mainFrame.getContentPane().removeAll();
-				MenuSinglePlayerPanel.this.mainFrame.getContentPane().add(MenuSinglePlayerPanel.this.mainMenuPanel);
-				MenuSinglePlayerPanel.this.mainFrame.setVisible(true);
-				MenuSinglePlayerPanel.this.mainMenuPanel.repaint();
+				mainFrame.setContentPane(mainMenuPanel);
+				mainFrame.getContentPane().setVisible(true);
+				mainFrame.setVisible(true);
+				mainMenuPanel.repaint();
+				mainFrame.setVisible(true);
 
 			}
 		});
@@ -284,28 +296,29 @@ public class MenuSinglePlayerPanel extends JPanel
 
 	protected void addMapPreviewPanel()
 	{
-		mapPreview.setBounds(screenWidth * 55 / 100, 30, screenWidth * 45 / 100 - 30, screenHeight * 55 / 100);
+		mapPreview.setBounds(xPanel + widthPanel * 55 / 100, yPanel + 30, widthPanel * 45 / 100 - 30, heightPanel * 55 / 100);
 		mapPreview.repaint();
 		this.add(mapPreview);
 	}
 
 	protected void addMapListPanel()
 	{
-		mapListPanel.setBounds(screenWidth * 80 / 100, 50 + screenHeight * 60 / 100, screenWidth * 19 / 100 + 5, screenHeight * 20 / 100);
+		mapListPanel.setBounds(xPanel + widthPanel * 80 / 100, yPanel + 50 + heightPanel * 60 / 100, widthPanel * 19 / 100 + 5,
+				heightPanel * 20 / 100);
 		System.out.println(mapListPanel.getBounds());
 		this.add(mapListPanel);
 	}
 
 	protected void addInputNamePanel()
 	{
-		inputNamePanel.setBounds(40, 50, screenWidth * 50 / 100, screenHeight * 30 / 100);
+		inputNamePanel.setBounds(xPanel + 40, yPanel + 50, widthPanel * 50 / 100, heightPanel * 30 / 100);
 		inputNamePanel.setOpaque(false);
 		this.add(inputNamePanel);
 	}
 
 	protected void addDifficultyPanel()
 	{
-		difficultyPanel.setBounds(40, screenHeight * 60 / 100, screenWidth * 45 / 100, screenHeight * 25 / 100);
+		difficultyPanel.setBounds(xPanel + 40, yPanel + heightPanel * 60 / 100, widthPanel * 45 / 100, heightPanel * 25 / 100);
 		this.repaint();
 		this.add(difficultyPanel);
 	}
@@ -314,7 +327,8 @@ public class MenuSinglePlayerPanel extends JPanel
 	protected void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
-		g.drawImage(backgroundImage, 0, 0, screenWidth, screenHeight, this);
+		g.drawImage(backgroundImage, getX(), getY(), getWidth(), getHeight(), this);
+		g.drawImage(panelBackgroudImage, xPanel, yPanel, widthPanel, heightPanel, this);
 	}
 
 }
