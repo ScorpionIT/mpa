@@ -44,8 +44,9 @@ public class UpdateInfoHandler extends ProcessingChain
 			for( String tower : towers.keySet() )
 			{
 				Vector2f position = towers.get( tower );
+				String life = String.valueOf( GameManagerProxy.getInstance().getLifeTower( tower ) );
 				message.add( tower + ":" + String.valueOf( position.x ) + ","
-						+ String.valueOf( position.y ) );
+						+ String.valueOf( position.y ) + ":" + life );
 			}
 
 			message.add( new String( "PlayerAttacks:" ) );

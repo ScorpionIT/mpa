@@ -25,15 +25,19 @@ public class MultiPlayerController extends HandlerImplementation
 	public MultiPlayerController( Socket socket )
 	{
 		this.socket = socket;
-		try
+		boolean isOk = true;
+		do
 		{
-			outToServer = new DataOutputStream( socket.getOutputStream() );
-			inFromServer = new BufferedReader( new InputStreamReader( socket.getInputStream() ) );
-		} catch( IOException e )
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			try
+			{
+				outToServer = new DataOutputStream( socket.getOutputStream() );
+				inFromServer = new BufferedReader( new InputStreamReader( socket.getInputStream() ) );
+				isOk = true;
+			} catch( IOException e )
+			{
+				isOk = false;
+			}
+		} while( !isOk );
 	}
 
 	@Override
@@ -193,7 +197,7 @@ public class MultiPlayerController extends HandlerImplementation
 	@Override
 	public boolean createTower( String property )
 	{
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 
@@ -234,14 +238,9 @@ public class MultiPlayerController extends HandlerImplementation
 		List<String> deadMinions = new ArrayList<>();
 		List<String> deadPlayers = new ArrayList<>();
 		List<String> deadTowerCrushers = new ArrayList<>();
-		Map<String, javax.vecmath.Vector2f> towers = new HashMap<>();
 		List<String> attackingPlayers = new ArrayList<>();
 		List<String> attackingMinions = new ArrayList<>();
 		List<String> attackingTowerCrushers = new ArrayList<>();
-		Map<String, javax.vecmath.Vector2f[]> playersPositions = new HashMap<>();
-
-		Map<String, javax.vecmath.Vector2f[]> minionsPositions = new HashMap<>();
-		Map<String, javax.vecmath.Vector2f[]> towerCrusherPositions = new HashMap<>();
 
 		for( String m : deadMinions )
 			GuiObjectManager.getInstance().killMinion( m );
@@ -253,17 +252,164 @@ public class MultiPlayerController extends HandlerImplementation
 		try
 		{
 			String message = inFromServer.readLine();
+			int state = 0; // 0 deadM 1 deadP 2 deadTC 3 Towers 4 AttackingP 5 AttackingM 6
+							// AttackingT 7 PlayerPosition 8 MinionPosition 9 TowerCrusherPosition
+			while( !message.equals( "EndOfInfo." ) )
+			{
+				if( state == 0 )
+				{
+					if( message.equals( "DeadPlayers:" ) )
+					{
+						state++;
+						for( String minion : deadMinions )
+							GuiObjectManager.getInstance().killMinion( minion );
+					}
+					else if( !message.equals( "DeadMinions:" ) )
+					{
+						deadMinions.add( message );
+					}
+
+				}
+				else if( state == 1 )
+				{
+					if( message.equals( "DeadTowerCrushers:" ) )
+					{
+						state++;
+						for( String player : deadPlayers )
+							GuiObjectManager.getInstance().killPlayer( player );
+					}
+					else if( !message.equals( "DeadPlayers:" ) )
+					{
+						deadPlayers.add( message );
+					}
+				}
+				else if( state == 2 )
+				{
+					if( message.equals( "Towers:" ) )
+					{
+						state++;
+						for( String tC : deadTowerCrushers )
+							GuiObjectManager.getInstance().killTowerCrusher( tC );
+					}
+					else if( !message.equals( "DeadTowerCrushers:" ) )
+					{
+						deadTowerCrushers.add( message );
+					}
+				}
+				else if( state == 3 )
+				{
+					if( message.equals( "PlayerAttacks:" ) )
+					{
+						state++;
+					}
+					else if( !message.equals( "Towers:" ) )
+					{
+						String[] strings = message.split( ":" );
+						String[] positions = strings[1].split( "," );
+						GuiObjectManager.getInstance().updateTower(
+								new javax.vecmath.Vector2f( Float.parseFloat( positions[0] ),
+										Float.parseFloat( positions[1] ) ), strings[0],
+								Integer.parseInt( strings[2] ) );
+					}
+				}
+				else if( state == 4 )
+				{
+					if( message.equals( "MinionAttacks:" ) )
+					{
+						state++;
+						for( String player : attackingPlayers )
+							GuiObjectManager.getInstance().startPlayerAttackAnimation( player );
+					}
+					else if( !message.equals( "PlayerAttacks:" ) )
+						attackingPlayers.add( message );
+				}
+				else if( state == 5 )
+				{
+					if( message.equals( "TowerCrusherAttacks:" ) )
+					{
+						state++;
+						for( String minion : attackingMinions )
+							GuiObjectManager.getInstance().startMinionAttackAnimation( minion );
+					}
+					else if( !message.equals( "MinionAttacks:" ) )
+						attackingMinions.add( message );
+				}
+				else if( state == 6 )
+				{
+					if( message.equals( "PlayersPositions:" ) )
+					{
+						state++;
+						for( String tC : attackingTowerCrushers )
+							GuiObjectManager.getInstance().startTowerCrusherAttackAnimation( tC );
+					}
+					else if( !message.equals( "TowerCrusherAttacks:" ) )
+						attackingMinions.add( message );
+				}
+				else if( state == 7 )
+				{
+					if( message.equals( "MinionsPositions:" ) )
+						state++;
+					else if( !message.equals( "PlayersPositions:" ) )
+					{
+						String[] fields = message.split( ":" );
+						boolean isMoving = fields[1].equals( "true" );
+						int hp = Integer.parseInt( fields[2] );
+						String[] position = fields[3].split( "," );
+						String[] lookAt = fields[4].split( "," );
+						GuiObjectManager.getInstance().updatePlayerPosition(
+								fields[0],
+								new javax.vecmath.Vector2f( Float.parseFloat( position[0] ), Float
+										.parseFloat( position[1] ) ),
+								new javax.vecmath.Vector2f( Float.parseFloat( lookAt[0] ), Float
+										.parseFloat( lookAt[1] ) ), isMoving, hp );
+					}
+				}
+				else if( state == 8 )
+				{
+					if( message.equals( "TowerCrushersPositions:" ) )
+						state++;
+					else if( !message.equals( "MinionsPositions:" ) )
+					{
+						String[] fields = message.split( ":" );
+						boolean isMoving = fields[3].equals( "true" );
+						String[] position = fields[1].split( "," );
+						String[] lookAt = fields[2].split( "," );
+						GuiObjectManager.getInstance().updateMinionPosition(
+								fields[0],
+								new javax.vecmath.Vector2f( Float.parseFloat( position[0] ), Float
+										.parseFloat( position[1] ) ),
+								new javax.vecmath.Vector2f( Float.parseFloat( lookAt[0] ), Float
+										.parseFloat( lookAt[1] ) ), isMoving, fields[4] );
+					}
+				}
+				else if( state == 9 )
+				{
+					if( !message.equals( "TowerCrushersPositions:" ) )
+					{
+						String[] fields = message.split( ":" );
+						boolean isMoving = fields[3].equals( "true" );
+						int hp = Integer.parseInt( fields[5] );
+						String[] position = fields[1].split( "," );
+						String[] lookAt = fields[2].split( "," );
+						GuiObjectManager.getInstance().updateTowerCrusherPosition(
+								fields[0],
+								new javax.vecmath.Vector2f( Float.parseFloat( position[0] ), Float
+										.parseFloat( position[1] ) ),
+								new javax.vecmath.Vector2f( Float.parseFloat( lookAt[0] ), Float
+										.parseFloat( lookAt[1] ) ), isMoving, fields[4], hp );
+					}
+				}
+
+				message = inFromServer.readLine();
+
+			}
 		} catch( IOException e )
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		{}
 	}
 
 	@Override
 	public void createStateInformation()
 	{
-		// TODO Auto-generated method stub
 
 	}
 
@@ -407,7 +553,7 @@ public class MultiPlayerController extends HandlerImplementation
 	@Override
 	public void computePath( Vector2f click, String playerName )
 	{
-		// TODO Stub di metodo generato automaticamente
+		// NOT TO DO
 
 	}
 
@@ -747,7 +893,6 @@ public class MultiPlayerController extends HandlerImplementation
 	@Override
 	public boolean upgradeLevel( String playingPlayer )
 	{
-		// TODO Stub di metodo generato automaticamente
 		return false;
 	}
 
