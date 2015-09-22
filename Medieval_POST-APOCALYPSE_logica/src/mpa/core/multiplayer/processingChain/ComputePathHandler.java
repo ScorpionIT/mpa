@@ -5,7 +5,7 @@ import mpa.core.logic.GameManagerProxy;
 public class ComputePathHandler extends ProcessingChain
 {
 
-	protected ComputePathHandler( ProcessingChain next )
+	public ComputePathHandler( ProcessingChain next )
 	{
 		super( next );
 	}
