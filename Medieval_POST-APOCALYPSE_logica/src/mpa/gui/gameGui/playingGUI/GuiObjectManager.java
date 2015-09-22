@@ -433,6 +433,7 @@ public class GuiObjectManager
 			SpatialAnimationController spatialAnimationController = animationControllerSpatial.get(players.get(name));
 			if (spatialAnimationController != null)
 			{
+				spatialsLifeBars.get(players.get(name)).setLife(0);
 				if (!spatialAnimationController.startDeathAnimation())
 				{
 					removePlayer(name);
