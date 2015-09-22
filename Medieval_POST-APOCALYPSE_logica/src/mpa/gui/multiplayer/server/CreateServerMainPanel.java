@@ -32,10 +32,13 @@ public class CreateServerMainPanel extends JPanel
 	private MapInfo mapInfo = new MapInfo();
 	private WelcomeServer welcomeServer;
 	private String map;
+	private JPanel parent;
 
-	public CreateServerMainPanel( int x, int y, int width, int height, final JFrame mainFrame )
+	public CreateServerMainPanel( int x, int y, int width, int height, final JFrame mainFrame,
+			JPanel parent )
 	{
 		this.mainFrame = mainFrame;
+		this.parent = parent;
 		mapPreview = new MapPreview( this );
 		mapPreview.setBounds( 25 * width / 100, 10 * height / 100, 50 * width / 100,
 				50 * height / 100 );
@@ -53,6 +56,15 @@ public class CreateServerMainPanel extends JPanel
 			};
 		} );
 
+		backButton.addMouseListener( new MouseAdapter()
+		{
+			public void mouseReleased( java.awt.event.MouseEvent e )
+			{
+				CreateServerMainPanel.this.mainFrame
+						.setContentPane( CreateServerMainPanel.this.parent );
+			};
+		} );
+
 	}
 
 	public void setMap( String mapName )
@@ -67,8 +79,6 @@ public class CreateServerMainPanel extends JPanel
 			JOptionPane.showMessageDialog( this,
 					"Sorry but this map seems to be lost or damaged :(", "MAP ERROR",
 					JOptionPane.ERROR_MESSAGE );
-
-			// TODO rimuovere la mappa danneggiata (o persa) dalla lista!!!!!
 		}
 		mapInfo = worldLoader.getMapInfo();
 		( ( MapPreview ) mapPreview ).setMapDimension( mapInfo.getWidth(), mapInfo.getHeight() );

@@ -9,7 +9,7 @@ import mpa.core.logic.GameManagerProxy;
 public class PlayerActionHandler extends ProcessingChain
 {
 
-	protected PlayerActionHandler( ProcessingChain next )
+	public PlayerActionHandler( ProcessingChain next )
 	{
 		super( next );
 	}

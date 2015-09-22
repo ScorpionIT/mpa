@@ -5,8 +5,10 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,10 +19,21 @@ import com.jme3.math.Vector2f;
 public class MultiPlayerController extends HandlerImplementation
 {
 	private Socket socket;
+	private DataOutputStream outToServer;
+	private BufferedReader inFromServer;
 
 	public MultiPlayerController( Socket socket )
 	{
 		this.socket = socket;
+		try
+		{
+			outToServer = new DataOutputStream( socket.getOutputStream() );
+			inFromServer = new BufferedReader( new InputStreamReader( socket.getInputStream() ) );
+		} catch( IOException e )
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -39,9 +52,9 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				// DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
+				// BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
+				// socket.getInputStream() ) );
 
 				outToServer.writeBytes( "getPlayerResourcesAmount" + '\n' );
 
@@ -88,9 +101,9 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				// DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
+				// BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
+				// socket.getInputStream() ) );
 
 				outToServer.writeBytes( "PickedObject" + String.valueOf( click.x ) + ","
 						+ String.valueOf( click.y ) + '\n' );
@@ -113,7 +126,7 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
+				// DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
 				outToServer.writeBytes( "ChangeItem:"
 						+ GuiObjectManager.getInstance().getPlayingPlayer() + ":" + item + '\n' );
 				isOk = true;
@@ -133,7 +146,7 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
+				// DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
 				outToServer.writeBytes( "Do:" + GuiObjectManager.getInstance().getPlayingPlayer()
 						+ ":" + String.valueOf( direction.x ) + "," + String.valueOf( direction.y )
 						+ '\n' );
@@ -155,7 +168,7 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
+				// DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
 				outToServer
 						.writeBytes( "Occupy:" + GuiObjectManager.getInstance().getPlayingPlayer()
 								+ ":" + property + '\n' );
@@ -194,12 +207,12 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
+				// DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
 				outToServer.writeBytes( "Bless:" + "Minions" + boss + ":"
 						+ String.valueOf( quantity ) + ":" + target + '\n' );
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				// BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
+				// socket.getInputStream() ) );
 
 				reply = inFromServer.readLine();
 				isOk = true;
@@ -218,8 +231,33 @@ public class MultiPlayerController extends HandlerImplementation
 	@Override
 	public void updateInformation()
 	{
-		// TODO Auto-generated method stub
+		List<String> deadMinions = new ArrayList<>();
+		List<String> deadPlayers = new ArrayList<>();
+		List<String> deadTowerCrushers = new ArrayList<>();
+		Map<String, javax.vecmath.Vector2f> towers = new HashMap<>();
+		List<String> attackingPlayers = new ArrayList<>();
+		List<String> attackingMinions = new ArrayList<>();
+		List<String> attackingTowerCrushers = new ArrayList<>();
+		Map<String, javax.vecmath.Vector2f[]> playersPositions = new HashMap<>();
 
+		Map<String, javax.vecmath.Vector2f[]> minionsPositions = new HashMap<>();
+		Map<String, javax.vecmath.Vector2f[]> towerCrusherPositions = new HashMap<>();
+
+		for( String m : deadMinions )
+			GuiObjectManager.getInstance().killMinion( m );
+		for( String p : deadPlayers )
+			GuiObjectManager.getInstance().killPlayer( p );
+		for( String towerCrusherID : deadTowerCrushers )
+			GuiObjectManager.getInstance().killTowerCrusher( towerCrusherID );
+
+		try
+		{
+			String message = inFromServer.readLine();
+		} catch( IOException e )
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -237,7 +275,7 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
+				// DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
 				outToServer.writeBytes( "GoThere:"
 						+ GuiObjectManager.getInstance().getPlayingPlayer() + ":"
 						+ String.valueOf( click.x ) + "," + String.valueOf( click.y ) + '\n' );
@@ -259,7 +297,7 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
+				// DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
 				outToServer.writeBytes( "InfoOn:" + "OWNER:" + objectType + "," + objectID + '\n' );
 
 				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
@@ -286,7 +324,7 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
+				// DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
 				outToServer.writeBytes( "InfoOn:" + "PRODUCTIVITY:" + objectType + "," + objectID
 						+ '\n' );
 
@@ -314,11 +352,11 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
+				// DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
 				outToServer.writeBytes( "PlayerInfo:" + playerName + ":" + "MP" + '\n' );
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				// BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
+				// socket.getInputStream() ) );
 
 				String message = inFromServer.readLine();
 
@@ -348,11 +386,11 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
+				// DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
 				outToServer.writeBytes( "PlayersNames" + '\n' );
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				// BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
+				// socket.getInputStream() ) );
 
 				reply = Integer.parseInt( inFromServer.readLine() );
 				isOk = true;
@@ -382,11 +420,11 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
+				// DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
 				outToServer.writeBytes( "PlayerInfo:" + player + ":" + "LEVEL" + '\n' );
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				// BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
+				// socket.getInputStream() ) );
 
 				reply = inFromServer.readLine();
 				isOk = true;
@@ -409,11 +447,11 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
+				// DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
 				outToServer.writeBytes( "PlayerInfo:" + player + ":" + "HP" + '\n' );
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				// BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
+				// socket.getInputStream() ) );
 
 				reply = Integer.parseInt( inFromServer.readLine() );
 				isOk = true;
@@ -437,11 +475,11 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
+				// DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
 				outToServer.writeBytes( "PlayerInfo:" + player + ":" + "MP" + '\n' );
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				// BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
+				// socket.getInputStream() ) );
 
 				reply = Integer.parseInt( inFromServer.readLine() );
 				isOk = true;
@@ -464,11 +502,11 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
+				// DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
 				outToServer.writeBytes( "PlayersNames" + '\n' );
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				// BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
+				// socket.getInputStream() ) );
 
 				String message = inFromServer.readLine();
 
@@ -498,12 +536,12 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
+				// DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
 				outToServer.writeBytes( "Bless:" + "TowerCrusher" + boss + ":" + ":" + target
 						+ '\n' );
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				// BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
+				// socket.getInputStream() ) );
 
 				reply = inFromServer.readLine();
 				isOk = true;
@@ -528,11 +566,11 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
+				// DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
 				outToServer.writeBytes( "Buy:" + playerName + ":" + "HP" + '\n' );
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				// BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
+				// socket.getInputStream() ) );
 
 				reply = inFromServer.readLine();
 				isOk = true;
@@ -558,11 +596,11 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
+				// DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
 				outToServer.writeBytes( "Buy:" + playerName + ":" + "MP" + '\n' );
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				// BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
+				// socket.getInputStream() ) );
 
 				reply = inFromServer.readLine();
 				isOk = true;
@@ -588,11 +626,11 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
+				// DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
 				outToServer.writeBytes( "Buy:" + playerName + ":" + "GRANADE" + '\n' );
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				// BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
+				// socket.getInputStream() ) );
 
 				reply = inFromServer.readLine();
 				isOk = true;
@@ -618,11 +656,11 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
+				// DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
 				outToServer.writeBytes( "GetPotionAmount:" + playerName + ":" + "HP" + '\n' );
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				// BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
+				// socket.getInputStream() ) );
 
 				reply = Integer.parseInt( inFromServer.readLine() );
 				isOk = true;
@@ -645,11 +683,11 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
+				// DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
 				outToServer.writeBytes( "GetPotionAmount:" + playerName + ":" + "MP" + '\n' );
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				// BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
+				// socket.getInputStream() ) );
 
 				reply = Integer.parseInt( inFromServer.readLine() );
 				isOk = true;
@@ -673,11 +711,11 @@ public class MultiPlayerController extends HandlerImplementation
 		{
 			try
 			{
-				DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
+				// DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
 				outToServer.writeBytes( "GetPotionAmount:" + playerName + ":" + "GRANADE" + '\n' );
 
-				BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
-						socket.getInputStream() ) );
+				// BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
+				// socket.getInputStream() ) );
 
 				reply = Integer.parseInt( inFromServer.readLine() );
 				isOk = true;
