@@ -1,4 +1,4 @@
-package mpa.gui.multiPlayerMenu;
+package mpa.gui.multiplayer;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 import mpa.core.logic.MapInfo;
 import mpa.core.util.GameProperties;
 import mpa.core.util.MapFromXMLCreator;
+import mpa.gui.multiplayer.client.MultiplayerMenuPanel;
 
 import org.jdom2.JDOMException;
 
@@ -34,7 +35,7 @@ public class ServerSelectionPanel extends JPanel
 {
 	private static final long serialVersionUID = -8958460289373316021L;
 	private Image backgroundImage;
-	private int numberOfServers = 20;
+	private int numberOfServers = 10;
 	private String[] servers = new String[numberOfServers];
 	private List<JLabel> serverList = new ArrayList<>();
 	private JPanel selectionPanel = new JPanel();
@@ -43,25 +44,87 @@ public class ServerSelectionPanel extends JPanel
 	private JLabel back = new JLabel( "BACK" );
 	private JLabel enter = new JLabel( "ENTER" );
 	private JFrame mainFrame;
+	private Image panelBackgroudImage;
+	private int xPanel;
+	private int yPanel;
+	private int widthPanel;
+	private int heightPanel;
+	private JPanel mainMenuPanel;
 
-	public ServerSelectionPanel( int x, int y, int width, int height, final JFrame mainFrame )
+	public ServerSelectionPanel( final JFrame mainFrame, JPanel mainMenuPanel )
 	{
 		this.mainFrame = mainFrame;
+		this.mainMenuPanel = mainMenuPanel;
 		setLayout( null );
-		setBounds( x, y, width, height );
+		setBounds( mainFrame.getX(), mainFrame.getY(), mainFrame.getWidth(), mainFrame.getHeight() );
 
-		selectionPanel.setBounds( width * 40 / 100, height * 15 / 100, width * 20 / 100,
-				height * 70 / 100 );
+		xPanel = this.getWidth() * 20 / 100;
+		yPanel = this.getHeight() * 20 / 100;
+		widthPanel = this.getWidth() * 60 / 100;
+		heightPanel = this.getHeight() * 60 / 100;
+
+		addSelectionPanel();
+
+		try
+		{
+			backgroundImage = ImageIO.read( new File( GameProperties.getInstance().getPath(
+					"BackgroundImagesPath" )
+					+ "/background1.jpg" ) );
+			panelBackgroudImage = ImageIO.read( new File( GameProperties.getInstance().getPath(
+					"BackgroundImagesPath" )
+					+ "/backgroundHeadquarterPanel.png" ) );
+		} catch( IOException e1 )
+		{
+			e1.printStackTrace();
+		}
+
+		addButtons();
+
+		add( selectionPanel );
+		add( enter );
+		add( back );
+		setVisible( true );
+
+	}
+
+	private void addButtons()
+	{
+		// enter.setBounds(93 * width / 100, 92 * height / 100, 5 * width / 100, 5 * height / 100);
+		// back.setBounds(2 * width / 100, 92 * height / 100, 5 * width / 100, 5 * height / 100);
+
+		enter.addMouseListener( new MouseAdapter()
+		{
+			public void mouseReleased( MouseEvent e )
+			{
+				if( selectedServer == null )
+					return;
+
+				String[] addressAndPort = selectedServer.getText().split( ":" );
+				getMap( addressAndPort );
+
+			};
+		} );
+	}
+
+	private void addSelectionPanel()
+	{
+		selectionPanel.setBounds( xPanel + xPanel * 70 / 100, yPanel + yPanel * 40 / 100,
+				widthPanel * 50 / 100, heightPanel * 70 / 100 );
 		selectionPanel.setOpaque( false );
 		selectionPanel.setVisible( true );
 		selectionPanel.setLayout( null );
 		selectionPanel.setBorder( BorderFactory.createLineBorder( Color.black, 10 ) );
 
-		labelHeight = ( 70 * height / 100 ) / numberOfServers;
+		labelHeight = selectionPanel.getHeight() / ( numberOfServers + 1 );
+		int yLabel = labelHeight / 2;
 
 		for( int i = 0; i < numberOfServers; i++ )
 		{
-			JLabel server = new JLabel( "ciao compa" );
+			JLabel server = new JLabel(
+					"<html> <font color='white'face='URW Chancery L' size='20'>Text color:red</font></html>",
+					JLabel.CENTER );
+			server.setBounds( 0, yLabel, selectionPanel.getWidth(), labelHeight );
+
 			server.addMouseListener( new MouseAdapter()
 			{
 				@Override
@@ -84,42 +147,11 @@ public class ServerSelectionPanel extends JPanel
 
 			} );
 			serverList.add( server );
-		}
-		int index = 0;
-		for( JLabel server : serverList )
-		{
-			server.setBounds( 0, labelHeight * index++, selectionPanel.getWidth(), labelHeight );
+
+			System.out.println( server.getText() );
+			yLabel += labelHeight;
 			selectionPanel.add( server );
 		}
-
-		try
-		{
-			backgroundImage = ImageIO.read( new File( "Assets/BackgroundImages/mainMenu.jpg" ) );
-		} catch( IOException e1 )
-		{
-			e1.printStackTrace();
-		}
-
-		enter.setBounds( 93 * width / 100, 92 * height / 100, 5 * width / 100, 5 * height / 100 );
-		back.setBounds( 2 * width / 100, 92 * height / 100, 5 * width / 100, 5 * height / 100 );
-
-		enter.addMouseListener( new MouseAdapter()
-		{
-			public void mouseReleased( MouseEvent e )
-			{
-				if( selectedServer == null )
-					return;
-
-				String[] addressAndPort = selectedServer.getText().split( ":" );
-				getMap( addressAndPort );
-
-			};
-		} );
-
-		add( selectionPanel );
-		add( enter );
-		add( back );
-		setVisible( true );
 
 	}
 
@@ -200,22 +232,25 @@ public class ServerSelectionPanel extends JPanel
 	protected void paintComponent( Graphics g )
 	{
 		super.paintComponent( g );
+		System.out.println( "SONO QUA" );
+
 		g.drawImage( backgroundImage, getX(), getY(), getWidth(), getHeight(), this );
+		g.drawImage( panelBackgroudImage, xPanel, yPanel, widthPanel, heightPanel, this );
 	}
 
-	public static void main( String[] args )
-	{
-		int screenWidth = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
-		int screenHeight = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
-
-		JFrame frame = new JFrame();
-		frame.setLocation( 0, 0 );
-
-		frame.setSize( screenWidth, screenHeight );
-
-		ServerSelectionPanel mp = new ServerSelectionPanel( 0, 0, screenWidth, screenHeight, frame );
-		frame.add( mp );
-		frame.setVisible( true );
-		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-	}
+	// public static void main( String[] args )
+	// {
+	// int screenWidth = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
+	// int screenHeight = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
+	//
+	// JFrame frame = new JFrame();
+	// frame.setLocation( 0, 0 );
+	//
+	// frame.setSize( screenWidth, screenHeight );
+	//
+	// ServerSelectionPanel mp = new ServerSelectionPanel( 0, 0, screenWidth, screenHeight, frame );
+	// frame.add( mp );
+	// frame.setVisible( true );
+	// frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+	// }
 }

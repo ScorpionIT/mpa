@@ -1,9 +1,11 @@
-package mpa.gui.multiPlayerMenu;
+package mpa.gui.multiplayer.client;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+
+import mpa.gui.multiplayer.ServerSelectionPanel;
 
 public class BroadcastConnectionListener extends Thread
 {

@@ -1,19 +1,25 @@
-package mpa.gui.multiPlayerMenu;
+package mpa.gui.multiplayer.client;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Panel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -40,7 +46,7 @@ public class MultiplayerMenuPanel extends JPanel
 	private WorldLoader worldLoader = new WorldLoader();
 	private Pair<Float, Float> selectedHQ = null;
 	private String playerName = null;
-	private JLabel buttonPlay;
+	private JLabel buttonReady;
 	private Image backgroundImage;
 	private int selectedHQIndex = 0;
 	int screenWidth;
@@ -65,22 +71,22 @@ public class MultiplayerMenuPanel extends JPanel
 
 		addInputNamePanel();
 
-		Image imagePlay = null;
+		Image imageReady = null;
 		try
 		{
-			imagePlay = ImageIO.read( new File( textImagePath + "/Play.png" ) );
-			imagePlay = imagePlay.getScaledInstance( screenWidth * 20 / this.getWidth() * 10, 40,
+			imageReady = ImageIO.read( new File( textImagePath + "/Play.png" ) );
+			imageReady = imageReady.getScaledInstance( screenWidth * 20 / this.getWidth() * 10, 40,
 					Image.SCALE_FAST );
-			buttonPlay = new JLabel( new ImageIcon( imagePlay ) );
+			buttonReady = new JLabel( new ImageIcon( imageReady ) );
 		} catch( IOException e2 )
 		{
 			// TODO Blocco catch generato automaticamente
 			e2.printStackTrace();
 		}
-		buttonPlay.setBounds( this.getWidth() - imagePlay.getWidth( this ),
-				52 + screenHeight * 80 / 100, imagePlay.getWidth( this ),
-				imagePlay.getHeight( this ) );
-		buttonPlay.addMouseListener( new MouseAdapter()
+		buttonReady.setBounds( this.getWidth() - imageReady.getWidth( this ),
+				52 + screenHeight * 80 / 100, imageReady.getWidth( this ),
+				imageReady.getHeight( this ) );
+		buttonReady.addMouseListener( new MouseAdapter()
 		{
 			@Override
 			public void mouseReleased( MouseEvent e )
@@ -95,46 +101,15 @@ public class MultiplayerMenuPanel extends JPanel
 				else if( selectedHQ == null )
 					JOptionPane.showMessageDialog( new Frame(), "Seleziona il quartier generale",
 							"Message", JOptionPane.PLAIN_MESSAGE );
-				else if( difficultyLevelSelected == null )
-					JOptionPane.showMessageDialog( new Frame(), "Seleziona la difficoltà",
-							"Message", JOptionPane.PLAIN_MESSAGE );
 				else
 				{
-
-					Thread t = new Thread( new Runnable()
-					{
-						@Override
-						public void run()
-						{
-							mpa.gui.gameGui.playingGUI.GameGui app = new mpa.gui.gameGui.playingGUI.GameGui(
-									playerName );
-							AppSettings gameSettings = new AppSettings( false );
-							gameSettings.setResolution( java.awt.Toolkit.getDefaultToolkit()
-									.getScreenSize().width, java.awt.Toolkit.getDefaultToolkit()
-									.getScreenSize().height );
-							gameSettings.setFullscreen( true );
-							gameSettings.setVSync( false );
-							gameSettings.setTitle( "Stellar Conquest" );
-							gameSettings.setUseInput( true );
-							gameSettings.setFrameRate( 500 );
-							gameSettings.setSamples( 0 );
-							gameSettings.setRenderer( "LWJGL-OpenGL2" );
-							app.setSettings( gameSettings );
-							app.setShowSettings( false );
-
-							// disable statistics
-							app.setDisplayFps( false );
-							app.setDisplayStatView( false );
-							app.start();
-						}
-					} );
-					t.start();
+					startGame();
 				}
-			}
 
+			}
 		} );
 
-		this.add( buttonPlay );
+		this.add( buttonReady );
 		try
 		{
 			backgroundImage = ImageIO.read( new File( "Assets/BackgroundImages/mainMenu.jpg" ) );
@@ -163,6 +138,52 @@ public class MultiplayerMenuPanel extends JPanel
 		UIManager.put( "Button.font", new Font( "URW Chancery L", Font.BOLD, 13 ) );
 	}
 
+	private void startGame()
+	{
+
+		try
+		{
+			BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
+					socket.getInputStream() ) );
+			if( !inFromServer.readLine().equals( "LETSGO" ) )
+				return;
+
+		} catch( IOException e )
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		Thread t = new Thread( new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				mpa.gui.gameGui.playingGUI.GameGui app = new mpa.gui.gameGui.playingGUI.GameGui(
+						playerName );
+				AppSettings gameSettings = new AppSettings( false );
+				gameSettings.setResolution(
+						java.awt.Toolkit.getDefaultToolkit().getScreenSize().width,
+						java.awt.Toolkit.getDefaultToolkit().getScreenSize().height );
+				gameSettings.setFullscreen( true );
+				gameSettings.setVSync( false );
+				gameSettings.setTitle( "Stellar Conquest" );
+				gameSettings.setUseInput( true );
+				gameSettings.setFrameRate( 500 );
+				gameSettings.setSamples( 0 );
+				gameSettings.setRenderer( "LWJGL-OpenGL2" );
+				app.setSettings( gameSettings );
+				app.setShowSettings( false );
+
+				// disable statistics
+				app.setDisplayFps( false );
+				app.setDisplayStatView( false );
+				app.start();
+			}
+		} );
+		t.start();
+	}
+
 	public void setMap( String mapName )
 	{
 		mapPreview.removeAll();
@@ -186,8 +207,33 @@ public class MultiplayerMenuPanel extends JPanel
 
 	public void setSelectedHeadQuarter( Pair<Float, Float> headQuarterPosition )
 	{
-		if( mapInfo.getHeadQuarters().contains( headQuarterPosition ) )
+		String reply = new String();
+		try
+		{
+			DataOutputStream outToServer = new DataOutputStream( socket.getOutputStream() );
+			BufferedReader inFromServer = new BufferedReader( new InputStreamReader(
+					socket.getInputStream() ) );
+			outToServer.writeBytes( new String( "GET"
+					+ String.valueOf( headQuarterPosition.getFirst() ) + ","
+					+ String.valueOf( headQuarterPosition.getSecond() + '\n' ) ) );
+			reply = inFromServer.readLine();
+		} catch( IOException e )
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		if( reply.equals( "OK" ) )
+		{
+			mapPreview.removeBorder( selectedHQ );
 			selectedHQ = headQuarterPosition;
+			mapPreview.addBorder( selectedHQ );
+		}
+		else
+		{
+			JOptionPane.showMessageDialog( this, "HQ already taken", ":( ",
+					JOptionPane.INFORMATION_MESSAGE );
+		}
 	}
 
 	public Pair<Float, Float> getSelectedHQ()
@@ -207,7 +253,7 @@ public class MultiplayerMenuPanel extends JPanel
 
 	private void addMapPreviewPanel()
 	{
-		mapPreview = new MultiplayerMapPreview( this, mapInfo, socket );
+		mapPreview = new MultiplayerMapPreview( this, mapInfo );
 		mapPreview.setBounds( screenWidth * 55 / 100, 30, screenWidth * 45 / 100 - 30,
 				screenHeight * 55 / 100 );
 		mapPreview.repaint();
@@ -229,26 +275,26 @@ public class MultiplayerMenuPanel extends JPanel
 		g.drawImage( backgroundImage, 0, 0, screenWidth, screenHeight, this );
 	}
 
-	// public static void main( String[] args )
-	// {
-	//
-	// int screenWidth = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
-	// int screenHeight = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
-	//
-	// JFrame frame = new JFrame();
-	// frame.setLocation( 0, 0 );
-	//
-	// frame.setSize( screenWidth, screenHeight );
-	// MultiplayerMenuPanel mainMenuGamePanel = new MultiplayerMenuPanel( screenWidth * 15 / 100,
-	// screenHeight * 10 / 100, screenWidth * 70 / 100, screenHeight * 80 / 100 );
-	//
-	// frame.setContentPane( new Panel() );
-	// frame.getContentPane().setBackground( Color.BLACK );
-	// frame.getContentPane().add( mainMenuGamePanel );
-	// frame.getContentPane().setLayout( null );
-	// frame.getContentPane().setVisible( true );;
-	// frame.setVisible( true );
-	// frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-	// }
+	public static void main( String[] args )
+	{
 
+		int screenWidth = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
+		int screenHeight = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
+
+		JFrame frame = new JFrame();
+		frame.setLocation( 0, 0 );
+
+		frame.setSize( screenWidth, screenHeight );
+		MultiplayerMenuPanel mainMenuGamePanel = new MultiplayerMenuPanel( screenWidth * 15 / 100,
+				screenHeight * 10 / 100, screenWidth * 70 / 100, screenHeight * 80 / 100, null,
+				null, null );
+
+		frame.setContentPane( new Panel() );
+		frame.getContentPane().setBackground( Color.BLACK );
+		frame.getContentPane().add( mainMenuGamePanel );
+		frame.getContentPane().setLayout( null );
+		frame.getContentPane().setVisible( true );;
+		frame.setVisible( true );
+		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+	}
 }
