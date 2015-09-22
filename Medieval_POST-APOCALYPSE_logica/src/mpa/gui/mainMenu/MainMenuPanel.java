@@ -1,9 +1,7 @@
 package mpa.gui.mainMenu;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Panel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -59,14 +57,38 @@ public class MainMenuPanel extends JPanel
 			@Override
 			public void mouseReleased(MouseEvent e)
 			{
-				MenuSinglePlayerPanel menuSinglePlayerPanel = new MenuSinglePlayerPanel(mainFrame.getWidth() * 15 / 100, mainFrame.getHeight() * 10 / 100,
-						mainFrame.getWidth() * 70 / 100, mainFrame.getHeight() * 80 / 100);
+				final MenuSinglePlayerPanel menuSinglePlayerPanel = new MenuSinglePlayerPanel(mainFrame.getWidth() * 15 / 100,
+						mainFrame.getHeight() * 10 / 100, mainFrame.getWidth() * 70 / 100, mainFrame.getHeight() * 80 / 100, MainMenuPanel.this,
+						mainFrame);
 
-				mainFrame.setContentPane(new Panel());
-				mainFrame.getContentPane().setBackground(Color.BLACK);
-				mainFrame.getContentPane().add(menuSinglePlayerPanel);
-				mainFrame.getContentPane().setLayout(null);
-				mainFrame.getContentPane().setVisible(true);;
+				JPanel panelConponent = new JPanel()
+				{
+
+					@Override
+					protected void paintComponent(Graphics g)
+					{
+
+						this.setBounds(0, 0, mainFrame.getWidth(), mainFrame.getHeight());
+						super.paintComponent(g);
+						Image background = null;
+						try
+						{
+							background = ImageIO.read(new File("Assets/BackgroundImages/background.jpg"));
+						} catch (IOException e)
+						{
+							// TODO Blocco catch generato automaticamente
+							e.printStackTrace();
+						}
+						g.drawImage(background, 0, 0, this.getWidth(), this.getHeight(), this);
+						this.add(menuSinglePlayerPanel);
+					}
+				};
+
+				mainFrame.getContentPane().removeAll();
+				mainFrame.getContentPane().add(panelConponent);
+				mainFrame.getContentPane().setVisible(true);
+				mainFrame.setVisible(true);
+				menuSinglePlayerPanel.repaint();
 				mainFrame.setVisible(true);
 			}
 		});
@@ -102,9 +124,11 @@ public class MainMenuPanel extends JPanel
 			@Override
 			public void mouseReleased(MouseEvent e)
 			{
-				mainFrame.getContentPane().add(new MainMapEditorPanel(MainMenuPanel.this, mainFrame));
+				MainMapEditorPanel mainMapEditorPanel = new MainMapEditorPanel(MainMenuPanel.this, mainFrame);
+				mainFrame.getContentPane().add(mainMapEditorPanel);
 				mainFrame.getContentPane().setVisible(true);
 				mainFrame.setVisible(true);
+				mainMapEditorPanel.repaint();
 			}
 		});
 		add(mapEditor);
@@ -174,9 +198,10 @@ public class MainMenuPanel extends JPanel
 
 		frame.setSize(screenWidth, screenHeight);
 
-		MainMenuPanel mp = new MainMenuPanel(0, 0, screenWidth, screenHeight, frame);
-		frame.add(mp);
+		MainMenuPanel mainMenuPanel = new MainMenuPanel(0, 0, screenWidth, screenHeight, frame);
+		frame.add(mainMenuPanel);
 		frame.setVisible(true);
+		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }

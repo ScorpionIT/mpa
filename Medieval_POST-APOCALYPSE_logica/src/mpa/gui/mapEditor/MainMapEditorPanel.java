@@ -38,6 +38,8 @@ public class MainMapEditorPanel extends JPanel
 	private HashMap<String, Image> imageLabels = new HashMap<String, Image>();
 	private final String imageFolder = GameProperties.getInstance().getPath("ImagesPreviewPath");
 	private final String mapFolder = GameProperties.getInstance().getPath("CustomMapsPath");
+	int screenWidth = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
+	int screenHeight = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
 	Image deleteCursor;
 
 	private boolean deleteMode = false;
@@ -52,6 +54,7 @@ public class MainMapEditorPanel extends JPanel
 
 		this.mainMenuPanel = mainMenuPanel;
 		this.mainFrame = frame;
+
 		this.setLayout(null);
 		buttonsEditorPanel = new ButtonsEditorPanel(this);
 		mapPreviewEditorPanel = new MapPreviewEditorPanel(this, imageLabels);
@@ -139,7 +142,7 @@ public class MainMapEditorPanel extends JPanel
 	@Override
 	public void setBounds(int x, int y, int width, int height)
 	{
-		super.setBounds(x, y, width, height);
+		super.setBounds(0, 0, mainFrame.getWidth(), mainFrame.getHeight());
 
 		buttonsEditorPanel.setBounds(0, 0, this.getWidth() * 15 / 100, this.getHeight() * 5 / 100);
 		try
@@ -278,9 +281,10 @@ public class MainMapEditorPanel extends JPanel
 
 	public void backButton()
 	{
-		mainFrame.getContentPane().removeAll();
+
+		mainFrame.getContentPane().remove(this);
 		mainFrame.getContentPane().add(mainMenuPanel);
-		mainFrame.getContentPane().setVisible(true);
+		mainFrame.getContentPane().repaint();
 		mainFrame.setVisible(true);
 		mainMenuPanel.repaint();
 	}
