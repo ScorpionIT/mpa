@@ -24,17 +24,17 @@ import mpa.core.util.GameProperties;
 public class MapPreview extends MpaPanel
 {
 
-	private MapInfo mapInfo;
-	private Map<String, Image> images = new HashMap<>();
-	private Map<JLabel, Pair<Float, Float>> headQuartersLabel = new HashMap<>();
-	private JPanel menuSinglePlayerPanel;
-	private Image backgroundImage;
-	private String texturePath = GameProperties.getInstance().getPath( "TexturePath" );
-	private String imagesPreviewPath = GameProperties.getInstance().getPath( "ImagesPreviewPath" );
+	protected MapInfo mapInfo;
+	protected Map<String, Image> images = new HashMap<>();
+	protected Map<JLabel, Pair<Float, Float>> headQuartersLabel = new HashMap<>();
+	protected JPanel menuMapPanel;
+	protected Image backgroundImage;
+	protected String texturePath = GameProperties.getInstance().getPath( "TexturePath" );
+	protected String imagesPreviewPath = GameProperties.getInstance().getPath( "ImagesPreviewPath" );
 
 	public MapPreview( JPanel menuSinglePlayerPanel )
 	{
-		this.menuSinglePlayerPanel = menuSinglePlayerPanel;
+		this.menuMapPanel = menuSinglePlayerPanel;
 		this.setLayout( null );
 		try
 		{
@@ -47,7 +47,7 @@ public class MapPreview extends MpaPanel
 
 	}
 
-	private void loadImages()
+	protected void loadImages()
 	{
 
 		try
@@ -96,14 +96,14 @@ public class MapPreview extends MpaPanel
 					Set<JLabel> keys = MapPreview.this.headQuartersLabel.keySet();
 					for( JLabel l : keys )
 						if( MapPreview.this.headQuartersLabel.get( l ).equals(
-								( ( MenuSinglePlayerPanel ) MapPreview.this.menuSinglePlayerPanel )
+								( ( MenuSinglePlayerPanel ) MapPreview.this.menuMapPanel )
 										.getSelectedHQ() ) )
 						{
 							l.setBorder( BorderFactory.createEmptyBorder() );
 						}
 					( ( JLabel ) e.getSource() ).setBorder( BorderFactory
 							.createLineBorder( Color.red ) );
-					( ( MenuSinglePlayerPanel ) MapPreview.this.menuSinglePlayerPanel )
+					( ( MenuSinglePlayerPanel ) MapPreview.this.menuMapPanel )
 							.setSelectedHeadQuarter( MapPreview.this.headQuartersLabel.get( e
 									.getSource() ) );
 

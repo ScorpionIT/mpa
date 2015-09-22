@@ -1,21 +1,19 @@
 package mpa.gui.multiPlayerMenu;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Panel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.Socket;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -27,10 +25,7 @@ import mpa.core.logic.Pair;
 import mpa.core.logic.WorldLoader;
 import mpa.core.util.GameProperties;
 import mpa.core.util.MapFromXMLCreator;
-import mpa.gui.menuMap.DifficultyPanel;
 import mpa.gui.menuMap.InputNamePanel;
-import mpa.gui.menuMap.MapListPanel;
-import mpa.gui.menuMap.MapPreview;
 
 import org.jdom2.JDOMException;
 
@@ -40,10 +35,8 @@ public class MultiplayerMenuPanel extends JPanel
 {
 	private static final long serialVersionUID = 1L;
 	private MapInfo mapInfo;
-	private MapListPanel mapListPanel;
-	private MapPreview mapPreview;
+	private MultiplayerMapPreview mapPreview;
 	private InputNamePanel inputNamePanel;
-	private DifficultyPanel difficultyPanel;
 	private WorldLoader worldLoader = new WorldLoader();
 	private Pair<Float, Float> selectedHQ = null;
 	private String playerName = null;
@@ -54,10 +47,14 @@ public class MultiplayerMenuPanel extends JPanel
 	int screenHeight;
 	DifficultyLevel difficultyLevelSelected = null;
 	private String textImagePath = GameProperties.getInstance().getPath( "TextImagePath" );
+	private Socket socket;
 
-	public MultiplayerMenuPanel( int x, int y, int width, int height )
+	public MultiplayerMenuPanel( int x, int y, int width, int height, Socket socket,
+			MapInfo mapInfo, JPanel ancestor )
 	{
 
+		this.socket = socket;
+		this.mapInfo = mapInfo;
 		this.setSize( width, height );
 		this.setLocation( x, y );
 		this.setLayout( null );
@@ -112,13 +109,6 @@ public class MultiplayerMenuPanel extends JPanel
 							mpa.gui.gameGui.playingGUI.GameGui app = new mpa.gui.gameGui.playingGUI.GameGui(
 									playerName );
 							AppSettings gameSettings = new AppSettings( false );
-							// gameSettings.setResolution( 800, 600 );
-							// GraphicsDevice device = GraphicsEnvironment
-							// .getLocalGraphicsEnvironment().getDefaultScreenDevice();
-
-							// gameSettings.setResolution( screenWidth, screenHeight );
-							// gameSettings.setFullscreen( true );
-
 							gameSettings.setResolution( java.awt.Toolkit.getDefaultToolkit()
 									.getScreenSize().width, java.awt.Toolkit.getDefaultToolkit()
 									.getScreenSize().height );
@@ -217,7 +207,7 @@ public class MultiplayerMenuPanel extends JPanel
 
 	private void addMapPreviewPanel()
 	{
-		mapPreview = new MapPreview( this );
+		mapPreview = new MultiplayerMapPreview( this, mapInfo, socket );
 		mapPreview.setBounds( screenWidth * 55 / 100, 30, screenWidth * 45 / 100 - 30,
 				screenHeight * 55 / 100 );
 		mapPreview.repaint();
@@ -239,26 +229,26 @@ public class MultiplayerMenuPanel extends JPanel
 		g.drawImage( backgroundImage, 0, 0, screenWidth, screenHeight, this );
 	}
 
-	public static void main( String[] args )
-	{
-
-		int screenWidth = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
-		int screenHeight = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
-
-		JFrame frame = new JFrame();
-		frame.setLocation( 0, 0 );
-
-		frame.setSize( screenWidth, screenHeight );
-		MultiplayerMenuPanel mainMenuGamePanel = new MultiplayerMenuPanel( screenWidth * 15 / 100,
-				screenHeight * 10 / 100, screenWidth * 70 / 100, screenHeight * 80 / 100 );
-
-		frame.setContentPane( new Panel() );
-		frame.getContentPane().setBackground( Color.BLACK );
-		frame.getContentPane().add( mainMenuGamePanel );
-		frame.getContentPane().setLayout( null );
-		frame.getContentPane().setVisible( true );;
-		frame.setVisible( true );
-		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-	}
+	// public static void main( String[] args )
+	// {
+	//
+	// int screenWidth = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
+	// int screenHeight = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
+	//
+	// JFrame frame = new JFrame();
+	// frame.setLocation( 0, 0 );
+	//
+	// frame.setSize( screenWidth, screenHeight );
+	// MultiplayerMenuPanel mainMenuGamePanel = new MultiplayerMenuPanel( screenWidth * 15 / 100,
+	// screenHeight * 10 / 100, screenWidth * 70 / 100, screenHeight * 80 / 100 );
+	//
+	// frame.setContentPane( new Panel() );
+	// frame.getContentPane().setBackground( Color.BLACK );
+	// frame.getContentPane().add( mainMenuGamePanel );
+	// frame.getContentPane().setLayout( null );
+	// frame.getContentPane().setVisible( true );;
+	// frame.setVisible( true );
+	// frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+	// }
 
 }
