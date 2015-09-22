@@ -21,7 +21,6 @@ public class GameGuiKeyActionListener implements ActionListener
 	{
 		if ("pause".equals(name) && keyPressed)
 		{
-			System.out.println("pausa");
 			handler.setPause();
 		}
 

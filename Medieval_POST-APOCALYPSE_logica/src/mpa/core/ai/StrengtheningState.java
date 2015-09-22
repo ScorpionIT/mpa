@@ -15,63 +15,52 @@ class StrengtheningState extends AIState
 	}
 
 	@Override
-	void action( OpponentAI opponentAI )
+	void action(OpponentAI opponentAI)
 	{
-
-		if( opponentAI.player.getName().equals( "Paola Maledetta 2" ) )
-			System.out.println( "Strengthening State" );
 		Player p = opponentAI.player;
 
 		Vector2f collectionPoint = p.getHeadquarter().getGatheringPlace();
-		if( /*
+		if ( /*
 			 * ( p.getPath() == null || p.getPath().isEmpty() ) &&
-			 */collectionPoint.equals( p.getPosition() ) )
+			 */collectionPoint.equals(p.getPosition()))
 		{
-			if( p.canUpgrade() )
+			if (p.canUpgrade())
 			{
 				p.upgradeLevel();
 
-				// System.out.println();
-				// System.out.println();
-				// System.out.println( "ho uppato di livello" );
-				// System.out.println();
-				// System.out.println();
 			}
 			isWalking = false;
 		}
-		else if( isWalking )
+		else if (isWalking)
 			return;
-		else if( p.canUpgrade() )
+		else if (p.canUpgrade())
 		{
-			GameManager.getInstance().computePath( p, collectionPoint.x, collectionPoint.y );
+			GameManager.getInstance().computePath(p, collectionPoint.x, collectionPoint.y);
 			isWalking = true;
 		}
 
 	}
 
 	@Override
-	AIState changeState( OpponentAI opponentAI )
+	AIState changeState(OpponentAI opponentAI)
 	{
-		AIState nextState = super.changeState( opponentAI );
+		AIState nextState = super.changeState(opponentAI);
 
-		if( nextState != null )
+		if (nextState != null)
 			return nextState;
 
-		if( opponentAI.player.canUpgrade() || isWalking )
+		if (opponentAI.player.canUpgrade() || isWalking)
 			nextState = this;
-		else if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings()
-				&& opponentAI.player.isThereAnyFreeSulbaltern()
-				&& opponentAI.canGoToThisState( ConquestState.class ) )
+		else if (!opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings() && opponentAI.player.isThereAnyFreeSulbaltern()
+				&& opponentAI.canGoToThisState(ConquestState.class))
 			nextState = new ConquestState();
-		else if( opponentAI.shouldICreateTowers() && opponentAI.canIcreateTowers() )
+		else if (opponentAI.shouldICreateTowers() && opponentAI.canIcreateTowers())
 			nextState = new FortificationState();
-		else if( opponentAI.areThereWeakerPlayers() )
+		else if (opponentAI.areThereWeakerPlayers())
 			nextState = new CombatState();
-		else if( opponentAI.shouldBuyPotions() && opponentAI.player.canBuyPotions()
-				&& opponentAI.canGoToThisState( ProductionState.class ) )
+		else if (opponentAI.shouldBuyPotions() && opponentAI.player.canBuyPotions() && opponentAI.canGoToThisState(ProductionState.class))
 			nextState = new ProductionState();
-		else if( !opponentAI.knownAllTheWorld
-				&& opponentAI.canGoToThisState( ExplorationState.class ) )
+		else if (!opponentAI.knownAllTheWorld && opponentAI.canGoToThisState(ExplorationState.class))
 			nextState = new ExplorationState();
 		else
 		{

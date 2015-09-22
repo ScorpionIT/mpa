@@ -165,8 +165,6 @@ public class SinglePlayerController extends HandlerImplementation
 		for (String p : initPs.keySet())
 		{
 			javax.vecmath.Vector2f[] positions = initPs.get(p);
-			System.out.println("positions= " + positions);
-			System.out.println(GuiObjectManager.getInstance());
 			GuiObjectManager.getInstance().addPlayer(p, positions[2], positions[0], positions[1], gManagerProxy.getPLayerHP(p));
 		}
 		Map<String, javax.vecmath.Vector2f> fields = gManagerProxy.getFields();
@@ -238,8 +236,6 @@ public class SinglePlayerController extends HandlerImplementation
 	public boolean createTowerCrusher(String boss, String target)
 	{
 		String towerCrusher = gManagerProxy.createTowerCrushers(boss, target);
-		// GuiObjectManager.getInstance().addTowerCrusher(towerCrusher.get(0));
-		System.out.println("tower crusher created " + towerCrusher);
 		if (towerCrusher == null)
 			return false;
 		else

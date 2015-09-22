@@ -16,6 +16,7 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
@@ -134,10 +135,21 @@ public class NiftyHandler
 						panel(new PanelBuilder("#winningPanel")
 						{
 							{
+								childLayoutCenter();
 								width("100%");
 								height("100%");
 								backgroundColor(color);
+
+								image(new ImageBuilder("#YouWin")
+								{
+									{
+										filename("youWin.png");
+
+									}
+
+								});
 							}
+
 						});
 					}
 				});
@@ -160,9 +172,19 @@ public class NiftyHandler
 						panel(new PanelBuilder("#losingPanel")
 						{
 							{
+								childLayoutCenter();
 								width("100%");
 								height("100%");
 								backgroundColor(color);
+
+								image(new ImageBuilder("#YouWLose")
+								{
+									{
+										filename("youLose.png");
+
+									}
+
+								});
 							}
 						});
 					}

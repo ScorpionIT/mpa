@@ -2,8 +2,6 @@ package mpa.gui.gameGui.playingGUI;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-import mpa.core.logic.GameManager;
-import mpa.core.logic.characters.Player;
 import mpa.gui.gameGui.listener.GameGuiClickListener;
 import mpa.gui.gameGui.listener.GameGuiKeyActionListener;
 import mpa.gui.gameGui.listener.GameGuiMouseListener;
@@ -43,7 +41,6 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	boolean cursorOnTheTopEdge = false;
 	boolean cursorOnTheBottomEdge = false;
 	private float cameraHeight = 270;// 120
-	// private float scalingFactor = 2.2f;
 	float lz = (float) Math.sqrt(Math.pow(cameraHeight / Math.sin(90), 2) - Math.pow(cameraHeight, 2)); // sin(40)
 
 	private Node groundNode;
@@ -52,7 +49,6 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	private Node circlesUnderPlayers = new Node("Players' Circles");
 
 	private Node lifeBars = new Node("Life Bars");
-	Node spheres = new Node("palline");
 
 	private String playingPlayer;
 	NiftyHandler niftyHandler;
@@ -60,7 +56,9 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	private GameGuiClickListener clickActionListener;
 	private GameGuiKeyActionListener keyActionListener;
 
-	HandlerImplementation listenerImplementation = new SinglePlayerController();
+	private boolean endGame = false;
+
+	private HandlerImplementation listenerImplementation = new SinglePlayerController();
 
 	public GameGui(String playingPlayer)
 	{
@@ -99,7 +97,6 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 		clickActionListener = new GameGuiClickListener(listenerImplementation, this);
 		keyActionListener = new GameGuiKeyActionListener(listenerImplementation, niftyHandler);
 
-		rootNode.attachChild(spheres);
 		setEventTriggers();
 
 		new GraphicUpdater(this).start();
@@ -170,25 +167,14 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	{
 		DirectionalLight dl = new DirectionalLight();
 		dl.setDirection(new Vector3f(-0.8f, -0.6f, -0.08f).normalizeLocal());
-		// dl.setColor( new ColorRGBA( 0.9f, 0.9f, 0.9f, 1.0f ) );
 		rootNode.addLight(dl);
 
 		AmbientLight al = new AmbientLight();
-		// al.setColor( new ColorRGBA( 0.7f, 0.9f, 1.5f, 1.0f ) );
 		rootNode.addLight(al);
 	}
 
 	public void setCamera(Vector3f newPosition)
 	{
-		// if( newPosition.z + lz < 0 )
-		// return;
-		// if( newPosition.x < -1
-		// || newPosition.x > GameManager.getInstance().getWorld().getWidth() + 10
-		// || newPosition.z > GameManager.getInstance().getWorld().getHeight() )
-		// return;
-
-		// if (niftyHandler.isVisibleSelectionPanel())
-		// niftyHandler.removeSelectedPanel();
 		cam.setLocation(newPosition);
 		cam.lookAt(new Vector3f(newPosition.x, 0, newPosition.z + lz), new Vector3f(0, 1, 0));
 
@@ -216,30 +202,21 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 		lock.unlock();
 	}
 
-	private int count = 0;
-
-	private boolean csc = true;
-
 	@Override
 	public void simpleUpdate(float tpf)
 	{
-		if (csc)
-			GuiObjectManager.getInstance().setPointToVisit();
 
-		csc = false;
-		if (count == 100)
+		if (endGame && getTimer().getTimeInSeconds() > 4)
+		{
+			System.exit(0);
+		}
+		else if (!endGame && getTimer().getTimeInSeconds() > 2)
 		{
 			niftyHandler.updateResourcePanel();
-			count = 0;
+			getTimer().reset();
 		}
-		else
-			count++;
 
 		listenerImplementation.updateInformation();
-		for (Player p : GameManager.getInstance().getPlayers())
-			if (p.getName().equals(GuiObjectManager.getInstance().getPlayingPlayer()))
-				GuiObjectManager.getInstance().setPath(p.getPath());
-		// super.simpleUpdate( tpf );
 	}
 
 	public Vector3f getCameraLookAt()
@@ -349,5 +326,11 @@ public class GameGui extends SimpleApplication implements AnimEventListener
 	public boolean canClick()
 	{
 		return niftyHandler.canClick();
+	}
+
+	public void setEndGame()
+	{
+		this.endGame = true;
+		getTimer().reset();
 	}
 }

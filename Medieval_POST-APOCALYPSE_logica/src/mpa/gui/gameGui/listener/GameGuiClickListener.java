@@ -31,15 +31,11 @@ public class GameGuiClickListener implements ActionListener
 	public void onAction(String name, boolean isPressed, float tpf)
 	{
 
-		// System.out.println( "ci sono entrato  per la " + c++ );
 		Vector2f click = gameGui.getInputManager().getCursorPosition();
 
 		Vector3f cursor = gameGui.getCamera().getWorldCoordinates(new Vector2f(click.x, click.y), 0.0f).clone();
 
-		// System.out.println( "la pos di cursor è " + cursor );
-
 		Vector3f dir = gameGui.getCamera().getWorldCoordinates(new Vector2f(click.x, click.y), 1.0f).subtractLocal(cursor).normalizeLocal();
-		// System.out.println( "la dir è " + dir );
 
 		Ray ray = new Ray();
 
@@ -57,14 +53,11 @@ public class GameGuiClickListener implements ActionListener
 		if (!isPressed && name.equals("Click") && crs.getClosestCollision() != null)
 		{
 
-			// TODO controllare che crs non sia null se il click è fuori dal mondo
 			contactPoint = new Vector2f(crs.getClosestCollision().getContactPoint().x, crs.getClosestCollision().getContactPoint().z);
 			String pickedObject = listener.getPickedObject(contactPoint);
 
-			System.out.println("ho cliccato su " + pickedObject);
 			if (!isPressed && pickedObject.equals("GROUND"))
 			{
-				System.out.println("ci entro?");
 				listener.computePath(contactPoint);
 
 			}
@@ -76,8 +69,6 @@ public class GameGuiClickListener implements ActionListener
 				String pickedObjectOwner = listener.getPickedObjectOwner(split[0], split[1]);
 				String objectProductivity = Integer.toString(listener.getPickedObjectProductivity(split[0], split[1]));
 
-				System.out.println(GuiObjectManager.getInstance().getPlayingPlayer());
-				System.out.println(pickedObjectOwner);
 				if (split[0].toLowerCase().equals("headquarter") && pickedObjectOwner.equals(GuiObjectManager.getInstance().getPlayingPlayer()))
 				{
 					niftyHandler.setHeadquarterPanel(split[0], split[1]);
@@ -123,17 +114,10 @@ public class GameGuiClickListener implements ActionListener
 
 		if ("attack".equals(name) && isPressed && gameGui.canClick())
 		{
-
-			// String player = GuiObjectManager.getInstance().getPlayingPlayer();
-
-			// TODO cambiare azione in base all'item selezionato
 			if (crs.getClosestCollision() != null)
 			{
 
 				contactPoint = new Vector2f(crs.getClosestCollision().getContactPoint().x, crs.getClosestCollision().getContactPoint().z);
-				// contactPoint = new Vector2f(crs.getClosestCollision().getContactPoint().x,
-				// crs.getClosestCollision().getContactPoint().z);
-
 				listener.playerAction(contactPoint);
 			}
 		}

@@ -19,35 +19,29 @@ class ExplorationState extends AIState
 	}
 
 	@Override
-	void action( OpponentAI opponentAI )
+	void action(OpponentAI opponentAI)
 	{
-		if( opponentAI.player.getName().equals( "Paola Maledetta 2" ) )
+		if (opponentAI.player.getName().equals("Paola Maledetta 2"))
 		{
-			// System.out.println( "Exploration State" );
-			// System.out.println( "da visitare ho ancora " +
-			// opponentAI.worldManager.openList.size() );
-			// System.out.println( "mentre ne ho visitati "
-			// + opponentAI.worldManager.closedList.size() );
-			if( pointToReach != null )
+
+			if (pointToReach != null)
 			{
-				// System.out.println( "sto cercandoo di andare in  " + pointToReach.toString() );
-				if( pointToReach.x == 500 && pointToReach.y == 300 )
+				if (pointToReach.x == 500 && pointToReach.y == 300)
 				{
 					List<Vector2f> path = opponentAI.player.getPath();
-					// if( path != null )
-					// System.out.println( "e la size del path è " + path.size() );
+
 				}
 			}
 		}
 		Player p = opponentAI.player;
 
-		if( pointToReach != null )
+		if (pointToReach != null)
 		{
 			// if( isWalking && ( ( int ) pointToReach.x ) == ( ( int ) playerX )
 			// && ( ( int ) pointToReach.y ) == ( ( int ) playerY ) )
-			if( isWalking && pointToReach.equals( p.getPosition() ) )
+			if (isWalking && pointToReach.equals(p.getPosition()))
 			{
-				opponentAI.addBuildings( pointToReach );
+				opponentAI.addBuildings(pointToReach);
 
 				// pointToReach = opponentAI.worldManager.getNextLocation( opponentAI.player );
 				// if( opponentAI.player.getName().equals( "Paola Maledetta 2" ) )
@@ -70,27 +64,23 @@ class ExplorationState extends AIState
 				// }
 
 			}
-			else if( isWalking && pointToReach != null && !pointToReach.equals( p.getPosition() )
-					&& ( p.getPath() == null || p.getPath().isEmpty() ) )
+			else if (isWalking && pointToReach != null && !pointToReach.equals(p.getPosition()) && (p.getPath() == null || p.getPath().isEmpty()))
 			{
 				// System.out.println( "sono " + opponentAI.player.getName()
 				// + " e sto facendo bruttissimo" );
-				pointToReach = opponentAI.worldManager.giveMeAnotherLocation( pointToReach,
-						opponentAI.player );
-				GameManager.getInstance().computePath( opponentAI.player, pointToReach.x,
-						pointToReach.y );
+				pointToReach = opponentAI.worldManager.giveMeAnotherLocation(pointToReach, opponentAI.player);
+				GameManager.getInstance().computePath(opponentAI.player, pointToReach.x, pointToReach.y);
 			}
 
 		}
 		else
 		{
-			pointToReach = opponentAI.worldManager.getNextLocation( opponentAI.player );
-			if( pointToReach != null )
+			pointToReach = opponentAI.worldManager.getNextLocation(opponentAI.player);
+			if (pointToReach != null)
 			{
 				isWalking = true;
-				GameManager.getInstance().computePath( opponentAI.player, pointToReach.x,
-						pointToReach.y );
-				if( pointToReach.x == 500 && pointToReach.y == 300 )
+				GameManager.getInstance().computePath(opponentAI.player, pointToReach.x, pointToReach.y);
+				if (pointToReach.x == 500 && pointToReach.y == 300)
 				{
 					// System.out.println( "sto calcolando il path per quel punto" );
 					List<Vector2f> path = opponentAI.player.getPath();
@@ -108,29 +98,27 @@ class ExplorationState extends AIState
 	}
 
 	@Override
-	AIState changeState( OpponentAI opponentAI )
+	AIState changeState(OpponentAI opponentAI)
 	{
-		AIState nextState = super.changeState( opponentAI );
+		AIState nextState = super.changeState(opponentAI);
 
-		if( nextState != null )
+		if (nextState != null)
 			return nextState;
 
-		if( isWalking )
+		if (isWalking)
 			nextState = this;
-		else if( opponentAI.player.canUpgrade() )
+		else if (opponentAI.player.canUpgrade())
 			nextState = new StrengtheningState();
-		else if( !opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings()
-				&& opponentAI.player.isThereAnyFreeSulbaltern()
-				&& opponentAI.canGoToThisState( ConquestState.class ) )
+		else if (!opponentAI.knownBuildings.isEmpty() && opponentAI.areThereConquerableBuildings() && opponentAI.player.isThereAnyFreeSulbaltern()
+				&& opponentAI.canGoToThisState(ConquestState.class))
 			nextState = new ConquestState();
-		else if( opponentAI.shouldICreateTowers() && opponentAI.canIcreateTowers() )
+		else if (opponentAI.shouldICreateTowers() && opponentAI.canIcreateTowers())
 			nextState = new FortificationState();
-		else if( opponentAI.areThereWeakerPlayers() )
+		else if (opponentAI.areThereWeakerPlayers())
 			nextState = new CombatState();
-		else if( opponentAI.shouldBuyPotions() && opponentAI.player.canBuyPotions()
-				&& opponentAI.canGoToThisState( ProductionState.class ) )
+		else if (opponentAI.shouldBuyPotions() && opponentAI.player.canBuyPotions() && opponentAI.canGoToThisState(ProductionState.class))
 			nextState = new ProductionState();
-		else if( !opponentAI.knownAllTheWorld )
+		else if (!opponentAI.knownAllTheWorld)
 			nextState = this;
 		else
 		{

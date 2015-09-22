@@ -53,7 +53,7 @@ public class GameManager
 	private Map<Player, Integer> numberOfMinions = new ConcurrentHashMap<>();
 	private Map<Player, Integer> numberOfTowerCrushers = new ConcurrentHashMap<>();
 	private final int MAX_NUMBER_MINIONS_FOR_PLAYER = 5;
-	private final int MAX_NUMBER_TOWER_CRUSHERS_FOR_PLAYER = 2;
+	private final int MAX_NUMBER_TOWER_CRUSHERS_FOR_PLAYER = 1;
 
 	private static GameManager gameManager = null;
 
@@ -106,8 +106,8 @@ public class GameManager
 	private GameManager(World world, DifficultyLevel level)
 	{
 		this.world = world;
-		this.players = new ArrayList<Player>();
-		AI_players = new HashMap<>();
+		this.players = new CopyOnWriteArrayList<>();
+		AI_players = new ConcurrentHashMap<Player, OpponentAI>();
 		this.difficultyLevel = level;
 		minionIDs = new IDPool(100);
 		towerCrusherIDs = new IDPool(100);
@@ -184,7 +184,7 @@ public class GameManager
 	{
 
 		List<TowerCrusher> towerCrushers = new ArrayList<>();
-		if (numberOfTowerCrushers.get(boss) == MAX_NUMBER_TOWER_CRUSHERS_FOR_PLAYER)
+		if (numberOfTowerCrushers.get(boss) >= MAX_NUMBER_TOWER_CRUSHERS_FOR_PLAYER)
 		{
 			return towerCrushers;
 		}
@@ -193,7 +193,7 @@ public class GameManager
 		TowerCrusher createTowerCrusher = boss.createTowerCrusher(target, towerCrusherIDs.getID());
 		this.towerCrushers.add(createTowerCrusher);
 		towerCrushers.add(createTowerCrusher);
-		numberOfMinions.put(boss, numberOfTowerCrushers.get(boss) + 1);
+		numberOfTowerCrushers.put(boss, numberOfTowerCrushers.get(boss) + 1);
 
 		return towerCrushers;
 	}
@@ -303,13 +303,14 @@ public class GameManager
 		writeLock.unlock();
 	}
 
-	public void killMinion(Minion m)
+	public void killMinion(Minion minion)
 	{
 		writeLock.lock();
-		m.stopMoving();
-		deadMinions.add(m);
-		minionsAlive.remove(m);
-		minionIDs.freeID(m.getID());
+		minion.stopMoving();
+		numberOfMinions.put(minion.getBoss(), numberOfMinions.get(minion.getBoss()) - 1);
+		deadMinions.add(minion);
+		minionsAlive.remove(minion);
+		minionIDs.freeID(minion.getID());
 		writeLock.unlock();
 	}
 
@@ -317,6 +318,7 @@ public class GameManager
 	{
 		writeLock.lock();
 		towerCrusher.stopMoving();
+		numberOfTowerCrushers.put(towerCrusher.getBoss(), numberOfTowerCrushers.get(towerCrusher.getBoss()) - 1);
 		deadTowerCrushers.add(towerCrusher);
 		towerCrushers.remove(towerCrusher);
 		writeLock.unlock();
@@ -343,7 +345,7 @@ public class GameManager
 		try
 		{
 			writeLock.lock();
-			List<Player> deads = new ArrayList<>();
+			List<Player> deads = new CopyOnWriteArrayList<>();
 
 			for (Player p : deadPlayers)
 			{
@@ -354,6 +356,7 @@ public class GameManager
 				System.out.println("STO KILLANDO " + p.getName());
 				System.out.println("STO KILLANDO " + p.getName());
 				deads.add(p);
+
 			}
 
 			deadPlayers.clear();
@@ -361,6 +364,7 @@ public class GameManager
 			return deads;
 		} finally
 		{
+
 			writeLock.unlock();
 		}
 
@@ -478,43 +482,40 @@ public class GameManager
 		attackRequests.addRequest(attacker, attacker.getCurrentVector());
 	}
 
-	public List<Player> playerAction(Player p, Vector2f target)
+	public List<Player> playerAction(final Player p, Vector2f target)
 	{
-		try
+
+		List<Player> hitPlayers = null;
+		if (target != null && p != null)
+			p.setDirection(MyMath.computeDirection(p.getPosition(), target));
+
+		if (p != null && p.getSelectedItem().equals(Item.WEAPON) || p.getSelectedItem().equals(Item.GRANADE)
+				|| p.getSelectedItem().equals(Item.FLASH_BANG))
+		{
+			attackRequests.addRequest(p, target);
+		}
+		else if (p.getSelectedItem().equals(Item.HP_POTION))
 		{
 			p.getWriteLock();
-
-			List<Player> hitPlayers = null;
-			if (target != null && p != null)
-				p.setDirection(MyMath.computeDirection(p.getPosition(), target));
-
-			if (p != null && p.getSelectedItem().equals(Item.WEAPON) || p.getSelectedItem().equals(Item.GRANADE)
-					|| p.getSelectedItem().equals(Item.FLASH_BANG))
+			if (p.getPotionAmount(Potions.HP) > 0)
 			{
-				attackRequests.addRequest(p, target);
+				p.restoreHealth(Potions.HP);
+				p.takePotion(Potions.HP);
 			}
-			else if (p.getSelectedItem().equals(Item.HP_POTION))
-			{
-				if (p.getPotionAmount(Potions.HP) > 0)
-				{
-					p.restoreHealth(Potions.HP);
-					p.takePotion(Potions.HP);
-				}
-			}
-			else
-			{
-				if (p.getPotionAmount(Potions.MP) > 0)
-				{
-					p.restoreHealth(Potions.MP);
-					p.takePotion(Potions.MP);
-				}
-			}
-
-			return hitPlayers;
-		} finally
-		{
 			p.leaveWriteLock();
 		}
+		else
+		{
+			p.getWriteLock();
+			if (p.getPotionAmount(Potions.MP) > 0)
+			{
+				p.restoreHealth(Potions.MP);
+				p.takePotion(Potions.MP);
+			}
+			p.leaveWriteLock();
+		}
+
+		return hitPlayers;
 	}
 
 	public boolean occupyProperty(Player player, AbstractPrivateProperty property)

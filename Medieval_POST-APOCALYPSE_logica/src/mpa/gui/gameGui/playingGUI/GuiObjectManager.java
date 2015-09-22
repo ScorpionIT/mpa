@@ -1,31 +1,21 @@
 package mpa.gui.gameGui.playingGUI;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 import javax.vecmath.Vector2f;
 
-import mpa.core.logic.AbstractObject;
-import mpa.core.logic.GameManager;
-import mpa.core.logic.building.AbstractProperty;
 import mpa.core.maths.MyMath;
 import mpa.core.util.GameProperties;
 
 import com.jme3.asset.plugins.ZipLocator;
 import com.jme3.bounding.BoundingBox;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.shape.Sphere;
-import com.jme3.util.TangentBinormalGenerator;
 
 public class GuiObjectManager
 {
@@ -39,8 +29,6 @@ public class GuiObjectManager
 	private Map<String, Spatial> minions = new HashMap<>();
 	private Map<String, Spatial> towerCrushers = new HashMap<>();
 	private Map<String, Spatial> towers = new HashMap<>();
-	private Map<String, Spatial> hitPlayers = new HashMap<>();
-	private List<Vector2f> pointToVisit = new ArrayList<>();
 
 	private Map<Spatial, Circle2D> spatialCirlces = new HashMap<>();
 
@@ -49,7 +37,6 @@ public class GuiObjectManager
 	private Map<Spatial, LifeBar> spatialsLifeBars = new HashMap<>();
 
 	private Map<Spatial, SpatialAnimationController> animationControllerSpatial = new HashMap<>();
-	private List<Vector2f> path = null;
 
 	private float worldDimension;
 
@@ -74,25 +61,6 @@ public class GuiObjectManager
 		this.playingPlayer = playingPlayer;
 	}
 
-	public void setPath(List<Vector2f> path)
-	{
-		if (this.path == null || this.path.isEmpty())
-		{
-			this.path = path;
-
-			// gameGui.spheres.detachAllChildren();
-
-			// if (path != null)
-			// for (Vector2f position : path)
-			// addSphere(position.x, position.y);
-		}
-	}
-
-	public List<Vector2f> getPath()
-	{
-		return path;
-	}
-
 	static void init(GameGui gm, String playingPlayer)
 	{
 		_guiGuiObjectManager = new GuiObjectManager(gm, playingPlayer, false);
@@ -112,44 +80,6 @@ public class GuiObjectManager
 	{
 		this.worldDimension = worldDimension;
 		gameGui.createWorld(worldDimension);
-	}
-
-	public void setPointToVisit()
-	{
-		float ray = 100f;
-		int fragmentsX = (int) (GameManager.getInstance().getWorld().getWidth() / ray);
-		int fragmentsY = (int) (GameManager.getInstance().getWorld().getHeight() / ray);
-
-		for (int i = 0; i < fragmentsX; i++)
-			for (int j = 0; j < fragmentsY; j++)
-			{
-				Vector2f position = new Vector2f(ray + ray * i, ray + ray * j);
-
-				List<AbstractObject> collisions = GameManager.getInstance().getWorld().checkForCollision(position.x, position.y, ray);
-				if (collisions.isEmpty())
-				{
-
-				}
-				else
-				{
-					position = ((AbstractProperty) collisions.get(0)).getGatheringPlace();
-
-				}
-				pointToVisit.add(position);
-			}
-		System.out.println();
-		System.out.println();
-		System.out.println("CE NE SONO " + pointToVisit.size());
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		gameGui.spheres.detachAllChildren();
-
-		// for (Vector2f p : pointToVisit)
-		// {
-		// System.out.println("provo a disegnare la sfera " + p.toString());
-		// this.addSphere(p.x, p.y);
-		// }
 	}
 
 	public void addPlayer(String name, Vector2f hqPosition, Vector2f gatheringPlace, Vector2f direction, int life)
@@ -187,8 +117,6 @@ public class GuiObjectManager
 
 		if (name.equals(playingPlayer))
 			gameGui.setCamera(new Vector3f(playerPosition.x, gameGui.getCameraHeight(), playerPosition.z - 40));
-
-		System.out.println("casa dopo dello scale = " + getModelBounds(hqModel));
 
 	}
 
@@ -261,32 +189,6 @@ public class GuiObjectManager
 		return playingPlayer;
 	}
 
-	public void setHitPlayers(ArrayList<String> hitPl)
-	{
-		hitPlayers.clear();
-		for (String s : hitPl)
-			if (players.containsKey(s))
-				hitPlayers.put(s, players.get(s));
-			else if (minions.containsKey(s))
-				hitPlayers.put(s, minions.get(s));
-			else if (towerCrushers.containsKey(s))
-				hitPlayers.put(s, towerCrushers.get(s));
-	}
-
-	public List<Spatial> getHitCharacters()
-	{
-		try
-		{
-			ArrayList<Spatial> hit = new ArrayList<>();
-			for (String s : hitPlayers.keySet())
-				hit.add(hitPlayers.get(s));
-			return hit;
-		} finally
-		{
-			hitPlayers.clear();
-		}
-	}
-
 	public void addResource(String type, int ID, Vector2f position)
 	{
 		Spatial model = null;
@@ -321,11 +223,9 @@ public class GuiObjectManager
 				mines.put(ID, model);
 				model.rotate(FastMath.PI / 2, 0, 0);
 				break;
-		// TODO
 		}
 
 		model.setLocalTranslation(new Vector3f(position.x, 0, position.y));
-		addSphere(position.x, position.y);
 
 		gameGui.attachStaticObject(model);
 
@@ -335,26 +235,6 @@ public class GuiObjectManager
 	{
 		Circle2D circle2D = new Circle2D(gameGui.getAssetManager(), radius, 0, 360, color, 360);
 		return circle2D;
-	}
-
-	private void addSphere(float x, float y)
-	{
-
-		Sphere sphereMesh = new Sphere(10, 10, 9f);
-		Geometry sphereGeo = new Geometry("Shiny rock", sphereMesh);
-		sphereMesh.setTextureMode(Sphere.TextureMode.Projected); // better quality on spheres
-		TangentBinormalGenerator.generate(sphereMesh); // for lighting effect
-		Material sphereMat = new Material(gameGui.getAssetManager(), "Common/MatDefs/Light/Lighting.j3md");
-		sphereMat.setTexture("DiffuseMap", gameGui.getAssetManager().loadTexture("Textures/Terrain/Pond/Pond.jpg"));
-		sphereMat.setTexture("NormalMap", gameGui.getAssetManager().loadTexture("Textures/Terrain/Pond/Pond_normal.png"));
-		sphereMat.setBoolean("UseMaterialColors", true);
-		sphereMat.setColor("Diffuse", ColorRGBA.White);
-		sphereMat.setColor("Specular", ColorRGBA.White);
-		sphereMat.setFloat("Shininess", 64f); // [0,128]
-		sphereGeo.setMaterial(sphereMat);
-		sphereGeo.setLocalTranslation(x, 15, y); // Move it a bit
-		sphereGeo.rotate(1.6f, 0, 0); // Rotate it a bit
-		gameGui.spheres.attachChild(sphereGeo);
 	}
 
 	private void addMinion(String ID, String boss)
@@ -506,11 +386,6 @@ public class GuiObjectManager
 			updateModelLifeBar(towerCrusher, position, life);
 
 		}
-		// Spatial crusher = towerCrushers.get(ID);
-		// crusher.setLocalTranslation(position.x, 0, position.y);
-		// Quaternion quad = new Quaternion();
-		// quad.lookAt(new Vector3f(-direction.x, 0, -direction.y), upVector);
-		// crusher.setLocalRotation(quad);
 	}
 
 	public void removeTower(String ID)
@@ -585,6 +460,8 @@ public class GuiObjectManager
 		if (name.equals(playingPlayer))
 		{
 			gameGui.getNiftyHandler().setLosingScreen();
+			gameGui.setEndGame();
+
 		}
 		gameGui.detachMobileObject(players.get(name));
 		animationControllerSpatial.remove(players.get(name));
@@ -597,6 +474,7 @@ public class GuiObjectManager
 		if (players.size() == 1 && players.containsKey(playingPlayer))
 		{
 			gameGui.getNiftyHandler().setWinningScreen();
+			gameGui.setEndGame();
 
 		}
 	}
@@ -643,5 +521,4 @@ public class GuiObjectManager
 	{
 		return playersColors;
 	}
-	// TODO retrieve informations
 }

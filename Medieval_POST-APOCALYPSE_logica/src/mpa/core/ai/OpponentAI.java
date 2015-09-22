@@ -35,100 +35,85 @@ public class OpponentAI extends MyThread
 
 	boolean knownAllTheWorld = false;
 
-	public OpponentAI( Player player, DifficultyLevel level )
+	public OpponentAI(Player player, DifficultyLevel level)
 	{
 		this.player = player;
-		if( level.equals( DifficultyLevel.values()[DifficultyLevel.values().length - 1] ) )
+		if (level.equals(DifficultyLevel.values()[DifficultyLevel.values().length - 1]))
 			knownAllTheWorld = true;
 		else
-			worldManager = new AIWorldManager( level );
+			worldManager = new AIWorldManager(level);
 
-		states.put( ExplorationState.class.getCanonicalName(), 0 );
-		states.put( ProductionState.class.getCanonicalName(), 0 );
-		states.put( ConquestState.class.getCanonicalName(), 0 );
+		states.put(ExplorationState.class.getCanonicalName(), 0);
+		states.put(ProductionState.class.getCanonicalName(), 0);
+		states.put(ConquestState.class.getCanonicalName(), 0);
 		// states.put( WaitingState.class.getCanonicalName(), 0 );
 	}
 
 	@Override
 	public void run()
 	{
-		while( player.getHP() > 0 )
+		while (player.getHP() > 0)
 		{
 			super.run();
 			try
 			{
-				sleep( 500 );
-			} catch( InterruptedException e )
+				sleep(500);
+			} catch (InterruptedException e)
 			{
 				e.printStackTrace();
 			}
 
 			preroutine();
-			aiState.action( this );
-			aiState = aiState.changeState( this );
+			aiState.action(this);
+			aiState = aiState.changeState(this);
 		}
-
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println( " SONO " + player.getName().toUpperCase() + " E ME LA SONO QUAZATA" );
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
 	}
 
-	private void addBuilding( AbstractObject building )
+	private void addBuilding(AbstractObject building)
 	{
-		if( !knownBuildings.contains( building ) )
-			knownBuildings.add( building );
+		if (!knownBuildings.contains(building))
+			knownBuildings.add(building);
 
-		if( building instanceof AbstractResourceProducer
-				&& !knownResourceProducers.contains( building ) )
-			knownResourceProducers.add( ( AbstractResourceProducer ) building );
-		if( building instanceof House && !knownHeadQuarters.contains( building ) )
-			knownHeadQuarters.add( ( House ) building );
+		if (building instanceof AbstractResourceProducer && !knownResourceProducers.contains(building))
+			knownResourceProducers.add((AbstractResourceProducer) building);
+		if (building instanceof House && !knownHeadQuarters.contains(building))
+			knownHeadQuarters.add((House) building);
 	}
 
-	boolean canGoToThisState( Class<?> state )
+	boolean canGoToThisState(Class<?> state)
 	{
-		if( !states.keySet().contains( state.getCanonicalName() ) )
+		if (!states.keySet().contains(state.getCanonicalName()))
 			return true;
 
-		if( states.get( state.getCanonicalName() ) >= MAXIMUM_TIMES_PER_STATE )
+		if (states.get(state.getCanonicalName()) >= MAXIMUM_TIMES_PER_STATE)
 			return false;
 		else
 		{
-			states.put( state.getCanonicalName(), states.get( state.getCanonicalName() ) + 1 );
+			states.put(state.getCanonicalName(), states.get(state.getCanonicalName()) + 1);
 			return true;
 		}
 	}
 
 	void resetStateCounters()
 	{
-		for( String s : states.keySet() )
-			states.put( s, 0 );
+		for (String s : states.keySet())
+			states.put(s, 0);
 	}
 
-	void addBuildings( Vector2f position )
+	void addBuildings(Vector2f position)
 	{
-		List<AbstractObject> newBuildings = worldManager.getBuildings( position );
+		List<AbstractObject> newBuildings = worldManager.getBuildings(position);
 
-		for( AbstractObject obj : newBuildings )
+		for (AbstractObject obj : newBuildings)
 		{
-			if( obj instanceof Headquarter )
+			if (obj instanceof Headquarter)
 			{
-				if( !knownPlayers.contains( ( ( Headquarter ) obj ).getOwner() )
-						&& ( ( Headquarter ) obj ).getOwner() != player )
+				if (!knownPlayers.contains(((Headquarter) obj).getOwner()) && ((Headquarter) obj).getOwner() != player)
 				{
-					knownPlayers.add( ( ( Headquarter ) obj ).getOwner() );
+					knownPlayers.add(((Headquarter) obj).getOwner());
 				}
 			}
-			addBuilding( obj );
+			addBuilding(obj);
 		}
 	}
 
@@ -142,25 +127,25 @@ public class OpponentAI extends MyThread
 		return knownResourceProducers;
 	}
 
-	boolean isOpponentPlayerWeaker( Player p )
+	boolean isOpponentPlayerWeaker(Player p)
 	{
-		if( p == player )
+		if (p == player)
 			return false;
-		if( p.getPlayerLevel().ordinal() < player.getPlayerLevel().ordinal() )
+		if (p.getPlayerLevel().ordinal() < player.getPlayerLevel().ordinal())
 			return true;
 
-		if( player.getPlayerLevel().ordinal() == p.getPlayerLevel().ordinal() )
+		if (player.getPlayerLevel().ordinal() == p.getPlayerLevel().ordinal())
 		{
 			int opponentPotions = 0;
 			int playerPotions = 0;
 
-			for( Potions potion : Potions.values() )
+			for (Potions potion : Potions.values())
 			{
-				opponentPotions += p.getPotionAmount( potion );
-				playerPotions += p.getPotionAmount( potion );
+				opponentPotions += p.getPotionAmount(potion);
+				playerPotions += p.getPotionAmount(potion);
 			}
 
-			if( opponentPotions <= playerPotions )
+			if (opponentPotions <= playerPotions)
 				return true;
 			else
 				return false;
@@ -174,26 +159,26 @@ public class OpponentAI extends MyThread
 		List<Player> deads = new ArrayList<>();
 		try
 		{
-			for( Player p : knownPlayers )
-				if( GameManager.getInstance().isPlayerDead( p ) )
-					deads.add( p );
-				else if( isOpponentPlayerWeaker( p ) )
+			for (Player p : knownPlayers)
+				if (GameManager.getInstance().isPlayerDead(p))
+					deads.add(p);
+				else if (isOpponentPlayerWeaker(p))
 					return true;
 
 			return false;
 		} finally
 		{
-			for( Player p : deads )
-				knownPlayers.remove( p );
+			for (Player p : deads)
+				knownPlayers.remove(p);
 		}
 	}
 
 	boolean areThereConquerableBuildings()
 	{
 
-		for( AbstractResourceProducer b : knownResourceProducers )
+		for (AbstractResourceProducer b : knownResourceProducers)
 		{
-			if( b.isFree() /* || ( isOpponentPlayerWeaker( b.getOwner() ) ) */)
+			if (b.isFree() /* || ( isOpponentPlayerWeaker( b.getOwner() ) ) */)
 				return true;
 		}
 		return false;
@@ -201,29 +186,28 @@ public class OpponentAI extends MyThread
 
 	private void preroutine()
 	{
-		if( player.getHP() < 100 )
+		if (player.getHP() < 100)
 		{
-			GameManager.getInstance().changeSelectedItem( player, Item.HP_POTION );
-			GameManager.getInstance().playerAction( player, null );
+			GameManager.getInstance().changeSelectedItem(player, Item.HP_POTION);
+			GameManager.getInstance().playerAction(player, null);
 		}
-		if( player.getMP() < 100 )
+		if (player.getMP() < 100)
 		{
-			GameManager.getInstance().changeSelectedItem( player, Item.MP_POTION );
-			GameManager.getInstance().playerAction( player, null );
+			GameManager.getInstance().changeSelectedItem(player, Item.MP_POTION);
+			GameManager.getInstance().playerAction(player, null);
 		}
 
 	}
 
-	boolean canIFightWithHim( Player bully )
+	boolean canIFightWithHim(Player bully)
 	{
-		if( player.getHP() < 5 )
+		if (player.getHP() < 5)
 			return false;
-		if( player.getMP() < 5 )
+		if (player.getMP() < 5)
 			return false;
-		if( player.getPotionAmount( Potions.GRANADE ) == 0 )
+		if (player.getPotionAmount(Potions.GRANADE) == 0)
 			return false;
-		System.out.println( "ma sto bully ? " + bully );
-		if( player.getPlayerLevel().ordinal() < bully.getPlayerLevel().ordinal() )
+		if (player.getPlayerLevel().ordinal() < bully.getPlayerLevel().ordinal())
 			return false;
 
 		return true;
@@ -231,8 +215,8 @@ public class OpponentAI extends MyThread
 
 	boolean shouldBuyPotions()
 	{
-		for( Potions p : Potions.values() )
-			if( player.getPotionAmount( p ) == 0 )
+		for (Potions p : Potions.values())
+			if (player.getPotionAmount(p) == 0)
 				return true;
 
 		return false;
@@ -243,15 +227,15 @@ public class OpponentAI extends MyThread
 		return player;
 	}
 
-	public void gotAttackedBy( AbstractCharacter bully )
+	public void gotAttackedBy(AbstractCharacter bully)
 	{
-		aiState.heIsAttackingYou( bully, player );
+		aiState.heIsAttackingYou(bully, player);
 	}
 
 	boolean shouldICreateTowers()
 	{
-		for( AbstractPrivateProperty property : player.getProperties() )
-			if( property.getNumberOfTowers() < 4 )
+		for (AbstractPrivateProperty property : player.getProperties())
+			if (property.getNumberOfTowers() < 4)
 				return true;
 
 		return false;
@@ -259,6 +243,6 @@ public class OpponentAI extends MyThread
 
 	boolean canIcreateTowers()
 	{
-		return player.hasEnoughResources( GameProperties.getInstance().getPrices( "tower" ) );
+		return player.hasEnoughResources(GameProperties.getInstance().getPrices("tower"));
 	}
 }

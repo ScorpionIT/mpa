@@ -211,16 +211,20 @@ public class GameManagerProxy
 	// return hitPlayersNames;
 	// }
 
-	public List<String> playerAction(String p, Vector2f target)
+	public List<String> playerAction(String playerName, Vector2f target)
 	{
-		List<Player> hitPlayers = gm.playerAction(players.get(p), target);
-
+		Player p = players.get(playerName);
+		List<Player> hitPlayers = null;
 		List<String> hitPlayersNames = new ArrayList<>();
+		if (p != null)
+		{
 
-		if (hitPlayers != null)
-			for (Player player : hitPlayers)
-				hitPlayersNames.add(player.getName());
+			hitPlayers = gm.playerAction(p, target);
 
+			if (hitPlayers != null)
+				for (Player player : hitPlayers)
+					hitPlayersNames.add(player.getName());
+		}
 		return hitPlayersNames;
 
 	}

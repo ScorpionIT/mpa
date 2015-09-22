@@ -26,18 +26,16 @@ public class ConquestState extends AIState
 	}
 
 	@Override
-	void action( OpponentAI opponentAI )
+	void action(OpponentAI opponentAI)
 	{
 		Player player = opponentAI.player;
 
-		if( buildingToOccupy != null && walking )
+		if (buildingToOccupy != null && walking)
 		{
 			Vector2f gathPlace = buildingToOccupy.getGatheringPlace();
-			if( ( ( int ) player.getX() ) == ( ( int ) gathPlace.x )
-					&& ( ( int ) player.getY() ) == ( ( int ) gathPlace.y ) )
+			if (((int) player.getX()) == ((int) gathPlace.x) && ((int) player.getY()) == ((int) gathPlace.y))
 			{
-				// System.out.println( "sono dentro l'if cazzuto " );
-				GameManager.getInstance().occupyProperty( player, buildingToOccupy );
+				GameManager.getInstance().occupyProperty(player, buildingToOccupy);
 				walking = false;
 				buildingToOccupy = null;
 			}
@@ -52,19 +50,19 @@ public class ConquestState extends AIState
 
 		int[] resourcesAmount = new int[4];
 
-		for( DependentCharacter dependentCharacter : player.getSubalterns() )
+		for (DependentCharacter dependentCharacter : player.getSubalterns())
 		{
 			AbstractPrivateProperty building = dependentCharacter.getAbstractPrivateProperty();
 
-			if( building != null )
+			if (building != null)
 			{
-				if( building instanceof Wood )
+				if (building instanceof Wood)
 					resourcesAmount[woods]++;
-				else if( building instanceof Field )
+				else if (building instanceof Field)
 					resourcesAmount[fields]++;
-				else if( building instanceof Mine )
+				else if (building instanceof Mine)
 					resourcesAmount[mines]++;
-				else if( building instanceof Cave )
+				else if (building instanceof Cave)
 					resourcesAmount[caves]++;
 			}
 		}
@@ -73,26 +71,26 @@ public class ConquestState extends AIState
 		int minAmount = Integer.MAX_VALUE;
 		int indexBestChoice = 0;
 
-		for( int i = 0; i < 4; i++ )
-			if( resourcesAmount[i] < minAmount )
+		for (int i = 0; i < 4; i++)
+			if (resourcesAmount[i] < minAmount)
 			{
 				minAmount = resourcesAmount[i];
 				indexBestChoice = i;
-				if( resourcesAmount[i] == 0 && i == fields )
+				if (resourcesAmount[i] == 0 && i == fields)
 					break;
 			}
 
 		int maxAmount = 0;
 		int resourceToFreeIndex = 0;
 		Class<?> resourceToFree = null;
-		for( int i = 0; i < 4; i++ )
-			if( resourcesAmount[i] > maxAmount )
+		for (int i = 0; i < 4; i++)
+			if (resourcesAmount[i] > maxAmount)
 			{
 				maxAmount = resourcesAmount[i];
 				resourceToFreeIndex = i;
 			}
 
-		switch( indexBestChoice )
+		switch (indexBestChoice)
 		{
 			case caves:
 				bestChoice = Cave.class;
@@ -108,7 +106,7 @@ public class ConquestState extends AIState
 				break;
 		}
 
-		switch( resourceToFreeIndex )
+		switch (resourceToFreeIndex)
 		{
 			case caves:
 				resourceToFree = Cave.class;
@@ -128,20 +126,19 @@ public class ConquestState extends AIState
 		float _distance = Float.MAX_VALUE;
 		AbstractResourceProducer _building2 = null;
 
-		for( AbstractResourceProducer building : opponentAI.getKnownResourceProducers() )
+		for (AbstractResourceProducer building : opponentAI.getKnownResourceProducers())
 		{
-			if( building.getOwner() == player )
+			if (building.getOwner() == player)
 				continue;
 
-			float distance = MyMath.distanceFloat( player.getX(), player.getY(), building.getX(),
-					building.getY() );
+			float distance = MyMath.distanceFloat(player.getX(), player.getY(), building.getX(), building.getY());
 
-			if( distance < shortestDistance && !building.getClass().equals( bestChoice.getClass() ) )
+			if (distance < shortestDistance && !building.getClass().equals(bestChoice.getClass()))
 			{
 				_building = building;
 				shortestDistance = distance;
 			}
-			else if( distance < _distance && building.getClass().equals( bestChoice.getClass() ) )
+			else if (distance < _distance && building.getClass().equals(bestChoice.getClass()))
 			{
 				_building2 = building;
 				_distance = distance;
@@ -149,90 +146,76 @@ public class ConquestState extends AIState
 
 		}
 
-		if( !player.isThereAnyFreeSulbaltern() )
+		if (!player.isThereAnyFreeSulbaltern())
 		{
-			if( minAmount == 0 )
+			if (minAmount == 0)
 			{
 				List<DependentCharacter> subalterns = player.getSubalterns();
 
-				for( DependentCharacter dC : subalterns )
+				for (DependentCharacter dC : subalterns)
 				{
 					AbstractPrivateProperty privateProperty = dC.getAbstractPrivateProperty();
-					if( privateProperty != null
-							&& privateProperty.getClass().equals( resourceToFree.getClass() ) )
+					if (privateProperty != null && privateProperty.getClass().equals(resourceToFree.getClass()))
 					{
-						player.freeSubaltern( dC );
+						player.freeSubaltern(dC);
 						break;
 					}
 				}
 			}
 		}
 
-		if( _building2 != null )
+		if (_building2 != null)
 		{
 			buildingToOccupy = _building2;
 			Vector2f gatheringPlace = _building2.getGatheringPlace();
-			GameManager.getInstance().computePath( player, gatheringPlace.x, gatheringPlace.y );
+			GameManager.getInstance().computePath(player, gatheringPlace.x, gatheringPlace.y);
 			walking = true;
 		}
-		else if( _building != null )
+		else if (_building != null)
 		{
 			buildingToOccupy = _building;
 			Vector2f gatheringPlace = _building.getGatheringPlace();
-			GameManager.getInstance().computePath( player, gatheringPlace.x, gatheringPlace.y );
+			GameManager.getInstance().computePath(player, gatheringPlace.x, gatheringPlace.y);
 			walking = true;
 		}
-		else if( !opponentAI.player.getFreeSubalterns().isEmpty() )
+		else if (!opponentAI.player.getFreeSubalterns().isEmpty())
 		{
 			int min = Integer.MAX_VALUE;
 			AbstractPrivateProperty chosen = null;
-			for( AbstractPrivateProperty abstractPrivateProperty : opponentAI.player
-					.getProperties() )
+			for (AbstractPrivateProperty abstractPrivateProperty : opponentAI.player.getProperties())
 			{
-				if( opponentAI.player.getName().equals( "Paola Maledetta 2" ) )
-				{
-					// System.out.println( "il numero di edifici conquistati è "
-					// + opponentAI.player.getProperties().size() );
-					// System.out.println( "il mio chosen per il momento è " + chosen );
-				}
-				if( abstractPrivateProperty.getNumberOfControllers() < min )
+				if (abstractPrivateProperty.getNumberOfControllers() < min)
 				{
 					chosen = abstractPrivateProperty;
 					min = abstractPrivateProperty.getNumberOfControllers();
 				}
 			}
-			if( chosen != null )
+			if (chosen != null)
 			{
-				if( opponentAI.player.getName().equals( "Paola Maledetta 2" ) )
-				{
-					// System.out.println( "alla fine ho scelto " + chosen );
-				}
-				GameManager.getInstance().addWorker( opponentAI.player, chosen );
+				GameManager.getInstance().addWorker(opponentAI.player, chosen);
 			}
 		}
 	}
 
 	@Override
-	AIState changeState( OpponentAI opponentAI )
+	AIState changeState(OpponentAI opponentAI)
 	{
-		AIState nextState = super.changeState( opponentAI );
+		AIState nextState = super.changeState(opponentAI);
 
-		if( nextState != null )
+		if (nextState != null)
 			return nextState;
 
-		if( walking && buildingToOccupy != null )
+		if (walking && buildingToOccupy != null)
 			nextState = this;
-		else if( opponentAI.shouldICreateTowers() && opponentAI.canIcreateTowers() )
+		else if (opponentAI.shouldICreateTowers() && opponentAI.canIcreateTowers())
 			nextState = new FortificationState();
-		else if( opponentAI.player.canUpgrade() )
+		else if (opponentAI.player.canUpgrade())
 			nextState = new StrengtheningState();
-		else if( opponentAI.areThereWeakerPlayers() )
+		else if (opponentAI.areThereWeakerPlayers())
 			nextState = new CombatState();
-		else if( opponentAI.shouldBuyPotions() && opponentAI.player.canBuyPotions()
-				&& opponentAI.canGoToThisState( ProductionState.class ) )
+		else if (opponentAI.shouldBuyPotions() && opponentAI.player.canBuyPotions() && opponentAI.canGoToThisState(ProductionState.class))
 			nextState = new ProductionState();
-		else if( !opponentAI.knownAllTheWorld
-				&& opponentAI.canGoToThisState( ExplorationState.class ) )
+		else if (!opponentAI.knownAllTheWorld && opponentAI.canGoToThisState(ExplorationState.class))
 			nextState = new ExplorationState();
 		else
 		{
