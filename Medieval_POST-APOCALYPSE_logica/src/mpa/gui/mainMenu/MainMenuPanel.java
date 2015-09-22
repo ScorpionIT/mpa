@@ -57,9 +57,8 @@ public class MainMenuPanel extends JPanel
 			@Override
 			public void mouseReleased(MouseEvent e)
 			{
-				final MenuSinglePlayerPanel menuSinglePlayerPanel = new MenuSinglePlayerPanel(mainFrame.getWidth() * 15 / 100,
-						mainFrame.getHeight() * 10 / 100, mainFrame.getWidth() * 70 / 100, mainFrame.getHeight() * 80 / 100, MainMenuPanel.this,
-						mainFrame);
+				final JPanel menuSinglePlayerPanel = new MenuSinglePlayerPanel(mainFrame.getWidth() * 15 / 100, mainFrame.getHeight() * 10 / 100,
+						mainFrame.getWidth() * 70 / 100, mainFrame.getHeight() * 80 / 100, MainMenuPanel.this, mainFrame);
 
 				JPanel panelConponent = new JPanel()
 				{
@@ -101,6 +100,22 @@ public class MainMenuPanel extends JPanel
 		xComponent = this.getWidth() * 50 / 100 - imageIcon.getIconWidth() / 2;
 		multiPlayer.setBounds(xComponent, yComponent, imageIcon.getIconWidth(), yIncrement);
 		multiPlayer.setVisible(true);
+		multiPlayer.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mouseReleased(MouseEvent e)
+			{
+				JPanel serverSelectionPanel = new mpa.gui.multiplayer.ServerSelectionPanel(mainFrame, MainMenuPanel.this);
+
+				mainFrame.getContentPane().removeAll();
+				mainFrame.getContentPane().add(serverSelectionPanel);
+				mainFrame.getContentPane().setVisible(true);
+				mainFrame.setVisible(true);
+				serverSelectionPanel.repaint();
+				mainFrame.setVisible(true);
+
+			}
+		});
 		add(multiPlayer);
 
 		yComponent += yIncrement;
@@ -110,6 +125,15 @@ public class MainMenuPanel extends JPanel
 		xComponent = this.getWidth() * 50 / 100 - imageIcon.getIconWidth() / 2;
 		createServer.setBounds(xComponent, yComponent, imageIcon.getIconWidth(), yIncrement);
 		createServer.setVisible(true);
+
+		createServer.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mouseReleased(MouseEvent e)
+			{
+
+			}
+		});
 		add(createServer);
 
 		yComponent += yIncrement;
