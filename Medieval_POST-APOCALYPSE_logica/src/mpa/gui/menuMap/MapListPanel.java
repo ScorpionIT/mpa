@@ -26,9 +26,9 @@ public class MapListPanel extends JPanel
 
 	private JList<String> mapList;
 	private String[] data;
-	JScrollPane scrollPane;
+	private JScrollPane scrollPane;
 
-	public MapListPanel(MainMenuGamePanel mainPanel)
+	public MapListPanel(MenuSinglePlayerPanel mainPanel)
 	{
 
 		this.setOpaque(false);
@@ -75,10 +75,10 @@ public class MapListPanel extends JPanel
 					int selectedIndex = mapList.getSelectedIndex();
 
 					if (selectedIndex < listOfFilesDefaultFolder.length)
-						((MainMenuGamePanel) MapListPanel.this.mainPanel).setMap(MapListPanel.this.defaultMaps + "/" + mapList.getSelectedValue()
+						((MenuSinglePlayerPanel) MapListPanel.this.mainPanel).setMap(MapListPanel.this.defaultMaps + "/" + mapList.getSelectedValue()
 								+ ".xml");
 					else
-						((MainMenuGamePanel) MapListPanel.this.mainPanel).setMap(MapListPanel.this.customMaps + "/" + mapList.getSelectedValue()
+						((MenuSinglePlayerPanel) MapListPanel.this.mainPanel).setMap(MapListPanel.this.customMaps + "/" + mapList.getSelectedValue()
 								+ ".xml");
 
 				}

@@ -27,13 +27,13 @@ import mpa.core.util.GameProperties;
 import mpa.core.util.MapFromXMLCreator;
 import mpa.gui.menuMap.DifficultyPanel;
 import mpa.gui.menuMap.InputNamePanel;
-import mpa.gui.menuMap.MainMenuGamePanel;
+import mpa.gui.menuMap.MenuSinglePlayerPanel;
 import mpa.gui.menuMap.MapListPanel;
 import mpa.gui.menuMap.MapPreview;
 
 import org.jdom2.JDOMException;
 
-public class ProvaMainMenuGamePanel extends MainMenuGamePanel
+public class ProvaMainMenuGamePanel extends MenuSinglePlayerPanel
 {
 	/**
 	 * 

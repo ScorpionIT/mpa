@@ -1,6 +1,7 @@
 package mpa.gui.mapEditor;
 
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
@@ -93,6 +94,15 @@ public class ButtonsEditorPanel extends JPanel
 		back = new JButton(new ImageIcon(images.get("Back")));
 		back.setOpaque(false);
 		back.setContentAreaFilled(false);
+		back.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mouseReleased(MouseEvent e)
+			{
+				ButtonsEditorPanel.this.mainMapEditorPanel.backButton();
+
+			}
+		});
 
 		delete = new JButton(new ImageIcon(images.get("Delete")));
 		delete.setOpaque(false);

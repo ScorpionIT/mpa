@@ -15,6 +15,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -35,7 +36,7 @@ import org.jdom2.JDOMException;
 
 import com.jme3.system.AppSettings;
 
-public class MainMenuGamePanel extends JPanel
+public class MenuSinglePlayerPanel extends JPanel
 {
 	/**
 	 * 
@@ -57,12 +58,14 @@ public class MainMenuGamePanel extends JPanel
 	DifficultyLevel difficultyLevelSelected = null;
 	private String textImagePath = GameProperties.getInstance().getPath("TextImagePath");
 
-	public MainMenuGamePanel()
+	private JButton back = null;
+
+	public MenuSinglePlayerPanel()
 	{
 		// TODO Stub di costruttore generato automaticamente
 	}
 
-	public MainMenuGamePanel(int x, int y, int width, int height)
+	public MenuSinglePlayerPanel(int x, int y, int width, int height)
 	{
 
 		this.setSize(width, height);
@@ -109,14 +112,14 @@ public class MainMenuGamePanel extends JPanel
 					JOptionPane.showMessageDialog(new Frame(), "Seleziona la difficoltà", "Message", JOptionPane.PLAIN_MESSAGE);
 				else
 				{
-					World world = MainMenuGamePanel.this.worldLoader.loadWorld(new WorldFromMapInfo());
+					World world = MenuSinglePlayerPanel.this.worldLoader.loadWorld(new WorldFromMapInfo());
 					// GameManager.init(world,
 					// MainMenuGamePanel.this.worldLoader.makePlayers(MainMenuGamePanel.this.playerName,
 					// world,
 					// MainMenuGamePanel.this.selectedHQ));
 					GameManager.init(world, difficultyLevelSelected, false);
-					MainMenuGamePanel.this.selectedHQIndex = MainMenuGamePanel.this.worldLoader.makePlayers(MainMenuGamePanel.this.playerName, world,
-							MainMenuGamePanel.this.selectedHQ);
+					MenuSinglePlayerPanel.this.selectedHQIndex = MenuSinglePlayerPanel.this.worldLoader.makePlayers(
+							MenuSinglePlayerPanel.this.playerName, world, MenuSinglePlayerPanel.this.selectedHQ);
 					// MainMenuPanel.this.removeAll();
 					// GameGui gameGui = new GameGui();
 					// gameGui.setBounds(0, 0, MainMenuPanel.this.screenWidth,
@@ -283,12 +286,12 @@ public class MainMenuGamePanel extends JPanel
 		frame.setLocation(0, 0);
 
 		frame.setSize(screenWidth, screenHeight);
-		MainMenuGamePanel mainMenuGamePanel = new MainMenuGamePanel(screenWidth * 15 / 100, screenHeight * 10 / 100, screenWidth * 70 / 100,
-				screenHeight * 80 / 100);
+		MenuSinglePlayerPanel menuSinglePlayerPanel = new MenuSinglePlayerPanel(screenWidth * 15 / 100, screenHeight * 10 / 100,
+				screenWidth * 70 / 100, screenHeight * 80 / 100);
 
 		frame.setContentPane(new Panel());
 		frame.getContentPane().setBackground(Color.BLACK);
-		frame.getContentPane().add(mainMenuGamePanel);
+		frame.getContentPane().add(menuSinglePlayerPanel);
 		frame.getContentPane().setLayout(null);
 		frame.getContentPane().setVisible(true);;
 		frame.setVisible(true);

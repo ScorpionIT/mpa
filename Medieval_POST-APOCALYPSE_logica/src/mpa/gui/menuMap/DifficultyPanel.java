@@ -24,7 +24,7 @@ import mpa.core.util.GameProperties;
 public class DifficultyPanel extends JPanel
 {
 
-	private MainMenuGamePanel mainMenuGamePanel;
+	private MenuSinglePlayerPanel menuSinglePlayerPanel;
 
 	private List<AbstractButton> buttonList = new ArrayList<AbstractButton>();
 	private ButtonGroup group = new ButtonGroup();
@@ -33,9 +33,9 @@ public class DifficultyPanel extends JPanel
 
 	private String textImagePath = GameProperties.getInstance().getPath("TextImagePath");
 
-	public DifficultyPanel(MainMenuGamePanel mainMenuGamePanel)
+	public DifficultyPanel(MenuSinglePlayerPanel menuSinglePlayerPanel)
 	{
-		this.mainMenuGamePanel = mainMenuGamePanel;
+		this.menuSinglePlayerPanel = menuSinglePlayerPanel;
 
 		initRadioButtonGroup();
 		this.setLayout(null);
@@ -52,7 +52,7 @@ public class DifficultyPanel extends JPanel
 				for (DifficultyLevel difficultyLevel : somethingList)
 				{
 					if (difficultyLevel.name().equals(difficultyLevelSelected))
-						DifficultyPanel.this.mainMenuGamePanel.setDifficultyLevel(difficultyLevel);
+						DifficultyPanel.this.menuSinglePlayerPanel.setDifficultyLevel(difficultyLevel);
 				}
 
 			}

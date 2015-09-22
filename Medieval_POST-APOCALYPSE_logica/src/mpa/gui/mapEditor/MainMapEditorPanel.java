@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import mpa.core.logic.Pair;
 import mpa.core.util.GameProperties;
 import mpa.core.util.MapToXmlCreator;
+import mpa.gui.mainMenu.MainMenuPanel;
 
 public class MainMapEditorPanel extends JPanel
 {
@@ -43,10 +44,14 @@ public class MainMapEditorPanel extends JPanel
 
 	// TODO creare un file proporties per le cartelle
 	private SubmitButtonEditorPanel submitButtonEditorPanel;
+	private JFrame mainFrame;
+	private MainMenuPanel mainMenuPanel;
 
-	public MainMapEditorPanel()
+	public MainMapEditorPanel(MainMenuPanel mainMenuPanel, JFrame frame)
 	{
 
+		this.mainMenuPanel = mainMenuPanel;
+		this.mainFrame = frame;
 		this.setLayout(null);
 		buttonsEditorPanel = new ButtonsEditorPanel(this);
 		mapPreviewEditorPanel = new MapPreviewEditorPanel(this, imageLabels);
@@ -271,15 +276,13 @@ public class MainMapEditorPanel extends JPanel
 			mapPreviewEditorPanel.repaint();
 	}
 
-	public static void main(String[] args)
+	public void backButton()
 	{
-		JFrame frame = new JFrame();
-		int screenWidth = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
-		int screenHeight = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
-		frame.setSize(screenWidth, screenHeight);
-		frame.setContentPane(new MainMapEditorPanel());
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
+		mainFrame.getContentPane().removeAll();
+		mainFrame.getContentPane().add(mainMenuPanel);
+		mainFrame.getContentPane().setVisible(true);
+		mainFrame.setVisible(true);
+		mainMenuPanel.repaint();
 	}
 
 }

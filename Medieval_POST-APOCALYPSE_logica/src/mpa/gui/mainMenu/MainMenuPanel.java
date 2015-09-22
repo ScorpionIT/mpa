@@ -17,13 +17,11 @@ import javax.swing.JPanel;
 
 import mpa.core.util.GameProperties;
 import mpa.gui.mapEditor.MainMapEditorPanel;
-import mpa.gui.menuMap.MainMenuGamePanel;
+import mpa.gui.menuMap.MenuSinglePlayerPanel;
 
 public class MainMenuPanel extends JPanel
 {
 	private static final long serialVersionUID = 1L;
-
-	private JLabel title;
 
 	private Image backgroundImage;
 	private JLabel singlePlayer;
@@ -50,10 +48,6 @@ public class MainMenuPanel extends JPanel
 			e1.printStackTrace();
 		}
 		ImageIcon imageIcon = null;
-		title = new JLabel("CI SARÀ UN'IMMAGINE");
-		title.setBounds(25 * width / 100, 0, 50 * width / 100, 10 * height / 100);
-		title.setVisible(true);
-		add(title);
 
 		imageIcon = loadImageIcon("SinglePlayer.png");
 		singlePlayer = new JLabel(imageIcon);
@@ -65,12 +59,12 @@ public class MainMenuPanel extends JPanel
 			@Override
 			public void mouseReleased(MouseEvent e)
 			{
-				MainMenuGamePanel mainMenuGamePanel = new MainMenuGamePanel(mainFrame.getWidth() * 15 / 100, mainFrame.getHeight() * 10 / 100,
+				MenuSinglePlayerPanel menuSinglePlayerPanel = new MenuSinglePlayerPanel(mainFrame.getWidth() * 15 / 100, mainFrame.getHeight() * 10 / 100,
 						mainFrame.getWidth() * 70 / 100, mainFrame.getHeight() * 80 / 100);
 
 				mainFrame.setContentPane(new Panel());
 				mainFrame.getContentPane().setBackground(Color.BLACK);
-				mainFrame.getContentPane().add(mainMenuGamePanel);
+				mainFrame.getContentPane().add(menuSinglePlayerPanel);
 				mainFrame.getContentPane().setLayout(null);
 				mainFrame.getContentPane().setVisible(true);;
 				mainFrame.setVisible(true);
@@ -108,8 +102,8 @@ public class MainMenuPanel extends JPanel
 			@Override
 			public void mouseReleased(MouseEvent e)
 			{
-				mainFrame.getContentPane().add(new MainMapEditorPanel());
-				mainFrame.getContentPane().setVisible(true);;
+				mainFrame.getContentPane().add(new MainMapEditorPanel(MainMenuPanel.this, mainFrame));
+				mainFrame.getContentPane().setVisible(true);
 				mainFrame.setVisible(true);
 			}
 		});

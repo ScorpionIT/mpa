@@ -8,12 +8,14 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import mpa.core.logic.MapInfo;
 import mpa.core.logic.Pair;
@@ -23,16 +25,16 @@ public class MapPreview extends MpaPanel
 {
 
 	private MapInfo mapInfo;
-	private HashMap<String, Image> images = new HashMap<>();
-	private HashMap<JLabel, Pair<Float, Float>> headQuartersLabel = new HashMap<>();
-	private MainMenuGamePanel mainMenuGamePanel;
+	private Map<String, Image> images = new HashMap<>();
+	private Map<JLabel, Pair<Float, Float>> headQuartersLabel = new HashMap<>();
+	private JPanel menuSinglePlayerPanel;
 	private Image backgroundImage;
 	private String texturePath = GameProperties.getInstance().getPath("TexturePath");
 	private String imagesPreviewPath = GameProperties.getInstance().getPath("ImagesPreviewPath");
 
-	public MapPreview(MainMenuGamePanel mainMenuGamePanel)
+	public MapPreview(MenuSinglePlayerPanel menuSinglePlayerPanel)
 	{
-		this.mainMenuGamePanel = mainMenuGamePanel;
+		this.menuSinglePlayerPanel = menuSinglePlayerPanel;
 		this.setLayout(null);
 		try
 		{
@@ -89,12 +91,14 @@ public class MapPreview extends MpaPanel
 				{
 					Set<JLabel> keys = MapPreview.this.headQuartersLabel.keySet();
 					for (JLabel l : keys)
-						if (MapPreview.this.headQuartersLabel.get(l).equals(MapPreview.this.mainMenuGamePanel.getSelectedHQ()))
+						if (MapPreview.this.headQuartersLabel.get(l).equals(
+								((MenuSinglePlayerPanel) MapPreview.this.menuSinglePlayerPanel).getSelectedHQ()))
 						{
 							l.setBorder(BorderFactory.createEmptyBorder());
 						}
 					((JLabel) e.getSource()).setBorder(BorderFactory.createLineBorder(Color.red));
-					MapPreview.this.mainMenuGamePanel.setSelectedHeadQuarter(MapPreview.this.headQuartersLabel.get(e.getSource()));
+					((MenuSinglePlayerPanel) MapPreview.this.menuSinglePlayerPanel).setSelectedHeadQuarter(MapPreview.this.headQuartersLabel.get(e
+							.getSource()));
 
 				}
 

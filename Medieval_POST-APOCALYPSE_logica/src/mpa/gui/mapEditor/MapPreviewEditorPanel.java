@@ -142,8 +142,8 @@ public class MapPreviewEditorPanel extends MpaPanel
 
 			g.drawRect((int) (this.selectedObjectPosition.getX()), (int) this.selectedObjectPosition.getY(), W(objectWidth * 2), H(objectHeight * 2));
 
-			g.drawImage(images.get(selectedName), (int) (this.selectedObjectPosition.getX()), (int) this.selectedObjectPosition.getY(),
-					W(objectWidth * 2), H(objectHeight * 2), this);
+			g.drawImage(images.get(selectedName), (int) (this.selectedObjectPosition.getX() + W(objectWidth / 2)),
+					(int) this.selectedObjectPosition.getY() + H(objectHeight / 2), W(objectWidth), H(objectHeight), this);
 
 		}
 
@@ -155,7 +155,8 @@ public class MapPreviewEditorPanel extends MpaPanel
 			Integer objectWidth = GameProperties.getInstance().getObjectWidth(elementName);
 			Integer objectHeight = GameProperties.getInstance().getObjectHeight(elementName);
 
-			g.drawImage(image, (int) (element.getSecond().getX()), (int) element.getSecond().getY(), W(objectWidth * 2), H(objectHeight * 2), this);
+			g.drawImage(image, (int) (element.getSecond().getX() + W(objectWidth / 2)), (int) element.getSecond().getY() + H(objectHeight / 2),
+					W(objectWidth), H(objectHeight), this);
 
 		}
 

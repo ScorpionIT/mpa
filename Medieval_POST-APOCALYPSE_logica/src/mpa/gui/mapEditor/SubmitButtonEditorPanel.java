@@ -33,6 +33,7 @@ public class SubmitButtonEditorPanel extends JPanel
 			{
 				super.mouseReleased(e);
 				SubmitButtonEditorPanel.this.mainMapEditorPanel.convertMapToXml();
+				SubmitButtonEditorPanel.this.mainMapEditorPanel.backButton();
 			}
 
 		});
