@@ -52,6 +52,16 @@ public class PlayerInfoHandler extends ProcessingChain
 				reply[0] = GameManagerProxy.getInstance().getPlayerLevel( fields[1] );
 				return reply;
 			}
+			else
+			{
+				String[] minionName = fields[2].split( "," );
+				if( minionName[0].equals( "MINION" ) )
+				{
+					String[] reply = new String[1];
+					reply[0] = GameManagerProxy.getInstance().getMinionBoss( minionName[1] );
+					return reply;
+				}
+			}
 		}
 		if( hasNext() )
 			return next.processRequest( request );
