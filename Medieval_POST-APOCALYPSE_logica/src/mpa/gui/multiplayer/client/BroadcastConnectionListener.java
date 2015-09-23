@@ -62,8 +62,8 @@ public class BroadcastConnectionListener extends Thread {
 					
 				}
 
-				
 			}
+			socket.close();	
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
