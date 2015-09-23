@@ -7,13 +7,16 @@ import java.util.Map;
 import javax.vecmath.Vector2f;
 
 import mpa.core.logic.GameManagerProxy;
+import mpa.gui.multiplayer.server.WelcomeServer;
 
 public class UpdateInfoHandler extends ProcessingChain
 {
+	private WelcomeServer welcomeServer;
 
-	public UpdateInfoHandler( ProcessingChain next )
+	public UpdateInfoHandler( ProcessingChain next, WelcomeServer welcomeServer )
 	{
 		super( next );
+		this.welcomeServer = welcomeServer;
 	}
 
 	@Override

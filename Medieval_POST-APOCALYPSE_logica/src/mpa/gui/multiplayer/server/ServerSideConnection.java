@@ -22,6 +22,7 @@ import mpa.core.multiplayer.processingChain.PlayerActionHandler;
 import mpa.core.multiplayer.processingChain.PlayerInfoHandler;
 import mpa.core.multiplayer.processingChain.PlayersInfosHandler;
 import mpa.core.multiplayer.processingChain.ProcessingChain;
+import mpa.core.multiplayer.processingChain.UpdateInfoHandler;
 
 public class ServerSideConnection extends Thread
 {
@@ -37,10 +38,12 @@ public class ServerSideConnection extends Thread
 	private DataOutputStream outToClient;
 	private BufferedReader inFromClient;
 	private ProcessingChain headOfTheChain = null;
+	private WelcomeServer welcomeServer;
 
-	public ServerSideConnection( Socket socket, String mapPath )
+	public ServerSideConnection( Socket socket, String mapPath, WelcomeServer welcomeServer )
 	{
 		this.mapPath = mapPath;
+		this.welcomeServer = welcomeServer;
 		boolean isOk = true;
 
 		do
@@ -68,7 +71,7 @@ public class ServerSideConnection extends Thread
 				{
 					case GETTING_MAP:
 						if( inFromClient.readLine().equals( "Enter" ) )
-							outToClient.writeBytes("OK"+'\n');
+							outToClient.writeBytes( "OK" + '\n' );
 						if( inFromClient.readLine().equals( "GetMap" ) )
 							givingTheMap();
 					case GAME_SETTING:
@@ -82,7 +85,7 @@ public class ServerSideConnection extends Thread
 
 				}
 			}
-			outToClient.writeBytes("CLOSING");
+			outToClient.writeBytes( "CLOSING" );
 		} catch( IOException e )
 		{
 			// TODO Auto-generated catch block
@@ -94,7 +97,7 @@ public class ServerSideConnection extends Thread
 	private void initChain()
 	{
 
-		BuyPotionHandler buyPotionHandler = null;
+		BuyPotionHandler buyPotionHandler = new BuyPotionHandler( null );
 		ChangeItemHandler changeItemHandler = new ChangeItemHandler( buyPotionHandler );
 		ComputePathHandler computePathHandler = new ComputePathHandler( changeItemHandler );
 		CreateMinionsHandler createMinionsHandler = new CreateMinionsHandler( computePathHandler );
@@ -109,7 +112,9 @@ public class ServerSideConnection extends Thread
 				getResourcesAmountHandler );
 		PlayerActionHandler playerActionHandler = new PlayerActionHandler( occupyPropertyHandler );
 		PlayersInfosHandler playersInfosHandler = new PlayersInfosHandler( playerActionHandler );
-		headOfTheChain = new PlayerInfoHandler( playersInfosHandler );
+		UpdateInfoHandler updateInfoHandler = new UpdateInfoHandler( playersInfosHandler,
+				welcomeServer );
+		headOfTheChain = new PlayerInfoHandler( updateInfoHandler );
 
 	}
 
@@ -121,13 +126,13 @@ public class ServerSideConnection extends Thread
 			BufferedReader br = new BufferedReader( new FileReader( mapPath ) );
 			String line = br.readLine();
 
-			outToClient.writeBytes( "BEGIN"+ '\n' );
+			outToClient.writeBytes( "BEGIN" + '\n' );
 			while( line != null )
 			{
-				outToClient.writeBytes( line + '\n');
+				outToClient.writeBytes( line + '\n' );
 				line = br.readLine();
 			}
-			outToClient.writeBytes( "END"+ '\n' );
+			outToClient.writeBytes( "END" + '\n' );
 			br.close();
 
 		} catch( FileNotFoundException e )
@@ -141,10 +146,10 @@ public class ServerSideConnection extends Thread
 		state = ConnectionState.GAME_SETTING;
 
 	}
-	
-	public void stopThread ()
+
+	public void stopThread()
 	{
-		keepConnectionOn= false;
+		keepConnectionOn = false;
 	}
 
 }
