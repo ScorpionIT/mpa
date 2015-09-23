@@ -3,6 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="jdom-2.0.5.jar"/>
-	<classpathentry kind="lib" path="/home/parcuri/Dropbox/Workspace_Java/JMonkey/jME3_2014-06-12/jMonkeyEngine3.jar"/>
+	<classpathentry kind="lib" path="JMonkey/jME3_2014-06-12/jMonkeyEngine3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
