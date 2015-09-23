@@ -58,9 +58,9 @@ public class ProvaPath extends MpaPanel
 			@Override
 			public void mouseReleased( MouseEvent e )
 			{
-				listenerImplementation.computePath(
-						new Vector2f( worldX( e.getX() ), worldY( e.getY() ) ),
-						ProvaPath.this.player );
+//				listenerImplementation.computePath(
+//						new Vector2f( worldX( e.getX() ), worldY( e.getY() ) ),
+//						ProvaPath.this.player );
 
 			}
 

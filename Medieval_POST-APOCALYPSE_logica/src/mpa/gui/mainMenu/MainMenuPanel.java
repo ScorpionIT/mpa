@@ -241,6 +241,7 @@ public class MainMenuPanel extends JPanel
 		frame.setContentPane(mainMenuPanel);
 		frame.setVisible(true);
 		frame.setResizable(false);
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }

@@ -20,8 +20,7 @@ import mpa.core.logic.characters.TowerCrusher;
 import mpa.core.logic.potions.Potions;
 import mpa.core.logic.resources.AbstractResourceProducer;
 
-public class GameManagerProxy
-{
+public class GameManagerProxy {
 
 	private static GameManagerProxy gameManagerProxy = null;
 	private GameManager gm;
@@ -32,27 +31,26 @@ public class GameManagerProxy
 	private Map<String, TowerCrusher> towerCrushers = new ConcurrentHashMap<>();
 	private Map<String, Map<String, AbstractPrivateProperty>> objects = new HashMap<>();
 
-	protected GameManagerProxy(GameManager gm)
-	{
+	protected GameManagerProxy(GameManager gm) {
 		this.gm = gm;
 
-		objects.put("headquarter", new HashMap<String, AbstractPrivateProperty>());
+		objects.put("headquarter",
+				new HashMap<String, AbstractPrivateProperty>());
 		objects.put("field", new HashMap<String, AbstractPrivateProperty>());
 		objects.put("wood", new HashMap<String, AbstractPrivateProperty>());
 		objects.put("mine", new HashMap<String, AbstractPrivateProperty>());
 		objects.put("cave", new HashMap<String, AbstractPrivateProperty>());
 		objects.put("tower", new HashMap<String, AbstractPrivateProperty>());
 
-		for (Player p : gm.getPlayers())
-		{
+		for (Player p : gm.getPlayers()) {
 			players.put(p.getName(), p);
 			player_headquarter.put(p.getName(), p.getHeadquarter());
-			objects.get("headquarter").put(p.getHeadquarter().getID(), p.getHeadquarter());
+			objects.get("headquarter").put(p.getHeadquarter().getID(),
+					p.getHeadquarter());
 			System.out.println("ID " + p.getHeadquarter().getID());
 		}
 
-		for (AbstractPrivateProperty obj : gm.getWorld().getAllObjects())
-		{
+		for (AbstractPrivateProperty obj : gm.getWorld().getAllObjects()) {
 			// nome della classe per la chiave dell'hashmap
 			String className = obj.getClass().toString();
 			String[] split = className.split("\\.");
@@ -62,42 +60,37 @@ public class GameManagerProxy
 		}
 	}
 
-	public static void init(GameManager gm)
-	{
+	public static void init(GameManager gm) {
 		if (gameManagerProxy == null)
 			gameManagerProxy = new GameManagerProxy(gm);
 	}
 
-	public static GameManagerProxy getInstance()
-	{
+	public static GameManagerProxy getInstance() {
 		if (gameManagerProxy == null)
 			gameManagerProxy = new GameManagerProxy(GameManager.getInstance());
 		return gameManagerProxy;
 	}
 
-	public String getPickedObject(com.jme3.math.Vector2f contactPoint)
-	{
-		AbstractObject pickedObject = GameManager.getInstance().getWorld().pickedObject(contactPoint.x, contactPoint.y);
+	public String getPickedObject(com.jme3.math.Vector2f contactPoint) {
+		AbstractObject pickedObject = GameManager.getInstance().getWorld()
+				.pickedObject(contactPoint.x, contactPoint.y);
 
 		String obj;
 
 		if (pickedObject == null)
 			obj = new String("GROUND");
-		else
-		{
+		else {
 			obj = pickedObject.getClass().getSimpleName();
 			obj += ":" + pickedObject.getID();
 		}
 		return obj;
 	}
 
-	public void computePath(String player, float xGoal, float yGoal)
-	{
+	public void computePath(String player, float xGoal, float yGoal) {
 		gm.computePath(players.get(player), xGoal, yGoal);
 	}
 
-	public Map<String, Vector2f> getFields()
-	{
+	public Map<String, Vector2f> getFields() {
 		Map<String, Vector2f> toReturn = new HashMap<>();
 
 		Map<String, AbstractPrivateProperty> fields = objects.get("field");
@@ -107,13 +100,12 @@ public class GameManagerProxy
 		return toReturn;
 	}
 
-	public String getPlayerLevel(String player)
-	{
-		return GameManager.getInstance().getPlayerLevel(players.get(player)).toString();
+	public String getPlayerLevel(String player) {
+		return GameManager.getInstance().getPlayerLevel(players.get(player))
+				.toString();
 	}
 
-	public Map<String, Vector2f> getWoods()
-	{
+	public Map<String, Vector2f> getWoods() {
 		Map<String, Vector2f> toReturn = new HashMap<>();
 
 		Map<String, AbstractPrivateProperty> woods = objects.get("wood");
@@ -123,8 +115,7 @@ public class GameManagerProxy
 		return toReturn;
 	}
 
-	public Map<String, Vector2f> getMines()
-	{
+	public Map<String, Vector2f> getMines() {
 		Map<String, Vector2f> toReturn = new HashMap<>();
 
 		Map<String, AbstractPrivateProperty> mines = objects.get("mine");
@@ -134,8 +125,7 @@ public class GameManagerProxy
 		return toReturn;
 	}
 
-	public Map<String, Vector2f> getCaves()
-	{
+	public Map<String, Vector2f> getCaves() {
 		Map<String, Vector2f> toReturn = new HashMap<>();
 
 		Map<String, AbstractPrivateProperty> caves = objects.get("cave");
@@ -145,11 +135,9 @@ public class GameManagerProxy
 		return toReturn;
 	}
 
-	public Map<String, Vector2f> getTowers()
-	{
+	public Map<String, Vector2f> getTowers() {
 		List<Tower> towersObject = gm.getTowers();
-		for (Tower tower : towersObject)
-		{
+		for (Tower tower : towersObject) {
 			if (!objects.get("tower").containsKey(tower.getID()))
 				objects.get("tower").put(tower.getID(), tower);
 		}
@@ -163,12 +151,11 @@ public class GameManagerProxy
 		return toReturn;
 	}
 
-	public List<String> createMinions(String boss, int quantity, String target)
-	{
-		List<Minion> createdMinions = gm.createMinions(players.get(boss), quantity, players.get(target));
+	public List<String> createMinions(String boss, int quantity, String target) {
+		List<Minion> createdMinions = gm.createMinions(players.get(boss),
+				quantity, players.get(target));
 		List<String> minionNames = new ArrayList<>();
-		for (Minion minion : createdMinions)
-		{
+		for (Minion minion : createdMinions) {
 			minions.put(minion.getID(), minion);
 			minionNames.add(minion.getID());
 		}
@@ -176,32 +163,32 @@ public class GameManagerProxy
 		return minionNames;
 	}
 
-	public String createTowerCrushers(String boss, String target)
-	{
-		List<TowerCrusher> createdTowerCrushers = GameManager.getInstance().createTowerCrushers(players.get(boss),
-				(Tower) objects.get("tower").get(target));
+	public String createTowerCrushers(String boss, String target) {
+		List<TowerCrusher> createdTowerCrushers = GameManager.getInstance()
+				.createTowerCrushers(players.get(boss),
+						(Tower) objects.get("tower").get(target));
 
-		if (!createdTowerCrushers.isEmpty())
-		{
-			towerCrushers.put(createdTowerCrushers.get(0).getID(), createdTowerCrushers.get(0));
+		if (!createdTowerCrushers.isEmpty()) {
+			towerCrushers.put(createdTowerCrushers.get(0).getID(),
+					createdTowerCrushers.get(0));
 			return createdTowerCrushers.get(0).getID();
-		}
-		else
+		} else
 			return null;
 
 	}
 
-	public boolean conquer(String abstractPrivateProperty, String player)
-	{
+	public boolean conquer(String abstractPrivateProperty, String player) {
 		String[] field = abstractPrivateProperty.split(":");
 
-		AbstractPrivateProperty conqueredObject = objects.get(field[0].toLowerCase()).get(field[1]);
+		AbstractPrivateProperty conqueredObject = objects.get(
+				field[0].toLowerCase()).get(field[1]);
 		return gm.conquer(conqueredObject, players.get(player));
 	}
 
 	// public ArrayList<String> attackPhysically(String attacker)
 	// {
-	// ArrayList<Player> hitPlayers = gm.attackPhysically(minions.get(attacker));
+	// ArrayList<Player> hitPlayers =
+	// gm.attackPhysically(minions.get(attacker));
 	//
 	// ArrayList<String> hitPlayersNames = new ArrayList<>();
 	//
@@ -211,13 +198,11 @@ public class GameManagerProxy
 	// return hitPlayersNames;
 	// }
 
-	public List<String> playerAction(String playerName, Vector2f target)
-	{
+	public List<String> playerAction(String playerName, Vector2f target) {
 		Player p = players.get(playerName);
 		List<Player> hitPlayers = null;
 		List<String> hitPlayersNames = new ArrayList<>();
-		if (p != null)
-		{
+		if (p != null) {
 
 			hitPlayers = gm.playerAction(p, target);
 
@@ -229,38 +214,37 @@ public class GameManagerProxy
 
 	}
 
-	public boolean occupyProperty(String player, String property)
-	{
+	public boolean occupyProperty(String player, String property) {
 
 		String[] field = property.split(":");
-		AbstractPrivateProperty conqueredObject = objects.get(field[0].toLowerCase()).get(field[1]);
+		AbstractPrivateProperty conqueredObject = objects.get(
+				field[0].toLowerCase()).get(field[1]);
 
 		return gm.conquer(conqueredObject, players.get(player));
 	}
 
-	public Vector2f getTowerAvaiblePosition(String property)
-	{
+	public Vector2f getTowerAvaiblePosition(String property) {
 		String[] field = property.split(":");
 
-		List<Vector2f> gatheringPlaces = objects.get(field[0].toLowerCase()).get(field[1]).getAvaibleGatheringPlaces();
-		if (gatheringPlaces != null && !gatheringPlaces.isEmpty())
-		{
+		List<Vector2f> gatheringPlaces = objects.get(field[0].toLowerCase())
+				.get(field[1]).getAvaibleGatheringPlaces();
+		if (gatheringPlaces != null && !gatheringPlaces.isEmpty()) {
 			System.out.println("NON CI ARRIVO");
 			return gatheringPlaces.get(0);
-		}
-		else
+		} else
 			return null;
 	}
 
-	public String createTower(String playerName, Vector2f position, String property)
-	{
+	public String createTower(String playerName, Vector2f position,
+			String property) {
 
 		String[] field = property.split(":");
-		AbstractPrivateProperty propertyObject = objects.get(field[0].toLowerCase()).get(field[1]);
-		Tower tower = gm.createTower(players.get(playerName), position, propertyObject);
+		AbstractPrivateProperty propertyObject = objects.get(
+				field[0].toLowerCase()).get(field[1]);
+		Tower tower = gm.createTower(players.get(playerName), position,
+				propertyObject);
 
-		if (tower != null)
-		{
+		if (tower != null) {
 			propertyObject.addTower(tower, position);
 			objects.get("tower").put(tower.getID(), tower);
 			return tower.getID();
@@ -269,41 +253,37 @@ public class GameManagerProxy
 		return "";
 	}
 
-	public void setPause()
-	{
+	public void setPause() {
 		gm.setPause();
 	}
 
-	public void changeSelectedItem(String p, String selected)
-	{
+	public void changeSelectedItem(String p, String selected) {
 		Item item = null;
 
-		switch (selected)
-		{
-			case "WEAPON":
-				item = Item.WEAPON;
-				break;
-			case "FLASH_BANG":
-				item = Item.FLASH_BANG;
-				break;
-			case "GRANADE":
-				item = Item.GRANADE;
-				break;
-			case "HP_POTION":
-				item = Item.HP_POTION;
-				break;
-			case "MP_POTION":
-				item = Item.MP_POTION;
-				break;
-			default:
-				return;
+		switch (selected) {
+		case "WEAPON":
+			item = Item.WEAPON;
+			break;
+		case "FLASH_BANG":
+			item = Item.FLASH_BANG;
+			break;
+		case "GRANADE":
+			item = Item.GRANADE;
+			break;
+		case "HP_POTION":
+			item = Item.HP_POTION;
+			break;
+		case "MP_POTION":
+			item = Item.MP_POTION;
+			break;
+		default:
+			return;
 		}
 
 		gm.changeSelectedItem(players.get(p), item);
 	}
 
-	public List<String> takePlayerAttacks()
-	{
+	public List<String> takePlayerAttacks() {
 		List<String> attackers = new ArrayList<>();
 
 		for (Player p : GameManager.getInstance().takePlayerAttacks())
@@ -312,8 +292,7 @@ public class GameManagerProxy
 		return attackers;
 	}
 
-	public List<String> takeMinionAttacks()
-	{
+	public List<String> takeMinionAttacks() {
 		List<String> attackers = new ArrayList<>();
 
 		for (Minion m : GameManager.getInstance().takeMinionAttacks())
@@ -322,24 +301,22 @@ public class GameManagerProxy
 		return attackers;
 	}
 
-	public List<String> takeTowerCrusherAttacks()
-	{
+	public List<String> takeTowerCrusherAttacks() {
 		List<String> attackers = new ArrayList<>();
 
-		for (TowerCrusher t : GameManager.getInstance().takeTowerCrusherAttacks())
+		for (TowerCrusher t : GameManager.getInstance()
+				.takeTowerCrusherAttacks())
 			attackers.add(t.getID());
 
 		return attackers;
 
 	}
 
-	public List<String> takeDeadPlayers()
-	{
+	public List<String> takeDeadPlayers() {
 		List<Player> deadPlayers = gm.takeDeadPlayers();
 		List<String> names = new ArrayList<>();
 
-		for (Player p : deadPlayers)
-		{
+		for (Player p : deadPlayers) {
 			players.remove(p.getName());
 			names.add(p.getName());
 		}
@@ -347,13 +324,11 @@ public class GameManagerProxy
 		return names;
 	}
 
-	public List<String> takeDeadMinions()
-	{
+	public List<String> takeDeadMinions() {
 		List<Minion> deadMinions = gm.takeDeadMinions();
 		List<String> names = new ArrayList<>();
 
-		for (Minion m : deadMinions)
-		{
+		for (Minion m : deadMinions) {
 			minions.remove(m.getID());
 			names.add(m.getID());
 		}
@@ -361,24 +336,20 @@ public class GameManagerProxy
 		return names;
 	}
 
-	public List<String> takeDeadTowerCrushers()
-	{
+	public List<String> takeDeadTowerCrushers() {
 		List<TowerCrusher> deadTowerCrushers = gm.takeDeadTowerCrushers();
 		List<String> names = new ArrayList<>();
 
-		for (TowerCrusher towerCrusher : deadTowerCrushers)
-		{
+		for (TowerCrusher towerCrusher : deadTowerCrushers) {
 			towerCrushers.remove(towerCrusher.getID());
 			names.add(towerCrusher.getID());
 		}
 		return names;
 	}
 
-	public Map<String, Vector2f[]> getPlayersPositions()
-	{
+	public Map<String, Vector2f[]> getPlayersPositions() {
 		Map<String, Vector2f[]> newPositions = new HashMap<>();
-		for (String p : players.keySet())
-		{
+		for (String p : players.keySet()) {
 			Vector2f[] position = new Vector2f[2];
 			position[0] = players.get(p).getPosition();
 			position[1] = players.get(p).getPlayerDirection();
@@ -389,12 +360,10 @@ public class GameManagerProxy
 
 	}
 
-	public Map<String, Vector2f[]> getMinionsPositions()
-	{
+	public Map<String, Vector2f[]> getMinionsPositions() {
 		Map<String, Vector2f[]> newPositions = new HashMap<>();
 
-		for (String m : minions.keySet())
-		{
+		for (String m : minions.keySet()) {
 			Vector2f[] position = new Vector2f[2];
 			position[0] = minions.get(m).getPosition();
 			position[1] = minions.get(m).getPlayerDirection();
@@ -406,11 +375,9 @@ public class GameManagerProxy
 	}
 
 	// vector[0] position, vector[1] direction, vector[2] hq
-	public Map<String, Vector2f[]> getPlayers()
-	{
+	public Map<String, Vector2f[]> getPlayers() {
 		Map<String, Vector2f[]> players = new HashMap<>();
-		for (Player p : gm.getPlayers())
-		{
+		for (Player p : gm.getPlayers()) {
 			Vector2f[] positions = new Vector2f[3];
 			positions[0] = p.getPosition();
 			positions[1] = p.getPlayerDirection();
@@ -421,22 +388,20 @@ public class GameManagerProxy
 		return players;
 	}
 
-	public String getObjectOwner(String objectType, String objectID)
-	{
-		Player owner = objects.get(objectType.toLowerCase()).get(objectID).getOwner();
-		if (owner == null)
-		{
+	public String getObjectOwner(String objectType, String objectID) {
+		Player owner = objects.get(objectType.toLowerCase()).get(objectID)
+				.getOwner();
+		if (owner == null) {
 			return null;
-		}
-		else
+		} else
 			return owner.getName();
 
 	}
 
-	public int getObjectProductivity(String objectType, String objectID)
-	{
+	public int getObjectProductivity(String objectType, String objectID) {
 
-		AbstractPrivateProperty object = objects.get(objectType.toLowerCase()).get(objectID);
+		AbstractPrivateProperty object = objects.get(objectType.toLowerCase())
+				.get(objectID);
 		if (object instanceof AbstractResourceProducer)
 			return ((AbstractResourceProducer) object).getProviding();
 		else
@@ -444,42 +409,35 @@ public class GameManagerProxy
 
 	}
 
-	public int getLifeTower(String objectID)
-	{
+	public int getLifeTower(String objectID) {
 
 		AbstractPrivateProperty object = objects.get("tower").get(objectID);
-		if (object != null)
-		{
+		if (object != null) {
 			return ((Tower) object).getLife();
 		}
 		return 0;
 
 	}
 
-	public int getTowerCrusherLife(String towerCrusherID)
-	{
+	public int getTowerCrusherLife(String towerCrusherID) {
 		TowerCrusher towerCrusher = towerCrushers.get(towerCrusherID);
-		if (towerCrusher != null)
-		{
+		if (towerCrusher != null) {
 			return towerCrusher.getHealth();
 		}
 		return 0;
 	}
 
-	public Map<String, Map<String, Integer>> getPlayersResourceAmount()
-	{
+	public Map<String, Map<String, Integer>> getPlayersResourceAmount() {
 		Map<String, Map<String, Integer>> playersResourceAmount = new HashMap<>();
 		Collection<Player> listPlayers = players.values();
 
-		for (Player player : listPlayers)
-		{
+		for (Player player : listPlayers) {
 			playersResourceAmount.put(player.getName(), player.getResources());
 		}
 		return playersResourceAmount;
 	}
 
-	public Map<String, Integer> getPlayerResourcesAmout(String playerName)
-	{
+	public Map<String, Integer> getPlayerResourcesAmout(String playerName) {
 		Player player = players.get(playerName);
 		if (player != null)
 			return players.get(playerName).getResources();
@@ -488,18 +446,15 @@ public class GameManagerProxy
 
 	}
 
-	public float worldDimension()
-	{
+	public float worldDimension() {
 		return gm.getWorld().getWidth();
 	}
 
-	public int getNumberOfPlayer()
-	{
+	public int getNumberOfPlayer() {
 		return players.size();
 	}
 
-	public boolean isMovingPlayer(String playerName)
-	{
+	public boolean isMovingPlayer(String playerName) {
 		List<Vector2f> playerPath = players.get(playerName).getPath();
 		if (playerPath == null || playerPath.isEmpty())
 			return false;
@@ -507,8 +462,7 @@ public class GameManagerProxy
 			return true;
 	}
 
-	public boolean isMovingMinion(String ID)
-	{
+	public boolean isMovingMinion(String ID) {
 		List<Vector2f> minionPath = minions.get(ID).getPath();
 		if (minionPath == null || minionPath.isEmpty())
 			return false;
@@ -516,8 +470,7 @@ public class GameManagerProxy
 			return true;
 	}
 
-	public boolean isMovingTowerCrusher(String ID)
-	{
+	public boolean isMovingTowerCrusher(String ID) {
 		List<Vector2f> towerCrusherPath = towerCrushers.get(ID).getPath();
 		if (towerCrusherPath == null || towerCrusherPath.isEmpty())
 			return false;
@@ -525,23 +478,19 @@ public class GameManagerProxy
 			return true;
 	}
 
-	public int getPLayerHP(String playerName)
-	{
+	public int getPLayerHP(String playerName) {
 		return players.get(playerName).getHP();
 	}
 
-	public int getPlayerMP(String playerName)
-	{
+	public int getPlayerMP(String playerName) {
 		return players.get(playerName).getMP();
 	}
 
-	public Set<String> getPlayersName()
-	{
+	public Set<String> getPlayersName() {
 		return players.keySet();
 	}
 
-	public boolean buyPotion(String playerName, String potionType)
-	{
+	public boolean buyPotion(String playerName, String potionType) {
 		Player player = players.get(playerName);
 		if (!player.canBuyPotions())
 			return false;
@@ -555,8 +504,7 @@ public class GameManagerProxy
 		return true;
 	}
 
-	public int getPotionAmount(String playerName, String potionType)
-	{
+	public int getPotionAmount(String playerName, String potionType) {
 		Player player = players.get(playerName);
 
 		if (potionType.toLowerCase().equals("mp"))
@@ -569,52 +517,47 @@ public class GameManagerProxy
 		return -100;
 	}
 
-	public String getMinionBoss(String ID)
-	{
+	public String getMinionBoss(String ID) {
 		Minion minion = minions.get(ID);
-		if (minion != null)
-		{
+		if (minion != null) {
 			return minion.getBoss().getName();
-		}
-		else
+		} else
 			return null;
 	}
 
-	public String getTowerCrusherBoss(String ID)
-	{
+	public String getTowerCrusherBoss(String ID) {
 		TowerCrusher towercrusher = towerCrushers.get(ID);
-		if (towercrusher != null)
-		{
+		if (towercrusher != null) {
 			return towercrusher.getBoss().getName();
-		}
-		else
+		} else
 			return null;
 	}
 
-	public Map<String, javax.vecmath.Vector2f[]> getTowerCrushersPositions()
-	{
+	public Map<String, javax.vecmath.Vector2f[]> getTowerCrushersPositions() {
 		Map<String, Vector2f[]> newPositions = new HashMap<>();
 
-		for (String towerCrusherID : towerCrushers.keySet())
-		{
+		for (String towerCrusherID : towerCrushers.keySet()) {
 			Vector2f[] position = new Vector2f[2];
 			position[0] = towerCrushers.get(towerCrusherID).getPosition();
-			position[1] = towerCrushers.get(towerCrusherID).getPlayerDirection();
+			position[1] = towerCrushers.get(towerCrusherID)
+					.getPlayerDirection();
 			newPositions.put(towerCrusherID, position);
 		}
 		return newPositions;
 
 	}
 
-	public void endGame()
-	{
+	public void endGame() {
 		gm.endGame(this);
 	}
 
-	public boolean upgradeLevel(String playername)
-	{
+	public boolean upgradeLevel(String playername) {
 		Player player = players.get(playername);
 		return gm.upgradeLevel(player);
+	}
+
+	public Vector2f getHeaquarterPosition(String player) {
+		return player_headquarter.get(player).getPosition();
 	}
 
 }

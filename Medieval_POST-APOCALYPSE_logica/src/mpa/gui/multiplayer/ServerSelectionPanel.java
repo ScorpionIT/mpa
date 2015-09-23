@@ -3,6 +3,7 @@ package mpa.gui.multiplayer;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
@@ -28,6 +29,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import mpa.core.logic.MapInfo;
@@ -173,7 +175,10 @@ public class ServerSelectionPanel extends JPanel {
 			public void mouseReleased(MouseEvent e) {
 
 				if (selectedServer == null)
+				{
+					JOptionPane.showMessageDialog(new Frame(), "Seleziona il server", "Message", JOptionPane.PLAIN_MESSAGE);
 					return;
+				}
 
 				broadcastConnectionListener.stopListener();
 				threadUpdateAlive = false;
@@ -274,6 +279,7 @@ public class ServerSelectionPanel extends JPanel {
 				MapInfo mapInfo = creator.createMapInfo(GameProperties
 						.getInstance().getPath("MultiplayerMapPath")
 						+ "/map.xml");
+				
 
 				MultiplayerMenuPanel multiplayerMenuPanel = new MultiplayerMenuPanel(
 						getX(), getY(), getWidth(), getHeight(), socket,

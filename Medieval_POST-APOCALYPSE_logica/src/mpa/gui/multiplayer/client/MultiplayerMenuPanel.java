@@ -18,7 +18,6 @@ import java.net.Socket;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -36,8 +35,7 @@ import org.jdom2.JDOMException;
 
 import com.jme3.system.AppSettings;
 
-public class MultiplayerMenuPanel extends JPanel
-{
+public class MultiplayerMenuPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private MapInfo mapInfo;
 	private MultiplayerMapPreview mapPreview;
@@ -50,7 +48,8 @@ public class MultiplayerMenuPanel extends JPanel
 	private int selectedHQIndex = 0;
 
 	DifficultyLevel difficultyLevelSelected = null;
-	private String textImagePath = GameProperties.getInstance().getPath("TextImagePath");
+	private String textImagePath = GameProperties.getInstance().getPath(
+			"TextImagePath");
 	private Socket socket;
 	private int xPanel;
 	private int yPanel;
@@ -59,8 +58,8 @@ public class MultiplayerMenuPanel extends JPanel
 	private Image panelBackgroudImage;
 	private JLabel backButton;
 
-	public MultiplayerMenuPanel(int x, int y, int width, int height, Socket socket, MapInfo mapInfo, JPanel ancestor)
-	{
+	public MultiplayerMenuPanel(int x, int y, int width, int height,
+			Socket socket, MapInfo mapInfo, JPanel ancestor) {
 
 		this.socket = socket;
 		this.mapInfo = mapInfo;
@@ -79,46 +78,45 @@ public class MultiplayerMenuPanel extends JPanel
 
 		addReadyButton();
 		addBackButton();
-		try
-		{
-			backgroundImage = ImageIO.read(new File(GameProperties.getInstance().getPath("BackgroundImagesPath") + "/background.jpg"));
-			panelBackgroudImage = ImageIO.read(new File(GameProperties.getInstance().getPath("BackgroundImagesPath") + "/background1.jpg"));
-		} catch (IOException e1)
-		{
+		try {
+			backgroundImage = ImageIO.read(new File(GameProperties
+					.getInstance().getPath("BackgroundImagesPath")
+					+ "/background.jpg"));
+			panelBackgroudImage = ImageIO.read(new File(GameProperties
+					.getInstance().getPath("BackgroundImagesPath")
+					+ "/background1.jpg"));
+		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 		this.setVisible(true);
 	}
 
-	private void addReadyButton()
-	{
+	private void addReadyButton() {
 		Image imageReady = null;
-		try
-		{
+		try {
 			imageReady = ImageIO.read(new File(textImagePath + "/Ready.png"));
 
 			buttonReady = new JLabel(new ImageIcon(imageReady));
-		} catch (IOException e2)
-		{
+		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
-		buttonReady.setBounds(xPanel + widthPanel - imageReady.getWidth(this) * 2, yPanel + heightPanel * 85 / 100, imageReady.getWidth(this),
-				imageReady.getHeight(this));
-		buttonReady.addMouseListener(new MouseAdapter()
-		{
+		buttonReady.setBounds(xPanel + widthPanel - imageReady.getWidth(this)
+				* 2, yPanel + heightPanel * 85 / 100,
+				imageReady.getWidth(this), imageReady.getHeight(this));
+		buttonReady.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseReleased(MouseEvent e)
-			{
+			public void mouseReleased(MouseEvent e) {
 				playerName = inputNamePanel.getPlayerName();
-				if (playerName == null || playerName.equals(""))
-				{
+				if (playerName == null || playerName.equals("")) {
 					setButtonsStyle();
-					JOptionPane.showMessageDialog(new Frame(), "Inserisci il nome che preferisci", "Message", JOptionPane.PLAIN_MESSAGE);
-				}
-				else if (selectedHQ == null)
-					JOptionPane.showMessageDialog(new Frame(), "Seleziona il quartier generale", "Message", JOptionPane.PLAIN_MESSAGE);
-				else
-				{
+					JOptionPane.showMessageDialog(new Frame(),
+							"Inserisci il nome che preferisci", "Message",
+							JOptionPane.PLAIN_MESSAGE);
+				} else if (selectedHQ == null)
+					JOptionPane.showMessageDialog(new Frame(),
+							"Seleziona il quartier generale", "Message",
+							JOptionPane.PLAIN_MESSAGE);
+				else {
 					startGame();
 				}
 
@@ -128,23 +126,20 @@ public class MultiplayerMenuPanel extends JPanel
 		this.add(buttonReady);
 	}
 
-	protected void addBackButton()
-	{
+	protected void addBackButton() {
 		Image imageBack = null;
-		try
-		{
+		try {
 			imageBack = ImageIO.read(new File(textImagePath + "/back.png"));
 			backButton = new JLabel(new ImageIcon(imageBack));
-		} catch (IOException e2)
-		{
+		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
-		backButton.setBounds(xPanel + imageBack.getWidth(this), yPanel + heightPanel * 85 / 100, imageBack.getWidth(this), imageBack.getHeight(this));
-		backButton.addMouseListener(new MouseAdapter()
-		{
+		backButton.setBounds(xPanel + imageBack.getWidth(this), yPanel
+				+ heightPanel * 85 / 100, imageBack.getWidth(this),
+				imageBack.getHeight(this));
+		backButton.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseReleased(MouseEvent e)
-			{
+			public void mouseReleased(MouseEvent e) {
 
 				// frame.setContentPane(mainMenuPanel);
 				// mainFrame.getContentPane().setVisible(true);
@@ -158,15 +153,14 @@ public class MultiplayerMenuPanel extends JPanel
 
 	}
 
-	private void setButtonsStyle()
-	{
+	private void setButtonsStyle() {
 
 		Font font = null;
-		try
-		{
-			font = Font.createFont(Font.PLAIN, new FileInputStream(GameProperties.getInstance().getPath("fontsPath") + "/KELMSCOT.TTF"));
-		} catch (FontFormatException | IOException e)
-		{
+		try {
+			font = Font.createFont(Font.PLAIN, new FileInputStream(
+					GameProperties.getInstance().getPath("fontsPath")
+							+ "/KELMSCOT.TTF"));
+		} catch (FontFormatException | IOException e) {
 			// TODO Blocco catch generato automaticamente
 			e.printStackTrace();
 		}
@@ -175,30 +169,31 @@ public class MultiplayerMenuPanel extends JPanel
 		UIManager.put("Button.font", new Font("URW Chancery L", Font.BOLD, 13));
 	}
 
-	private void startGame()
-	{
+	private void startGame() {
 
-		try
-		{
-			BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		try {
+			DataOutputStream outToServer = new DataOutputStream(
+					socket.getOutputStream());
+			outToServer.writeBytes("READY:" + playerName + '\n');
+			BufferedReader inFromServer = new BufferedReader(
+					new InputStreamReader(socket.getInputStream()));
 			if (!inFromServer.readLine().equals("LETSGO"))
 				return;
 
-		} catch (IOException e)
-		{
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		Thread t = new Thread(new Runnable()
-		{
+		Thread t = new Thread(new Runnable() {
 			@Override
-			public void run()
-			{
-				mpa.gui.gameGui.playingGUI.GameGui app = new mpa.gui.gameGui.playingGUI.GameGui(playerName);
+			public void run() {
+				mpa.gui.gameGui.playingGUI.GameGui app = new mpa.gui.gameGui.playingGUI.GameGui(
+						playerName, socket);
 				AppSettings gameSettings = new AppSettings(false);
-				gameSettings.setResolution(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width, java.awt.Toolkit.getDefaultToolkit()
-						.getScreenSize().height);
+				gameSettings.setResolution(java.awt.Toolkit.getDefaultToolkit()
+						.getScreenSize().width, java.awt.Toolkit
+						.getDefaultToolkit().getScreenSize().height);
 				gameSettings.setFullscreen(true);
 				gameSettings.setVSync(false);
 				gameSettings.setTitle("Stellar Conquest");
@@ -218,15 +213,14 @@ public class MultiplayerMenuPanel extends JPanel
 		t.start();
 	}
 
-	public void setMap(String mapName)
-	{
+	public void setMap(String mapName) {
 		mapPreview.removeAll();
-		try
-		{
+		try {
 			worldLoader.loadMapInfo(new MapFromXMLCreator(), mapName);
-		} catch (JDOMException | IOException e)
-		{
-			JOptionPane.showMessageDialog(this, "Sorry but this map seems to be lost or damaged :(", "MAP ERROR", JOptionPane.ERROR_MESSAGE);
+		} catch (JDOMException | IOException e) {
+			JOptionPane.showMessageDialog(this,
+					"Sorry but this map seems to be lost or damaged :(",
+					"MAP ERROR", JOptionPane.ERROR_MESSAGE);
 
 			// TODO rimuovere la mappa danneggiata (o persa) dalla lista!!!!!
 		}
@@ -237,96 +231,75 @@ public class MultiplayerMenuPanel extends JPanel
 		this.repaint();
 	}
 
-	public void setSelectedHeadQuarter(Pair<Float, Float> headQuarterPosition)
-	{
+	public void setSelectedHeadQuarter(Pair<Float, Float> headQuarterPosition) {
 		String reply = new String();
-		try
-		{
-			DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
-			BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			outToServer.writeBytes(new String("GET" + String.valueOf(headQuarterPosition.getFirst()) + ","
-					+ String.valueOf(headQuarterPosition.getSecond() + '\n')));
+		try {
+			DataOutputStream outToServer = new DataOutputStream(
+					socket.getOutputStream());
+			BufferedReader inFromServer = new BufferedReader(
+					new InputStreamReader(socket.getInputStream()));
+			outToServer.writeBytes(new String("GET,"
+					+ String.valueOf(headQuarterPosition.getFirst()) + ","
+					+ String.valueOf(headQuarterPosition.getSecond()) + '\n'));
 			reply = inFromServer.readLine();
-		} catch (IOException e)
-		{
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		if (reply.equals("OK"))
-		{
+		if (reply.equals("OK")) {
 			mapPreview.removeBorder(selectedHQ);
 			selectedHQ = headQuarterPosition;
 			mapPreview.addBorder(selectedHQ);
-		}
-		else
-		{
-			JOptionPane.showMessageDialog(this, "HQ already taken", ":( ", JOptionPane.INFORMATION_MESSAGE);
+		} else {
+			JOptionPane.showMessageDialog(this, "HQ already taken", ":( ",
+					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
-	public Pair<Float, Float> getSelectedHQ()
-	{
+	public Pair<Float, Float> getSelectedHQ() {
 		return selectedHQ;
 	}
 
-	public void setPlayerName(String playerName)
-	{
+	public void setPlayerName(String playerName) {
 		this.playerName = playerName;
 	}
 
-	public void setDifficultyLevel(DifficultyLevel difficultyLevel)
-	{
+	public void setDifficultyLevel(DifficultyLevel difficultyLevel) {
 		this.difficultyLevelSelected = difficultyLevel;
 	}
 
-	private void addMapPreviewPanel()
-	{
+	private void addMapPreviewPanel() {
 		mapPreview = new MultiplayerMapPreview(this, mapInfo);
-		mapPreview.setBounds(xPanel + widthPanel * 30 / 100, yPanel + heightPanel * 10 / 100, widthPanel * 40 / 100, widthPanel * 40 / 100);
+		mapPreview.setBounds(xPanel + widthPanel * 30 / 100, yPanel
+				+ heightPanel * 10 / 100, widthPanel * 40 / 100,
+				widthPanel * 40 / 100);
 		mapPreview.repaint();
 		this.add(mapPreview);
 	}
 
-	private void addInputNamePanel()
-	{
+	private void addInputNamePanel() {
 		inputNamePanel = new InputNamePanel();
 		JLabel insertYourNameLabel = new JLabel("Insert your name");
 		insertYourNameLabel.setForeground(Color.WHITE);
 		insertYourNameLabel.setFont(new Font("URW Chancery L", Font.BOLD, 20));
-		insertYourNameLabel.setBounds(xPanel + widthPanel * 32 / 100, yPanel, widthPanel * 38 / 100, heightPanel * 5 / 100);
+		insertYourNameLabel.setBounds(xPanel + widthPanel * 32 / 100, yPanel,
+				widthPanel * 38 / 100, heightPanel * 5 / 100);
 		this.add(insertYourNameLabel);
-		inputNamePanel.setBounds(xPanel + widthPanel * 32 / 100, yPanel + heightPanel * 5 / 100, widthPanel * 38 / 100, heightPanel * 10 / 100);
+		inputNamePanel.setBounds(xPanel + widthPanel * 32 / 100, yPanel
+				+ heightPanel * 5 / 100, widthPanel * 38 / 100,
+				heightPanel * 10 / 100);
 		inputNamePanel.setOpaque(false);
 		this.add(inputNamePanel);
 	}
 
 	@Override
-	protected void paintComponent(Graphics g)
-	{
+	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(backgroundImage, getX(), getY(), this.getWidth(), this.getHeight(), this);
-		g.drawImage(panelBackgroudImage, xPanel, yPanel, widthPanel, heightPanel, this);
+		g.drawImage(backgroundImage, getX(), getY(), this.getWidth(),
+				this.getHeight(), this);
+		g.drawImage(panelBackgroudImage, xPanel, yPanel, widthPanel,
+				heightPanel, this);
 	}
 
-	public static void main(String[] args)
-	{
-
-		int screenWidth = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
-		int screenHeight = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
-
-		JFrame frame = new JFrame();
-		frame.setLocation(0, 0);
-
-		frame.setSize(screenWidth, screenHeight);
-		MultiplayerMenuPanel mainMenuGamePanel = new MultiplayerMenuPanel(0, 0, screenWidth, screenHeight, null, null, null);
-
-		frame.setContentPane(mainMenuGamePanel);
-		// frame.getContentPane().setBackground(Color.BLACK);
-		// frame.getContentPane().add(mainMenuGamePanel);
-		// frame.getContentPane().setLayout(null);
-		frame.getContentPane().setVisible(true);;
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
 }

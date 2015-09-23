@@ -172,7 +172,7 @@ public class MenuSinglePlayerPanel extends JPanel
 						@Override
 						public void run()
 						{
-							mpa.gui.gameGui.playingGUI.GameGui app = new mpa.gui.gameGui.playingGUI.GameGui(playerName);
+							mpa.gui.gameGui.playingGUI.GameGui app = new mpa.gui.gameGui.playingGUI.GameGui(playerName, null);
 							AppSettings gameSettings = new AppSettings(false);
 							// gameSettings.setResolution( 800, 600 );
 							// GraphicsDevice device = GraphicsEnvironment

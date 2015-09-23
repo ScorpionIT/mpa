@@ -36,6 +36,7 @@ public class MultiplayerMapPreview extends MapPreview
 				break;
 			}
 		}
+		this.updateUI();
 	}
 
 	public void addBorder(Pair<Float, Float> newHQ)
@@ -48,6 +49,7 @@ public class MultiplayerMapPreview extends MapPreview
 				break;
 			}
 		}
+		this.updateUI();
 	}
 
 	@Override

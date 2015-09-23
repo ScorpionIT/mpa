@@ -32,8 +32,7 @@ import mpa.gui.menuMap.MapPreview;
 
 import org.jdom2.JDOMException;
 
-public class CreateServerMainPanel extends JPanel
-{
+public class CreateServerMainPanel extends JPanel {
 	private JLabel backButton = new JLabel();
 	private JLabel launchButton = new JLabel();
 	private MapPreview mapPreview;
@@ -51,11 +50,12 @@ public class CreateServerMainPanel extends JPanel
 	private boolean visiblePanel = false;
 	private JComboBox<Object> difficultyLevelComboBox;
 	private DifficultyLevel difficultyLevelSelected = null;
-	private List<DifficultyLevel> difficlutyLevels = Arrays.asList(DifficultyLevel.values());
+	private List<DifficultyLevel> difficlutyLevels = Arrays
+			.asList(DifficultyLevel.values());
 	private JLabel difficultyLevelLabel;
 
-	public CreateServerMainPanel(int x, int y, int width, int height, final JFrame mainFrame, JPanel parent)
-	{
+	public CreateServerMainPanel(int x, int y, int width, int height,
+			final JFrame mainFrame, JPanel parent) {
 		this.mainFrame = mainFrame;
 		this.parent = parent;
 		this.setSize(width, height);
@@ -65,16 +65,19 @@ public class CreateServerMainPanel extends JPanel
 		addMapPreview();
 
 		mapListPanel = new MapListPanel(this);
-		mapListPanel.setBounds(30 * this.getWidth() / 100, 70 * this.getHeight() / 100, 15 * this.getWidth() / 100, 20 * this.getHeight() / 100);
+		mapListPanel.setBounds(30 * this.getWidth() / 100,
+				70 * this.getHeight() / 100, 15 * this.getWidth() / 100,
+				20 * this.getHeight() / 100);
 		this.add(mapListPanel);
 
-		try
-		{
-			backgroundImage = ImageIO.read(new File(GameProperties.getInstance().getPath("BackgroundImagesPath") + "/background.jpg"));
-			panelBackgroudImage = ImageIO.read(new File(GameProperties.getInstance().getPath("BackgroundImagesPath")
+		try {
+			backgroundImage = ImageIO.read(new File(GameProperties
+					.getInstance().getPath("BackgroundImagesPath")
+					+ "/background.jpg"));
+			panelBackgroudImage = ImageIO.read(new File(GameProperties
+					.getInstance().getPath("BackgroundImagesPath")
 					+ "/backgroundHeadquarterPanel.png"));
-		} catch (IOException e)
-		{
+		} catch (IOException e) {
 			// TODO Blocco catch generato automaticamente
 			e.printStackTrace();
 		}
@@ -88,130 +91,138 @@ public class CreateServerMainPanel extends JPanel
 
 	}
 
-	private void addDifficultyLevelComboBox()
-	{
+	private void addDifficultyLevelComboBox() {
 		difficultyLevelLabel = new JLabel("Select Difficulty Level");
 		difficultyLevelLabel.setForeground(Color.WHITE);
 		difficultyLevelLabel.setFont(new Font("URW Chancery L", Font.BOLD, 30));
 
-		difficultyLevelLabel.setBounds(60 * this.getWidth() / 100, 80 * this.getHeight() / 100, 30 * this.getWidth() / 100,
+		difficultyLevelLabel.setBounds(60 * this.getWidth() / 100,
+				80 * this.getHeight() / 100, 30 * this.getWidth() / 100,
 				5 * this.getHeight() / 100);
 
 		this.add(difficultyLevelLabel);
 		difficultyLevelComboBox = new JComboBox<>();
 
 		difficultyLevelComboBox.addItem("-");
-		for (DifficultyLevel difficultyLevel : difficlutyLevels)
-		{
+		for (DifficultyLevel difficultyLevel : difficlutyLevels) {
 			difficultyLevelComboBox.addItem(difficultyLevel.toString());
 		}
 
-		difficultyLevelComboBox.setBounds(60 * this.getWidth() / 100, 85 * this.getHeight() / 100, 10 * this.getWidth() / 100,
+		difficultyLevelComboBox.setBounds(60 * this.getWidth() / 100,
+				85 * this.getHeight() / 100, 10 * this.getWidth() / 100,
 				2 * this.getHeight() / 100);
 		this.add(difficultyLevelComboBox);
 	}
 
-	private void addBotsComboBox()
-	{
+	private void addBotsComboBox() {
 		JLabel numberOfBotsLabel = new JLabel("Select Number of Bots");
 		numberOfBotsLabel.setForeground(Color.WHITE);
 		numberOfBotsLabel.setFont(new Font("URW Chancery L", Font.BOLD, 30));
 
-		numberOfBotsLabel.setBounds(60 * this.getWidth() / 100, 70 * this.getHeight() / 100, 30 * this.getWidth() / 100, 10 * this.getHeight() / 100);
+		numberOfBotsLabel.setBounds(60 * this.getWidth() / 100,
+				70 * this.getHeight() / 100, 30 * this.getWidth() / 100,
+				10 * this.getHeight() / 100);
 
 		this.add(numberOfBotsLabel);
 		numberOfBotsBox = new JComboBox<>();
 
-		numberOfBotsBox.setBounds(60 * this.getWidth() / 100, 77 * this.getHeight() / 100, 10 * this.getWidth() / 100, 2 * this.getHeight() / 100);
+		numberOfBotsBox.setBounds(60 * this.getWidth() / 100,
+				77 * this.getHeight() / 100, 10 * this.getWidth() / 100,
+				2 * this.getHeight() / 100);
 		this.add(numberOfBotsBox);
 	}
 
-	private void addLauchButton()
-	{
+	private void addLauchButton() {
 
 		Image imageBack = null;
-		try
-		{
-			imageBack = ImageIO.read(new File(GameProperties.getInstance().getPath("textImagePath") + "/Launch.png"));
+		try {
+			imageBack = ImageIO.read(new File(GameProperties.getInstance()
+					.getPath("textImagePath") + "/Launch.png"));
 			launchButton = new JLabel(new ImageIcon(imageBack));
-		} catch (IOException e2)
-		{
+		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
-		launchButton.setBounds(85 * this.getWidth() / 100, this.getHeight() * 85 / 100, imageBack.getWidth(this), imageBack.getHeight(this));
+		launchButton.setBounds(85 * this.getWidth() / 100,
+				this.getHeight() * 85 / 100, imageBack.getWidth(this),
+				imageBack.getHeight(this));
 
-		launchButton.addMouseListener(new MouseAdapter()
-		{
+		launchButton.addMouseListener(new MouseAdapter() {
 			private UDPSpammer udpSpammer;
 
-			public void mouseReleased(java.awt.event.MouseEvent e)
-			{
+			public void mouseReleased(java.awt.event.MouseEvent e) {
 
-				numberOfBots = Integer.parseInt((String) numberOfBotsBox.getSelectedItem());
-				if (numberOfBots > 0)
-				{
-					String selectedItem = (String) difficultyLevelComboBox.getSelectedItem();
-					for (DifficultyLevel difficultyLevel : difficlutyLevels)
-					{
+				numberOfBots = Integer.parseInt((String) numberOfBotsBox
+						.getSelectedItem());
+				if (numberOfBots > 0) {
+					String selectedItem = (String) difficultyLevelComboBox
+							.getSelectedItem();
+					for (DifficultyLevel difficultyLevel : difficlutyLevels) {
 						if (difficultyLevel.name().equals(selectedItem))
 							difficultyLevelSelected = difficultyLevel;
 					}
 				}
 
-				if (mapInfo == null)
-				{
-					JOptionPane.showMessageDialog(new Frame(), "Seleziona la mappa", "Message", JOptionPane.PLAIN_MESSAGE);
-				}
-				else if (numberOfBots == -1)
-				{
-					JOptionPane.showMessageDialog(new Frame(), "Seleziona il numero di bot", "Message", JOptionPane.PLAIN_MESSAGE);
-				}
-				else if (numberOfBots > 0 && difficultyLevelSelected == null)
-				{
-					JOptionPane.showMessageDialog(new Frame(), "Seleziona il livello di difficoltà", "Message", JOptionPane.PLAIN_MESSAGE);
-				}
-				else
-				{
+				if (mapInfo == null) {
+					JOptionPane.showMessageDialog(new Frame(),
+							"Seleziona la mappa", "Message",
+							JOptionPane.PLAIN_MESSAGE);
+				} else if (numberOfBots == -1) {
+					JOptionPane.showMessageDialog(new Frame(),
+							"Seleziona il numero di bot", "Message",
+							JOptionPane.PLAIN_MESSAGE);
+				} else if (numberOfBots > 0 && difficultyLevelSelected == null) {
+					JOptionPane.showMessageDialog(new Frame(),
+							"Seleziona il livello di difficoltà", "Message",
+							JOptionPane.PLAIN_MESSAGE);
+				} else {
 					udpSpammer = new UDPSpammer();
-					welcomeServer = new WelcomeServer(mapInfo.getNumberOfPlayers() - numberOfBots, map,difficultyLevelSelected,udpSpammer);
+					welcomeServer = new WelcomeServer(mapInfo
+							.getNumberOfPlayers() - numberOfBots, map,
+							difficultyLevelSelected, udpSpammer, mapInfo,
+							worldLoader);
 					welcomeServer.start();
 
 					udpSpammer.setIp(welcomeServer.getIP());
 					udpSpammer.setPort(welcomeServer.getPort());
 					udpSpammer.start();
-					
-					
+
 					CreateServerMainPanel.this.removeAll();
 
-					JLabel createdServer = new JLabel("Server IP: "+welcomeServer.getIP()+" port: "+ welcomeServer.getPort() );
+					JLabel createdServer = new JLabel("Server IP: "
+							+ welcomeServer.getIP() + " port: "
+							+ welcomeServer.getPort());
 					createdServer.setForeground(Color.WHITE);
-					createdServer.setFont(new Font("URW Chancery L", Font.BOLD, 40));
+					createdServer.setFont(new Font("URW Chancery L", Font.BOLD,
+							40));
 
-					createdServer.setBounds(30 * CreateServerMainPanel.this.getWidth() / 100, 30 * CreateServerMainPanel.this.getHeight() / 100,
-							50 * CreateServerMainPanel.this.getWidth() / 100, 10 * CreateServerMainPanel.this.getHeight() / 100);
+					createdServer.setBounds(
+							30 * CreateServerMainPanel.this.getWidth() / 100,
+							30 * CreateServerMainPanel.this.getHeight() / 100,
+							50 * CreateServerMainPanel.this.getWidth() / 100,
+							10 * CreateServerMainPanel.this.getHeight() / 100);
 
 					CreateServerMainPanel.this.add(createdServer);
 
 					JLabel stopServer = null;
-					try
-					{
-						stopServer = new JLabel(new ImageIcon(ImageIO.read(new File(GameProperties.getInstance().getPath("textImagePath")
-								+ "/stopServer.png"))));
-					} catch (IOException e1)
-					{
+					try {
+						stopServer = new JLabel(new ImageIcon(ImageIO
+								.read(new File(GameProperties.getInstance()
+										.getPath("textImagePath")
+										+ "/stopServer.png"))));
+					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
-					stopServer.setBounds(45 * CreateServerMainPanel.this.getWidth() / 100, 50 * CreateServerMainPanel.this.getHeight() / 100,
-							30 * CreateServerMainPanel.this.getWidth() / 100, 10 * CreateServerMainPanel.this.getHeight() / 100);
+					stopServer.setBounds(
+							45 * CreateServerMainPanel.this.getWidth() / 100,
+							50 * CreateServerMainPanel.this.getHeight() / 100,
+							30 * CreateServerMainPanel.this.getWidth() / 100,
+							10 * CreateServerMainPanel.this.getHeight() / 100);
 
-					stopServer.addMouseListener(new MouseAdapter()
-					{
-						public void mouseReleased(MouseEvent e)
-						{
+					stopServer.addMouseListener(new MouseAdapter() {
+						public void mouseReleased(MouseEvent e) {
 							udpSpammer.stopSpammer();
 							welcomeServer.stopServer();
-							udpSpammer= null;
-							welcomeServer = null;
+							udpSpammer = null;
 						};
 					});
 
@@ -227,27 +238,32 @@ public class CreateServerMainPanel extends JPanel
 		this.add(launchButton);
 	}
 
-	private void addMapPreview()
-	{
-		mapPreview = new MapPreview(this)
-		{
+	private void addMapPreview() {
+		mapPreview = new MapPreview(this) {
 			@Override
-			public void loadMap(MapInfo mapInfo)
-			{
+			public void loadMap(MapInfo mapInfo) {
 				this.mapInfo = mapInfo;
 
 				this.headQuartersLabel.clear();
 
-				for (Pair<Float, Float> headQuarterPosition : mapInfo.getHeadQuarters())
-				{
+				for (Pair<Float, Float> headQuarterPosition : mapInfo
+						.getHeadQuarters()) {
 					Image image = images.get("headQuarter");
-					image = image.getScaledInstance(W(GameProperties.getInstance().getObjectWidth("headQuarter")), H(GameProperties.getInstance()
-							.getObjectHeight("headQuarter")), 0);
+					image = image.getScaledInstance(
+							W(GameProperties.getInstance().getObjectWidth(
+									"headQuarter")),
+							H(GameProperties.getInstance().getObjectHeight(
+									"headQuarter")), 0);
 
 					ImageIcon imageIcon = new ImageIcon(image);
 					JLabel jLabel = new JLabel(imageIcon);
-					jLabel.setBounds(graphicX(headQuarterPosition.getFirst()), graphicY(headQuarterPosition.getSecond()), W(GameProperties
-							.getInstance().getObjectWidth("headQuarter")), H(GameProperties.getInstance().getObjectHeight("headQuarter")));
+					jLabel.setBounds(
+							graphicX(headQuarterPosition.getFirst()),
+							graphicY(headQuarterPosition.getSecond()),
+							W(GameProperties.getInstance().getObjectWidth(
+									"headQuarter")),
+							H(GameProperties.getInstance().getObjectHeight(
+									"headQuarter")));
 					this.add(jLabel);
 
 					headQuartersLabel.put(jLabel, headQuarterPosition);
@@ -255,42 +271,40 @@ public class CreateServerMainPanel extends JPanel
 			}
 		};
 
-		mapPreview.setBounds(25 * this.getWidth() / 100, 5 * this.getHeight() / 100, 50 * this.getWidth() / 100, 60 * this.getHeight() / 100);
+		mapPreview.setBounds(25 * this.getWidth() / 100,
+				5 * this.getHeight() / 100, 50 * this.getWidth() / 100,
+				60 * this.getHeight() / 100);
 		this.add(mapPreview);
 	}
 
-	public void setMap(String mapName)
-	{
+	public void setMap(String mapName) {
 		map = mapName;
 		mapPreview.removeAll();
-		try
-		{
+		try {
 			worldLoader.loadMapInfo(new MapFromXMLCreator(), mapName);
-		} catch (JDOMException | IOException e)
-		{
-			JOptionPane.showMessageDialog(this, "Sorry but this map seems to be lost or damaged :(", "MAP ERROR", JOptionPane.ERROR_MESSAGE);
+		} catch (JDOMException | IOException e) {
+			JOptionPane.showMessageDialog(this,
+					"Sorry but this map seems to be lost or damaged :(",
+					"MAP ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 		mapInfo = worldLoader.getMapInfo();
-		((MapPreview) mapPreview).setMapDimension(mapInfo.getWidth(), mapInfo.getHeight());
+		((MapPreview) mapPreview).setMapDimension(mapInfo.getWidth(),
+				mapInfo.getHeight());
 		((MapPreview) mapPreview).loadMap(mapInfo);
 		this.repaint();
 
 		numberOfBots = 0;
 		numberOfBotsBox.removeAllItems();
-		for (int i = 0; i <= mapInfo.getNumberOfPlayers() - 2; i++)
-		{
+		for (int i = 0; i <= mapInfo.getNumberOfPlayers() - 2; i++) {
 			numberOfBotsBox.addItem(String.valueOf(i));
 		}
 
-		if (mapInfo.getNumberOfPlayers() - 2 > 0)
-		{
+		if (mapInfo.getNumberOfPlayers() - 2 > 0) {
 			difficultyLevelLabel.setVisible(true);
 			difficultyLevelComboBox.setVisible(true);
 			difficultyLevelSelected = null;
 
-		}
-		else
-		{
+		} else {
 			difficultyLevelLabel.setVisible(false);
 			difficultyLevelComboBox.setVisible(false);
 
@@ -300,39 +314,37 @@ public class CreateServerMainPanel extends JPanel
 	}
 
 	@Override
-	protected void paintComponent(Graphics g)
-	{
+	protected void paintComponent(Graphics g) {
 		// TODO Stub di metodo generato automaticamente
 		super.paintComponent(g);
 
-		g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
-		if (visiblePanel)
-		{
+		g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(),
+				this);
+		if (visiblePanel) {
 			int xPanel = this.getWidth() * 20 / 100;
 			int yPanel = this.getHeight() * 10 / 100;
 			int widthPanel = this.getWidth() * 60 / 100;
 			int heightPanel = this.getHeight() * 70 / 100;
-			g.drawImage(panelBackgroudImage, xPanel, yPanel, widthPanel, heightPanel, this);
+			g.drawImage(panelBackgroudImage, xPanel, yPanel, widthPanel,
+					heightPanel, this);
 		}
 	}
 
-	protected void addBackButton()
-	{
+	protected void addBackButton() {
 		Image imageBack = null;
-		try
-		{
-			imageBack = ImageIO.read(new File(GameProperties.getInstance().getPath("textImagePath") + "/back.png"));
+		try {
+			imageBack = ImageIO.read(new File(GameProperties.getInstance()
+					.getPath("textImagePath") + "/back.png"));
 			backButton = new JLabel(new ImageIcon(imageBack));
-		} catch (IOException e2)
-		{
+		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
-		backButton.setBounds(10 * this.getWidth() / 100, this.getHeight() * 85 / 100, imageBack.getWidth(this), imageBack.getHeight(this));
-		backButton.addMouseListener(new MouseAdapter()
-		{
+		backButton.setBounds(10 * this.getWidth() / 100,
+				this.getHeight() * 85 / 100, imageBack.getWidth(this),
+				imageBack.getHeight(this));
+		backButton.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseReleased(MouseEvent e)
-			{
+			public void mouseReleased(MouseEvent e) {
 
 				mainFrame.setContentPane(parent);
 				mainFrame.getContentPane().setVisible(true);
