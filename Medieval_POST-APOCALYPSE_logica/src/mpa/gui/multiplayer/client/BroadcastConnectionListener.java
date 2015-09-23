@@ -57,7 +57,6 @@ public class BroadcastConnectionListener extends Thread {
 					String ip = split[1];
 					String port = split[2];
 					serverSelectionPanel.addServer(ip+":"+port);
-					System.out.println(ip+ ":"+port);
 					
 					
 				}

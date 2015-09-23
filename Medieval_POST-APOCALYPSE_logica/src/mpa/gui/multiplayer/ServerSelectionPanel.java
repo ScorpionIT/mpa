@@ -2,6 +2,7 @@ package mpa.gui.multiplayer;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
@@ -10,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,6 +21,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -39,12 +42,11 @@ public class ServerSelectionPanel extends JPanel {
 	private static final long serialVersionUID = -8958460289373316021L;
 	private Image backgroundImage;
 	private int numberOfServers = 10;
-	private String[] servers = new String[numberOfServers];
+	private Stack<String> servers = new Stack<String>();
 	private List<JLabel> serverList = new ArrayList<>();
 	private JPanel selectionPanel = new JPanel();
 	private JLabel selectedServer;
 	private int labelHeight;
-	private int numberOfServersPresent = 0;
 
 	private JFrame mainFrame;
 	private Image panelBackgroudImage;
@@ -56,7 +58,8 @@ public class ServerSelectionPanel extends JPanel {
 	private JLabel backButton;
 	private JLabel enterButton;
 	private Thread thread;
-	private boolean threadUpdateAlive =true;
+	private boolean threadUpdateAlive = true;
+	Font font = null;
 	private BroadcastConnectionListener broadcastConnectionListener;
 
 	public ServerSelectionPanel(final JFrame mainFrame, JPanel mainMenuPanel) {
@@ -76,15 +79,14 @@ public class ServerSelectionPanel extends JPanel {
 		broadcastConnectionListener = new BroadcastConnectionListener(this);
 		broadcastConnectionListener.start();
 		thread = new Thread() {
-		
 
 			@Override
 			public void run() {
-				while (threadUpdateAlive ) {
-					
+				while (threadUpdateAlive) {
+
 					ServerSelectionPanel.this.updateUI();
 					try {
-						sleep(100000);
+						sleep(1000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -92,9 +94,18 @@ public class ServerSelectionPanel extends JPanel {
 				}
 			}
 		};
-		
+
 		thread.start();
 
+		
+		try
+		{
+			font = Font.createFont(Font.PLAIN, new FileInputStream(GameProperties.getInstance().getPath("fontsPath") + "/urw-chancery-l-medium-italic.ttf"));
+		} catch (FontFormatException | IOException e)
+		{
+			// TODO Blocco catch generato automaticamente
+			e.printStackTrace();
+		}
 		try {
 			backgroundImage = ImageIO.read(new File(GameProperties
 					.getInstance().getPath("BackgroundImagesPath")
@@ -108,11 +119,11 @@ public class ServerSelectionPanel extends JPanel {
 
 		addBackButton();
 		addEnterButton();
+	
 
 		setVisible(true);
 
 	}
-
 
 	protected void addBackButton() {
 		Image imageBack = null;
@@ -136,7 +147,7 @@ public class ServerSelectionPanel extends JPanel {
 				mainMenuPanel.repaint();
 				mainFrame.setVisible(true);
 				broadcastConnectionListener.stopListener();
-				threadUpdateAlive= false;
+				threadUpdateAlive = false;
 
 			}
 		});
@@ -165,7 +176,7 @@ public class ServerSelectionPanel extends JPanel {
 					return;
 
 				broadcastConnectionListener.stopListener();
-				threadUpdateAlive= false;
+				threadUpdateAlive = false;
 				String[] addressAndPort = selectedServer.getText().split(":");
 				getMap(addressAndPort);
 			}
@@ -199,8 +210,8 @@ public class ServerSelectionPanel extends JPanel {
 					List<JLabel> keys = ServerSelectionPanel.this.serverList;
 					for (JLabel l : keys) {
 						if (((JLabel) e.getSource()).equals(l)) {
-						if (l.getText().equals(""))
-							return;
+							if (l.getText().equals(""))
+								return;
 							if (selectedServer != null)
 								selectedServer.setBorder(null);
 							selectedServer = ((JLabel) e.getSource());
@@ -238,17 +249,16 @@ public class ServerSelectionPanel extends JPanel {
 			outToServer.writeBytes("Enter" + '\n');
 			String reply = inFromServer.readLine();
 
-			
 			if (reply.equals("OK")) {
 				outToServer.writeBytes("GetMap" + '\n');
 				reply = inFromServer.readLine();
 				System.out.println(reply);
 
 				Writer writer = new BufferedWriter(new OutputStreamWriter(
-						new FileOutputStream(GameProperties
-								.getInstance().getPath(
-										"MultiplayerMapPath")+"/map.xml"), "utf-8"));
-				
+						new FileOutputStream(GameProperties.getInstance()
+								.getPath("MultiplayerMapPath") + "/map.xml"),
+						"utf-8"));
+
 				System.out.println(writer);
 
 				while (!reply.equals("END")) {
@@ -262,20 +272,18 @@ public class ServerSelectionPanel extends JPanel {
 				writer.close();
 				MapFromXMLCreator creator = new MapFromXMLCreator();
 				MapInfo mapInfo = creator.createMapInfo(GameProperties
-						.getInstance().getPath(
-								"MultiplayerMapPath") + "/map.xml");
-				
-				
-				MultiplayerMenuPanel multiplayerMenuPanel = new MultiplayerMenuPanel(getX(),
-						getY(), getWidth(), getHeight(), socket,
+						.getInstance().getPath("MultiplayerMapPath")
+						+ "/map.xml");
+
+				MultiplayerMenuPanel multiplayerMenuPanel = new MultiplayerMenuPanel(
+						getX(), getY(), getWidth(), getHeight(), socket,
 						mapInfo, mainMenuPanel);
-				
-				
+
 				mainFrame.setContentPane(multiplayerMenuPanel);
-				 mainFrame.getContentPane().setVisible(true);
-				 mainFrame.setVisible(true);
-				 multiplayerMenuPanel.repaint();
-				 mainFrame.setVisible(true);
+				mainFrame.getContentPane().setVisible(true);
+				mainFrame.setVisible(true);
+				multiplayerMenuPanel.repaint();
+				mainFrame.setVisible(true);
 
 			}
 		} catch (IOException e) {
@@ -289,24 +297,12 @@ public class ServerSelectionPanel extends JPanel {
 	}
 
 	public void addServer(String newServer) {
-		for (JLabel server : serverList){
-			if (server.getText().equals(newServer))
+		for (String server : servers) {
+			if (server.equals(newServer))
 				return;
 		}
-
-		servers[servers.length - 1] = newServer;
-
-//		int index = 0;
-		for (JLabel server : serverList) {
-			if (server.getText().equals(""))
-			{
-				server.setText(newServer);
-				server.updateUI();
-				System.out.println("ho settato "+server.getText());
-				numberOfServersPresent++;
-				return;
-			}
-		}
+		if (servers.size() < numberOfServers)
+			servers.push(newServer);
 
 	}
 
@@ -323,25 +319,23 @@ public class ServerSelectionPanel extends JPanel {
 
 	private void checkConnections() {
 
-		if (numberOfServersPresent<3)
-		{
+		if (servers.isEmpty())
 			return;
-		}
-		for (int i = 1; i < serverList.size(); i++) {
 
-//			if (serverList.get(i).getText().equals("")) {
-//				break;
-//			} else {
+		int index = 0;
 
-				String text = serverList.get(i).getText();
-				serverList.get(i - 1).setText(text);
-				serverList.get(i - 1).updateUI();
-				serverList.get(i).setText("");
-				serverList.get(i).updateUI();
-				
-//			}
+		for (int i = 0; i < servers.size(); i++) {
+			serverList.get(i).setText(servers.get(i));
+			serverList.get(i).updateUI();
+			index++;
 		}
-		numberOfServersPresent--;
+
+		for (int i = index; i < serverList.size(); i++) {
+			serverList.get(i).setText("");
+			serverList.get(i).updateUI();
+
+		}
+		servers.pop();
 	}
 
 }

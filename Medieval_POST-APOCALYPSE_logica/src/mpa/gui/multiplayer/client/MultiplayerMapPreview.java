@@ -22,7 +22,6 @@ public class MultiplayerMapPreview extends MapPreview
 	public MultiplayerMapPreview(JPanel menuSinglePlayerPanel, final MapInfo mapInfo)
 	{
 		super(menuSinglePlayerPanel);
-//		loadMap( mapInfo );
 		this.mapInfo = mapInfo;
 		this.setVisible(true);
 	}

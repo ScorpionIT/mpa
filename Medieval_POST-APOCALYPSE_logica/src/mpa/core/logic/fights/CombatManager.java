@@ -89,6 +89,8 @@ public class CombatManager
 
 			for (Player p : GameManager.getInstance().getPlayers())
 			{
+				if (p== attacker.getBoss())
+					continue;
 				float distanceFloat = MyMath.distanceFloat(attacker.getX() + direction.x * attacker.getRangeOfPhysicallAttack(), attacker.getY()
 						+ direction.y * attacker.getRangeOfPhysicallAttack(), p.getX(), p.getY());
 

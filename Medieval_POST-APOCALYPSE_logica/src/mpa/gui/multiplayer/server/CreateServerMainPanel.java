@@ -185,7 +185,7 @@ public class CreateServerMainPanel extends JPanel
 
 					JLabel createdServer = new JLabel("Server IP: "+welcomeServer.getIP()+" port: "+ welcomeServer.getPort() );
 					createdServer.setForeground(Color.WHITE);
-					createdServer.setFont(new Font("URW Chancery L", Font.BOLD, 50));
+					createdServer.setFont(new Font("URW Chancery L", Font.BOLD, 40));
 
 					createdServer.setBounds(30 * CreateServerMainPanel.this.getWidth() / 100, 30 * CreateServerMainPanel.this.getHeight() / 100,
 							50 * CreateServerMainPanel.this.getWidth() / 100, 10 * CreateServerMainPanel.this.getHeight() / 100);
