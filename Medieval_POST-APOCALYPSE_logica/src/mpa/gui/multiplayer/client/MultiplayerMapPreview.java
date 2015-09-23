@@ -22,7 +22,8 @@ public class MultiplayerMapPreview extends MapPreview
 	public MultiplayerMapPreview(JPanel menuSinglePlayerPanel, final MapInfo mapInfo)
 	{
 		super(menuSinglePlayerPanel);
-		// loadMap( mapInfo );
+		loadMap( mapInfo );
+		this.setVisible(true);
 	}
 
 	public void removeBorder(Pair<Float, Float> oldHQ)
@@ -52,15 +53,19 @@ public class MultiplayerMapPreview extends MapPreview
 	@Override
 	public void loadMap(MapInfo mapInfo)
 	{
+		loadImages();
 		this.mapInfo = mapInfo;
+//		System.out.println(mapInfo);
 
 		this.headQuartersLabel.clear();
 
 		for (Pair<Float, Float> headQuarterPosition : mapInfo.getHeadQuarters())
 		{
 			Image image = images.get("headQuarter");
-			image = image.getScaledInstance(W(GameProperties.getInstance().getObjectWidth("headQuarter")), H(GameProperties.getInstance()
-					.getObjectHeight("headQuarter")), 0);
+			System.out.println(image);
+			System.out.println(image.getWidth(this));
+//			image = image.getScaledInstance(W(GameProperties.getInstance().getObjectWidth("headQuarter")), H(GameProperties.getInstance()
+//					.getObjectHeight("headQuarter")), Image.SCALE_FAST);
 
 			ImageIcon imageIcon = new ImageIcon(image);
 			JLabel jLabel = new JLabel(imageIcon);

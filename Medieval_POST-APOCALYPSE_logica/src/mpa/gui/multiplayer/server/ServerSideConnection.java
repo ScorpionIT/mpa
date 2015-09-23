@@ -67,6 +67,8 @@ public class ServerSideConnection extends Thread
 				switch( state )
 				{
 					case GETTING_MAP:
+						if( inFromClient.readLine().equals( "Enter" ) )
+							outToClient.writeBytes("OK"+'\n');
 						if( inFromClient.readLine().equals( "GetMap" ) )
 							givingTheMap();
 					case GAME_SETTING:
@@ -80,6 +82,7 @@ public class ServerSideConnection extends Thread
 
 				}
 			}
+			outToClient.writeBytes("CLOSING");
 		} catch( IOException e )
 		{
 			// TODO Auto-generated catch block
@@ -118,13 +121,13 @@ public class ServerSideConnection extends Thread
 			BufferedReader br = new BufferedReader( new FileReader( mapPath ) );
 			String line = br.readLine();
 
-			outToClient.writeBytes( "BEGIN" );
+			outToClient.writeBytes( "BEGIN"+ '\n' );
 			while( line != null )
 			{
-				outToClient.writeBytes( line );
+				outToClient.writeBytes( line + '\n');
 				line = br.readLine();
 			}
-			outToClient.writeBytes( "END" );
+			outToClient.writeBytes( "END"+ '\n' );
 			br.close();
 
 		} catch( FileNotFoundException e )
@@ -137,6 +140,11 @@ public class ServerSideConnection extends Thread
 
 		state = ConnectionState.GAME_SETTING;
 
+	}
+	
+	public void stopThread ()
+	{
+		keepConnectionOn= false;
 	}
 
 }

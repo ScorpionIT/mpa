@@ -142,6 +142,8 @@ public class CreateServerMainPanel extends JPanel
 
 		launchButton.addMouseListener(new MouseAdapter()
 		{
+			private UDPSpammer udpSpammer;
+
 			public void mouseReleased(java.awt.event.MouseEvent e)
 			{
 
@@ -170,16 +172,23 @@ public class CreateServerMainPanel extends JPanel
 				}
 				else
 				{
-					welcomeServer = new WelcomeServer(mapInfo.getNumberOfPlayers() - numberOfBots, map);
+					udpSpammer = new UDPSpammer();
+					welcomeServer = new WelcomeServer(mapInfo.getNumberOfPlayers() - numberOfBots, map,difficultyLevelSelected,udpSpammer);
 					welcomeServer.start();
+
+					udpSpammer.setIp(welcomeServer.getIP());
+					udpSpammer.setPort(welcomeServer.getPort());
+					udpSpammer.start();
+					
+					
 					CreateServerMainPanel.this.removeAll();
 
-					JLabel createdServer = new JLabel("Server ");
+					JLabel createdServer = new JLabel("Server IP: "+welcomeServer.getIP()+" port: "+ welcomeServer.getPort() );
 					createdServer.setForeground(Color.WHITE);
 					createdServer.setFont(new Font("URW Chancery L", Font.BOLD, 50));
 
 					createdServer.setBounds(30 * CreateServerMainPanel.this.getWidth() / 100, 30 * CreateServerMainPanel.this.getHeight() / 100,
-							30 * CreateServerMainPanel.this.getWidth() / 100, 10 * CreateServerMainPanel.this.getHeight() / 100);
+							50 * CreateServerMainPanel.this.getWidth() / 100, 10 * CreateServerMainPanel.this.getHeight() / 100);
 
 					CreateServerMainPanel.this.add(createdServer);
 
@@ -199,6 +208,10 @@ public class CreateServerMainPanel extends JPanel
 					{
 						public void mouseReleased(MouseEvent e)
 						{
+							udpSpammer.stopSpammer();
+							welcomeServer.stopServer();
+							udpSpammer= null;
+							welcomeServer = null;
 						};
 					});
 

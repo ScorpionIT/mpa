@@ -2,56 +2,78 @@ package mpa.gui.multiplayer.client;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 
 import mpa.gui.multiplayer.ServerSelectionPanel;
 
-public class BroadcastConnectionListener extends Thread
-{
+public class BroadcastConnectionListener extends Thread {
+	private DatagramSocket socket;
 	private ServerSelectionPanel serverSelectionPanel;
 	private boolean listen = true;
+	private boolean alive = true;
 
-	public BroadcastConnectionListener( ServerSelectionPanel serverSelectionPanel )
-	{
+	public BroadcastConnectionListener(ServerSelectionPanel serverSelectionPanel) {
+		this.serverSelectionPanel = serverSelectionPanel;
 
 	}
 
 	@Override
-	public void run()
-	{
-		MulticastSocket socket = null;
-		InetAddress group;
-		try
-		{
-			socket = new MulticastSocket( 4446 );
-			group = InetAddress.getByName( "203.0.113.0" );
-			socket.joinGroup( group );
-			DatagramPacket packet;
-			while( listen )
-			{
-				sleep( 2000 );
-				byte[] buf = new byte[256];
-				packet = new DatagramPacket( buf, buf.length );
-				socket.receive( packet );
+	public void run() {
+		try {
+			// Keep a socket open to listen to all the UDP trafic that is
+			// destined for this port
+			socket = new DatagramSocket(8888, InetAddress.getByName("0.0.0.0"));
+			socket.setBroadcast(true);
 
-				String newServer = new String( packet.getData() );
-				serverSelectionPanel.addServer( newServer );
+			while (alive) {
+
+				try {
+					sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				// Receive a packet
+				byte[] recvBuf = new byte[15000];
+				DatagramPacket packet = new DatagramPacket(recvBuf,
+						recvBuf.length);
+				socket.receive(packet);
+
+				// Packet received
+				System.out.println(getClass().getName()
+						+ ">>>Discovery packet received from: "
+						+ packet.getAddress().getHostAddress());
+				System.out.println(getClass().getName()
+						+ ">>>Packet received; data: "
+						+ new String(packet.getData()));
+
+				// See if the packet holds the right command (message)
+				String message = new String(packet.getData()).trim();
+				String[] split = message.split(":");
+				
+				if (split.length == 3) {
+					String ip = split[1];
+					String port = split[2];
+					serverSelectionPanel.addServer(ip+":"+port);
+					System.out.println(ip+ ":"+port);
+					
+					
+				}
+
+				
 			}
-			socket.leaveGroup( group );
-			socket.close();
-		} catch( IOException e )
-		{
-			e.printStackTrace();
-		} catch( InterruptedException e )
-		{
-			e.printStackTrace();
+		} catch (IOException ex) {
+			ex.printStackTrace();
 		}
-
 	}
 
-	public void setListenMode( boolean listen )
-	{
+	public void setListenMode(boolean listen) {
 		this.listen = listen;
+	}
+
+	public void stopListener() {
+		alive = false;
 	}
 }
