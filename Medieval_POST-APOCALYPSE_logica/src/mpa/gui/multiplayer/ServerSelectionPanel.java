@@ -135,6 +135,8 @@ public class ServerSelectionPanel extends JPanel {
 				mainFrame.setVisible(true);
 				mainMenuPanel.repaint();
 				mainFrame.setVisible(true);
+				broadcastConnectionListener.stopListener();
+				threadUpdateAlive= false;
 
 			}
 		});
@@ -269,8 +271,6 @@ public class ServerSelectionPanel extends JPanel {
 						mapInfo, mainMenuPanel);
 				
 				
-				System.out.println("SONO QUI");
-				System.out.println(mapInfo);
 				mainFrame.setContentPane(multiplayerMenuPanel);
 				 mainFrame.getContentPane().setVisible(true);
 				 mainFrame.setVisible(true);
@@ -293,11 +293,7 @@ public class ServerSelectionPanel extends JPanel {
 			if (server.getText().equals(newServer))
 				return;
 		}
-//		for (int i = 1; i < servers.length; i++) {
-//			servers[i - 1] = servers[i];
-//		}
 
-		System.out.println("STO AGGIUNGENDO "+newServer);
 		servers[servers.length - 1] = newServer;
 
 //		int index = 0;

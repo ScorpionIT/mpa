@@ -22,7 +22,8 @@ public class MultiplayerMapPreview extends MapPreview
 	public MultiplayerMapPreview(JPanel menuSinglePlayerPanel, final MapInfo mapInfo)
 	{
 		super(menuSinglePlayerPanel);
-		loadMap( mapInfo );
+//		loadMap( mapInfo );
+		this.mapInfo = mapInfo;
 		this.setVisible(true);
 	}
 
@@ -53,19 +54,16 @@ public class MultiplayerMapPreview extends MapPreview
 	@Override
 	public void loadMap(MapInfo mapInfo)
 	{
-		loadImages();
 		this.mapInfo = mapInfo;
-//		System.out.println(mapInfo);
-
-		this.headQuartersLabel.clear();
+		
+		setMapDimension(mapInfo.getWidth(),mapInfo.getHeight());
 
 		for (Pair<Float, Float> headQuarterPosition : mapInfo.getHeadQuarters())
 		{
 			Image image = images.get("headQuarter");
-			System.out.println(image);
-			System.out.println(image.getWidth(this));
-//			image = image.getScaledInstance(W(GameProperties.getInstance().getObjectWidth("headQuarter")), H(GameProperties.getInstance()
-//					.getObjectHeight("headQuarter")), Image.SCALE_FAST);
+		
+			image = image.getScaledInstance(W(GameProperties.getInstance().getObjectWidth("headQuarter")), H(GameProperties.getInstance()
+					.getObjectHeight("headQuarter")), Image.SCALE_FAST);
 
 			ImageIcon imageIcon = new ImageIcon(image);
 			JLabel jLabel = new JLabel(imageIcon);
@@ -79,12 +77,20 @@ public class MultiplayerMapPreview extends MapPreview
 				}
 
 			});
+			
 			jLabel.setBounds(graphicX(headQuarterPosition.getFirst()), graphicY(headQuarterPosition.getSecond()), W(GameProperties.getInstance()
 					.getObjectWidth("headQuarter")), H(GameProperties.getInstance().getObjectHeight("headQuarter")));
 			this.add(jLabel);
 
 			headQuartersLabel.put(jLabel, headQuarterPosition);
+			
 		}
+	}
+	
+	@Override
+	public void setBounds(int x, int y, int width, int height) {
+		super.setBounds(x, y, width, height);
+		loadMap(mapInfo);
 	}
 
 }
