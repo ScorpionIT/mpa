@@ -149,24 +149,10 @@ public class MenuSinglePlayerPanel extends JPanel
 				else
 				{
 					World world = MenuSinglePlayerPanel.this.worldLoader.loadWorld(new WorldFromMapInfo());
-					// GameManager.init(world,
-					// MainMenuGamePanel.this.worldLoader.makePlayers(MainMenuGamePanel.this.playerName,
-					// world,
-					// MainMenuGamePanel.this.selectedHQ));
 					GameManager.init(world, difficultyLevelSelected, false);
 					MenuSinglePlayerPanel.this.selectedHQIndex = MenuSinglePlayerPanel.this.worldLoader.makePlayers(
 							MenuSinglePlayerPanel.this.playerName, world, MenuSinglePlayerPanel.this.selectedHQ);
-					// MainMenuPanel.this.removeAll();
-					// GameGui gameGui = new GameGui();
-					// gameGui.setBounds(0, 0, MainMenuPanel.this.screenWidth,
-					// MainMenuPanel.this.screenHeight);
-					// MainMenuPanel.this.add(gameGui);
-					// new GraphicThread( gameGui ).start();
-					// new PositionUpdater().start();
-					// MainMenuPanel.this.updateUI();
-					// mpa.gui.gameGui.GameGui app = new mpa.gui.gameGui.GameGui();
-					// app.start();
-					// Logger.getLogger( "" ).setLevel( Level.OFF );
+
 					Thread t = new Thread(new Runnable()
 					{
 						@Override

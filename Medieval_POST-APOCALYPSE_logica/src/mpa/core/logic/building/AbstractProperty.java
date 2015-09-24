@@ -46,15 +46,17 @@ public class AbstractProperty extends AbstractObject
 				candidatePositions.add(new Vector2f(x + getCollisionRay() + 10, y - getCollisionRay() - 10));
 				candidatePositions.add(new Vector2f(x - getCollisionRay() - 10, y + getCollisionRay() + 10));
 
-				for (Vector2f position : candidatePositions)
-				{
-					if (GameManager.getInstance().getWorld()
-							.checkForCollision(position.x, position.y, GameProperties.getInstance().getCollisionRay(objectName)).isEmpty())
-					{
-						gatheringPlace = position;
-						break;
-					}
-				}
+				gatheringPlace = candidatePositions.get(0);
+				// for (Vector2f position : candidatePositions)
+				// {
+				// if (GameManager.getInstance().getWorld()
+				// .checkForCollision(position.x, position.y,
+				// GameProperties.getInstance().getCollisionRay(objectName)).isEmpty())
+				// {
+				// gatheringPlace = position;
+				// break;
+				// }
+				// }
 			}
 		}
 		return gatheringPlace;

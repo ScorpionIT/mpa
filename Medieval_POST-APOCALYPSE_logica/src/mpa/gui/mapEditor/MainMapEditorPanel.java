@@ -238,14 +238,21 @@ public class MainMapEditorPanel extends JPanel
 
 	}
 
-	public void convertMapToXml()
+	public boolean convertMapToXml()
 	{
 		mapName = settingsMapEditorPanel.getMapName();
 		boolean isNameValid = true;
 		if (numberOfPlayers <= 0)
+		{
 			JOptionPane.showMessageDialog(new Frame(), "Inserire oggetti nella mappa", "", JOptionPane.PLAIN_MESSAGE);
+			return false;
+		}
 		else if (mapName == null || mapName.equals(""))
+		{
 			JOptionPane.showMessageDialog(new Frame(), "Inserire un nome valido per la mappa", "", JOptionPane.PLAIN_MESSAGE);
+			return false;
+
+		}
 		else
 		{
 			File folder = new File(mapFolder);
@@ -258,7 +265,7 @@ public class MainMapEditorPanel extends JPanel
 					{
 						JOptionPane.showMessageDialog(new Frame(), "Mappa già esistente", "", JOptionPane.PLAIN_MESSAGE);
 						isNameValid = false;
-						break;
+						return false;
 					}
 				}
 
@@ -266,8 +273,10 @@ public class MainMapEditorPanel extends JPanel
 			if (isNameValid)
 			{
 				MapToXmlCreator.createXmlMap(mapPreviewEditorPanel.getAddedObjects(), mapName, mapWidth, mapHeight, numberOfPlayers);
+				return true;
 			}
 		}
+		return false;
 
 	}
 

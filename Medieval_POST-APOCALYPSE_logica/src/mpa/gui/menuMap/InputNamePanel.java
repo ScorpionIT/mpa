@@ -1,9 +1,11 @@
 package mpa.gui.menuMap;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -11,6 +13,7 @@ public class InputNamePanel extends JPanel
 {
 	// private MainMenuGamePanel mainMenuGamePanel;
 	private JTextField textField;
+	private JLabel insertYourNameLabel;
 
 	// Button button;
 
@@ -18,6 +21,12 @@ public class InputNamePanel extends JPanel
 	{
 		// this.mainMenuGamePanel = mainMenuGamePanel;
 		this.setLayout(null);
+
+		insertYourNameLabel = new JLabel("Insert your name");
+		insertYourNameLabel.setForeground(Color.WHITE);
+		insertYourNameLabel.setFont(new Font("URW Chancery L", Font.BOLD, 20));
+
+		this.add(insertYourNameLabel);
 
 		FocusListener highlighter = new FocusListener()
 		{
@@ -58,8 +67,9 @@ public class InputNamePanel extends JPanel
 	public void setBounds(int x, int y, int width, int height)
 	{
 		super.setBounds(x, y, width, height);
-		textField.setBounds(30, 0, this.getWidth() - 80, 30);
-		// button.setBounds(this.getWidth() - 190, 30, 139, 30);
+		insertYourNameLabel.setBounds(width * 2 / 100, 0, width * 80 / 100, height * 10 / 100);
+		textField.setBounds(width * 2 / 100, insertYourNameLabel.getY() + insertYourNameLabel.getHeight(), this.getWidth() - this.getWidth() * 10
+				/ 100, height * 15 / 100);
 	}
 
 	public String getPlayerName()

@@ -31,8 +31,10 @@ import mpa.core.multiplayer.processingChain.PlayersInfosHandler;
 import mpa.core.multiplayer.processingChain.ProcessingChain;
 import mpa.core.multiplayer.processingChain.UpdateInfoHandler;
 
-public class ServerSideConnection extends Thread {
-	public enum ConnectionState {
+public class ServerSideConnection extends Thread
+{
+	public enum ConnectionState
+	{
 		GETTING_MAP, GAME_SETTING, PLAYING
 	}
 
@@ -52,239 +54,243 @@ public class ServerSideConnection extends Thread {
 
 	private boolean gettingFirstInformation = true;
 
-	public ServerSideConnection(Socket socket, String mapPath,
-			WelcomeServer welcomeServer) {
+	public ServerSideConnection(Socket socket, String mapPath, WelcomeServer welcomeServer)
+	{
 		this.socket = socket;
 		this.mapPath = mapPath;
 		this.welcomeServer = welcomeServer;
 		boolean isOk = true;
 
-		do {
-			try {
+		do
+		{
+			try
+			{
 				outToClient = new DataOutputStream(socket.getOutputStream());
-				inFromClient = new BufferedReader(new InputStreamReader(
-						socket.getInputStream()));
+				inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				isOk = true;
-			} catch (IOException e) {
+			} catch (IOException e)
+			{
 				isOk = false;
 			}
 		} while (!isOk);
 	}
 
 	@Override
-	public void run() {
-		try {
-			while (keepConnectionOn) {
-				System.out.println(state);
-				switch (state) {
-				case GETTING_MAP:
-					if (inFromClient.readLine().equals("Enter"))
-						outToClient.writeBytes("OK" + '\n');
-					if (inFromClient.readLine().equals("GetMap"))
-						givingTheMap();
-					break;
-				case GAME_SETTING:
-					String readLine = inFromClient.readLine();
-					String[] split = readLine.split(",");
-					if (split[0].equals("GET")) {
-						if (welcomeServer.occupy(
-								new Pair<Float, Float>(Float
-										.parseFloat(split[1]), Float
-										.parseFloat(split[2])), socket
-										.getInetAddress())) {
-
+	public void run()
+	{
+		try
+		{
+			while (keepConnectionOn)
+			{
+				switch (state)
+				{
+					case GETTING_MAP:
+						if (inFromClient.readLine().equals("Enter"))
 							outToClient.writeBytes("OK" + '\n');
+						if (inFromClient.readLine().equals("GetMap"))
+							givingTheMap();
+						break;
+					case GAME_SETTING:
+						String readLine = inFromClient.readLine();
+						String[] split = readLine.split(",");
+						if (split[0].equals("GET"))
+						{
+							if (welcomeServer.occupy(new Pair<Float, Float>(Float.parseFloat(split[1]), Float.parseFloat(split[2])),
+									socket.getInetAddress()))
+							{
 
-						} else
-							outToClient.writeBytes("NO" + '\n');
+								outToClient.writeBytes("OK" + '\n');
 
-					}
-					readLine = inFromClient.readLine();
-					String[] split2 = readLine.split(":");
-					if (split2[0].equals("READY")) {
-						welcomeServer.addReadyPlayer(split2[1],
-								socket.getInetAddress());
-						state = ConnectionState.PLAYING;
-					}
-					break;
-				case PLAYING:
-					if (allReadyPlayers) {
-						outToClient.writeBytes("LETSGO" + '\n');
-						allReadyPlayers = false;
-						playing = true;
-					} else if (playing) {
-						if (gettingFirstInformation) {
-							initGame();
-							gettingFirstInformation = false;
+							}
+							else
+								outToClient.writeBytes("NO" + '\n');
 
-						} else {
-							String request = inFromClient.readLine();
-							if (headOfTheChain == null)
-								initChain();
-							String[] processRequest = headOfTheChain
-									.processRequest(request);
-							for (String message : processRequest)
-								outToClient.writeBytes(message + '\n');
 						}
-					}
-					break;
+						readLine = inFromClient.readLine();
+						String[] split2 = readLine.split(":");
+						if (split2[0].equals("READY"))
+						{
+							welcomeServer.addReadyPlayer(split2[1], socket.getInetAddress());
+							state = ConnectionState.PLAYING;
+						}
+						break;
+					case PLAYING:
+						if (allReadyPlayers)
+						{
+							outToClient.writeBytes("LETSGO" + '\n');
+							allReadyPlayers = false;
+							playing = true;
+						}
+						else if (playing)
+						{
+							if (gettingFirstInformation)
+							{
+								initGame();
+								gettingFirstInformation = false;
+
+							}
+							else
+							{
+								String request = inFromClient.readLine();
+								if (headOfTheChain == null)
+									initChain();
+								String[] processRequest = headOfTheChain.processRequest(request);
+								for (String message : processRequest)
+									outToClient.writeBytes(message + '\n');
+							}
+						}
+						break;
 				}
 			}
 			outToClient.writeBytes("CLOSING");
-		} catch (IOException e) {
+		} catch (IOException e)
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
 
-	private void initGame() {
+	private synchronized void initGame()
+	{
 
-		try {
-			if (inFromClient.readLine().equals("PLAYERS")) {
+		try
+		{
+			System.out.println("SONO QUI");
+			if (inFromClient.readLine().equals("PLAYERS"))
+			{
 				List<String> message = new ArrayList<>();
-				message.add(new String("PlayersPositions:"));
-				Map<String, javax.vecmath.Vector2f[]> playersPositions = GameManagerProxy
-						.getInstance().getPlayersPositions();
-				for (String player : playersPositions.keySet()) {
-					javax.vecmath.Vector2f[] position = playersPositions
-							.get(player);
+				Map<String, javax.vecmath.Vector2f[]> playersPositions = GameManagerProxy.getInstance().getPlayersPositions();
+				for (String player : playersPositions.keySet())
+				{
+					javax.vecmath.Vector2f[] position = playersPositions.get(player);
 
-					javax.vecmath.Vector2f heaquarterPosition = GameManagerProxy
-							.getInstance().getHeaquarterPosition(player);
-					String hp = String.valueOf(GameManagerProxy.getInstance()
-							.getPLayerHP(player));
-					message.add(new String(player + ":"
-							+ String.valueOf(position[0].x) + ","
-							+ String.valueOf(position[0].y))
-							+ ":"
-							+ String.valueOf(position[1].x)
-							+ ","
-							+ String.valueOf(position[1].y)
-							+ ":"
-							+ String.valueOf(heaquarterPosition.x)
-							+ ","
+					javax.vecmath.Vector2f heaquarterPosition = GameManagerProxy.getInstance().getHeaquarterPosition(player);
+					String hp = String.valueOf(GameManagerProxy.getInstance().getPLayerHP(player));
+					message.add(new String(player + ":" + String.valueOf(position[0].x) + "," + String.valueOf(position[0].y)) + ":"
+							+ String.valueOf(position[1].x) + "," + String.valueOf(position[1].y) + ":" + String.valueOf(heaquarterPosition.x) + ","
 							+ String.valueOf(heaquarterPosition.y) + ":" + hp);
 
 				}
 				message.add("END");
 
-				for (String string : message) {
+				for (String string : message)
+				{
 					outToClient.writeBytes(string + '\n');
 				}
 
 			}
 
-			if (inFromClient.readLine().equals("FIELD")) {
-				Map<String, Vector2f> fields = GameManagerProxy.getInstance()
-						.getFields();
+			if (inFromClient.readLine().equals("FIELD"))
+			{
+				Map<String, Vector2f> fields = GameManagerProxy.getInstance().getFields();
 				List<String> createMessages = createMessages(fields);
-				for (String string : createMessages) {
+				for (String string : createMessages)
+				{
 					outToClient.writeBytes(string + '\n');
 				}
 
 			}
 
-			if (inFromClient.readLine().equals("CAVE")) {
-				Map<String, Vector2f> caves = GameManagerProxy.getInstance()
-						.getCaves();
+			if (inFromClient.readLine().equals("CAVE"))
+			{
+				Map<String, Vector2f> caves = GameManagerProxy.getInstance().getCaves();
 				List<String> createMessages = createMessages(caves);
-				for (String string : createMessages) {
+				for (String string : createMessages)
+				{
 					outToClient.writeBytes(string + '\n');
 				}
 
 			}
-			if (inFromClient.readLine().equals("WOOD")) {
-				Map<String, Vector2f> woods = GameManagerProxy.getInstance()
-						.getWoods();
+			if (inFromClient.readLine().equals("WOOD"))
+			{
+				Map<String, Vector2f> woods = GameManagerProxy.getInstance().getWoods();
 				List<String> createMessages = createMessages(woods);
-				for (String string : createMessages) {
+				for (String string : createMessages)
+				{
 					outToClient.writeBytes(string + '\n');
 				}
 
 			}
-			if (inFromClient.readLine().equals("MINE")) {
-				Map<String, Vector2f> mines = GameManagerProxy.getInstance()
-						.getMines();
+			if (inFromClient.readLine().equals("MINE"))
+			{
+				Map<String, Vector2f> mines = GameManagerProxy.getInstance().getMines();
 				List<String> createMessages = createMessages(mines);
-				for (String string : createMessages) {
+				for (String string : createMessages)
+				{
 					outToClient.writeBytes(string + '\n');
 				}
 
 			}
 
-			if (inFromClient.equals("WORLD_DIMESION")) {
-				float worldDimension = GameManagerProxy.getInstance()
-						.worldDimension();
-				String dimension = new String(
-						String.valueOf(worldDimension) + '\n');
-				outToClient.writeBytes(dimension);
+			if (inFromClient.readLine().equals("WORLD_DIMENSION"))
+			{
+				float worldDimension = GameManagerProxy.getInstance().worldDimension();
+				String dimension = new String(String.valueOf(worldDimension));
+				outToClient.writeBytes(dimension + '\n');
 			}
 
-		} catch (IOException e) {
+		} catch (IOException e)
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	private List<String> createMessages(Map<String, Vector2f> objects) {
+	private List<String> createMessages(Map<String, Vector2f> objects)
+	{
 		java.util.List<String> message = new ArrayList<String>();
-		for (String ID : objects.keySet()) {
+		for (String ID : objects.keySet())
+		{
 			Vector2f position = objects.get(ID);
-			message.add(new String(ID + ":" + String.valueOf(position.x) + ","
-					+ String.valueOf(position.y)));
+			message.add(new String(ID + ":" + String.valueOf(position.x) + "," + String.valueOf(position.y)));
 		}
 		message.add("END");
 		return message;
 	}
 
-	private void initChain() {
+	private void initChain()
+	{
 
 		BuyPotionHandler buyPotionHandler = new BuyPotionHandler(null);
-		ChangeItemHandler changeItemHandler = new ChangeItemHandler(
-				buyPotionHandler);
-		ComputePathHandler computePathHandler = new ComputePathHandler(
-				changeItemHandler);
-		CreateMinionsHandler createMinionsHandler = new CreateMinionsHandler(
-				computePathHandler);
+		ChangeItemHandler changeItemHandler = new ChangeItemHandler(buyPotionHandler);
+		ComputePathHandler computePathHandler = new ComputePathHandler(changeItemHandler);
+		CreateMinionsHandler createMinionsHandler = new CreateMinionsHandler(computePathHandler);
 		CreateTower createTower = new CreateTower(createMinionsHandler);
-		GetPickedObjectHandler getPickedObjectHandler = new GetPickedObjectHandler(
-				createTower);
-		GetPickedObjectInfo getPickedObjectInfo = new GetPickedObjectInfo(
-				getPickedObjectHandler);
-		GetPotionAmountHandler getPotionAmountHandler = new GetPotionAmountHandler(
-				getPickedObjectInfo);
-		GetResourcesAmountHandler getResourcesAmountHandler = new GetResourcesAmountHandler(
-				getPotionAmountHandler);
-		OccupyPropertyHandler occupyPropertyHandler = new OccupyPropertyHandler(
-				getResourcesAmountHandler);
-		PlayerActionHandler playerActionHandler = new PlayerActionHandler(
-				occupyPropertyHandler);
-		PlayersInfosHandler playersInfosHandler = new PlayersInfosHandler(
-				playerActionHandler);
-		UpdateInfoHandler updateInfoHandler = new UpdateInfoHandler(
-				playersInfosHandler, welcomeServer);
+		GetPickedObjectHandler getPickedObjectHandler = new GetPickedObjectHandler(createTower);
+		GetPickedObjectInfo getPickedObjectInfo = new GetPickedObjectInfo(getPickedObjectHandler);
+		GetPotionAmountHandler getPotionAmountHandler = new GetPotionAmountHandler(getPickedObjectInfo);
+		GetResourcesAmountHandler getResourcesAmountHandler = new GetResourcesAmountHandler(getPotionAmountHandler);
+		OccupyPropertyHandler occupyPropertyHandler = new OccupyPropertyHandler(getResourcesAmountHandler);
+		PlayerActionHandler playerActionHandler = new PlayerActionHandler(occupyPropertyHandler);
+		PlayersInfosHandler playersInfosHandler = new PlayersInfosHandler(playerActionHandler);
+		UpdateInfoHandler updateInfoHandler = new UpdateInfoHandler(playersInfosHandler, welcomeServer);
 		headOfTheChain = new PlayerInfoHandler(updateInfoHandler);
 
 	}
 
-	private void givingTheMap() {
+	private void givingTheMap()
+	{
 
-		try {
+		try
+		{
 			BufferedReader br = new BufferedReader(new FileReader(mapPath));
 			String line = br.readLine();
 
 			outToClient.writeBytes("BEGIN" + '\n');
-			while (line != null) {
+			while (line != null)
+			{
 				outToClient.writeBytes(line + '\n');
 				line = br.readLine();
 			}
 			outToClient.writeBytes("END" + '\n');
 			br.close();
 
-		} catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e)
+		{
 
-		} catch (IOException e) {
+		} catch (IOException e)
+		{
 			// TODO: handle exception
 		}
 
@@ -292,11 +298,13 @@ public class ServerSideConnection extends Thread {
 
 	}
 
-	public void stopThread() {
+	public void stopThread()
+	{
 		keepConnectionOn = false;
 	}
 
-	public void setAllPlayersReasy() {
+	public void setAllPlayersReasy()
+	{
 		allReadyPlayers = true;
 
 	}

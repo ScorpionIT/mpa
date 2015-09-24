@@ -32,8 +32,8 @@ public class SubmitButtonEditorPanel extends JPanel
 			public void mouseReleased(MouseEvent e)
 			{
 				super.mouseReleased(e);
-				SubmitButtonEditorPanel.this.mainMapEditorPanel.convertMapToXml();
-				SubmitButtonEditorPanel.this.mainMapEditorPanel.backButton();
+				if (SubmitButtonEditorPanel.this.mainMapEditorPanel.convertMapToXml())
+					SubmitButtonEditorPanel.this.mainMapEditorPanel.backButton();
 			}
 
 		});

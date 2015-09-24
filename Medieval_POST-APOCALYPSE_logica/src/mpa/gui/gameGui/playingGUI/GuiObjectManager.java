@@ -153,8 +153,8 @@ public class GuiObjectManager
 		spatialCirlces.put(playerModel, circle2D);
 		playersColors.put(playerName, color);
 
-		if (playerName.equals(playingPlayer))
-			gameGui.getNiftyHandler().updateResourcePanel();
+		// if (playerName.equals(playingPlayer))
+		// gameGui.getNiftyHandler().updateResourcePanel();
 
 	}
 
